@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Branch-Xamarin-SDK-Testbed"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Branch-Xamarin-SDK-Testbed.iOS", "Branch-Xamarin-SDK-Testbed.iOS\Branch-Xamarin-SDK-Testbed.iOS.csproj", "{F9464D98-11DD-4833-8852-2C78AE76FCE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Branch-Xamarin-SDK-Textbed.Droid", "Branch-Xamarin-SDK-Textbed.Droid\Branch-Xamarin-SDK-Textbed.Droid.csproj", "{FF84B551-305B-473F-B685-C56392EC30CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Branch-Xamarin-SDK-Testbed.Droid", "Branch-Xamarin-SDK-Testbed.Droid\Branch-Xamarin-SDK-Testbed.Droid.csproj", "{FF84B551-305B-473F-B685-C56392EC30CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
