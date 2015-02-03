@@ -64,9 +64,10 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <IpaPackageName>
     </IpaPackageName>
+    <CodesignProvision>47c74dda-5a78-492a-a4bf-6dabb63fa731</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>full</DebugType>
