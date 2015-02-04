@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="Branch_Xamarin_SDK_Textbed.Droid">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.1" package="Branch_Xamarin_SDK_Textbed.Droid" android:versionCode="2">
 	<uses-sdk />
 	<application android:label="Branch-Xamarin-SDK-Textbed.Droid">
 	</application>
