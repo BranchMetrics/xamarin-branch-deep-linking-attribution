@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.1" package="Branch_Xamarin_SDK_Textbed.Droid" android:versionCode="2">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.1" package="Branch_Xamarin_SDK_Testbed.Droid" android:versionCode="2">
 	<uses-sdk />
-	<application android:label="Branch-Xamarin-SDK-Textbed.Droid">
+	<application android:label="Branch-Xamarin-SDK-Testbed.Droid">
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />

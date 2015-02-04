@@ -65,7 +65,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <IpaPackageName>Branch-Xamarin-Testbed</IpaPackageName>
+    <IpaPackageName>Branch-Xamarin-SDK-Testbed</IpaPackageName>
     <CodesignProvision>47c74dda-5a78-492a-a4bf-6dabb63fa731</CodesignProvision>
     <BuildIpa>true</BuildIpa>
     <IpaIncludeArtwork>true</IpaIncludeArtwork>
