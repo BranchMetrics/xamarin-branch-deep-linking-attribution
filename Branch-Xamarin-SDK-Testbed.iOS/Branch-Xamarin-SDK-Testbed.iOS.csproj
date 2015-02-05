@@ -66,7 +66,7 @@
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <IpaPackageName>Branch-Xamarin-SDK-Testbed</IpaPackageName>
-    <CodesignProvision>Automatic:InHouse</CodesignProvision>
+    <CodesignProvision>380da96a-4821-42cb-b462-7005534ce37d</CodesignProvision>
     <BuildIpa>true</BuildIpa>
     <IpaIncludeArtwork>true</IpaIncludeArtwork>
     <MtouchI18n>
