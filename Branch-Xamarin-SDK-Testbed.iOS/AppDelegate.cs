@@ -10,6 +10,8 @@ namespace BranchXamarinSDKTestbed.iOS
 		{
 			global::Xamarin.Forms.Forms.Init ();
 
+			BranchIOS.Init ("90830750554783802");
+
 			LoadApplication (new App ());
 
 			return base.FinishedLaunching (app, options);

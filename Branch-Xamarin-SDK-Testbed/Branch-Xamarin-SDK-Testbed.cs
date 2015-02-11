@@ -1,10 +1,12 @@
-﻿using System;
+﻿using BranchXamarinSDK;
+
+using System;
 
 using Xamarin.Forms;
 
 namespace BranchXamarinSDKTestbed
 {
-	public class App : Application
+	public class App : Application, IBranchReferralInitInterface
 	{
 		public App ()
 		{
@@ -16,18 +18,30 @@ namespace BranchXamarinSDKTestbed
 
 		protected override void OnStart ()
 		{
-			// Handle when your app starts
+			Branch branch = Branch.GetInstance ();
+			branch.InitSessionAsync (this);
 		}
 
 		protected override void OnSleep ()
 		{
-			// Handle when your app sleeps
+			Branch branch = Branch.GetInstance ();
+			branch.CloseSessionAsync();
 		}
 
 		protected override void OnResume ()
 		{
-			// Handle when your app resumes
+			Branch branch = Branch.GetInstance ();
+			branch.InitSessionAsync (this);
 		}
+
+		#region IBranchReferralInitInterface implementation
+
+		public void OnInitFinished (System.Collections.Generic.Dictionary<string, dynamic> result, BranchError error)
+		{
+			System.Diagnostics.Debug.WriteLine ("Initial Result: " + result);
+		}
+
+		#endregion
 	}
 }
 
