@@ -135,15 +135,24 @@ namespace BranchXamarinSDKTestbed.iOS
 
 		public String GetProperty (string key)
 		{
-			NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-			return defaults.ValueForKey((NSString)key).ToString();
+			String ret = null;
+			if (key != null) {
+				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
+				NSString value = (NSString)defaults.ValueForKey ((NSString)key);
+				if (value != null) {
+					ret = value.ToString ();
+				}
+			}
+			return ret;
 		}
 
 		public void SetProperty ( string key, string value)
 		{
-			NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-			defaults.SetValueForKey((NSString)key, (NSString)value);
-			defaults.Synchronize();
+			if ((key != null) && (value != null)) {
+				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
+				defaults.SetValueForKey((NSString)key, (NSString)value);
+				defaults.Synchronize();
+			}
 		}
 
 		#endregion

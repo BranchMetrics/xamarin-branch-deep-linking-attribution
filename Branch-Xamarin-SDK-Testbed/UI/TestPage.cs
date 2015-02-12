@@ -64,13 +64,17 @@ namespace BranchXamarinSDKTestbed
 			};
 
 			Button getUrlButton = new Button () {
-				Text = "Get URL"
+				Text = "Get URL",
+				BackgroundColor = Color.Gray,
+				TextColor = Color.White
 			};
 			getUrlButton.Clicked += GetUrlClicked;
 
 			SendEmailButton = new Button () {
 				Text = "Send URL in Email",
-				IsEnabled = false
+				IsEnabled = false,
+				BackgroundColor = Color.Gray,
+				TextColor = Color.White
 			};
 			SendEmailButton.Clicked += SendEmailClicked;
 
@@ -86,7 +90,8 @@ namespace BranchXamarinSDKTestbed
 					UriLabel,
 					SendEmailButton
 				},
-				Spacing = 20
+				Spacing = 20,
+				Padding = 20
 			};
 
 			ScrollView sv = new ScrollView () {
