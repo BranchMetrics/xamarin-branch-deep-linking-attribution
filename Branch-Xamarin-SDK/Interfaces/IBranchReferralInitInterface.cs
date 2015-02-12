@@ -5,7 +5,7 @@ namespace BranchXamarinSDK
 {
 	public interface IBranchReferralInitInterface
 	{
-		void OnInitFinished(Dictionary<string, dynamic> result, BranchError error);
+		void OnInitFinished(Dictionary<string, object> result, BranchError error);
 	}
 }
 

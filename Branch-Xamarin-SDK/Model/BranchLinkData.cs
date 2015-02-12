@@ -18,7 +18,7 @@ namespace BranchXamarinSDK
 		public readonly string channel;
 		public readonly string feature;
 		public readonly string stage;
-		public readonly Dictionary<string, dynamic> data;
+		public readonly Dictionary<string, object> data;
 
 		public BranchLinkData (ICollection<String> inTags,
 			string inAlias,
@@ -26,7 +26,7 @@ namespace BranchXamarinSDK
 			string inChannel,
 			string inFeature,
 			string inStage,
-			Dictionary<string, dynamic> inData) {
+			Dictionary<string, object> inData) {
 			tags = inTags;
 			alias = inAlias;
 			type = inType;

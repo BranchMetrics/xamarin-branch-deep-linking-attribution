@@ -97,15 +97,24 @@ namespace BranchXamarinSDK
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
-					Dictionary<string, dynamic> result = JsonConvert.DeserializeObject<Dictionary<string, dynamic>> (body);
 
-					dynamic data;
-					result.TryGetValue("data", out data);
+					JsonSerializerSettings settings = new JsonSerializerSettings();
+					List<JsonConverter> converterList = new List<JsonConverter>();
+					converterList.Add(new DictionaryConverter());
+					settings.Converters = converterList;
+					Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(body, settings);
 
-					Branch.GetInstance().UpdateUserAndSession(result, true);
+					object temp;
+					result.TryGetValue("data", out temp);
+					Dictionary<string, object> data = null;
+					if (temp is Dictionary<string, object>) {
+						data = (Dictionary<string, object>)temp;
+					}
+
+					Branch.GetInstance().UpdateUserAndSession(result, data, false);
 
 					if (Callback != null) {
-						Callback.OnInitFinished (data, null);
+						Callback.OnInitFinished (result, null);
 					}
 				} else {
 					if (Callback != null) {

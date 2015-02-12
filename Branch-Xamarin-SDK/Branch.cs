@@ -261,47 +261,28 @@ namespace BranchXamarinSDK
 			}
 		}
 		
-		protected internal void UpdateUserAndSession(Dictionary<string, dynamic> result, bool isInstall) {
+		protected internal void UpdateUserAndSession(Dictionary<string, object> result, Dictionary<string, object> data, bool isInstall) {
 			String sessionId = null;
 			String identityId = null;
 			String deviceFingerprintId = null;
-			Dictionary<String, dynamic> data = null;
 
-			dynamic temp;
-			result.TryGetValue("session_id", out temp);
-			if (temp != null) {
-				try {
-					sessionId = (String)temp;
-				} catch (InvalidCastException ex) {
-					System.Diagnostics.Debug.WriteLine ("Ex in cast: " + ex);
-				}
+			object temp;
+
+			result.TryGetValue ("session_id", out temp);
+			if (temp is String) {
+				sessionId = (String)temp;
 			}
 			temp = null;
-			result.TryGetValue("identity_id", out temp);
-			if (temp != null) {
-				try {
-					identityId = (String)temp;
-				} catch (InvalidCastException ex) {
-					System.Diagnostics.Debug.WriteLine ("Ex in cast: " + ex);
-				}
+
+			result.TryGetValue ("identity_id", out temp);
+			if (temp is String) {
+				identityId = (String)temp;
 			}
 			temp = null;
-			result.TryGetValue("device_fingerprint_id", out temp);
-			if (temp != null) {
-				try {
-					deviceFingerprintId = (String)temp;
-				} catch (InvalidCastException ex) {
-					System.Diagnostics.Debug.WriteLine ("Ex in cast: " + ex);
-				}
-			}
-			temp = null;
-			result.TryGetValue("data", out temp);
-			if (temp != null) {
-				try {
-					data = (Dictionary<String, dynamic>)temp;
-				} catch (InvalidCastException ex) {
-					System.Diagnostics.Debug.WriteLine ("Ex in cast: " + ex);
-				}
+
+			result.TryGetValue ("device_fingerprint_id", out temp);
+			if (temp is String) {
+				deviceFingerprintId = (String)temp;
 			}
 
 			if (sessionId != null) {

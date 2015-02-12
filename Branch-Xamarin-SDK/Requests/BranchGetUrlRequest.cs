@@ -33,7 +33,9 @@ namespace BranchXamarinSDK
 			try {
 				HttpClient client = new HttpClient ();
 				client.BaseAddress = Constants.BASE_URI;
-				String inBody = JsonConvert.SerializeObject(Data);
+				JsonSerializerSettings settings = new JsonSerializerSettings();
+				settings.DefaultValueHandling = DefaultValueHandling.Ignore;
+				String inBody = JsonConvert.SerializeObject(Data, settings);
 				HttpResponseMessage response = await client.PostAsync ("v1/url",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				if (response.StatusCode == HttpStatusCode.OK) {
