@@ -109,9 +109,11 @@ namespace BranchXamarinSDK
 					Dictionary<string, object> data = null;
 					if (temp is Dictionary<string, object>) {
 						data = (Dictionary<string, object>)temp;
+					} else if (temp is String) {
+						data = JsonConvert.DeserializeObject<Dictionary<string, object>>((String)temp, settings);
 					}
 
-					Branch.GetInstance().UpdateUserAndSession(result, data, false);
+					Branch.GetInstance().UpdateUserAndSession(result, data, true);
 
 					if (Callback != null) {
 						Callback.OnInitFinished (result, null);

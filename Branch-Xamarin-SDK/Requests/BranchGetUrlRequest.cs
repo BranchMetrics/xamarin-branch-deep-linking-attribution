@@ -41,12 +41,12 @@ namespace BranchXamarinSDK
 				if (response.StatusCode == HttpStatusCode.OK) {
 					if (Callback != null) {
 						String body = await response.Content.ReadAsStringAsync();
-						Dictionary<String, dynamic> result = JsonConvert.DeserializeObject<Dictionary<String, dynamic>>(body);
+						Dictionary<String, object> result = JsonConvert.DeserializeObject<Dictionary<String, object>>(body);
 						Uri uri = null;
 						if (result.ContainsKey("url")) {
-							dynamic temp;
+							object temp;
 							result.TryGetValue("url", out temp);
-							if (temp != null) {
+							if ((temp != null) && (temp is String)) {
 								uri = new Uri((String)temp);
 							}
 						}

@@ -14,7 +14,7 @@ namespace BranchXamarinSDKTestbed.iOS
 		{
 		}
 
-		public void EmailUrl(String url, Xamarin.Forms.Application app) {
+		public void EmailUrl(String url) {
 			MFMailComposeViewController controller = new MFMailComposeViewController ();
 			controller.SetSubject ("Check out this App");
 			controller.SetMessageBody (url, false);

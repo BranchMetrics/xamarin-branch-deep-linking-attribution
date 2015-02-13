@@ -13,7 +13,9 @@ namespace BranchXamarinSDKTestbed
 		Label SessionLabel;
 		Label IdentityIdLabel;
 		Label DeviceFingerprintIdLabel;
-		Label UriLabel;
+		Label FirstLabel;
+		Label LatestLabel;
+		Entry UriLabel;
 
 		String UriString;
 
@@ -57,9 +59,38 @@ namespace BranchXamarinSDKTestbed
 				FontSize = 18
 			};
 
-			UriLabel = new Label () {
+			Label FLabel = new Label () {
 				TextColor = Color.Blue,
-				FontSize = 18,
+				FontSize = 24,
+				Text = "First Params:"
+			};
+
+			FirstLabel = new Label () {
+				TextColor = Color.Blue,
+				FontSize = 18
+			};
+			Dictionary<string, object> first = Branch.GetInstance ().GetFirstReferringParams ();
+			if (first != null) {
+				FirstLabel.Text = prettyJSON(first);
+			}
+
+			Label LLabel = new Label () {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "Latest Params"
+			};
+
+			LatestLabel = new Label () {
+				TextColor = Color.Blue,
+				FontSize = 18
+			};
+			Dictionary<string, object> latest = Branch.GetInstance ().GetLatestReferringParams ();
+			if (latest != null) {
+				LatestLabel.Text = prettyJSON(latest);
+			}
+
+			UriLabel = new Entry () {
+				TextColor = Color.Blue,
 				Text = "Press button to generate a URL"
 			};
 
@@ -86,6 +117,10 @@ namespace BranchXamarinSDKTestbed
 					IdentityIdLabel,
 					DLabel,
 					DeviceFingerprintIdLabel,
+					FLabel,
+					FirstLabel,
+					LLabel,
+					LatestLabel,
 					getUrlButton,
 					UriLabel,
 					SendEmailButton
@@ -122,6 +157,7 @@ namespace BranchXamarinSDKTestbed
 			Dictionary<string, object> extra = new Dictionary<string, object> ();
 			extra.Add ("extra1", "test1");
 			data.Add ("extra", extra);
+			data.Add ("date", DateTime.Now.ToString ());
 
 			await Branch.GetInstance ().GetShortUrlAsync (this,
 				data,
@@ -150,6 +186,48 @@ namespace BranchXamarinSDKTestbed
 			SessionLabel.Text = current.SessionId;
 			IdentityIdLabel.Text = current.IdentityId;
 			DeviceFingerprintIdLabel.Text = current.DeviceFingerPrintId;
+			Dictionary<string, object> first = Branch.GetInstance ().GetFirstReferringParams ();
+			if (first != null) {
+				FirstLabel.Text = prettyJSON(first);
+			}
+			Dictionary<string, object> latest = Branch.GetInstance ().GetLatestReferringParams ();
+			if (latest != null) {
+				LatestLabel.Text = prettyJSON(latest);
+			}
+		}
+
+		private String prettyJSON(Dictionary<string, object> data) {
+			return prettyJSON (1, data);
+		}
+
+		// For recursion...
+		private String prettyJSON(int level, Dictionary<string, object> data) {
+			String ret = "";
+			String blanks = "                                                         ";
+			if (level > 0) {
+				ret += blanks.Substring (0, level * 2);
+			}
+			ret += "{\n";
+			foreach (string key in data.Keys) {
+				object value;
+				data.TryGetValue (key, out value);
+				if (value != null) {
+					if (value is Dictionary<string, object>) {
+						ret += prettyJSON (level + 1, (Dictionary<string, object>)value);
+					} else {
+						ret += blanks.Substring (0, (level + 1) * 2);
+						ret += key;
+						ret += " : ";
+						ret += value.ToString ();
+						ret += "\n";
+					}
+				}
+			}
+			if (level > 0) {
+				ret += blanks.Substring (0, level * 2);
+			}
+			ret += "}\n";
+			return ret;
 		}
 
 		#region IBranchGetUrlInterface implementation

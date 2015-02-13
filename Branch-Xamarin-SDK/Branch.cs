@@ -155,19 +155,27 @@ namespace BranchXamarinSDK
 			await EnqueueRequestAsync (req);
 		}
 
-		public Dictionary<String, dynamic> GetLastReferringParams() {
+		public Dictionary<String, object> GetLatestReferringParams() {
 			String data = Properties.GetProperty ("last_referring_params");
 			if (!String.IsNullOrWhiteSpace(data)) {
-				return JsonConvert.DeserializeObject < Dictionary<String, dynamic>> (data);
+				JsonSerializerSettings settings = new JsonSerializerSettings();
+				List<JsonConverter> converterList = new List<JsonConverter>();
+				converterList.Add(new DictionaryConverter());
+				settings.Converters = converterList;
+				return JsonConvert.DeserializeObject < Dictionary<String, object>> (data, settings);
 			}
 
 			return null;
 		}
 
-		public Dictionary<String, dynamic> GetFirstReferringParams() {
+		public Dictionary<String, object> GetFirstReferringParams() {
 			String data = Properties.GetProperty ("first_referring_params");
 			if (!String.IsNullOrWhiteSpace(data)) {
-				return JsonConvert.DeserializeObject < Dictionary<String, dynamic>> (data);
+				JsonSerializerSettings settings = new JsonSerializerSettings();
+				List<JsonConverter> converterList = new List<JsonConverter>();
+				converterList.Add(new DictionaryConverter());
+				settings.Converters = converterList;
+				return JsonConvert.DeserializeObject < Dictionary<String, object>> (data, settings);
 			}
 
 			return null;

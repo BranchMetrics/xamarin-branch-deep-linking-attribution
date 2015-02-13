@@ -67,9 +67,10 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <BuildIpa>true</BuildIpa>
     <IpaPackageName>Branch-Xamarin-SDK-Testbed</IpaPackageName>
-    <CodesignProvision>380da96a-4821-42cb-b462-7005534ce37d</CodesignProvision>
     <MtouchI18n>
     </MtouchI18n>
+    <IpaIncludeArtwork>true</IpaIncludeArtwork>
+    <CodesignProvision>380da96a-4821-42cb-b462-7005534ce37d</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>full</DebugType>
@@ -84,6 +85,8 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignProvision>Automatic:AdHoc</CodesignProvision>
     <BuildIpa>true</BuildIpa>
+    <IpaPackageName>
+    </IpaPackageName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>full</DebugType>
