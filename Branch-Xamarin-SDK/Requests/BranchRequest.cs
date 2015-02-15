@@ -18,12 +18,20 @@ namespace BranchXamarinSDK
 
 		public BranchRequestType Type { get; set; }
 
+		protected HttpClient Client;
+
 		protected BranchRequest (BranchRequestType type)
 		{
 			Type = type;
 		}
 
 		abstract public Task Execute();
+
+		protected void InitClient() {
+			Client = new HttpClient ();
+			Client.Timeout = Settings.GetSettings ().Timeout;
+			Client.BaseAddress = Constants.BASE_URI;
+		}
 	}
 }
 

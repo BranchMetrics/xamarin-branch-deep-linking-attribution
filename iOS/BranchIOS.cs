@@ -14,13 +14,32 @@ namespace BranchXamarinSDKTestbed.iOS
 		protected BranchIOS() {
 		}
 
-		public static void Init(String appKey) {
+		public static void Init(String appKey, bool autoClose = false) {
 			BranchIOS newBranch = new BranchIOS ();
 			newBranch.AppKey = appKey;
 			newBranch.DeviceInformation = newBranch;
 			newBranch.Properties = newBranch;
 			branch = newBranch;
 			newBranch.InitUserAndSession ();
+			if (autoClose) {
+				newBranch.setupNotificationCallbacks ();
+			}
+			Settings settings = Settings.GetSettings ();
+			settings.Timeout = TimeSpan.FromSeconds (newBranch.Properties.GetPropertyInt ("timeout", 10));
+			settings.Retries = newBranch.Properties.GetPropertyInt ("retries", 3);
+		}
+
+		private void setupNotificationCallbacks() {
+			UIApplication.Notifications.ObserveWillResignActive (WillResignActive);
+			UIApplication.Notifications.ObserveDidBecomeActive (DidBecomeActive);
+		}
+
+		async public void DidBecomeActive(object sender, NSNotificationEventArgs e) {
+			await InitSessionAsync(null);
+		}
+
+		async public void WillResignActive(object sender, NSNotificationEventArgs e) {
+			await CloseSessionAsync ();
 		}
 
 		public static BranchIOS getInstance() {
@@ -133,25 +152,42 @@ namespace BranchXamarinSDKTestbed.iOS
 
 		#region IBranchProperties implementation
 
-		public String GetProperty (string key)
+		public String GetPropertyString (string key)
 		{
 			String ret = null;
-			if (key != null) {
+			if (!String.IsNullOrWhiteSpace(key)) {
 				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-				NSString value = (NSString)defaults.ValueForKey ((NSString)key);
-				if (value != null) {
-					ret = value.ToString ();
-				}
+				ret = defaults.StringForKey (key);
 			}
 			return ret;
 		}
 
-		public void SetProperty ( string key, string value)
+		public void SetPropertyString ( string key, string value)
 		{
-			if ((key != null) && (value != null)) {
+			NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
+			if (!String.IsNullOrWhiteSpace(key) && (value != null)) {
+				defaults.SetString (value, key);
+			} else if (!String.IsNullOrWhiteSpace(key)) {
+				defaults.SetString (value, key);
+			} 
+			defaults.Synchronize ();
+		}
+
+		public int GetPropertyInt ( string key, int defaultValue)
+		{
+			int ret = defaultValue;
+			if (!String.IsNullOrWhiteSpace(key)) {
 				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-				defaults.SetValueForKey((NSString)key, (NSString)value);
-				defaults.Synchronize();
+				ret = (int)defaults.IntForKey ((NSString)key);
+			} 
+			return ret;
+		}
+
+		public void SetPropertyInt( string key, int value) {
+			if (!String.IsNullOrWhiteSpace (key)) {
+				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
+				defaults.SetInt ((nint)value, key);
+				defaults.Synchronize ();
 			}
 		}
 

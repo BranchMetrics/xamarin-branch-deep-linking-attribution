@@ -90,10 +90,9 @@ namespace BranchXamarinSDK
 
 		override async public Task Execute() {
 			try {
-				HttpClient client = new HttpClient ();
-				client.BaseAddress = Constants.BASE_URI;
+				InitClient();
 				String inBody = JsonConvert.SerializeObject(Params);
-				HttpResponseMessage response = await client.PostAsync ("v1/install",
+				HttpResponseMessage response = await Client.PostAsync ("v1/install",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
@@ -122,6 +121,11 @@ namespace BranchXamarinSDK
 					if (Callback != null) {
 						Callback.OnInitFinished (null, new BranchError (response.ReasonPhrase, System.Convert.ToInt32(response.StatusCode)));
 					}
+				}
+			} catch (TaskCanceledException ex) {
+				if (Callback != null) {
+					BranchError error = new BranchError ("Operation Timed Out", 1);
+					Callback.OnInitFinished (null, error);
 				}
 			} catch (Exception ex) {
 				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);

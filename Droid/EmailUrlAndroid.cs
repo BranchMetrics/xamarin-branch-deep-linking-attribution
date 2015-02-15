@@ -20,9 +20,7 @@ namespace BranchXamarinSDKTestbed.Droid
 			intent.SetType ("message/rfc822");
 			intent.PutExtra (Intent.ExtraSubject, "Try this app!");
 			intent.PutExtra (Intent.ExtraText, url);
-			if (MainActivity.This != null) {
-				MainActivity.This.StartActivity (intent);
-			}
+			Forms.Context.StartActivity (intent);
 		}
 	}
 }

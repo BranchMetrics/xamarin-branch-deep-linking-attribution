@@ -30,6 +30,9 @@ namespace BranchXamarinSDKTestbed.Droid
 			newBranch.AppContext = context.ApplicationContext;
 			branch = newBranch;
 			newBranch.InitUserAndSession ();
+			Settings settings = Settings.GetSettings ();
+			settings.Timeout = TimeSpan.FromSeconds (newBranch.GetPropertyInt ("timeout", 3));
+			settings.Retries = newBranch.GetPropertyInt ("retries", 3);
 		}
 
 		public static BranchAndroid getInstance() {
@@ -165,18 +168,44 @@ namespace BranchXamarinSDKTestbed.Droid
 
 		#region IBranchProperties implementation
 
-		public String GetProperty (string key)
+		public String GetPropertyString (string key)
 		{
 			ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
 			return prefs.GetString (key, "");
 		}
 
-		public void SetProperty (string key, string value)
+		public void SetPropertyString (string key, string value)
 		{
+			if (!String.IsNullOrWhiteSpace (key)) {
+				ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
+				ISharedPreferencesEditor editor = prefs.Edit ();
+				if (value != null) {
+					editor.PutString (key, value);
+				} else {
+					editor.Remove (key);
+				}
+				editor.Commit();
+			}
+		}
+
+		public int GetPropertyInt(string key, int defaultValue) {
+			int ret = defaultValue;
+			if (!String.IsNullOrWhiteSpace (key)) {
+				ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
+				if (prefs.Contains(key)) {
+					ret = prefs.GetInt(key, defaultValue);
+				}
+			}
+			return ret;
+		}
+
+		public void SetPropertyInt(string key, int value) {
 			ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
 			ISharedPreferencesEditor editor = prefs.Edit ();
-			editor.PutString(key, value);
-			editor.Commit();
+			if (!String.IsNullOrWhiteSpace (key)) {
+				editor.PutInt (key, value);
+				editor.Commit ();
+			}
 		}
 
 		#endregion

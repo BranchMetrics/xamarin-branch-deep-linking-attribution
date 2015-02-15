@@ -22,6 +22,7 @@ namespace BranchXamarinSDK
 
 		CloseParams Params;
 
+
 		public BranchCloseRequest (
 			string appId,
 			string deviceFingerprintId,
@@ -37,10 +38,9 @@ namespace BranchXamarinSDK
 
 		override async public Task Execute() {
 			try {
-				HttpClient client = new HttpClient ();
-				client.BaseAddress = Constants.BASE_URI;
+				InitClient();
 				String inBody = JsonConvert.SerializeObject(Params);
-				HttpResponseMessage response = await client.PostAsync ("v1/close",
+				HttpResponseMessage response = await Client.PostAsync ("v1/close",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				System.Diagnostics.Debug.WriteLine("Close session completed with status: " + response.ReasonPhrase);
 			} catch (Exception ex) {

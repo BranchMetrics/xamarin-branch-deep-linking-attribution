@@ -13,12 +13,9 @@ namespace BranchXamarinSDKTestbed.Droid
 		DataHost="open")]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
-		public static Activity This { get; set; }
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
-
-			This = this;
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 

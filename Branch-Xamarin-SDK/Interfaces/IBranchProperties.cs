@@ -4,8 +4,10 @@ namespace BranchXamarinSDK
 {
 	public interface IBranchProperties
 	{
-		String GetProperty(String key);
-		void SetProperty(String key, String val);
+		String GetPropertyString(String key);
+		void SetPropertyString(String key, String val);
+		int GetPropertyInt(String key, int defaultValue);
+		void SetPropertyInt(String key, int val);
 	}
 }
 

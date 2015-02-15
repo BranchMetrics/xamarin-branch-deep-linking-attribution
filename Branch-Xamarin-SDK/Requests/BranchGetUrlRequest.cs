@@ -31,12 +31,11 @@ namespace BranchXamarinSDK
 
 		override async public Task Execute() {
 			try {
-				HttpClient client = new HttpClient ();
-				client.BaseAddress = Constants.BASE_URI;
+				InitClient();
 				JsonSerializerSettings settings = new JsonSerializerSettings();
 				settings.DefaultValueHandling = DefaultValueHandling.Ignore;
 				String inBody = JsonConvert.SerializeObject(Data, settings);
-				HttpResponseMessage response = await client.PostAsync ("v1/url",
+				HttpResponseMessage response = await Client.PostAsync ("v1/url",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				if (response.StatusCode == HttpStatusCode.OK) {
 					if (Callback != null) {

@@ -14,6 +14,8 @@ namespace BranchXamarinSDKTestbed
 		public String SessionId { get; set; }
 		public String IdentityId { get; set; }
 		public String DeviceFingerPrintId { get; set; }
+		public String Error { get; set; }
+
 		public Boolean IsInit {
 			get {
 				return isInit;
@@ -44,7 +46,7 @@ namespace BranchXamarinSDKTestbed
 		protected override void OnSleep ()
 		{
 			Branch branch = Branch.GetInstance ();
-			branch.CloseSessionAsync();
+			branch.CloseSessionAsync ().Wait ();
 		}
 
 		protected override void OnResume ()
@@ -90,7 +92,11 @@ namespace BranchXamarinSDKTestbed
 				if ((temp != null) && (temp is String)) {
 					DeviceFingerPrintId = (String)temp;
 				}
+				Error = null;
 				IsInit = true;
+			} else {
+				Error = error.ErrorMessage;
+				IsInit = false;
 			}
 		}
 

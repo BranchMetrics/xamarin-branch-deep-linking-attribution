@@ -16,6 +16,8 @@ namespace BranchXamarinSDKTestbed
 		Label FirstLabel;
 		Label LatestLabel;
 		Entry UriLabel;
+		Entry TimeoutEntry;
+		Entry RetriesEntry;
 
 		String UriString;
 
@@ -23,7 +25,7 @@ namespace BranchXamarinSDKTestbed
 
 		public TestPage ()
 		{
-			BackgroundColor = Color.White;
+			BackgroundColor = Color.FromHex ("C0C0C0");
 			NavigationPage.SetHasNavigationBar (this, false);
 
 			Label SLabel = new Label () {
@@ -90,7 +92,7 @@ namespace BranchXamarinSDKTestbed
 			}
 
 			UriLabel = new Entry () {
-				TextColor = Color.Blue,
+				TextColor = Color.Black,
 				Text = "Press button to generate a URL"
 			};
 
@@ -109,6 +111,32 @@ namespace BranchXamarinSDKTestbed
 			};
 			SendEmailButton.Clicked += SendEmailClicked;
 
+			Label TOLabel = new Label {
+				TextColor = Color.Blue,
+				Text = "Timeout for API calls in seconds",
+				FontSize = 18
+			};
+
+			TimeoutEntry = new Entry {
+				Text = ((int)Settings.GetSettings ().Timeout.TotalSeconds).ToString (),
+				TextColor = Color.Black,
+				Keyboard = Keyboard.Numeric
+			};
+			TimeoutEntry.TextChanged += TimeoutChanged;
+
+			Label RLabel = new Label {
+				TextColor = Color.Blue,
+				Text = "Number of retries before failing a web API call",
+				FontSize = 18
+			};
+
+			RetriesEntry = new Entry {
+				Text = ((int)Settings.GetSettings ().Timeout.TotalSeconds).ToString (),
+				TextColor = Color.Black,
+				Keyboard = Keyboard.Numeric
+			};
+			RetriesEntry.TextChanged += RetriesChanged;
+
 			StackLayout stack = new StackLayout () {
 				Children = {
 					SLabel,
@@ -123,7 +151,11 @@ namespace BranchXamarinSDKTestbed
 					LatestLabel,
 					getUrlButton,
 					UriLabel,
-					SendEmailButton
+					SendEmailButton,
+					TOLabel,
+					TimeoutEntry,
+					RLabel,
+					RetriesEntry
 				},
 				Spacing = 20,
 				Padding = 20
@@ -174,10 +206,36 @@ namespace BranchXamarinSDKTestbed
 			}
 		}
 
+		void TimeoutChanged(object sender, TextChangedEventArgs e) {
+			String timeoutStr = e.NewTextValue;
+			int timeout = (int)Settings.GetSettings ().Timeout.TotalSeconds;
+			if (!int.TryParse (timeoutStr, out timeout)) {
+				TimeoutEntry.Text = e.OldTextValue;
+			} else {
+				Branch.GetInstance ().SetTimeout (TimeSpan.FromSeconds (timeout));
+				TimeoutEntry.Text = timeout.ToString (); // Make sure text matches what we stored.
+			}
+		}
+
+		void RetriesChanged(object sender, TextChangedEventArgs e) {
+			String retriesStr = e.NewTextValue;
+			int retries = Settings.GetSettings ().Retries;
+			if (!int.TryParse (retriesStr, out retries)) {
+				RetriesEntry.Text = e.OldTextValue;
+			} else {
+				Branch.GetInstance ().SetRetries (retries);
+				RetriesEntry.Text = retries.ToString (); // Make sure text matches what we stored.
+			}
+		}
+
 		void AppIsInit(object sender, PropertyChangedEventArgs args) {
 			App current = (App)Application.Current;
 			if (current.IsInit) {
 				UpdateLabels ();
+			} else {
+				if (!String.IsNullOrWhiteSpace (current.Error)) {
+					SessionIdLabel.Text = current.Error;
+				}
 			}
 		}
 
@@ -188,11 +246,15 @@ namespace BranchXamarinSDKTestbed
 			DeviceFingerprintIdLabel.Text = current.DeviceFingerPrintId;
 			Dictionary<string, object> first = Branch.GetInstance ().GetFirstReferringParams ();
 			if (first != null) {
-				FirstLabel.Text = prettyJSON(first);
+				FirstLabel.Text = prettyJSON (first);
+			} else {
+				FirstLabel.Text = "";
 			}
 			Dictionary<string, object> latest = Branch.GetInstance ().GetLatestReferringParams ();
 			if (latest != null) {
-				LatestLabel.Text = prettyJSON(latest);
+				LatestLabel.Text = prettyJSON (latest);
+			} else {
+				LatestLabel.Text = "";
 			}
 		}
 

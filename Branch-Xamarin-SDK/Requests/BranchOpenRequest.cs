@@ -55,10 +55,9 @@ namespace BranchXamarinSDK
 
 		override async public Task Execute() {
 			try {
-				HttpClient client = new HttpClient ();
-				client.BaseAddress = Constants.BASE_URI;
+				InitClient();
 				String inBody = JsonConvert.SerializeObject(Params);
-				HttpResponseMessage response = await client.PostAsync ("v1/open",
+				HttpResponseMessage response = await Client.PostAsync ("v1/open",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
  				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();

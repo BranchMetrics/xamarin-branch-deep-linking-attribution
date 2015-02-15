@@ -77,7 +77,7 @@ namespace BranchXamarinSDK
 					BranchRequest request;
 					if (User.Current != null) {
 						request = new BranchOpenRequest (AppKey,
-							Properties.GetProperty("device_fingerprint_id"),
+							Properties.GetPropertyString("device_fingerprint_id"),
 							User.Current.Id,
 							isReferrable,
 							DeviceInformation.GetAppVersion(),
@@ -128,9 +128,9 @@ namespace BranchXamarinSDK
 
 		public async Task CloseSessionAsync() {
 			BranchCloseRequest req = new BranchCloseRequest (AppKey,
-				                         Properties.GetProperty ("device_fingerprint_id"),
-				                         Properties.GetProperty ("identity_id"),
-				                         Properties.GetProperty ("session_id"));
+				                         Properties.GetPropertyString ("device_fingerprint_id"),
+				                         Properties.GetPropertyString ("identity_id"),
+				                         Properties.GetPropertyString ("session_id"));
 			await EnqueueRequestAsync (req);
 			Inited = false;
 		}
@@ -149,14 +149,14 @@ namespace BranchXamarinSDK
 				AppKey,
 				Session.Current.Id,
 				User.Current.Id,
-				Properties.GetProperty("device_fingerprint_id"),
+				Properties.GetPropertyString("device_fingerprint_id"),
 				data,
 				callback);
 			await EnqueueRequestAsync (req);
 		}
 
 		public Dictionary<String, object> GetLatestReferringParams() {
-			String data = Properties.GetProperty ("last_referring_params");
+			String data = Properties.GetPropertyString ("last_referring_params");
 			if (!String.IsNullOrWhiteSpace(data)) {
 				JsonSerializerSettings settings = new JsonSerializerSettings();
 				List<JsonConverter> converterList = new List<JsonConverter>();
@@ -169,7 +169,7 @@ namespace BranchXamarinSDK
 		}
 
 		public Dictionary<String, object> GetFirstReferringParams() {
-			String data = Properties.GetProperty ("first_referring_params");
+			String data = Properties.GetPropertyString ("first_referring_params");
 			if (!String.IsNullOrWhiteSpace(data)) {
 				JsonSerializerSettings settings = new JsonSerializerSettings();
 				List<JsonConverter> converterList = new List<JsonConverter>();
@@ -179,6 +179,16 @@ namespace BranchXamarinSDK
 			}
 
 			return null;
+		}
+
+		public void SetTimeout(TimeSpan timeout) {
+			Settings.GetSettings ().Timeout = timeout;
+			Properties.SetPropertyInt ("timeout", (int)timeout.TotalSeconds);
+		}
+
+		public void SetRetries(int retries) {
+			Settings.GetSettings ().Retries = retries;
+			Properties.SetPropertyInt ("retries", retries);
 		}
 
 		// Private Methods
@@ -257,12 +267,12 @@ namespace BranchXamarinSDK
 
 		// Some internal methods
 		protected void InitUserAndSession() {
-			String sessionId = Properties.GetProperty ("session_id");
+			String sessionId = Properties.GetPropertyString ("session_id");
 			if (!String.IsNullOrWhiteSpace(sessionId)) {
 				Session.Current = new Session(sessionId);
 			}
 
-			String userId = Properties.GetProperty ("identity_id");
+			String userId = Properties.GetPropertyString ("identity_id");
 			if (!String.IsNullOrWhiteSpace(userId)) {
 				User.Current = new User(userId);
 				System.Diagnostics.Debug.WriteLine ("User ID: " + userId);
@@ -295,23 +305,28 @@ namespace BranchXamarinSDK
 
 			if (sessionId != null) {
 				Session.Current = new Session(sessionId);
-				Properties.SetProperty ("session_id", sessionId);
+				Properties.SetPropertyString ("session_id", sessionId);
 			}
 
 			if (identityId != null) {
 				User.Current = new User(identityId);
-				Properties.SetProperty ("identity_id", identityId);
+				Properties.SetPropertyString ("identity_id", identityId);
 			}
 
 			if (deviceFingerprintId != null) {
-				Properties.SetProperty ("device_fingerprint_id", deviceFingerprintId);
+				Properties.SetPropertyString ("device_fingerprint_id", deviceFingerprintId);
 			}
 
 			if (data != null) {
 				String dataStr = JsonConvert.SerializeObject (data);
-				Properties.SetProperty ("last_referring_params", dataStr);
+				Properties.SetPropertyString ("last_referring_params", dataStr);
 				if (isInstall) {
-					Properties.SetProperty ("first_referring_params", dataStr);
+					Properties.SetPropertyString ("first_referring_params", dataStr);
+				}
+			} else {
+				Properties.SetPropertyString ("last_referring_params", "");
+				if (isInstall) {
+					Properties.SetPropertyString ("first_referring_params", "");
 				}
 			}
 		}
