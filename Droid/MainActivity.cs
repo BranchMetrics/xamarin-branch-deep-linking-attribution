@@ -13,19 +13,15 @@ namespace BranchXamarinSDKTestbed.Droid
 		DataHost="open")]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
-		protected override void OnCreate (Bundle bundle)
+		protected override void OnCreate (Bundle savedInstanceState)
 		{
-			base.OnCreate (bundle);
+			base.OnCreate (savedInstanceState);
 
-			global::Xamarin.Forms.Forms.Init (this, bundle);
+			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			BranchAndroid.Init (this, "90830750554783802");
+			BranchAndroid.Init (this, "90830750554783802", Intent.Data);
 
 			LoadApplication (new App ());
-		}
-
-		protected override void OnDestroy() {
-			base.OnDestroy ();
 		}
 	}
 }

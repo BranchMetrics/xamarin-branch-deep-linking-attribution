@@ -8,66 +8,81 @@ using Xamarin.Forms;
 
 namespace BranchXamarinSDKTestbed
 {
-	public class TestPage : ContentPage , IBranchGetUrlInterface
+	public class TestPage : ContentPage , IBranchGetUrlInterface, IBranchReferralInitInterface
 	{
-		Label SessionLabel;
-		Label IdentityIdLabel;
-		Label DeviceFingerprintIdLabel;
-		Label FirstLabel;
-		Label LatestLabel;
-		Entry UriLabel;
-		Entry TimeoutEntry;
-		Entry RetriesEntry;
+		readonly Label SessionLabel;
+		readonly Label IdentityIdLabel;
+		readonly Label DeviceFingerprintIdLabel;
+		readonly Label FirstLabel;
+		readonly Label LatestLabel;
+		readonly Entry UriLabel;
+		readonly Entry TimeoutEntry;
+		readonly Entry RetriesEntry;
+		readonly Entry UserEntry;
+		readonly Button LoginButton;
+		readonly Button LogoutButton;
+		readonly Button SendEmailButton;
+		readonly Picker TypePicker;
+		readonly Picker FeaturePicker;
+		readonly Entry ChannelEntry;
+		readonly Entry AliasEntry;
+		readonly Entry StageEntry;
+		readonly Entry TagsEntry;
+		readonly Entry ParamsEntry;
+		readonly Entry ActionEntry;
+		readonly Button CompleteActionButton;
+
+		int urlType = 0;
+		string feature;
 
 		String UriString;
-
-		Button SendEmailButton;
+		bool IsLoggedIn;
 
 		public TestPage ()
 		{
 			BackgroundColor = Color.FromHex ("C0C0C0");
 			NavigationPage.SetHasNavigationBar (this, false);
 
-			Label SLabel = new Label () {
+			var SLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
 				Text = "Session ID:"
 			};
 
-			SessionLabel = new Label () {
+			SessionLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 18
 			};
 
-			Label ILabel = new Label () {
+			var ILabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
 				Text = "Identity ID:"
 			};
 
-			IdentityIdLabel = new Label () {
+			IdentityIdLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 18
 			};
 
-			Label DLabel = new Label () {
+			var DLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
 				Text = "Device Finger Print ID:"
 			};
 
-			DeviceFingerprintIdLabel = new Label () {
+			DeviceFingerprintIdLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 18
 			};
 
-			Label FLabel = new Label () {
+			var FLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
 				Text = "First Params:"
 			};
 
-			FirstLabel = new Label () {
+			FirstLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 18
 			};
@@ -76,13 +91,13 @@ namespace BranchXamarinSDKTestbed
 				FirstLabel.Text = prettyJSON(first);
 			}
 
-			Label LLabel = new Label () {
+			var LLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
 				Text = "Latest Params"
 			};
 
-			LatestLabel = new Label () {
+			LatestLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 18
 			};
@@ -91,19 +106,103 @@ namespace BranchXamarinSDKTestbed
 				LatestLabel.Text = prettyJSON(latest);
 			}
 
-			UriLabel = new Entry () {
+			var uaLabel = new Label {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "Alias"
+			};
+
+			AliasEntry = new Entry {
+				TextColor = Color.Black,
+				Placeholder = "Enter an alias string"
+			};
+
+			var ucLabel = new Label {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "Channel"
+			};
+
+			ChannelEntry = new Entry {
+				TextColor = Color.Black,
+				Placeholder = "Enter a channel string"
+			};
+
+			var usLabel = new Label {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "Stage"
+			};
+
+			StageEntry = new Entry {
+				TextColor = Color.Black,
+				Placeholder = "Enter a stage string"
+			};
+
+			var utagsLabel = new Label {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "Tags (use , to seperate multiple tags)"
+			};
+
+			TagsEntry = new Entry {
+				TextColor = Color.Black,
+				Placeholder = "Enter one or more tags"
+			};
+
+			var upLabel = new Label {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "Params" +
+					" (Use a comma seperated list to add values for keys \"param1\", \"param2\" through \"paramN\".)"
+			};
+
+			ParamsEntry = new Entry {
+				TextColor = Color.Black,
+				Placeholder = "Enter params"
+			};
+
+			var utLabel = new Label {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "URL Type"
+			};
+
+			TypePicker = new Picker {
+				Title = "Unlimited",
+				VerticalOptions = LayoutOptions.CenterAndExpand,
+				SelectedIndex = 0,
+				Items = { "Unlimited", "Single Use" }
+			};
+			TypePicker.SelectedIndexChanged += TypeSelected;
+
+			var ufLabel = new Label {
+				TextColor = Color.Blue,
+				FontSize = 24,
+				Text = "URL Feature"
+			};
+
+			FeaturePicker = new Picker {
+				Title = "None",
+				VerticalOptions = LayoutOptions.CenterAndExpand,
+				SelectedIndex = 0,
+				Items = { "None", "Share", "Referral", "Invite", "Deal", "Gift" }
+			};
+			FeaturePicker.SelectedIndexChanged += FeatureSelected;
+
+			UriLabel = new Entry {
 				TextColor = Color.Black,
 				Text = "Press button to generate a URL"
 			};
 
-			Button getUrlButton = new Button () {
+			var getUrlButton = new Button {
 				Text = "Get URL",
 				BackgroundColor = Color.Gray,
 				TextColor = Color.White
 			};
 			getUrlButton.Clicked += GetUrlClicked;
 
-			SendEmailButton = new Button () {
+			SendEmailButton = new Button {
 				Text = "Send URL in Email",
 				IsEnabled = false,
 				BackgroundColor = Color.Gray,
@@ -111,59 +210,195 @@ namespace BranchXamarinSDKTestbed
 			};
 			SendEmailButton.Clicked += SendEmailClicked;
 
-			Label TOLabel = new Label {
+			var TOLabel = new Label {
 				TextColor = Color.Blue,
 				Text = "Timeout for API calls in seconds",
 				FontSize = 18
 			};
 
 			TimeoutEntry = new Entry {
-				Text = ((int)Settings.GetSettings ().Timeout.TotalSeconds).ToString (),
+				Text = ((int)Branch.GetInstance().Timeout.TotalSeconds).ToString (),
 				TextColor = Color.Black,
 				Keyboard = Keyboard.Numeric
 			};
 			TimeoutEntry.TextChanged += TimeoutChanged;
 
-			Label RLabel = new Label {
+			var RLabel = new Label {
 				TextColor = Color.Blue,
 				Text = "Number of retries before failing a web API call",
 				FontSize = 18
 			};
 
 			RetriesEntry = new Entry {
-				Text = ((int)Settings.GetSettings ().Timeout.TotalSeconds).ToString (),
+				Text = ((int)Branch.GetInstance ().Retries).ToString (),
 				TextColor = Color.Black,
 				Keyboard = Keyboard.Numeric
 			};
 			RetriesEntry.TextChanged += RetriesChanged;
 
-			StackLayout stack = new StackLayout () {
+			var UNLabel = new Label {
+				TextColor = Color.Blue,
+				Text = "Username to login",
+				FontSize = 18
+			};
+
+			UserEntry = new Entry {
+				Placeholder = "Username",
+				TextColor = Color.Black,
+				Keyboard = Keyboard.Create(KeyboardFlags.CapitalizeSentence)
+			};
+			UserEntry.TextChanged += UserChanged;
+
+			LoginButton = new Button {
+				Text = "Login User",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray,
+				IsEnabled = false
+			};
+			LoginButton.Clicked += LoginClicked;
+
+			LogoutButton = new Button {
+				Text = "Logout User",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray,
+				IsEnabled = false
+			};
+			LogoutButton.Clicked += LogoutClicked;
+
+			var caLabel = new Label {
+				TextColor = Color.Blue,
+				Text = "Action",
+				FontSize = 18
+			};
+
+			ActionEntry = new Entry {
+				TextColor = Color.Black,
+				Placeholder = "Action"
+			};
+			ActionEntry.TextChanged += ActionChanged;
+
+			CompleteActionButton = new Button {
+				Text = "User Completed Action",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray,
+				IsEnabled = false
+			};
+			CompleteActionButton.Clicked += CompleteActionClicked;
+
+			var stack1 = new StackLayout {
 				Children = {
 					SLabel,
 					SessionLabel,
 					ILabel,
 					IdentityIdLabel,
 					DLabel,
-					DeviceFingerprintIdLabel,
+					DeviceFingerprintIdLabel
+				}
+			};
+			var frame1 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack1
+			};
+
+			var stack2 = new StackLayout {
+				Children = {
 					FLabel,
 					FirstLabel,
 					LLabel,
-					LatestLabel,
+					LatestLabel
+				}
+			};
+			var frame2 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack2
+			};
+
+			var stack3 = new StackLayout {
+				Children = {
+					uaLabel,
+					AliasEntry,
+					ucLabel,
+					ChannelEntry,
+					usLabel,
+					StageEntry,
+					utagsLabel,
+					TagsEntry,
+					upLabel,
+					ParamsEntry,
+					utLabel,
+					TypePicker,
+					ufLabel,
+					FeaturePicker,
 					getUrlButton,
 					UriLabel,
-					SendEmailButton,
+					SendEmailButton
+				}
+			};
+			var frame3 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack3
+			};
+
+			var stack4 = new StackLayout {
+				Children = {
 					TOLabel,
 					TimeoutEntry,
 					RLabel,
 					RetriesEntry
-				},
-				Spacing = 20,
-				Padding = 20
+				}
+			};
+			var frame4 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack4
 			};
 
-			ScrollView sv = new ScrollView () {
+			var stack5 = new StackLayout {
+				Children = {
+					UNLabel,
+					UserEntry,
+					LoginButton,
+					LogoutButton
+				}
+			};
+			var frame5 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack5
+			};
+
+			var stack6 = new StackLayout {
+				Children = {
+					caLabel,
+					ActionEntry,
+					CompleteActionButton
+				}
+			};
+			var frame6 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack6
+			};
+
+			var stackLayout = new StackLayout {
+				Children = {
+					frame1,
+					frame2,
+					frame3,
+					frame4,
+					frame5,
+					frame6
+				},
+				Spacing = 10,
+				Padding = 10
+			};
+
+			var sv = new ScrollView {
 				Orientation = ScrollOrientation.Vertical,
-				Content = stack
+				Content = stackLayout
 			};
 
 			Content = sv;
@@ -173,7 +408,7 @@ namespace BranchXamarinSDKTestbed
 		{
 			base.OnAppearing ();
 
-			App current = (App)Application.Current;
+			var current = (App)Application.Current;
 			if (current.IsInit) {
 				UpdateLabels ();
 			} else {
@@ -182,23 +417,39 @@ namespace BranchXamarinSDKTestbed
 		}
 
 		async void GetUrlClicked(object sender, EventArgs e) {
-			Dictionary<string, object> data = new Dictionary<string, object> ();
-			data.Add ("param1", "test1");
-			data.Add ("param2", "test2");
-			data.Add ("param3", "test3");
-			Dictionary<string, object> extra = new Dictionary<string, object> ();
-			extra.Add ("extra1", "test1");
-			data.Add ("extra", extra);
-			data.Add ("date", DateTime.Now.ToString ());
+			Dictionary<string, object> data = new Dictionary<string, object>();
+			var paramStr = ParamsEntry.Text;
+			if (!String.IsNullOrWhiteSpace (paramStr)) {
+				String[] strs = paramStr.Split (',');
+				int count = 1;
+				foreach (String str in strs) {
+					String key = "param" + count.ToString ();
+					data.Add (key, str.Trim ());
+					count++;
+				}
+			}
+			data.Add ("url_creation_date", DateTime.Now.ToString ());
+
+			List<String> array = new List<String> ();
+			var tags = TagsEntry.Text;
+			if (String.IsNullOrWhiteSpace (tags)) {
+				array = null;
+			} else {
+				String[] tagStrs = tags.Split(',');
+				foreach (String tag in tagStrs) {
+					array.Add(tag.Trim());
+				}
+			}
 
 			await Branch.GetInstance ().GetShortUrlAsync (this,
 				data,
-				null,
-				null,
-				null,
-				null,
-				null);
-		}
+				String.IsNullOrWhiteSpace(AliasEntry.Text)?null:AliasEntry.Text,
+				String.IsNullOrWhiteSpace(ChannelEntry.Text)?null:ChannelEntry.Text,
+				String.IsNullOrWhiteSpace(StageEntry.Text)?null:StageEntry.Text,
+				array,
+				feature,
+				urlType);
+			}
 
 		void SendEmailClicked(object sender, EventArgs e) {
 			if (UriString != null) {
@@ -208,85 +459,157 @@ namespace BranchXamarinSDKTestbed
 
 		void TimeoutChanged(object sender, TextChangedEventArgs e) {
 			String timeoutStr = e.NewTextValue;
-			int timeout = (int)Settings.GetSettings ().Timeout.TotalSeconds;
+			int timeout;
 			if (!int.TryParse (timeoutStr, out timeout)) {
 				TimeoutEntry.Text = e.OldTextValue;
 			} else {
-				Branch.GetInstance ().SetTimeout (TimeSpan.FromSeconds (timeout));
+				Branch.GetInstance ().Timeout = TimeSpan.FromSeconds (timeout);
 				TimeoutEntry.Text = timeout.ToString (); // Make sure text matches what we stored.
 			}
 		}
 
 		void RetriesChanged(object sender, TextChangedEventArgs e) {
 			String retriesStr = e.NewTextValue;
-			int retries = Settings.GetSettings ().Retries;
+			int retries;
 			if (!int.TryParse (retriesStr, out retries)) {
 				RetriesEntry.Text = e.OldTextValue;
 			} else {
-				Branch.GetInstance ().SetRetries (retries);
+				Branch.GetInstance ().Retries = retries;
 				RetriesEntry.Text = retries.ToString (); // Make sure text matches what we stored.
 			}
 		}
 
+		void UserChanged(object sender, TextChangedEventArgs e) {
+			if (IsLoggedIn) {
+				UserEntry.Text = e.OldTextValue;
+			} else {
+				LoginButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
+			}
+		}
+
+		void ActionChanged(object sender, TextChangedEventArgs e) {
+			CompleteActionButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
+		}
+
+		async void LoginClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().Identify (UserEntry.Text, this);
+			UserEntry.IsEnabled = false;
+			LoginButton.IsEnabled = false;
+		}
+
+		async void LogoutClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().Logout ();
+			IsLoggedIn = false;
+			UserEntry.IsEnabled = true;
+			UserEntry.Text = "";
+			LoginButton.IsEnabled = false;
+			LogoutButton.IsEnabled = false;
+		}
+
+		async void CompleteActionClicked(object sender, EventArgs e) {
+			// Just to test metadata
+			Dictionary<string, object> data = new Dictionary<string, object> ();
+			data.Add ("action_complete_date", DateTime.Now.ToString ());
+			await Branch.GetInstance ().UserCompletedAction (ActionEntry.Text, data);
+		}
+
+		void TypeSelected(object sender, EventArgs args) {
+			switch (TypePicker.SelectedIndex) {
+			case 0:
+				urlType = Constants.URL_TYPE_UNLIMITED;
+				break;
+			case 1:
+				urlType = Constants.URL_TYPE_SINGLE_USE;
+				break;
+			default:
+				urlType = Constants.URL_TYPE_UNLIMITED;
+				break;
+			}
+		}
+
+		void FeatureSelected(object sender, EventArgs args) {
+			switch (FeaturePicker.SelectedIndex) {
+			case 1:
+				feature = Constants.URL_FEATURE_SHARE;
+				break;
+			case 2:
+				feature = Constants.URL_FEATURE_REFERRAL;
+				break;
+			case 3:
+				feature = Constants.URL_FEATURE_INVITE;
+				break;
+			case 4:
+				feature = Constants.URL_FEATURE_DEAL;
+				break;
+			case 5:
+				feature = Constants.URL_FEATURE_GIFT;
+				break;
+			default:
+				feature = null;
+				break;
+			}
+		}
+
 		void AppIsInit(object sender, PropertyChangedEventArgs args) {
-			App current = (App)Application.Current;
+			var current = (App)Application.Current;
 			if (current.IsInit) {
 				UpdateLabels ();
 			} else {
 				if (!String.IsNullOrWhiteSpace (current.Error)) {
-					SessionIdLabel.Text = current.Error;
+					SessionLabel.Text = current.Error;
 				}
 			}
 		}
 
 		void UpdateLabels() {
-			App current = (App)Application.Current;
-			SessionLabel.Text = current.SessionId;
-			IdentityIdLabel.Text = current.IdentityId;
-			DeviceFingerprintIdLabel.Text = current.DeviceFingerPrintId;
-			Dictionary<string, object> first = Branch.GetInstance ().GetFirstReferringParams ();
-			if (first != null) {
-				FirstLabel.Text = prettyJSON (first);
-			} else {
-				FirstLabel.Text = "";
+			if (Session.Current != null) {
+				SessionLabel.Text = Session.Current.Id;
+				DeviceFingerprintIdLabel.Text = Session.Current.DeviceFingerprintId;
 			}
-			Dictionary<string, object> latest = Branch.GetInstance ().GetLatestReferringParams ();
-			if (latest != null) {
-				LatestLabel.Text = prettyJSON (latest);
-			} else {
-				LatestLabel.Text = "";
+			if (User.Current != null) {
+				IdentityIdLabel.Text = User.Current.Id;
 			}
+			var first = Branch.GetInstance ().GetFirstReferringParams ();
+			FirstLabel.Text = (first != null) ? prettyJSON (first) : "";
+			var latest = Branch.GetInstance ().GetLatestReferringParams ();
+			LatestLabel.Text = (latest != null) ? prettyJSON (latest) : "";
 		}
 
-		private String prettyJSON(Dictionary<string, object> data) {
+		String prettyJSON(Dictionary<string, object> data) {
 			return prettyJSON (1, data);
 		}
 
-		// For recursion...
-		private String prettyJSON(int level, Dictionary<string, object> data) {
+		static String blankString(int level) {
 			String ret = "";
-			String blanks = "                                                         ";
+			for (int i = 0; i < level; i++) {
+				ret += "  ";
+			}
+			return ret;
+		}
+
+		// For recursion...
+		String prettyJSON(int level, Dictionary<string, object> data) {
+			String ret = "";
 			if (level > 0) {
-				ret += blanks.Substring (0, level * 2);
+				ret += blankString(level);
 			}
 			ret += "{\n";
 			foreach (string key in data.Keys) {
-				object value;
-				data.TryGetValue (key, out value);
+				object obj;
+				data.TryGetValue (key, out obj);
+				var value = obj as Dictionary<string, object>;
 				if (value != null) {
-					if (value is Dictionary<string, object>) {
-						ret += prettyJSON (level + 1, (Dictionary<string, object>)value);
-					} else {
-						ret += blanks.Substring (0, (level + 1) * 2);
-						ret += key;
-						ret += " : ";
-						ret += value.ToString ();
-						ret += "\n";
-					}
+					ret += prettyJSON (level + 1, value);
+				} else {
+					ret += blankString (level + 1);
+					ret += key;
+					ret += " : ";
+					ret += obj as String;
+					ret += "\n";
 				}
 			}
 			if (level > 0) {
-				ret += blanks.Substring (0, level * 2);
+				ret += blankString (level);
 			}
 			ret += "}\n";
 			return ret;
@@ -303,6 +626,26 @@ namespace BranchXamarinSDKTestbed
 			} else if (error != null) {
 				UriLabel.Text = error.ErrorMessage;
 			}
+		}
+
+		#endregion
+
+		#region IBranchReferralInitInterface implementation
+
+		public void OnInitFinished (Dictionary<string, object> result, BranchError error)
+		{
+			if (error == null) {
+				IsLoggedIn = true;
+				LogoutButton.IsEnabled = true;
+				LoginButton.IsEnabled = false;
+				UserEntry.IsEnabled = false;
+			} else {
+				IsLoggedIn = false;
+				LogoutButton.IsEnabled = false;
+				LoginButton.IsEnabled = true;
+				UserEntry.IsEnabled = true;
+			}
+			UpdateLabels ();
 		}
 
 		#endregion

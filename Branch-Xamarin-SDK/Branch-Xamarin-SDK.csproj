@@ -49,7 +49,9 @@
     <Compile Include="Requests\BranchOpenRequest.cs" />
     <Compile Include="Requests\BranchRequest.cs" />
     <Compile Include="Utils\DictionaryConverter.cs" />
-    <Compile Include="Model\Settings.cs" />
+    <Compile Include="Requests\BranchIdentifyRequest.cs" />
+    <Compile Include="Requests\BranchLogoutRequest.cs" />
+    <Compile Include="Requests\BranchCompleteActionRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

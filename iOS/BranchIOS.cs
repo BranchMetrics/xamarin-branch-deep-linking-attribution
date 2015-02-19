@@ -1,11 +1,11 @@
 ﻿using System;
-
-using CoreBluetooth;
+using System.Net;
+using BranchXamarinSDK;
 using CoreTelephony;
 using Foundation;
-using UIKit;
+using AdSupport;
 
-using BranchXamarinSDK;
+using UIKit;
 
 namespace BranchXamarinSDKTestbed.iOS
 {
@@ -14,8 +14,8 @@ namespace BranchXamarinSDKTestbed.iOS
 		protected BranchIOS() {
 		}
 
-		public static void Init(String appKey, bool autoClose = false) {
-			BranchIOS newBranch = new BranchIOS ();
+		public static void Init(String appKey, NSUrl url, bool autoClose = false) {
+			var newBranch = new BranchIOS ();
 			newBranch.AppKey = appKey;
 			newBranch.DeviceInformation = newBranch;
 			newBranch.Properties = newBranch;
@@ -24,12 +24,19 @@ namespace BranchXamarinSDKTestbed.iOS
 			if (autoClose) {
 				newBranch.setupNotificationCallbacks ();
 			}
-			Settings settings = Settings.GetSettings ();
-			settings.Timeout = TimeSpan.FromSeconds (newBranch.Properties.GetPropertyInt ("timeout", 10));
-			settings.Retries = newBranch.Properties.GetPropertyInt ("retries", 3);
+
+			if (url != null) {
+				foreach (string query in url.Query.Split (new [] { '&' })) {
+					if (query.StartsWith ("link_click_id")) {
+						if (query.Length > 13) {
+							newBranch.LinkClickIdentifier = WebUtility.UrlDecode(query.Substring(13).Trim());
+						}
+					}
+				}
+			}
 		}
 
-		private void setupNotificationCallbacks() {
+		void setupNotificationCallbacks() {
 			UIApplication.Notifications.ObserveWillResignActive (WillResignActive);
 			UIApplication.Notifications.ObserveDidBecomeActive (DidBecomeActive);
 		}
@@ -50,12 +57,19 @@ namespace BranchXamarinSDKTestbed.iOS
 
 		public string GetDeviceId (bool isDebug, out bool isReal)
 		{
+			string ret;
 			isReal = true;
-			if (!isDebug) {
-				return UIDevice.CurrentDevice.IdentifierForVendor.AsString ();
+
+			if (isDebug) {
+				isReal = false;
+				ret = Guid.NewGuid ().ToString ();
 			} else {
-				return Guid.NewGuid ().ToString ();
+				ret = ASIdentifierManager.SharedManager.AdvertisingIdentifier.AsString ();
+				if (ret == null) {
+					ret = UIDevice.CurrentDevice.IdentifierForVendor.AsString ();
+				}
 			}
+			return ret;
 		}
 
 		public string GetOS ()
@@ -90,7 +104,7 @@ namespace BranchXamarinSDKTestbed.iOS
 		}
 
 		public string GetCarrier() {
-			CTTelephonyNetworkInfo info = new CTTelephonyNetworkInfo ();
+			var info = new CTTelephonyNetworkInfo ();
 			return info.SubscriberCellularProvider.CarrierName;
 		}
 
@@ -123,11 +137,11 @@ namespace BranchXamarinSDKTestbed.iOS
 
 		public String GetURIScheme() {
 			String scheme = "";
-			NSArray urlTypes = (NSArray)NSBundle.MainBundle.ObjectForInfoDictionary ("CFBundleURLTypes");
+			var urlTypes = (NSArray)NSBundle.MainBundle.ObjectForInfoDictionary ("CFBundleURLTypes");
 			if (urlTypes != null) {
 				for (nuint i = 0; i < urlTypes.Count; i++) {
 					NSDictionary urlType = urlTypes.GetItem<NSDictionary> (i);
-					NSArray urlSchemes = (NSArray)urlType.ObjectForKey (new NSString("CFBundleURLScheme"));
+					var urlSchemes = (NSArray)urlType.ObjectForKey (new NSString("CFBundleURLScheme"));
 					if (urlSchemes != null) {
 						for (nuint j = 0; j < urlSchemes.Count; j++) {
 							NSString urlScheme = urlSchemes.GetItem<NSString> (i);
@@ -146,6 +160,10 @@ namespace BranchXamarinSDKTestbed.iOS
 			}
 
 			return scheme;
+		}
+
+		public void WriteLog(String message, String tag = null, int level = 3) {
+			Console.WriteLine (message);
 		}
 
 		#endregion
@@ -178,7 +196,10 @@ namespace BranchXamarinSDKTestbed.iOS
 			int ret = defaultValue;
 			if (!String.IsNullOrWhiteSpace(key)) {
 				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-				ret = (int)defaults.IntForKey ((NSString)key);
+				ret = (int)defaults.IntForKey (key);
+				if (ret == 0) {
+					ret = defaultValue;
+				}
 			} 
 			return ret;
 		}

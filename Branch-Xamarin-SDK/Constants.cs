@@ -5,7 +5,7 @@ namespace BranchXamarinSDK
 	static public class Constants
 	{
 		public const String SDK_VERSION = "1.0.0";
-		static public Uri BASE_URI = new Uri("https://api.branch.io/");
+		public static Uri BASE_URI = new Uri("https://api.branch.io/");
 
 		// Link Types for GetShortURL
 		public const int URL_TYPE_UNLIMITED = 0;
@@ -17,6 +17,10 @@ namespace BranchXamarinSDK
 		public const String URL_FEATURE_INVITE = "invite";
 		public const String URL_FEATURE_DEAL = "deal";
 		public const String URL_FEATURE_GIFT = "gift";
+
+		// Internal keys for data saved in properties
+		internal const String TIMEOUT_KEY = "timeout";
+		internal const String RETRY_KEY = "retry";
 	}
 }
 

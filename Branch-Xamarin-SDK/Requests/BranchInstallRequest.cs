@@ -32,16 +32,17 @@ namespace BranchXamarinSDK
 			public bool wifi;
 			public string uri_scheme;
 			public bool debug;
-			public String sdk = Constants.SDK_VERSION;
+			public string sdk = Constants.SDK_VERSION;
+			public string link_identifier;
 
 			public InstallParams() {
 			}
 		}
 
-		private InstallParams Params;
-		IBranchReferralInitInterface Callback;
+		readonly InstallParams Params;
+		readonly IBranchReferralInitInterface Callback;
 
-		public BranchInstallRequest (String appId,
+		public BranchInstallRequest (
 			String hardwareId,
 			bool isHardwareIdReal,
 			String appVersion,
@@ -62,10 +63,11 @@ namespace BranchXamarinSDK
 			bool wifi,
 			string uriScheme,
 			bool debug,
+			string linkClickIdentifier,
 			IBranchReferralInitInterface callback) : base(BranchRequestType.REQUEST_INSTALL)
 		{
 			Params = new InstallParams ();
-			Params.app_id = appId;
+			Params.app_id = Branch.GetInstance().AppKey;
 			Params.hardware_id = hardwareId;
 			Params.is_hardware_id_real = isHardwareIdReal;
 			Params.app_version = appVersion;
@@ -85,49 +87,63 @@ namespace BranchXamarinSDK
 			Params.screen_height = screenHeight;
 			Params.uri_scheme = uriScheme;
 			Params.debug = debug;
+			Params.wifi = wifi;
+			Params.link_identifier = linkClickIdentifier;
 			Callback = callback;
 		}
 
 		override async public Task Execute() {
 			try {
 				InitClient();
-				String inBody = JsonConvert.SerializeObject(Params);
+				var inSettings = new JsonSerializerSettings();
+				inSettings.NullValueHandling = NullValueHandling.Ignore;
+				String inBody = JsonConvert.SerializeObject(Params, inSettings);
+				Branch.GetInstance ().Log ("Sending install request", "WEBAPI", 3);
 				HttpResponseMessage response = await Client.PostAsync ("v1/install",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
+					Branch.GetInstance ().Log ("Install completed successfully", "WEBAPI", 3);
 
-					JsonSerializerSettings settings = new JsonSerializerSettings();
-					List<JsonConverter> converterList = new List<JsonConverter>();
+					var settings = new JsonSerializerSettings();
+					var converterList = new List<JsonConverter>();
 					converterList.Add(new DictionaryConverter());
 					settings.Converters = converterList;
 					Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(body, settings);
 
 					object temp;
 					result.TryGetValue("data", out temp);
-					Dictionary<string, object> data = null;
-					if (temp is Dictionary<string, object>) {
-						data = (Dictionary<string, object>)temp;
-					} else if (temp is String) {
-						data = JsonConvert.DeserializeObject<Dictionary<string, object>>((String)temp, settings);
+					Dictionary<string, object> data;
+					data = temp as Dictionary<string, object>;
+					String dataStr = null;
+					if (data == null) {
+						if (temp != null) {
+							dataStr = temp as String;
+							data = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr, settings);
+						}
+					} else {
+						dataStr = JsonConvert.SerializeObject(data);
 					}
 
-					Branch.GetInstance().UpdateUserAndSession(result, data, true);
+					Branch.GetInstance ().UpdateUserAndSession(result, dataStr, true);
 
 					if (Callback != null) {
 						Callback.OnInitFinished (result, null);
 					}
 				} else {
+					Branch.GetInstance().Log("Install failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
 					if (Callback != null) {
-						Callback.OnInitFinished (null, new BranchError (response.ReasonPhrase, System.Convert.ToInt32(response.StatusCode)));
+						Callback.OnInitFinished (null, new BranchError (response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
 					}
 				}
 			} catch (TaskCanceledException ex) {
+				Branch.GetInstance ().Log ("Install timed out", "WEBAPI", 6);
 				if (Callback != null) {
-					BranchError error = new BranchError ("Operation Timed Out", 1);
+					var error = new BranchError ("Operation Timed Out", 1);
 					Callback.OnInitFinished (null, error);
 				}
 			} catch (Exception ex) {
+				Branch.GetInstance ().Log ("Exception sending install request: " + ex.Message, "WEBAPI", 6);
 				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
 			}
 		}

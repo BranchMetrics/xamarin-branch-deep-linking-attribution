@@ -20,74 +20,87 @@ namespace BranchXamarinSDK
 			public string os;
 			public bool debug;
 			public string uri_scheme;
+			public string link_identifier;
 
 			public OpenParams() {
 			}
 		}
 
-		OpenParams Params;
-		IBranchReferralInitInterface Callback;
+		readonly OpenParams Params;
+		readonly IBranchReferralInitInterface Callback;
 
 		public BranchOpenRequest (
-			string appId,
-			string deviceFingerprintId,
-			string identityId,
 			bool isReferral,
 			string appVersion,
 			string osVersion,
 			string os,
 			string uriScheme,
 			bool debug,
+			string linkClickId,
 			IBranchReferralInitInterface callback) : base(BranchRequestType.REQUEST_OPEN)
 		{
 			Params = new OpenParams ();
-			Params.app_id = appId;
-			Params.device_fingerprint_id = deviceFingerprintId;
-			Params.identity_id = identityId;
+			Params.app_id = Branch.GetInstance().AppKey;
+			Params.device_fingerprint_id = Session.Current.DeviceFingerprintId;
+			Params.identity_id = User.Current.Id;
 			Params.is_referrable = isReferral ? 1 : 0;
 			Params.app_version = appVersion;
 			Params.os_version = osVersion;
 			Params.os = os;
 			Params.uri_scheme = uriScheme;
 			Params.debug = debug;
+			Params.link_identifier = linkClickId;
 			Callback = callback;
 		}
 
 		override async public Task Execute() {
 			try {
 				InitClient();
-				String inBody = JsonConvert.SerializeObject(Params);
+				var inSettings = new JsonSerializerSettings();
+				inSettings.NullValueHandling = NullValueHandling.Ignore;
+				String inBody = JsonConvert.SerializeObject(Params, inSettings);
+				Branch.GetInstance().Log("Sending open request", "WEBAPI", 3);
 				HttpResponseMessage response = await Client.PostAsync ("v1/open",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
  				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
+					Branch.GetInstance().Log("Open request completed successfully", "WEBAPI", 3);
 
-					JsonSerializerSettings settings = new JsonSerializerSettings();
-					List<JsonConverter> converterList = new List<JsonConverter>();
+					var settings = new JsonSerializerSettings();
+					var converterList = new List<JsonConverter>();
 					converterList.Add(new DictionaryConverter());
 					settings.Converters = converterList;
 					Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(body, settings);
 
 					object temp;
 					result.TryGetValue("data", out temp);
-					Dictionary<string, object> data = null;
-					if (temp is Dictionary<string, object>) {
-						data = (Dictionary<string, object>)temp;
-					} else if (temp is String) {
-						data = JsonConvert.DeserializeObject<Dictionary<string, object>>((String)temp, settings);
+					Dictionary<string, object> data;
+					data = temp as Dictionary<string, object>;
+					String dataStr = null;
+					if (data == null) {
+						if (temp != null) {
+							dataStr = temp as String;
+							data = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr, settings);
+						}
+					} else {
+						dataStr = JsonConvert.SerializeObject(data);
 					}
 
-					Branch.GetInstance().UpdateUserAndSession(result, data, false);
+					Branch.GetInstance().UpdateUserAndSession(result, dataStr, false);
 
 					if (Callback != null) {
 						Callback.OnInitFinished (result, null);
 					}
 				} else {
+					Branch.GetInstance().Log("Logout failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
 					if (Callback != null) {
-						Callback.OnInitFinished (null, new BranchError (response.ReasonPhrase, System.Convert.ToInt32(response.StatusCode)));
+						Callback.OnInitFinished (null, new BranchError (response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
 					}
 				}
+			} catch (TaskCanceledException ex) {
+				Branch.GetInstance().Log("Open timed out", "WEBAPI", 6);
 			} catch (Exception ex) {
+				Branch.GetInstance().Log("Exception sending open: " + ex.Message, "WEBAPI", 6);
 				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
 			}
 		}

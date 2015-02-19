@@ -10,7 +10,8 @@ namespace BranchXamarinSDK
 		REQUEST_CLOSE,
 		REQUEST_IDENTIFY,
 		REQUEST_LOGOUT,
-		REQUEST_GET_URL
+		REQUEST_GET_URL,
+		REQUEST_COMPLETE_ACTION
 	};
 
 	abstract public class BranchRequest
@@ -29,7 +30,7 @@ namespace BranchXamarinSDK
 
 		protected void InitClient() {
 			Client = new HttpClient ();
-			Client.Timeout = Settings.GetSettings ().Timeout;
+			Client.Timeout = Branch.GetInstance().Timeout;
 			Client.BaseAddress = Constants.BASE_URI;
 		}
 	}

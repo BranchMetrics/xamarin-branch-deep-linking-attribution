@@ -4,17 +4,22 @@ using UIKit;
 namespace BranchXamarinSDKTestbed.iOS
 {
 	[Register ("AppDelegate")]
-	public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+	public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
-		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+		public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
 		{
 			global::Xamarin.Forms.Forms.Init ();
 
-			BranchIOS.Init ("90830750554783802");
+			NSUrl url = null;
+			if ((launchOptions != null) && launchOptions.ContainsKey(UIApplication.LaunchOptionsUrlKey)) {
+				url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
+			}
+
+			BranchIOS.Init ("90830750554783802", url);
 
 			LoadApplication (new App ());
 
-			return base.FinishedLaunching (app, options);
+			return base.FinishedLaunching (uiApplication, launchOptions);
 		}
 	}
 }

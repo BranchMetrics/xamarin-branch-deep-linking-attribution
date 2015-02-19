@@ -42,11 +42,11 @@ namespace BranchXamarinSDKTestbed
 			Branch branch = Branch.GetInstance ();
 			branch.InitSessionAsync (this);
 		}
-
+	
 		protected override void OnSleep ()
 		{
 			Branch branch = Branch.GetInstance ();
-			branch.CloseSessionAsync ().Wait ();
+			branch.CloseSessionAsync ();
 		}
 
 		protected override void OnResume ()
@@ -77,21 +77,6 @@ namespace BranchXamarinSDKTestbed
 			System.Diagnostics.Debug.WriteLine ("Initial Result: " + result);
 
 			if (result != null) {
-				object temp;
-				result.TryGetValue ("session_id", out temp);
-				if ((temp != null) && (temp is String)) {
-					SessionId = (String)temp;
-				}
-				temp = null;
-				result.TryGetValue ("identity_id", out temp);
-				if ((temp != null) && (temp is String)) {
-					IdentityId = (String)temp;
-				}
-				temp = null;
-				result.TryGetValue ("device_fingerprint_id", out temp);
-				if ((temp != null) && (temp is String)) {
-					DeviceFingerPrintId = (String)temp;
-				}
 				Error = null;
 				IsInit = true;
 			} else {

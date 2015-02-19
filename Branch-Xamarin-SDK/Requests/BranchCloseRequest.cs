@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -20,30 +18,34 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		CloseParams Params;
+		readonly CloseParams Params;
 
-
-		public BranchCloseRequest (
-			string appId,
-			string deviceFingerprintId,
-			string identityId,
-			string sessionId) : base (BranchRequestType.REQUEST_CLOSE)
+		public BranchCloseRequest () : base (BranchRequestType.REQUEST_CLOSE)
 		{
 			Params = new CloseParams ();
-			Params.app_id = appId;
-			Params.device_fingerprint_id = deviceFingerprintId;
-			Params.identity_id = identityId;
-			Params.session_id = sessionId;
+			Params.app_id = Branch.GetInstance().AppKey;
+			Params.device_fingerprint_id = Session.Current.DeviceFingerprintId;
+			Params.identity_id = User.Current.Id;
+			Params.session_id = Session.Current.Id;
 		}
 
 		override async public Task Execute() {
 			try {
 				InitClient();
+				Branch.GetInstance ().Log ("Sending close request", "WEBAPI");
 				String inBody = JsonConvert.SerializeObject(Params);
 				HttpResponseMessage response = await Client.PostAsync ("v1/close",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
+				if (response.StatusCode == System.Net.HttpStatusCode.OK) {
+					Branch.GetInstance().Log("Close request completed successfully", "WEBAPI");
+				} else {
+					Branch.GetInstance().Log("Close failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
+				}
 				System.Diagnostics.Debug.WriteLine("Close session completed with status: " + response.ReasonPhrase);
+			} catch (TaskCanceledException ex) {
+				Branch.GetInstance().Log("Close request timed out", "WEBAPI", 6);
 			} catch (Exception ex) {
+				Branch.GetInstance().Log("Exception sending close: " + ex.Message, "WEBAPI", 6);
 				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
 			}
 		}

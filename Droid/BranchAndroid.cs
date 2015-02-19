@@ -4,35 +4,32 @@ using Android.Content.PM;
 using Android.Net;
 using Android.Telephony;
 using Android.Util;
-using Android.Views;
 
 using BranchXamarinSDK;
 
-using Java.IO;
-using Java.Util.Jar;
-
 using System;
+using System.Collections.Generic;
 
 namespace BranchXamarinSDKTestbed.Droid
 {
 	public class BranchAndroid : Branch, IBranchGetDeviceInformation, IBranchProperties
 	{
-		private Context AppContext;
+		Context AppContext;
 
 		protected BranchAndroid() {
 		}
 
-		public static void Init(Context context, String appKey) {
-			BranchAndroid newBranch = new BranchAndroid ();
+		public static void Init(Context context, String appKey, Android.Net.Uri uri = null) {
+			var newBranch = new BranchAndroid ();
 			newBranch.AppKey = appKey;
 			newBranch.DeviceInformation = newBranch;
 			newBranch.Properties = newBranch;
 			newBranch.AppContext = context.ApplicationContext;
 			branch = newBranch;
 			newBranch.InitUserAndSession ();
-			Settings settings = Settings.GetSettings ();
-			settings.Timeout = TimeSpan.FromSeconds (newBranch.GetPropertyInt ("timeout", 3));
-			settings.Retries = newBranch.GetPropertyInt ("retries", 3);
+			if ((uri != null) && uri.IsHierarchical) {
+				newBranch.LinkClickIdentifier = uri.GetQueryParameter ("link_click_id");
+			}
 		}
 
 		public static BranchAndroid getInstance() {
@@ -96,8 +93,7 @@ namespace BranchXamarinSDKTestbed.Droid
 
 		public string GetCarrier() {
 			if (GetTelephonePresent()) {
-				TelephonyManager tm =
-					(TelephonyManager)AppContext.GetSystemService (Context.TelephonyService);
+				var tm = (TelephonyManager)AppContext.GetSystemService (Context.TelephonyService);
 				if (tm != null) {
 					return tm.NetworkOperatorName;
 				}
@@ -131,11 +127,8 @@ namespace BranchXamarinSDKTestbed.Droid
 			bool ret = false;
 			BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
 			try {
-				if ((adapter != null) && adapter.IsEnabled) {
-					ret = true;
-				}
+				ret |= ((adapter != null) && adapter.IsEnabled);
 			} catch (Java.Lang.SecurityException ex) {
-				Log.Debug ("BranchAndroid", "Checking bluetooth present exception: " + ex.Message);
 				System.Diagnostics.Debug.WriteLine ("Need BT permissions to get Bluetooth present");
 			}
 
@@ -145,8 +138,7 @@ namespace BranchXamarinSDKTestbed.Droid
 		public bool GetWifiConnected() {
 			if (AppContext.CheckCallingOrSelfPermission(Android.Manifest.Permission.AccessNetworkState) ==
 				Permission.Granted) {
-				ConnectivityManager cm = 
-					(ConnectivityManager)AppContext.GetSystemService(Context.ConnectivityService);
+				var cm = (ConnectivityManager)AppContext.GetSystemService(Context.ConnectivityService);
 				return cm.GetNetworkInfo(ConnectivityType.Wifi).IsConnected;
 			}
 
@@ -157,11 +149,38 @@ namespace BranchXamarinSDKTestbed.Droid
 			DisplayMetrics dm = AppContext.Resources.DisplayMetrics;
 			width = dm.WidthPixels;
 			height = dm.HeightPixels;
-			return System.Convert.ToInt32 (dm.DensityDpi);
+			return Convert.ToInt32 (dm.DensityDpi);
 		}
 
 		public string GetURIScheme() {
 			return "";
+		}
+
+		public void WriteLog(String message, String tag = null, int level = 3) {
+			String localTag = "";
+			if (tag != null) {
+				localTag = tag;
+			}
+			switch (level) {
+			case 2:
+				Android.Util.Log.Verbose (localTag, message);
+				break;
+			case 3:
+				Android.Util.Log.Debug (localTag, message);
+				break;
+			case 4:
+				Android.Util.Log.Info (localTag, message);
+				break;
+			case 5:
+				Android.Util.Log.Warn (localTag, message);
+				break;
+			case 6:
+				Android.Util.Log.Error (localTag, message);
+				break;
+			default:
+				Android.Util.Log.Debug (localTag, message);
+				break;
+			}
 		}
 
 		#endregion

@@ -7,7 +7,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.branch.sdk.BranchXamarinSDKTestbed</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.10</string>
+	<string>1.0.12</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -49,6 +49,6 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>10</string>
+	<string>12</string>
 </dict>
 </plist>

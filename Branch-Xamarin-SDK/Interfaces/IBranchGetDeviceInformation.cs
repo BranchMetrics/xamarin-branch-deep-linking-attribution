@@ -19,6 +19,7 @@ namespace BranchXamarinSDK
 		bool GetWifiConnected();
 		int GetDpi(out int width, out int height);
 		String GetURIScheme();
+		void WriteLog(String message, String tag = null, int level = 3);
 	}
 }
 
