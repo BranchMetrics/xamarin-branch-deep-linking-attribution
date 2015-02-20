@@ -21,15 +21,16 @@ namespace BranchXamarinSDK
 		}
 
 		readonly LogoutParams Params;
+		readonly IBranchCompletionCallback Callback;
 
-
-		public BranchLogoutRequest () : base (BranchRequestType.REQUEST_LOGOUT)
+		public BranchLogoutRequest (IBranchCompletionCallback callback = null) : base (BranchRequestType.REQUEST_LOGOUT)
 		{
 			Params = new LogoutParams ();
 			Params.app_id = Branch.GetInstance().AppKey;
 			Params.device_fingerprint_id = Session.Current.DeviceFingerprintId;
 			Params.identity_id = User.Current.Id;
 			Params.session_id = Session.Current.Id;
+			Callback = callback;
 		}
 
 		override async public Task Execute() {
@@ -49,12 +50,24 @@ namespace BranchXamarinSDK
 					settings.Converters = converterList;
 					Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(body, settings);
 					Branch.GetInstance().UpdateUserAndSession(result, null, true); // Passing true so that both first and latest data gets cleared.
+					if (Callback != null) {
+						Callback.RequestComplete(null);
+					}
 				} else {
+					if (Callback != null) {
+						Callback.RequestComplete(new BranchError("Logout failed with HTTP error: " + response.ReasonPhrase));
+					}
 					Branch.GetInstance().Log("Logout failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
 				}
 			} catch (TaskCanceledException ex) {
+				if (Callback != null) {
+					Callback.RequestComplete(new BranchError("Operation timed out", 1));
+				}
 				Branch.GetInstance ().Log ("Logout timed out", "WEBAPI", 6);
 			} catch (Exception ex) {
+				if (Callback != null) {
+					Callback.RequestComplete(new BranchError("Execption: " + ex.Message));
+				}
 				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
 				Branch.GetInstance ().Log ("Exception sending logout" + ex.Message, "WEBAPI", 6);
 			}

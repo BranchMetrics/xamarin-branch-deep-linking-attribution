@@ -31,6 +31,9 @@ namespace BranchXamarinSDKTestbed
 		readonly Entry ParamsEntry;
 		readonly Entry ActionEntry;
 		readonly Button CompleteActionButton;
+		readonly Button LoadActionButton;
+		readonly Entry LoadActionEntry;
+		readonly Label LoadActionLabel;
 
 		int urlType = 0;
 		string feature;
@@ -285,6 +288,25 @@ namespace BranchXamarinSDKTestbed
 			};
 			CompleteActionButton.Clicked += CompleteActionClicked;
 
+			LoadActionButton = new Button {
+				Text = "Load Action Counts",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray
+			};
+			LoadActionButton.Clicked += LoadActionClicked;
+
+			LoadActionEntry = new Entry {
+				TextColor = Color.Black,
+				Placeholder = "Enter a action to see counts"
+			};
+			LoadActionEntry.TextChanged += LoadActionChanged;
+
+			LoadActionLabel = new Label {
+				TextColor = Color.Blue,
+				Text = "Total: 0 Unique: 0",
+				FontSize = 18
+			};
+
 			var stack1 = new StackLayout {
 				Children = {
 					SLabel,
@@ -374,7 +396,10 @@ namespace BranchXamarinSDKTestbed
 				Children = {
 					caLabel,
 					ActionEntry,
-					CompleteActionButton
+					CompleteActionButton,
+					LoadActionButton,
+					LoadActionEntry,
+					LoadActionLabel
 				}
 			};
 			var frame6 = new Frame {
@@ -491,6 +516,15 @@ namespace BranchXamarinSDKTestbed
 			CompleteActionButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
 		}
 
+		void LoadActionChanged(object sender, TextChangedEventArgs e) {
+			if (!String.IsNullOrWhiteSpace(e.NewTextValue)) {
+				LoadActionLabel.Text = "Total: " +
+					Branch.GetInstance().GetReferralCountsForAction(e.NewTextValue, false).ToString() +
+					" Unique: " +
+					Branch.GetInstance().GetReferralCountsForAction(e.NewTextValue, true).ToString();
+			}
+		}
+
 		async void LoginClicked(object sender, EventArgs e) {
 			await Branch.GetInstance ().Identify (UserEntry.Text, this);
 			UserEntry.IsEnabled = false;
@@ -511,6 +545,35 @@ namespace BranchXamarinSDKTestbed
 			Dictionary<string, object> data = new Dictionary<string, object> ();
 			data.Add ("action_complete_date", DateTime.Now.ToString ());
 			await Branch.GetInstance ().UserCompletedAction (ActionEntry.Text, data);
+		}
+
+		class CompletionCallback : IBranchCompletionCallback {
+			public delegate void HandleCompletionDelegate(BranchError error);
+
+			HandleCompletionDelegate MyDelegate;
+
+			public CompletionCallback(HandleCompletionDelegate d) {
+				MyDelegate = d;
+			}
+
+			public void RequestComplete (BranchError error)
+			{
+				if (MyDelegate != null) {
+					MyDelegate (error);
+				}
+			}
+		}
+
+		async void LoadActionClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().LoadReferralActionCounts (
+				new CompletionCallback (delegate(BranchError error) {
+					if (!String.IsNullOrWhiteSpace(LoadActionEntry.Text)) {
+						LoadActionLabel.Text = "Total: " +
+							Branch.GetInstance().GetReferralCountsForAction(LoadActionEntry.Text, false).ToString() +
+							" Unique: " +
+							Branch.GetInstance().GetReferralCountsForAction(LoadActionEntry.Text, true).ToString();
+					}
+				}));
 		}
 
 		void TypeSelected(object sender, EventArgs args) {

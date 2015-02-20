@@ -20,13 +20,16 @@ namespace BranchXamarinSDK
 		protected SemaphoreSlim NetworkSema;  // This ensures that only one network operation happens at a time.
 		protected bool Inited;
 		protected Task InitTask;
-		protected String LinkClickIdentifier;
 
 		protected internal Dictionary<BranchLinkData, Uri> LinkDataCache;
+		protected internal Dictionary<string, int> TotalActionCounts;
+		protected internal Dictionary<string, int> UniqueActionCounts;
+		protected internal String LinkClickIdentifier;
 
 		int timeout = -1;
 		int retries = -1;
 
+		public bool Debug;
 		public TimeSpan Timeout {
 			get {
 				if (timeout == -1) {
@@ -58,6 +61,8 @@ namespace BranchXamarinSDK
 			QueueSema = new SemaphoreSlim (1, 1);
 			NetworkSema = new SemaphoreSlim (1, 1);
 			LinkDataCache = new Dictionary<BranchLinkData, Uri>();
+			TotalActionCounts = new Dictionary<string, int> ();
+			UniqueActionCounts = new Dictionary<string, int> ();
 		}
 
 		public static Branch GetInstance() {
@@ -104,12 +109,11 @@ namespace BranchXamarinSDK
 							DeviceInformation.GetOSVersion(),
 							DeviceInformation.GetOS(),
 							DeviceInformation.GetURIScheme(),
-							false,
-							LinkClickIdentifier,
+							DeviceInformation.GetAdTrackingEnabled(),
 							callback);
 					} else {
 						bool isReal;
-						String deviceId = DeviceInformation.GetDeviceId (false, out isReal);
+						String deviceId = DeviceInformation.GetDeviceId (Debug, out isReal);
 
 						int width, height;
 						int density = DeviceInformation.GetDpi (out width, out height);
@@ -132,8 +136,7 @@ namespace BranchXamarinSDK
 							height,
 							DeviceInformation.GetWifiConnected (),
 							DeviceInformation.GetURIScheme(),
-							false,
-							LinkClickIdentifier,
+							DeviceInformation.GetAdTrackingEnabled(),
 							callback);
 					}
 
@@ -148,8 +151,8 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		public async Task CloseSessionAsync() {
-			var req = new BranchCloseRequest ();
+		public async Task CloseSessionAsync(IBranchCompletionCallback callback = null) {
+			var req = new BranchCloseRequest (callback);
 			await EnqueueRequestAsync (req);
 			Inited = false;
 		}
@@ -159,8 +162,8 @@ namespace BranchXamarinSDK
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task Logout() {
-			var req = new BranchLogoutRequest ();
+		public async Task Logout(IBranchCompletionCallback callback = null) {
+			var req = new BranchLogoutRequest (callback);
 			await EnqueueRequestAsync (req);
 		}
 
@@ -198,6 +201,11 @@ namespace BranchXamarinSDK
 			await EnqueueRequestAsync (req);
 		}
 
+		public async Task LoadReferralActionCounts(IBranchCompletionCallback callback = null) {
+			var req = new BranchLoadReferralActionCountsRequest (callback);
+			await EnqueueRequestAsync (req);
+		}
+
 		public Dictionary<String, object> GetLatestReferringParams() {
 			String data = Properties.GetPropertyString ("last_referring_params");
 			if (!String.IsNullOrWhiteSpace(data)) {
@@ -222,6 +230,16 @@ namespace BranchXamarinSDK
 			}
 
 			return null;
+		}
+
+		public int GetReferralCountsForAction(String action, bool unique) {
+			int ret;
+			if (unique) {
+				UniqueActionCounts.TryGetValue (action, out ret);
+			} else {
+				TotalActionCounts.TryGetValue (action, out ret);
+			}
+			return ret;
 		}
 
 		// Private Methods

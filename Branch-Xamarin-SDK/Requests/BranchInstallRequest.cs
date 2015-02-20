@@ -31,9 +31,9 @@ namespace BranchXamarinSDK
 			public int screen_width;
 			public bool wifi;
 			public string uri_scheme;
-			public bool debug;
-			public string sdk = Constants.SDK_VERSION;
+			public string sdk = "xamarin" + Constants.SDK_VERSION;
 			public string link_identifier;
+			public string ad_tracking_enabled;
 
 			public InstallParams() {
 			}
@@ -62,8 +62,7 @@ namespace BranchXamarinSDK
 			int screenWidth,
 			bool wifi,
 			string uriScheme,
-			bool debug,
-			string linkClickIdentifier,
+			string addTrackingEnabled,
 			IBranchReferralInitInterface callback) : base(BranchRequestType.REQUEST_INSTALL)
 		{
 			Params = new InstallParams ();
@@ -86,9 +85,9 @@ namespace BranchXamarinSDK
 			Params.screen_width = screenWidth;
 			Params.screen_height = screenHeight;
 			Params.uri_scheme = uriScheme;
-			Params.debug = debug;
 			Params.wifi = wifi;
-			Params.link_identifier = linkClickIdentifier;
+			Params.link_identifier = Branch.GetInstance().LinkClickIdentifier;
+			Params.ad_tracking_enabled = addTrackingEnabled;
 			Callback = callback;
 		}
 
@@ -98,12 +97,12 @@ namespace BranchXamarinSDK
 				var inSettings = new JsonSerializerSettings();
 				inSettings.NullValueHandling = NullValueHandling.Ignore;
 				String inBody = JsonConvert.SerializeObject(Params, inSettings);
-				Branch.GetInstance ().Log ("Sending install request", "WEBAPI", 3);
+				Branch.GetInstance ().Log ("Sending install request", "WEBAPI");
 				HttpResponseMessage response = await Client.PostAsync ("v1/install",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
-					Branch.GetInstance ().Log ("Install completed successfully", "WEBAPI", 3);
+					Branch.GetInstance ().Log ("Install completed successfully", "WEBAPI");
 
 					var settings = new JsonSerializerSettings();
 					var converterList = new List<JsonConverter>();

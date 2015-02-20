@@ -162,6 +162,10 @@ namespace BranchXamarinSDKTestbed.iOS
 			return scheme;
 		}
 
+		public String GetAdTrackingEnabled() {
+			return ASIdentifierManager.SharedManager.IsAdvertisingTrackingEnabled ? "true" : "false";
+		}
+
 		public void WriteLog(String message, String tag = null, int level = 3) {
 			Console.WriteLine (message);
 		}

@@ -20,6 +20,7 @@ namespace BranchXamarinSDK
 		int GetDpi(out int width, out int height);
 		String GetURIScheme();
 		void WriteLog(String message, String tag = null, int level = 3);
+		String GetAdTrackingEnabled();
 	}
 }
 

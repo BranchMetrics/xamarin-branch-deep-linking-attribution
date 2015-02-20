@@ -40,6 +40,7 @@ namespace BranchXamarinSDKTestbed
 		protected override void OnStart ()
 		{
 			Branch branch = Branch.GetInstance ();
+			branch.Debug = true; // Each install is a "new" install
 			branch.InitSessionAsync (this);
 		}
 	
@@ -52,6 +53,7 @@ namespace BranchXamarinSDKTestbed
 		protected override void OnResume ()
 		{
 			Branch branch = Branch.GetInstance ();
+			branch.Debug = true; // Each install is a "new" install
 			branch.InitSessionAsync (this);
 		}
 

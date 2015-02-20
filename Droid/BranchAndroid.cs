@@ -156,6 +156,11 @@ namespace BranchXamarinSDKTestbed.Droid
 			return "";
 		}
 
+		public string GetAdTrackingEnabled() {
+			// Not valid on Android right now?
+			return null;
+		}
+
 		public void WriteLog(String message, String tag = null, int level = 3) {
 			String localTag = "";
 			if (tag != null) {

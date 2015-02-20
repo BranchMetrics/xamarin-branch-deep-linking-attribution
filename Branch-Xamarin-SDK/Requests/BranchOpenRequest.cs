@@ -18,9 +18,9 @@ namespace BranchXamarinSDK
 			public string app_version;
 			public string os_version;
 			public string os;
-			public bool debug;
 			public string uri_scheme;
 			public string link_identifier;
+			public string ad_tracking_enabled;
 
 			public OpenParams() {
 			}
@@ -35,8 +35,7 @@ namespace BranchXamarinSDK
 			string osVersion,
 			string os,
 			string uriScheme,
-			bool debug,
-			string linkClickId,
+			string addTrackingEnabled,
 			IBranchReferralInitInterface callback) : base(BranchRequestType.REQUEST_OPEN)
 		{
 			Params = new OpenParams ();
@@ -48,8 +47,8 @@ namespace BranchXamarinSDK
 			Params.os_version = osVersion;
 			Params.os = os;
 			Params.uri_scheme = uriScheme;
-			Params.debug = debug;
-			Params.link_identifier = linkClickId;
+			Params.link_identifier = Branch.GetInstance().LinkClickIdentifier;
+			Params.ad_tracking_enabled = addTrackingEnabled;
 			Callback = callback;
 		}
 
@@ -59,12 +58,12 @@ namespace BranchXamarinSDK
 				var inSettings = new JsonSerializerSettings();
 				inSettings.NullValueHandling = NullValueHandling.Ignore;
 				String inBody = JsonConvert.SerializeObject(Params, inSettings);
-				Branch.GetInstance().Log("Sending open request", "WEBAPI", 3);
+				Branch.GetInstance().Log("Sending open request", "WEBAPI");
 				HttpResponseMessage response = await Client.PostAsync ("v1/open",
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
  				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
-					Branch.GetInstance().Log("Open request completed successfully", "WEBAPI", 3);
+					Branch.GetInstance().Log("Open request completed successfully", "WEBAPI");
 
 					var settings = new JsonSerializerSettings();
 					var converterList = new List<JsonConverter>();
