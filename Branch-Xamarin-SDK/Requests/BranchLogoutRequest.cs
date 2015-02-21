@@ -50,6 +50,8 @@ namespace BranchXamarinSDK
 					settings.Converters = converterList;
 					Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(body, settings);
 					Branch.GetInstance().UpdateUserAndSession(result, null, true); // Passing true so that both first and latest data gets cleared.
+					Branch.GetInstance().TotalActionCounts.Clear();
+					Branch.GetInstance().UniqueActionCounts.Clear();
 					if (Callback != null) {
 						Callback.RequestComplete(null);
 					}

@@ -206,6 +206,34 @@ namespace BranchXamarinSDK
 			await EnqueueRequestAsync (req);
 		}
 
+		public async Task GetReferralCode(IBranchReferralInterface callback,
+			int amount,
+			String prefix = null,
+			DateTime? expiration = null,
+			String bucket = null,
+			int calculationType = Constants.REFERRAL_CODE_AWARD_UNLIMITED,
+			int location = Constants.REFERRAL_CODE_LOCATION_REFERRING_USER) {
+			BranchGetReferralCodeRequest req = new BranchGetReferralCodeRequest(
+				amount,
+				prefix,
+				expiration,
+				bucket,
+				calculationType,
+				location,
+				callback);
+			await EnqueueRequestAsync(req);
+		}
+
+		public async Task ValidateReferralCode(IBranchReferralInterface callback, String code) {
+			BranchValidateReferralCodeRequest req = new BranchValidateReferralCodeRequest (code, callback);
+			await EnqueueRequestAsync (req);
+		}
+
+		public async Task ApplyReferralCode(IBranchReferralInterface callback, String code) {
+			BranchApplyReferralCodeRequest req = new BranchApplyReferralCodeRequest (code, callback);
+			await EnqueueRequestAsync (req);
+		}
+
 		public Dictionary<String, object> GetLatestReferringParams() {
 			String data = Properties.GetPropertyString ("last_referring_params");
 			if (!String.IsNullOrWhiteSpace(data)) {

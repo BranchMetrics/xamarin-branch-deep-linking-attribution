@@ -54,6 +54,12 @@
     <Compile Include="Requests\BranchCompleteActionRequest.cs" />
     <Compile Include="Interfaces\IBranchCompletionCallback.cs" />
     <Compile Include="Requests\BranchLoadReferralActionCountsRequest.cs" />
+    <Compile Include="Interfaces\IBranchSessionInterface.cs" />
+    <Compile Include="Interfaces\IBranchIdentityInterface.cs" />
+    <Compile Include="Interfaces\IBranchReferralInterface.cs" />
+    <Compile Include="Requests\BranchGetReferralCodeRequest.cs" />
+    <Compile Include="Requests\BranchValidateReferralCodeRequest.cs" />
+    <Compile Include="Requests\BranchApplyReferralCodeRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

@@ -18,6 +18,15 @@ namespace BranchXamarinSDK
 		public const String URL_FEATURE_DEAL = "deal";
 		public const String URL_FEATURE_GIFT = "gift";
 
+		// Calculation Types for Get Referral Code
+		public const int REFERRAL_CODE_AWARD_UNLIMITED = 1;
+		public const int REFERRAL_CODE_AWARD_UNIQUE = 0;
+
+		// Location for Get Referral Code
+		public const int REFERRAL_CODE_LOCATION_REFERREE = 0;
+		public const int REFERRAL_CODE_LOCATION_REFERRING_USER = 2;
+		public const int REFERRAL_CODE_LOCATION_BOTH = 3;
+
 		// Internal keys for data saved in properties
 		internal const String TIMEOUT_KEY = "timeout";
 		internal const String RETRY_KEY = "retry";

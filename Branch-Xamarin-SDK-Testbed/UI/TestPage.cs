@@ -8,7 +8,10 @@ using Xamarin.Forms;
 
 namespace BranchXamarinSDKTestbed
 {
-	public class TestPage : ContentPage , IBranchGetUrlInterface, IBranchReferralInitInterface
+	public class TestPage : ContentPage ,
+	IBranchGetUrlInterface,
+	IBranchReferralInitInterface,
+	IBranchReferralInterface
 	{
 		readonly Label SessionLabel;
 		readonly Label IdentityIdLabel;
@@ -34,6 +37,7 @@ namespace BranchXamarinSDKTestbed
 		readonly Button LoadActionButton;
 		readonly Entry LoadActionEntry;
 		readonly Label LoadActionLabel;
+		readonly Label ReferralCodeLabel;
 
 		int urlType = 0;
 		string feature;
@@ -41,10 +45,16 @@ namespace BranchXamarinSDKTestbed
 		String UriString;
 		bool IsLoggedIn;
 
+		Color entryTextColor = Color.Black;
+
 		public TestPage ()
 		{
 			BackgroundColor = Color.FromHex ("C0C0C0");
 			NavigationPage.SetHasNavigationBar (this, false);
+
+			if (Device.OS == TargetPlatform.Android) {
+				entryTextColor = Color.White;
+			}
 
 			var SLabel = new Label {
 				TextColor = Color.Blue,
@@ -116,7 +126,7 @@ namespace BranchXamarinSDKTestbed
 			};
 
 			AliasEntry = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Placeholder = "Enter an alias string"
 			};
 
@@ -127,7 +137,7 @@ namespace BranchXamarinSDKTestbed
 			};
 
 			ChannelEntry = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Placeholder = "Enter a channel string"
 			};
 
@@ -138,7 +148,7 @@ namespace BranchXamarinSDKTestbed
 			};
 
 			StageEntry = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Placeholder = "Enter a stage string"
 			};
 
@@ -149,7 +159,7 @@ namespace BranchXamarinSDKTestbed
 			};
 
 			TagsEntry = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Placeholder = "Enter one or more tags"
 			};
 
@@ -161,7 +171,7 @@ namespace BranchXamarinSDKTestbed
 			};
 
 			ParamsEntry = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Placeholder = "Enter params"
 			};
 
@@ -194,7 +204,7 @@ namespace BranchXamarinSDKTestbed
 			FeaturePicker.SelectedIndexChanged += FeatureSelected;
 
 			UriLabel = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Text = "Press button to generate a URL"
 			};
 
@@ -221,7 +231,7 @@ namespace BranchXamarinSDKTestbed
 
 			TimeoutEntry = new Entry {
 				Text = ((int)Branch.GetInstance().Timeout.TotalSeconds).ToString (),
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Keyboard = Keyboard.Numeric
 			};
 			TimeoutEntry.TextChanged += TimeoutChanged;
@@ -234,7 +244,7 @@ namespace BranchXamarinSDKTestbed
 
 			RetriesEntry = new Entry {
 				Text = ((int)Branch.GetInstance ().Retries).ToString (),
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Keyboard = Keyboard.Numeric
 			};
 			RetriesEntry.TextChanged += RetriesChanged;
@@ -247,7 +257,7 @@ namespace BranchXamarinSDKTestbed
 
 			UserEntry = new Entry {
 				Placeholder = "Username",
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Keyboard = Keyboard.Create(KeyboardFlags.CapitalizeSentence)
 			};
 			UserEntry.TextChanged += UserChanged;
@@ -275,7 +285,7 @@ namespace BranchXamarinSDKTestbed
 			};
 
 			ActionEntry = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Placeholder = "Action"
 			};
 			ActionEntry.TextChanged += ActionChanged;
@@ -296,7 +306,7 @@ namespace BranchXamarinSDKTestbed
 			LoadActionButton.Clicked += LoadActionClicked;
 
 			LoadActionEntry = new Entry {
-				TextColor = Color.Black,
+				TextColor = entryTextColor,
 				Placeholder = "Enter a action to see counts"
 			};
 			LoadActionEntry.TextChanged += LoadActionChanged;
@@ -304,6 +314,33 @@ namespace BranchXamarinSDKTestbed
 			LoadActionLabel = new Label {
 				TextColor = Color.Blue,
 				Text = "Total: 0 Unique: 0",
+				FontSize = 18
+			};
+
+			Button getCodeButton = new Button {
+				Text = "Get Referral Code",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray
+			};
+			getCodeButton.Clicked += GetCodeClicked;
+
+			Button validateCodeButton = new Button {
+				Text = "Validate Referral Code",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray
+			};
+			validateCodeButton.Clicked += ValidateCodeClicked;
+
+			Button applyCodeButton = new Button {
+				Text = "Apply Referral Code",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray
+			};
+			applyCodeButton.Clicked += ApplyCodeClicked;
+
+			ReferralCodeLabel = new Label {
+				TextColor = Color.Blue,
+				Text = "Press button to get referral code",
 				FontSize = 18
 			};
 
@@ -408,6 +445,20 @@ namespace BranchXamarinSDKTestbed
 				Content = stack6
 			};
 
+			var stack7 = new StackLayout {
+				Children = {
+					getCodeButton,
+					validateCodeButton,
+					applyCodeButton,
+					ReferralCodeLabel
+				}
+			};
+			var frame7 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack7
+			};
+
 			var stackLayout = new StackLayout {
 				Children = {
 					frame1,
@@ -415,7 +466,8 @@ namespace BranchXamarinSDKTestbed
 					frame3,
 					frame4,
 					frame5,
-					frame6
+					frame6,
+					frame7
 				},
 				Spacing = 10,
 				Padding = 10
@@ -576,6 +628,22 @@ namespace BranchXamarinSDKTestbed
 				}));
 		}
 
+		async void GetCodeClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().GetReferralCode (this,
+				10,
+				null,
+				null,
+				"test");
+		}
+
+		async void ValidateCodeClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().ValidateReferralCode (this, ReferralCodeLabel.Text);
+		}
+
+		async void ApplyCodeClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().ApplyReferralCode (this, ReferralCodeLabel.Text);
+		}
+
 		void TypeSelected(object sender, EventArgs args) {
 			switch (TypePicker.SelectedIndex) {
 			case 0:
@@ -709,6 +777,28 @@ namespace BranchXamarinSDKTestbed
 				UserEntry.IsEnabled = true;
 			}
 			UpdateLabels ();
+		}
+
+		#endregion
+
+		#region IBranchReferralInterface implementation
+
+		public void ReferralCodeCreated (string code)
+		{
+			ReferralCodeLabel.Text = code;
+		}
+
+		public void ReferralCodeValidated (string code, bool valid)
+		{
+		}
+
+		public void ReferralCodeApplied (string code)
+		{
+		}
+
+		public void ReferralRequestError (BranchError error)
+		{
+			ReferralCodeLabel.Text = error.ErrorMessage;
 		}
 
 		#endregion
