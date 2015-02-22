@@ -5,13 +5,6 @@ namespace BranchXamarinSDK
 {
 	public class BranchLinkData
 	{
-		// These fields are used to build the JSON for the request
-		public string app_id;
-		public string session_id;
-		public string identity_id;
-		public string device_fingerprint_id;
-
-		// These fields are used to build the JSON for the request and for caching
 		public readonly ICollection<String> tags;
 		public readonly string alias;
 		public readonly int type;
@@ -46,11 +39,11 @@ namespace BranchXamarinSDK
 				return true;
 			}
 
-			if (obj.GetType () != this.GetType ()) {
+			if (obj.GetType () != GetType ()) {
 				return false;
 			}
 
-			BranchLinkData other = (BranchLinkData)obj;
+			var other = (BranchLinkData)obj;
 
 			if (((other.tags != null) && (tags == null)) ||
 			    ((other.tags == null) && (tags != null)) ||
@@ -96,11 +89,8 @@ namespace BranchXamarinSDK
 				return false;
 			}
 
-			if (other.type != type) {
-				return false;
-			}
-
-			return true;
+			// Last thing to check.  If this matches, equals is true...
+			return other.type == type;
 		}
 
 		public override int GetHashCode ()

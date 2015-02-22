@@ -1,6 +1,5 @@
 ﻿using BranchXamarinSDK;
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -8,30 +7,23 @@ using Xamarin.Forms;
 
 namespace BranchXamarinSDKTestbed
 {
-	public class App : Application, IBranchReferralInitInterface
+	public class App : Application, IBranchSessionInterface
 	{
-		private bool isInit;
-		public String SessionId { get; set; }
-		public String IdentityId { get; set; }
-		public String DeviceFingerPrintId { get; set; }
-		public String Error { get; set; }
-
-		public Boolean IsInit {
+		BranchError error;
+		public BranchError Error {
 			get {
-				return isInit;
+				return error;
 			}
 			set {
-				isInit = value;
-				OnPropertyChanged ("IsInit");
+				error = value;
+				OnPropertyChanged ("Error");
 			}
 		}
-		public event PropertyChangedEventHandler InitChanged;
+		public event PropertyChangedEventHandler ErrorChanged;
 
 		public App ()
 		{
-			IsInit = false;
-
-			NavigationPage navPage = new NavigationPage ();
+			var navPage = new NavigationPage ();
 			navPage.PushAsync (new TestPage ());
 
 			MainPage = navPage;
@@ -44,10 +36,11 @@ namespace BranchXamarinSDKTestbed
 			branch.InitSessionAsync (this);
 		}
 	
-		protected override void OnSleep ()
+		protected override async void OnSleep ()
 		{
 			Branch branch = Branch.GetInstance ();
-			branch.CloseSessionAsync ();
+			// Await here ensure the thread stays alive long enough to complete the close.
+			await branch.CloseSessionAsync ();
 		}
 
 		protected override void OnResume ()
@@ -59,32 +52,34 @@ namespace BranchXamarinSDKTestbed
 
 		#region INotifyPropertyChanged
 
-		override protected void OnPropertyChanged(string property = null) {
-			if (property.Equals ("IsInit")) {
-				PropertyChangedEventHandler handler = InitChanged;
+		override protected void OnPropertyChanged(string propertyName = null) {
+			if (propertyName.Equals ("Error")) {
+				PropertyChangedEventHandler handler = ErrorChanged;
 				if (handler != null) {
-					handler (this, new PropertyChangedEventArgs ("IsInit"));
+					handler (this, new PropertyChangedEventArgs ("Error"));
 				}
 			} else {
-				base.OnPropertyChanged (property);
+				base.OnPropertyChanged (propertyName);
 			}
 		}
 
 		#endregion
 
-		#region IBranchReferralInitInterface implementation
+		#region IBranchSessionInterface implementation
 
-		public void OnInitFinished (Dictionary<string, object> result, BranchError error)
+		public void InitSessionComplete (Dictionary<string, object> data)
 		{
-			System.Diagnostics.Debug.WriteLine ("Initial Result: " + result);
+			Error = new BranchError("Ok");
+		}
 
-			if (result != null) {
-				Error = null;
-				IsInit = true;
-			} else {
-				Error = error.ErrorMessage;
-				IsInit = false;
-			}
+		public void CloseSessionComplete ()
+		{
+			Error = new BranchError("Ok");
+		}
+
+		public void SessionRequestError (BranchError error)
+		{
+			Error = error;
 		}
 
 		#endregion

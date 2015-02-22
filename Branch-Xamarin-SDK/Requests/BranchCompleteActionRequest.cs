@@ -10,11 +10,7 @@ namespace BranchXamarinSDK
 {
 	public class BranchCompleteActionRequest : BranchRequest
 	{
-		public class CompleteActionParams {
-			public string app_id;
-			public string device_fingerprint_id;
-			public string identity_id;
-			public string session_id;
+		public class CompleteActionParams : BranchParams {
 			[JsonProperty("event")]
 			public string eventStr;
 			public Dictionary<string, object> metadata;
@@ -23,40 +19,39 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		readonly CompleteActionParams Params;
+		private IBranchActionsInterface Callback;
 
 		public BranchCompleteActionRequest (
 			string action,
-			Dictionary<string, object> metadata) : base(BranchRequestType.REQUEST_COMPLETE_ACTION)
+			Dictionary<string, object> metadata,
+			IBranchActionsInterface callback) : base(BranchRequestType.REQUEST_COMPLETE_ACTION, new CompleteActionParams())
 		{
-			Params = new CompleteActionParams ();
-			Params.app_id = Branch.GetInstance().AppKey;
-			Params.device_fingerprint_id = Session.Current.DeviceFingerprintId;
-			Params.identity_id = User.Current.Id;
-			Params.session_id = Session.Current.Id;
-			Params.eventStr = action;
-			Params.metadata = metadata;
+			var LocalParams = Params as CompleteActionParams;
+			LocalParams.eventStr = action;
+			LocalParams.metadata = metadata;
+			Callback = callback;
 		}
 
 		override async public Task Execute() {
 			try {
-				InitClient();
-				var settings = new JsonSerializerSettings();
-				settings.DefaultValueHandling = DefaultValueHandling.Ignore;
-				String inBody = JsonConvert.SerializeObject(Params, settings);
-				Branch.GetInstance().Log("Sending complete action request", "WEBAPI");
-				HttpResponseMessage response = await Client.PostAsync ("v1/event",
-					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
+				HttpResponseMessage response = await ExecutePost ("v1/event");
 				if (response.StatusCode == HttpStatusCode.OK) {
-					Branch.GetInstance().Log("Complete action request completed successfully", "WEBAPI");
+					if (Callback != null) {
+						Callback.ActionComplete(((CompleteActionParams)Params).eventStr);
+					}
 				} else {
-					Branch.GetInstance().Log("Complete action failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
+					if (Callback != null) {
+						Callback.ActionRequestError(new BranchError(response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
+					}
 				}
-			} catch (TaskCanceledException ex) {
-				Branch.GetInstance().Log("Complete action timed out", "WEBAPI", 6);
+			} catch (TaskCanceledException) {
+				if (Callback != null) {
+					Callback.ActionRequestError(new BranchError("Operation timed out"));
+				}
 			} catch (Exception ex) {
-				Branch.GetInstance().Log("Exception sending complete action request: " + ex.Message, "WEBAPI", 6);
-				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
+				if (Callback != null) {
+					Callback.ActionRequestError(new BranchError("Exception: " + ex.Message));
+				}
 			}
 		}
 	}

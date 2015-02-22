@@ -24,7 +24,14 @@ namespace BranchXamarinSDK
 		protected internal Dictionary<BranchLinkData, Uri> LinkDataCache;
 		protected internal Dictionary<string, int> TotalActionCounts;
 		protected internal Dictionary<string, int> UniqueActionCounts;
+		protected internal Dictionary<string, int> Credits;
 		protected internal String LinkClickIdentifier;
+		protected internal String SessionId;
+		protected internal String DeviceFingerprintId;
+		protected internal String LinkClickId;
+		protected internal String Identity;
+		protected internal String IdentityId;
+		protected internal String UserLink;
 
 		int timeout = -1;
 		int retries = -1;
@@ -63,6 +70,7 @@ namespace BranchXamarinSDK
 			LinkDataCache = new Dictionary<BranchLinkData, Uri>();
 			TotalActionCounts = new Dictionary<string, int> ();
 			UniqueActionCounts = new Dictionary<string, int> ();
+			Credits = new Dictionary<string, int> ();
 		}
 
 		public static Branch GetInstance() {
@@ -73,16 +81,16 @@ namespace BranchXamarinSDK
 			return branch;
 		}
 
-		public async Task InitSessionAsync(IBranchReferralInitInterface callback) {
-			bool isReferrable = (DeviceInformation.GetUpdateState () == 0) && (User.Current == null);
+		public async Task InitSessionAsync(IBranchSessionInterface callback) {
+			bool isReferrable = (DeviceInformation.GetUpdateState () == 0) && (IdentityId == null);
 			await InitSessionInternalAsync (callback, isReferrable);
 		}
 
-		public async Task InitSessionAsync(IBranchReferralInitInterface callback, bool isReferrable) {
+		public async Task InitSessionAsync(IBranchSessionInterface callback, bool isReferrable) {
 			await InitSessionInternalAsync (callback, isReferrable);
 		}
 
-		async Task InitSessionInternalAsync(IBranchReferralInitInterface callback, bool isReferrable) {
+		async Task InitSessionInternalAsync(IBranchSessionInterface callback, bool isReferrable) {
 			// Init session takes priority over any other pending operation.  It does not get put on the queue
 			// and instead executes as soon as any inprogress operation finishes.
 
@@ -91,18 +99,18 @@ namespace BranchXamarinSDK
 				// init operation, just call the callback with an empty result.
 				if ((InitTask == null) || InitTask.IsCompleted) {
 					if (callback != null) {
-						callback.OnInitFinished (null, new BranchError ("Init is already complete"));
+						callback.SessionRequestError (new BranchError ("Init is already completed"));
 					}
 				} else {
 					if (callback != null) {
-						callback.OnInitFinished (null, new BranchError ("Init is already in progress"));
+						callback.SessionRequestError (new BranchError ("Init is already in progress"));
 					}
 				}
 			} else {
 				Inited = true;
 				try {
 					BranchRequest request;
-					if (User.Current != null) {
+					if (IdentityId != null) {
 						request = new BranchOpenRequest (
 							isReferrable,
 							DeviceInformation.GetAppVersion(),
@@ -151,23 +159,23 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		public async Task CloseSessionAsync(IBranchCompletionCallback callback = null) {
+		public async Task CloseSessionAsync(IBranchSessionInterface callback = null) {
 			var req = new BranchCloseRequest (callback);
 			await EnqueueRequestAsync (req);
 			Inited = false;
 		}
 
-		public async Task Identify(String user, IBranchReferralInitInterface callback) {
+		public async Task SetIdentity(String user, IBranchIdentityInterface callback) {
 			var req = new BranchIdentifyRequest (user, callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task Logout(IBranchCompletionCallback callback = null) {
+		public async Task Logout(IBranchIdentityInterface callback = null) {
 			var req = new BranchLogoutRequest (callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task GetShortUrlAsync(IBranchGetUrlInterface callback,
+		public async Task GetShortUrlAsync(IBranchUrlInterface callback,
 			Dictionary<String, dynamic> parameters = null,
 			String alias = null,
 			string channel = null,
@@ -191,17 +199,17 @@ namespace BranchXamarinSDK
 				await EnqueueRequestAsync (req);
 			} else {
 				if (callback != null) {
-					callback.Finished (cachedUri, null);
+					callback.ReceivedUrl (cachedUri);
 				}
 			}
 		}
 
-		public async Task UserCompletedAction(String action, Dictionary<string, object> metadata = null) {
-			var req = new BranchCompleteActionRequest (action, metadata);
+		public async Task UserCompletedAction(String action, Dictionary<string, object> metadata = null, IBranchActionsInterface callback = null) {
+			var req = new BranchCompleteActionRequest (action, metadata, callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task LoadReferralActionCounts(IBranchCompletionCallback callback = null) {
+		public async Task LoadReferralActionCounts(IBranchActionsInterface callback = null) {
 			var req = new BranchLoadReferralActionCountsRequest (callback);
 			await EnqueueRequestAsync (req);
 		}
@@ -213,7 +221,7 @@ namespace BranchXamarinSDK
 			String bucket = null,
 			int calculationType = Constants.REFERRAL_CODE_AWARD_UNLIMITED,
 			int location = Constants.REFERRAL_CODE_LOCATION_REFERRING_USER) {
-			BranchGetReferralCodeRequest req = new BranchGetReferralCodeRequest(
+			var req = new BranchGetReferralCodeRequest(
 				amount,
 				prefix,
 				expiration,
@@ -225,12 +233,35 @@ namespace BranchXamarinSDK
 		}
 
 		public async Task ValidateReferralCode(IBranchReferralInterface callback, String code) {
-			BranchValidateReferralCodeRequest req = new BranchValidateReferralCodeRequest (code, callback);
+			var req = new BranchValidateReferralCodeRequest (code, callback);
 			await EnqueueRequestAsync (req);
 		}
 
 		public async Task ApplyReferralCode(IBranchReferralInterface callback, String code) {
-			BranchApplyReferralCodeRequest req = new BranchApplyReferralCodeRequest (code, callback);
+			var req = new BranchApplyReferralCodeRequest (code, callback);
+			await EnqueueRequestAsync (req);
+		}
+
+		public async Task LoadRewards(IBranchRewardsInterface callback) {
+			var req = new BranchLoadRewardsRequest (callback);
+			await EnqueueRequestAsync (req);
+		}
+
+		public async Task RedeemRewards(IBranchRewardsInterface callback, int amount, string bucket = "default") {
+			if (String.IsNullOrWhiteSpace(bucket)) {
+				bucket = "default";
+			}
+
+			var req = new BranchRedeemRequest (bucket, amount, callback);
+			await EnqueueRequestAsync (req);
+		}
+
+		public async Task GetCreditHistory(IBranchRewardsInterface callback,
+			string bucket = null,
+			string afterId = null,
+			int length = 100,
+			bool mostRecentFirst = true) {
+			var req = new BranchGetCreditHistoryRequest (bucket, afterId, length, mostRecentFirst ? 0 : 1, callback);
 			await EnqueueRequestAsync (req);
 		}
 
@@ -268,6 +299,20 @@ namespace BranchXamarinSDK
 				TotalActionCounts.TryGetValue (action, out ret);
 			}
 			return ret;
+		}
+
+		public int GetCredits() {
+			int count;
+			Credits.TryGetValue("default", out count);
+			return count;
+		}
+
+		public int GetCreditsForBucket(string bucket) {
+			int count = 0;
+			if (!String.IsNullOrWhiteSpace(bucket)) {
+				Credits.TryGetValue(bucket, out count);
+			}
+			return count;
 		}
 
 		// Private Methods
@@ -317,12 +362,11 @@ namespace BranchXamarinSDK
 		protected void InitUserAndSession() {
 			String userId = Properties.GetPropertyString ("identity_id");
 			if (!String.IsNullOrWhiteSpace(userId)) {
-				User.Current = new User (userId, null, null);
-				System.Diagnostics.Debug.WriteLine ("User ID: " + userId);
+				IdentityId = userId;
 			}
 			String deviceFingerprintId = Properties.GetPropertyString ("device_fingerprint_id");
 			if (!String.IsNullOrWhiteSpace(deviceFingerprintId)) {
-				Session.Current = new Session(null, deviceFingerprintId, null);
+				DeviceFingerprintId = deviceFingerprintId;
 			}
 		}
 
@@ -342,7 +386,9 @@ namespace BranchXamarinSDK
 				Properties.SetPropertyString ("identity_id", identityId);
 			}
 
-			User.Current = new User (identityId, identity, urlStr);
+			IdentityId = identityId;
+			Identity = identity;
+			UserLink = urlStr;
 
 			if (dataStr != null) {
 				Properties.SetPropertyString ("first_referring_params", dataStr);
@@ -373,8 +419,11 @@ namespace BranchXamarinSDK
 			result.TryGetValue ("link_click_id", out temp);
 			clicked = temp as String;
 
-			Session.Current = new Session(sessionId, deviceFingerprintId, clicked);
-			User.Current = new User (identityId, null, link);
+			SessionId = sessionId;
+			DeviceFingerprintId = deviceFingerprintId;
+			LinkClickId = clicked;
+			IdentityId = identityId;
+			UserLink = link;
 
 			if (identityId != null) {
 				Properties.SetPropertyString ("identity_id", identityId);

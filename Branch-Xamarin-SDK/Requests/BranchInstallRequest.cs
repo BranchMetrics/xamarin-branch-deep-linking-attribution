@@ -10,8 +10,7 @@ namespace BranchXamarinSDK
 {
 	public class BranchInstallRequest : BranchRequest
 	{
-		public class InstallParams {
-			public string app_id;
+		public class InstallParams : BranchParams {
 			public string hardware_id;
 			public bool is_hardware_id_real;
 			public string app_version;
@@ -31,7 +30,6 @@ namespace BranchXamarinSDK
 			public int screen_width;
 			public bool wifi;
 			public string uri_scheme;
-			public string sdk = "xamarin" + Constants.SDK_VERSION;
 			public string link_identifier;
 			public string ad_tracking_enabled;
 
@@ -39,8 +37,7 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		readonly InstallParams Params;
-		readonly IBranchReferralInitInterface Callback;
+		readonly IBranchSessionInterface Callback;
 
 		public BranchInstallRequest (
 			String hardwareId,
@@ -63,43 +60,43 @@ namespace BranchXamarinSDK
 			bool wifi,
 			string uriScheme,
 			string addTrackingEnabled,
-			IBranchReferralInitInterface callback) : base(BranchRequestType.REQUEST_INSTALL)
+			IBranchSessionInterface callback) : base(BranchRequestType.REQUEST_INSTALL, new InstallParams())
 		{
-			Params = new InstallParams ();
-			Params.app_id = Branch.GetInstance().AppKey;
-			Params.hardware_id = hardwareId;
-			Params.is_hardware_id_real = isHardwareIdReal;
-			Params.app_version = appVersion;
-			Params.brand = brand;
-			Params.model = model;
-			Params.os = os;
-			Params.os_version = osVersion;
-			Params.is_referrable = isReferrable?1:0;
-			Params.update = update;
-			Params.carrier = carrier;
-			Params.has_nfc = hasNfc;
-			Params.has_bluetooth = hasBluetooth;
-			Params.has_telephone = hasTelephone;
-			Params.bluetooth_version = bluetoothVersion;
-			Params.screen_dpi = screenDpi;
-			Params.screen_width = screenWidth;
-			Params.screen_height = screenHeight;
-			Params.uri_scheme = uriScheme;
-			Params.wifi = wifi;
-			Params.link_identifier = Branch.GetInstance().LinkClickIdentifier;
-			Params.ad_tracking_enabled = addTrackingEnabled;
+			var LocalParams = Params as InstallParams;
+			LocalParams.hardware_id = hardwareId;
+			LocalParams.is_hardware_id_real = isHardwareIdReal;
+			LocalParams.app_version = appVersion;
+			LocalParams.brand = brand;
+			LocalParams.model = model;
+			LocalParams.os = os;
+			LocalParams.os_version = osVersion;
+			LocalParams.is_referrable = isReferrable?1:0;
+			LocalParams.update = update;
+			LocalParams.carrier = carrier;
+			LocalParams.has_nfc = hasNfc;
+			LocalParams.has_bluetooth = hasBluetooth;
+			LocalParams.has_telephone = hasTelephone;
+			LocalParams.bluetooth_version = bluetoothVersion;
+			LocalParams.screen_dpi = screenDpi;
+			LocalParams.screen_width = screenWidth;
+			LocalParams.screen_height = screenHeight;
+			LocalParams.uri_scheme = uriScheme;
+			LocalParams.wifi = wifi;
+			LocalParams.link_identifier = Branch.GetInstance().LinkClickIdentifier;
+			LocalParams.ad_tracking_enabled = addTrackingEnabled;
+
+			// These aren't used in the INSTALL request
+			Params.session_id = null;
+			Params.device_fingerprint_id = null;
+			Params.identity_id = null;
+			Params.link_click_id = null;
+
 			Callback = callback;
 		}
 
 		override async public Task Execute() {
 			try {
-				InitClient();
-				var inSettings = new JsonSerializerSettings();
-				inSettings.NullValueHandling = NullValueHandling.Ignore;
-				String inBody = JsonConvert.SerializeObject(Params, inSettings);
-				Branch.GetInstance ().Log ("Sending install request", "WEBAPI");
-				HttpResponseMessage response = await Client.PostAsync ("v1/install",
-					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
+				HttpResponseMessage response = await ExecutePost ("v1/install");
 				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
 					Branch.GetInstance ().Log ("Install completed successfully", "WEBAPI");
@@ -127,23 +124,21 @@ namespace BranchXamarinSDK
 					Branch.GetInstance ().UpdateUserAndSession(result, dataStr, true);
 
 					if (Callback != null) {
-						Callback.OnInitFinished (result, null);
+						Callback.InitSessionComplete(result);
 					}
 				} else {
-					Branch.GetInstance().Log("Install failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
 					if (Callback != null) {
-						Callback.OnInitFinished (null, new BranchError (response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
+						Callback.SessionRequestError(new BranchError(response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
 					}
 				}
-			} catch (TaskCanceledException ex) {
-				Branch.GetInstance ().Log ("Install timed out", "WEBAPI", 6);
+			} catch (TaskCanceledException) {
 				if (Callback != null) {
-					var error = new BranchError ("Operation Timed Out", 1);
-					Callback.OnInitFinished (null, error);
+					Callback.SessionRequestError (new BranchError ("Operation timed out"));
 				}
 			} catch (Exception ex) {
-				Branch.GetInstance ().Log ("Exception sending install request: " + ex.Message, "WEBAPI", 6);
-				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
+				if (Callback != null) {
+					Callback.SessionRequestError (new BranchError ("Exception: " + ex.Message));
+				}
 			}
 		}
 	}

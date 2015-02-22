@@ -9,13 +9,14 @@ using Xamarin.Forms;
 namespace BranchXamarinSDKTestbed
 {
 	public class TestPage : ContentPage ,
-	IBranchGetUrlInterface,
-	IBranchReferralInitInterface,
-	IBranchReferralInterface
+	IBranchUrlInterface,
+	IBranchSessionInterface,
+	IBranchIdentityInterface,
+	IBranchActionsInterface,
+	IBranchReferralInterface,
+	IBranchRewardsInterface
 	{
-		readonly Label SessionLabel;
-		readonly Label IdentityIdLabel;
-		readonly Label DeviceFingerprintIdLabel;
+		readonly Label StatusLabel;
 		readonly Label FirstLabel;
 		readonly Label LatestLabel;
 		readonly Entry UriLabel;
@@ -38,8 +39,14 @@ namespace BranchXamarinSDKTestbed
 		readonly Entry LoadActionEntry;
 		readonly Label LoadActionLabel;
 		readonly Label ReferralCodeLabel;
+		readonly Entry ReferralCodeEntry;
+		readonly Button ValidateCodeButton;
+		readonly Button ApplyCodeButton;
+		readonly Label CreditsLabel;
+		readonly Entry RedeemEntry;
+		readonly Button RedeemButton;
 
-		int urlType = 0;
+		int urlType;
 		string feature;
 
 		String UriString;
@@ -59,32 +66,10 @@ namespace BranchXamarinSDKTestbed
 			var SLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
-				Text = "Session ID:"
+				Text = "Status:"
 			};
 
-			SessionLabel = new Label {
-				TextColor = Color.Blue,
-				FontSize = 18
-			};
-
-			var ILabel = new Label {
-				TextColor = Color.Blue,
-				FontSize = 24,
-				Text = "Identity ID:"
-			};
-
-			IdentityIdLabel = new Label {
-				TextColor = Color.Blue,
-				FontSize = 18
-			};
-
-			var DLabel = new Label {
-				TextColor = Color.Blue,
-				FontSize = 24,
-				Text = "Device Finger Print ID:"
-			};
-
-			DeviceFingerprintIdLabel = new Label {
+			StatusLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 18
 			};
@@ -317,26 +302,12 @@ namespace BranchXamarinSDKTestbed
 				FontSize = 18
 			};
 
-			Button getCodeButton = new Button {
+			var getCodeButton = new Button {
 				Text = "Get Referral Code",
 				TextColor = Color.White,
 				BackgroundColor = Color.Gray
 			};
 			getCodeButton.Clicked += GetCodeClicked;
-
-			Button validateCodeButton = new Button {
-				Text = "Validate Referral Code",
-				TextColor = Color.White,
-				BackgroundColor = Color.Gray
-			};
-			validateCodeButton.Clicked += ValidateCodeClicked;
-
-			Button applyCodeButton = new Button {
-				Text = "Apply Referral Code",
-				TextColor = Color.White,
-				BackgroundColor = Color.Gray
-			};
-			applyCodeButton.Clicked += ApplyCodeClicked;
 
 			ReferralCodeLabel = new Label {
 				TextColor = Color.Blue,
@@ -344,14 +315,67 @@ namespace BranchXamarinSDKTestbed
 				FontSize = 18
 			};
 
+			ValidateCodeButton = new Button {
+				Text = "Validate Referral Code",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray,
+				IsEnabled = false
+			};
+			ValidateCodeButton.Clicked += ValidateCodeClicked;
+
+			ApplyCodeButton = new Button {
+				Text = "Apply Referral Code",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray,
+				IsEnabled = false
+			};
+			ApplyCodeButton.Clicked += ApplyCodeClicked;
+
+			ReferralCodeEntry = new Entry {
+				TextColor = entryTextColor,
+				Placeholder = "Enter code to validate or apply"
+			};
+			ReferralCodeEntry.TextChanged += CodeChanged;
+
+			var loadRewardsButton = new Button {
+				Text = "Load Rewards",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray
+			};
+			loadRewardsButton.Clicked += LoadRewardsClicked;
+
+			CreditsLabel = new Label {
+				TextColor = Color.Blue,
+				Text = "Press button to get credit count",
+				FontSize = 18
+			};
+
+			RedeemEntry = new Entry {
+				TextColor = entryTextColor,
+				Placeholder = "Enter a number of credits to redeem",
+				Keyboard = Keyboard.Numeric
+			};
+			RedeemEntry.TextChanged += RedeemChanged;
+
+			RedeemButton = new Button {
+				Text = "Redeem Rewards",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray,
+				IsEnabled = false
+			};
+			RedeemButton.Clicked += RedeemClicked;
+
+			var historyButton = new Button {
+				Text = "Get Credit History",
+				TextColor = Color.White,
+				BackgroundColor = Color.Gray
+			};
+			historyButton.Clicked += GetCreditHistoryClicked;
+
 			var stack1 = new StackLayout {
 				Children = {
 					SLabel,
-					SessionLabel,
-					ILabel,
-					IdentityIdLabel,
-					DLabel,
-					DeviceFingerprintIdLabel
+					StatusLabel
 				}
 			};
 			var frame1 = new Frame {
@@ -448,15 +472,31 @@ namespace BranchXamarinSDKTestbed
 			var stack7 = new StackLayout {
 				Children = {
 					getCodeButton,
-					validateCodeButton,
-					applyCodeButton,
-					ReferralCodeLabel
+					ReferralCodeLabel,
+					ValidateCodeButton,
+					ApplyCodeButton,
+					ReferralCodeEntry
 				}
 			};
 			var frame7 = new Frame {
 				OutlineColor = Color.Black,
 				Padding = new Thickness (5, 5, 5, 5),
 				Content = stack7
+			};
+
+			var stack8 = new StackLayout {
+				Children = {
+					loadRewardsButton,
+					CreditsLabel,
+					RedeemEntry,
+					RedeemButton,
+					historyButton
+				}
+			};
+			var frame8 = new Frame {
+				OutlineColor = Color.Black,
+				Padding = new Thickness (5, 5, 5, 5),
+				Content = stack8
 			};
 
 			var stackLayout = new StackLayout {
@@ -467,7 +507,8 @@ namespace BranchXamarinSDKTestbed
 					frame4,
 					frame5,
 					frame6,
-					frame7
+					frame7,
+					frame8
 				},
 				Spacing = 10,
 				Padding = 10
@@ -481,33 +522,34 @@ namespace BranchXamarinSDKTestbed
 			Content = sv;
 		}
 
-		protected override void OnAppearing ()
-		{
-			base.OnAppearing ();
-
-			var current = (App)Application.Current;
-			if (current.IsInit) {
-				UpdateLabels ();
-			} else {
-				current.InitChanged += AppIsInit;
+		protected override void OnAppearing() {
+			var app = (App)Application.Current;
+			if (app.Error != null) {
+				StatusLabel.Text = app.Error.ErrorMessage;
 			}
+			app.ErrorChanged += ErrorChanged;
+		}
+
+		void ErrorChanged(object sender, PropertyChangedEventArgs e) {
+			var app = (App)Application.Current;
+			StatusLabel.Text = app.Error.ErrorMessage;
 		}
 
 		async void GetUrlClicked(object sender, EventArgs e) {
-			Dictionary<string, object> data = new Dictionary<string, object>();
+			var data = new Dictionary<string, object>();
 			var paramStr = ParamsEntry.Text;
 			if (!String.IsNullOrWhiteSpace (paramStr)) {
 				String[] strs = paramStr.Split (',');
 				int count = 1;
 				foreach (String str in strs) {
-					String key = "param" + count.ToString ();
+					String key = "param" + count;
 					data.Add (key, str.Trim ());
 					count++;
 				}
 			}
 			data.Add ("url_creation_date", DateTime.Now.ToString ());
 
-			List<String> array = new List<String> ();
+			var array = new List<String> ();
 			var tags = TagsEntry.Text;
 			if (String.IsNullOrWhiteSpace (tags)) {
 				array = null;
@@ -571,14 +613,23 @@ namespace BranchXamarinSDKTestbed
 		void LoadActionChanged(object sender, TextChangedEventArgs e) {
 			if (!String.IsNullOrWhiteSpace(e.NewTextValue)) {
 				LoadActionLabel.Text = "Total: " +
-					Branch.GetInstance().GetReferralCountsForAction(e.NewTextValue, false).ToString() +
-					" Unique: " +
-					Branch.GetInstance().GetReferralCountsForAction(e.NewTextValue, true).ToString();
+				Branch.GetInstance ().GetReferralCountsForAction (e.NewTextValue, false) +
+				" Unique: " +
+				Branch.GetInstance ().GetReferralCountsForAction (e.NewTextValue, true);
 			}
 		}
 
+		void CodeChanged(object sender, TextChangedEventArgs e) {
+			ValidateCodeButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
+			ApplyCodeButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
+		}
+
+		void RedeemChanged(object sender, TextChangedEventArgs e) {
+			RedeemButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
+		}
+
 		async void LoginClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().Identify (UserEntry.Text, this);
+			await Branch.GetInstance ().SetIdentity (UserEntry.Text, this);
 			UserEntry.IsEnabled = false;
 			LoginButton.IsEnabled = false;
 		}
@@ -594,38 +645,13 @@ namespace BranchXamarinSDKTestbed
 
 		async void CompleteActionClicked(object sender, EventArgs e) {
 			// Just to test metadata
-			Dictionary<string, object> data = new Dictionary<string, object> ();
+			var data = new Dictionary<string, object> ();
 			data.Add ("action_complete_date", DateTime.Now.ToString ());
 			await Branch.GetInstance ().UserCompletedAction (ActionEntry.Text, data);
 		}
 
-		class CompletionCallback : IBranchCompletionCallback {
-			public delegate void HandleCompletionDelegate(BranchError error);
-
-			HandleCompletionDelegate MyDelegate;
-
-			public CompletionCallback(HandleCompletionDelegate d) {
-				MyDelegate = d;
-			}
-
-			public void RequestComplete (BranchError error)
-			{
-				if (MyDelegate != null) {
-					MyDelegate (error);
-				}
-			}
-		}
-
 		async void LoadActionClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().LoadReferralActionCounts (
-				new CompletionCallback (delegate(BranchError error) {
-					if (!String.IsNullOrWhiteSpace(LoadActionEntry.Text)) {
-						LoadActionLabel.Text = "Total: " +
-							Branch.GetInstance().GetReferralCountsForAction(LoadActionEntry.Text, false).ToString() +
-							" Unique: " +
-							Branch.GetInstance().GetReferralCountsForAction(LoadActionEntry.Text, true).ToString();
-					}
-				}));
+			await Branch.GetInstance ().LoadReferralActionCounts (this);
 		}
 
 		async void GetCodeClicked(object sender, EventArgs e) {
@@ -637,11 +663,24 @@ namespace BranchXamarinSDKTestbed
 		}
 
 		async void ValidateCodeClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().ValidateReferralCode (this, ReferralCodeLabel.Text);
+			await Branch.GetInstance ().ValidateReferralCode (this, ReferralCodeEntry.Text);
 		}
 
 		async void ApplyCodeClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().ApplyReferralCode (this, ReferralCodeLabel.Text);
+			await Branch.GetInstance ().ApplyReferralCode (this, ReferralCodeEntry.Text);
+		}
+
+		async void LoadRewardsClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().LoadRewards (this);
+		}
+
+		async void RedeemClicked(object sender, EventArgs e) {
+			int amount = int.Parse (RedeemEntry.Text);
+			await Branch.GetInstance ().RedeemRewards (this, amount, "test");
+		}
+
+		async void GetCreditHistoryClicked(object sender, EventArgs e) {
+			await Branch.GetInstance ().GetCreditHistory (this, "test");
 		}
 
 		void TypeSelected(object sender, EventArgs args) {
@@ -681,25 +720,7 @@ namespace BranchXamarinSDKTestbed
 			}
 		}
 
-		void AppIsInit(object sender, PropertyChangedEventArgs args) {
-			var current = (App)Application.Current;
-			if (current.IsInit) {
-				UpdateLabels ();
-			} else {
-				if (!String.IsNullOrWhiteSpace (current.Error)) {
-					SessionLabel.Text = current.Error;
-				}
-			}
-		}
-
 		void UpdateLabels() {
-			if (Session.Current != null) {
-				SessionLabel.Text = Session.Current.Id;
-				DeviceFingerprintIdLabel.Text = Session.Current.DeviceFingerprintId;
-			}
-			if (User.Current != null) {
-				IdentityIdLabel.Text = User.Current.Id;
-			}
 			var first = Branch.GetInstance ().GetFirstReferringParams ();
 			FirstLabel.Text = (first != null) ? prettyJSON (first) : "";
 			var latest = Branch.GetInstance ().GetLatestReferringParams ();
@@ -746,59 +767,143 @@ namespace BranchXamarinSDKTestbed
 			return ret;
 		}
 
-		#region IBranchGetUrlInterface implementation
-
-		public void Finished (Uri uri, BranchError error)
-		{
-			if (uri != null) {
-				UriLabel.Text = uri.ToString ();
-				UriString = uri.ToString ();
-				SendEmailButton.IsEnabled = true;
-			} else if (error != null) {
-				UriLabel.Text = error.ErrorMessage;
-			}
-		}
-
-		#endregion
-
-		#region IBranchReferralInitInterface implementation
-
-		public void OnInitFinished (Dictionary<string, object> result, BranchError error)
-		{
-			if (error == null) {
-				IsLoggedIn = true;
-				LogoutButton.IsEnabled = true;
-				LoginButton.IsEnabled = false;
-				UserEntry.IsEnabled = false;
-			} else {
-				IsLoggedIn = false;
-				LogoutButton.IsEnabled = false;
-				LoginButton.IsEnabled = true;
-				UserEntry.IsEnabled = true;
-			}
-			UpdateLabels ();
-		}
-
-		#endregion
-
 		#region IBranchReferralInterface implementation
 
 		public void ReferralCodeCreated (string code)
 		{
+			StatusLabel.Text = "Ok";
 			ReferralCodeLabel.Text = code;
 		}
 
 		public void ReferralCodeValidated (string code, bool valid)
 		{
+			StatusLabel.Text = "Ok";
 		}
 
 		public void ReferralCodeApplied (string code)
 		{
+			StatusLabel.Text = "Ok";
 		}
 
 		public void ReferralRequestError (BranchError error)
 		{
+			StatusLabel.Text = error.ErrorMessage;
 			ReferralCodeLabel.Text = error.ErrorMessage;
+		}
+
+		#endregion
+
+		#region IBranchUrlInterface implementation
+
+		public void ReceivedUrl (Uri uri)
+		{
+			StatusLabel.Text = "Ok";
+			UriLabel.Text = uri.ToString ();
+			UriString = uri.ToString ();
+			SendEmailButton.IsEnabled = true;
+		}
+
+		public void UrlRequestError (BranchError error)
+		{
+			UriLabel.Text = error.ErrorMessage;
+			StatusLabel.Text = error.ErrorMessage;
+		}
+
+		#endregion
+
+		#region IBranchSessionInterface implementation
+
+		public void InitSessionComplete (Dictionary<string, object> data)
+		{
+			StatusLabel.Text = "Ok";
+		}
+
+		public void CloseSessionComplete ()
+		{
+			StatusLabel.Text = "Ok";
+		}
+
+		public void SessionRequestError (BranchError error)
+		{
+			StatusLabel.Text = error.ErrorMessage;
+		}
+
+		#endregion
+
+		#region IBranchIdentityInterface implementation
+
+		public void IdentitySet (string identity, Dictionary<string, object> data)
+		{
+			StatusLabel.Text = "Ok";
+			IsLoggedIn = true;
+			LogoutButton.IsEnabled = true;
+			LoginButton.IsEnabled = false;
+			UserEntry.IsEnabled = false;
+			UpdateLabels ();
+		}
+
+		public void LogoutComplete ()
+		{
+			StatusLabel.Text = "Ok";
+			IsLoggedIn = false;
+			LogoutButton.IsEnabled = false;
+			LoginButton.IsEnabled = false;
+			UserEntry.Text = "";
+			UserEntry.IsEnabled = true;
+			UpdateLabels ();
+		}
+
+		public void IdentityRequestError (BranchError error) {
+			IsLoggedIn = false;
+			LogoutButton.IsEnabled = false;
+			LoginButton.IsEnabled = false;
+			UserEntry.IsEnabled = true;
+			StatusLabel.Text = error.ErrorMessage;
+			UpdateLabels ();
+		}
+
+		#endregion
+
+		#region IBranchActionsInterface implementation
+
+		public void ActionComplete (string eventStr)
+		{
+			StatusLabel.Text = "Ok";
+		}
+
+		public void LoadActionComplete ()
+		{
+			StatusLabel.Text = "Ok";
+		}
+
+		public void ActionRequestError (BranchError error)
+		{
+			StatusLabel.Text = error.ErrorMessage;
+		}
+
+		#endregion
+
+		#region IBranchRewardsInterface implementation
+
+		public void RewardsLoaded ()
+		{
+			StatusLabel.Text = "Ok";
+			CreditsLabel.Text = "Credit: " + Branch.GetInstance ().GetCreditsForBucket ("test");
+		}
+
+		public void RewardsRedeemed (string bucket, int count)
+		{
+			StatusLabel.Text = "Ok";
+		}
+
+		public void CreditHistory (List<CreditHistoryEntry> history)
+		{
+			StatusLabel.Text = "Ok";
+		}
+
+		public void RewardsRequestError (BranchError error)
+		{
+			StatusLabel.Text = error.ErrorMessage;
 		}
 
 		#endregion

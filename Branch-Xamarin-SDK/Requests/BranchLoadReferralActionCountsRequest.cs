@@ -10,20 +10,17 @@ namespace BranchXamarinSDK
 {
 	public class BranchLoadReferralActionCountsRequest : BranchRequest
 	{
-		IBranchCompletionCallback Callback;
+		readonly IBranchActionsInterface Callback;
 
-		public BranchLoadReferralActionCountsRequest (IBranchCompletionCallback callback) : base(BranchRequestType.REQUEST_LOAD_ACTION_COUNTS)
+		public BranchLoadReferralActionCountsRequest (IBranchActionsInterface callback) : base(BranchRequestType.REQUEST_LOAD_ACTION_COUNTS)
 		{
 			Callback = callback;
 		}
 
 		override public async Task Execute() {
 			try {
-				InitClient();
-				Branch.GetInstance ().Log ("Sending load action counts request", "WEBAPI");
-				HttpResponseMessage response = await Client.GetAsync("v1/referrals/" + User.Current.Id + "?sdk=xamarin" + Constants.SDK_VERSION);
-				if (response.StatusCode == System.Net.HttpStatusCode.OK) {
-					Branch.GetInstance().Log("Load action counts request completed successfully", "WEBAPI");
+				HttpResponseMessage response = await ExecuteGet ("v1/referrals/");
+				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
 
 					var settings = new JsonSerializerSettings();
@@ -46,47 +43,34 @@ namespace BranchXamarinSDK
 							if (totalObj != null) {
 								int total = 0;
 								string totalStr = totalObj as string;
-								if (totalStr != null) {
-									total = int.Parse((string)totalObj);
-								} else {
-									total = Convert.ToInt32(totalObj);
-								}
+								total = (totalStr != null)?int.Parse((string)totalObj):Convert.ToInt32(totalObj);
 								Branch.GetInstance().TotalActionCounts.Add(key, total);
 							}
 							if (uniqueObj != null) {
 								int unique = 0;
 								string uniqueStr = uniqueObj as string;
-								if (uniqueStr != null) {
-									unique = int.Parse((string)uniqueObj);
-								} else {
-									unique = Convert.ToInt32(uniqueObj);
-								}
+								unique = (uniqueStr != null)?int.Parse((string)uniqueObj):Convert.ToInt32(uniqueObj);
 								Branch.GetInstance().UniqueActionCounts.Add(key, unique);
 							}
 						}
 					}
 
 					if (Callback != null) {
-						Callback.RequestComplete(null);
+						Callback.LoadActionComplete();
 					}
 				} else {
-					Branch.GetInstance().Log("Load action counts failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
 					if (Callback != null) {
-						Callback.RequestComplete(new BranchError("Load action counts request failed with HTTP error: " + response.ReasonPhrase));
+						Callback.ActionRequestError(new BranchError(response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
 					}
 				}
-				System.Diagnostics.Debug.WriteLine("Load action counts completed with status: " + response.ReasonPhrase);
-			} catch (TaskCanceledException ex) {
+			} catch (TaskCanceledException) {
 				if (Callback != null) {
-					Callback.RequestComplete(new BranchError("Operation timed out", 1));
+					Callback.ActionRequestError (new BranchError ("Operation timed out"));
 				}
-				Branch.GetInstance().Log("Load action counts request timed out", "WEBAPI", 6);
 			} catch (Exception ex) {
 				if (Callback != null) {
-					Callback.RequestComplete(new BranchError("Execption: " + ex.Message));
+					Callback.ActionRequestError (new BranchError ("Exception: " + ex.Message));
 				}
-				Branch.GetInstance().Log("Exception sending load action counts: " + ex.Message, "WEBAPI", 6);
-				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
 			}
 		}
 	}

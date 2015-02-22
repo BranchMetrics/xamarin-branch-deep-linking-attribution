@@ -10,10 +10,7 @@ namespace BranchXamarinSDK
 {
 	public class BranchOpenRequest : BranchRequest
 	{
-		public class OpenParams {
-			public string app_id;
-			public string device_fingerprint_id;
-			public string identity_id;
+		public class OpenParams : BranchParams {
 			public int is_referrable;
 			public string app_version;
 			public string os_version;
@@ -26,8 +23,7 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		readonly OpenParams Params;
-		readonly IBranchReferralInitInterface Callback;
+		readonly IBranchSessionInterface Callback;
 
 		public BranchOpenRequest (
 			bool isReferral,
@@ -36,35 +32,29 @@ namespace BranchXamarinSDK
 			string os,
 			string uriScheme,
 			string addTrackingEnabled,
-			IBranchReferralInitInterface callback) : base(BranchRequestType.REQUEST_OPEN)
+			IBranchSessionInterface callback) : base(BranchRequestType.REQUEST_OPEN, new OpenParams())
 		{
-			Params = new OpenParams ();
-			Params.app_id = Branch.GetInstance().AppKey;
-			Params.device_fingerprint_id = Session.Current.DeviceFingerprintId;
-			Params.identity_id = User.Current.Id;
-			Params.is_referrable = isReferral ? 1 : 0;
-			Params.app_version = appVersion;
-			Params.os_version = osVersion;
-			Params.os = os;
-			Params.uri_scheme = uriScheme;
-			Params.link_identifier = Branch.GetInstance().LinkClickIdentifier;
-			Params.ad_tracking_enabled = addTrackingEnabled;
+			var LocalParams = Params as OpenParams;
+			LocalParams.is_referrable = isReferral ? 1 : 0;
+			LocalParams.app_version = appVersion;
+			LocalParams.os_version = osVersion;
+			LocalParams.os = os;
+			LocalParams.uri_scheme = uriScheme;
+			LocalParams.link_identifier = Branch.GetInstance().LinkClickIdentifier;
+			LocalParams.ad_tracking_enabled = addTrackingEnabled;
+
+			// These are not used by OPEN...
+			Params.session_id = null;
+			Params.link_click_id = null;
+
 			Callback = callback;
 		}
 
 		override async public Task Execute() {
 			try {
-				InitClient();
-				var inSettings = new JsonSerializerSettings();
-				inSettings.NullValueHandling = NullValueHandling.Ignore;
-				String inBody = JsonConvert.SerializeObject(Params, inSettings);
-				Branch.GetInstance().Log("Sending open request", "WEBAPI");
-				HttpResponseMessage response = await Client.PostAsync ("v1/open",
-					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
+				HttpResponseMessage response = await ExecutePost ("v1/open");
  				if (response.StatusCode == HttpStatusCode.OK) {
 					String body = await response.Content.ReadAsStringAsync ();
-					Branch.GetInstance().Log("Open request completed successfully", "WEBAPI");
-
 					var settings = new JsonSerializerSettings();
 					var converterList = new List<JsonConverter>();
 					converterList.Add(new DictionaryConverter());
@@ -88,19 +78,21 @@ namespace BranchXamarinSDK
 					Branch.GetInstance().UpdateUserAndSession(result, dataStr, false);
 
 					if (Callback != null) {
-						Callback.OnInitFinished (result, null);
+						Callback.InitSessionComplete(data);
 					}
 				} else {
-					Branch.GetInstance().Log("Logout failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
 					if (Callback != null) {
-						Callback.OnInitFinished (null, new BranchError (response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
+						Callback.SessionRequestError(new BranchError(response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
 					}
 				}
-			} catch (TaskCanceledException ex) {
-				Branch.GetInstance().Log("Open timed out", "WEBAPI", 6);
+			} catch (TaskCanceledException) {
+				if (Callback != null) {
+					Callback.SessionRequestError (new BranchError ("Operation timed out"));
+				}
 			} catch (Exception ex) {
-				Branch.GetInstance().Log("Exception sending open: " + ex.Message, "WEBAPI", 6);
-				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
+				if (Callback != null) {
+					Callback.SessionRequestError (new BranchError ("Exception: " + ex.Message));
+				}
 			}
 		}
 	}

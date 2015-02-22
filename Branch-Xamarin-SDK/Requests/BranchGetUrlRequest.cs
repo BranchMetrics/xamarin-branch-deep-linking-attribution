@@ -10,34 +10,43 @@ namespace BranchXamarinSDK
 {
 	public class BranchGetUrlRequest : BranchRequest
 	{
+		public class UrlParams : BranchParams
+		{
+			public ICollection<String> tags;
+			public string alias;
+			public int type;
+			public string channel;
+			public string feature;
+			public string stage;
+			public string data;
+
+			public UrlParams(BranchLinkData inData) {
+				tags = inData.tags;
+				type = inData.type;
+				channel = inData.channel;
+				feature = inData.feature;
+				stage = inData.stage;
+				data = inData.data;
+			}
+		}
+
 		readonly BranchLinkData Data;
-		readonly IBranchGetUrlInterface Callback;
+		readonly IBranchUrlInterface Callback;
 
 		public BranchGetUrlRequest (
 			BranchLinkData data,
-			IBranchGetUrlInterface callback) : base(BranchRequestType.REQUEST_GET_URL)
+			IBranchUrlInterface callback) : base(BranchRequestType.REQUEST_GET_URL, new UrlParams(data))
 		{
 			Data = data;
-			Data.app_id = Branch.GetInstance().AppKey;
-			Data.session_id = Session.Current.Id;
-			Data.identity_id = User.Current.Id;
-			Data.device_fingerprint_id = Session.Current.DeviceFingerprintId;
 			Callback = callback;
 		}
 
 		override async public Task Execute() {
 			try {
-				InitClient();
-				var settings = new JsonSerializerSettings();
-				settings.DefaultValueHandling = DefaultValueHandling.Ignore;
-				String inBody = JsonConvert.SerializeObject(Data, settings);
-				Branch.GetInstance().Log("Sending get URL request", "WEBAPI");
-				HttpResponseMessage response = await Client.PostAsync ("v1/url",
-					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
+				HttpResponseMessage response = await ExecutePost ("v1/url");
 				if (response.StatusCode == HttpStatusCode.OK) {
 					if (Callback != null) {
 						String body = await response.Content.ReadAsStringAsync();
-						Branch.GetInstance().Log("Get URL completed successfully", "WEBAPI");
 						Dictionary<String, object> result = JsonConvert.DeserializeObject<Dictionary<String, object>>(body);
 						Uri uri = null;
 						if (result.ContainsKey("url")) {
@@ -52,22 +61,21 @@ namespace BranchXamarinSDK
 							Branch.GetInstance().LinkDataCache.Add(Data, uri);
 						}
 
-						Callback.Finished(uri, null);
+						Callback.ReceivedUrl(uri);
 					}
 				} else {
-					Branch.GetInstance().Log("Get URL failed with HTTP error: " + response.ReasonPhrase, "WEBAPI", 6);
 					if (Callback != null) {
-						Callback.Finished(null, new BranchError(response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
+						Callback.UrlRequestError(new BranchError(response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
 					}
 				}
-			} catch (TaskCanceledException ex) {
-				Branch.GetInstance().Log("Get URL timed out", "WEBAPI", 6);
+			} catch (TaskCanceledException) {
 				if (Callback != null) {
-					Callback.Finished (null, new BranchError ("Operation timed out", 1));
+					Callback.UrlRequestError (new BranchError ("Operation timed out"));
 				}
 			} catch (Exception ex) {
-				Branch.GetInstance().Log("Exception sending get URL: " + ex.Message, "WEBAPI", 6);
-				System.Diagnostics.Debug.WriteLine ("Exception: " + ex);
+				if (Callback != null) {
+					Callback.UrlRequestError (new BranchError ("Exception: " + ex.Message));
+				}
 			}
 		}
 	}
