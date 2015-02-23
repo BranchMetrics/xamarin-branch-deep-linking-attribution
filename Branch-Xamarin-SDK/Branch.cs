@@ -204,17 +204,17 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		public async Task UserCompletedAction(String action, Dictionary<string, object> metadata = null, IBranchActionsInterface callback = null) {
+		public async Task UserCompletedActionAsync(String action, Dictionary<string, object> metadata = null, IBranchActionsInterface callback = null) {
 			var req = new BranchCompleteActionRequest (action, metadata, callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task LoadReferralActionCounts(IBranchActionsInterface callback = null) {
+		public async Task LoadReferralActionCountsAsync(IBranchActionsInterface callback = null) {
 			var req = new BranchLoadReferralActionCountsRequest (callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task GetReferralCode(IBranchReferralInterface callback,
+		public async Task GetReferralCodeAsync(IBranchReferralInterface callback,
 			int amount,
 			String prefix = null,
 			DateTime? expiration = null,
@@ -232,22 +232,22 @@ namespace BranchXamarinSDK
 			await EnqueueRequestAsync(req);
 		}
 
-		public async Task ValidateReferralCode(IBranchReferralInterface callback, String code) {
+		public async Task ValidateReferralCodeAsync(IBranchReferralInterface callback, String code) {
 			var req = new BranchValidateReferralCodeRequest (code, callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task ApplyReferralCode(IBranchReferralInterface callback, String code) {
+		public async Task ApplyReferralCodeAsync(IBranchReferralInterface callback, String code) {
 			var req = new BranchApplyReferralCodeRequest (code, callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task LoadRewards(IBranchRewardsInterface callback) {
+		public async Task LoadRewardsAsync(IBranchRewardsInterface callback) {
 			var req = new BranchLoadRewardsRequest (callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task RedeemRewards(IBranchRewardsInterface callback, int amount, string bucket = "default") {
+		public async Task RedeemRewardsAsync(IBranchRewardsInterface callback, int amount, string bucket = "default") {
 			if (String.IsNullOrWhiteSpace(bucket)) {
 				bucket = "default";
 			}
@@ -256,7 +256,7 @@ namespace BranchXamarinSDK
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task GetCreditHistory(IBranchRewardsInterface callback,
+		public async Task GetCreditHistoryAsync(IBranchRewardsInterface callback,
 			string bucket = null,
 			string afterId = null,
 			int length = 100,

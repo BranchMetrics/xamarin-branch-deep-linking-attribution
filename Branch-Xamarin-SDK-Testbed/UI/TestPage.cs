@@ -647,15 +647,15 @@ namespace BranchXamarinSDKTestbed
 			// Just to test metadata
 			var data = new Dictionary<string, object> ();
 			data.Add ("action_complete_date", DateTime.Now.ToString ());
-			await Branch.GetInstance ().UserCompletedAction (ActionEntry.Text, data);
+			await Branch.GetInstance ().UserCompletedActionAsync (ActionEntry.Text, data);
 		}
 
 		async void LoadActionClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().LoadReferralActionCounts (this);
+			await Branch.GetInstance ().LoadReferralActionCountsAsync (this);
 		}
 
 		async void GetCodeClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().GetReferralCode (this,
+			await Branch.GetInstance ().GetReferralCodeAsync (this,
 				10,
 				null,
 				null,
@@ -663,24 +663,24 @@ namespace BranchXamarinSDKTestbed
 		}
 
 		async void ValidateCodeClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().ValidateReferralCode (this, ReferralCodeEntry.Text);
+			await Branch.GetInstance ().ValidateReferralCodeAsync (this, ReferralCodeEntry.Text);
 		}
 
 		async void ApplyCodeClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().ApplyReferralCode (this, ReferralCodeEntry.Text);
+			await Branch.GetInstance ().ApplyReferralCodeAsync (this, ReferralCodeEntry.Text);
 		}
 
 		async void LoadRewardsClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().LoadRewards (this);
+			await Branch.GetInstance ().LoadRewardsAsync (this);
 		}
 
 		async void RedeemClicked(object sender, EventArgs e) {
 			int amount = int.Parse (RedeemEntry.Text);
-			await Branch.GetInstance ().RedeemRewards (this, amount, "test");
+			await Branch.GetInstance ().RedeemRewardsAsync (this, amount, "test");
 		}
 
 		async void GetCreditHistoryClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().GetCreditHistory (this, "test");
+			await Branch.GetInstance ().GetCreditHistoryAsync (this, "test");
 		}
 
 		void TypeSelected(object sender, EventArgs args) {
