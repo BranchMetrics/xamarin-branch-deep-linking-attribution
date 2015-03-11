@@ -1,6 +1,6 @@
 ## Introduction
 
-The Xamarin SDK is a cross platform SDK you can use to access the Branch APIs from your Xamarin application.  The SDK is a PCL that works with Xamarin Android, Xamarin iOS or Xamarin Forms applications.
+The Xamarin SDK is a cross platform SDK you can use to access the Branch APIs from your Xamarin application.  The SDK is a PCL (Portable Class Library) that works with Xamarin Android, Xamarin iOS or Xamarin Forms applications.
 
 ## A Word About Async Methods
 
@@ -64,7 +64,7 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 }
 ```
 
-Note that in both cases the first argument is the app key for your app from the Branch dashboard.  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
+Note that in both cases the first argument is the app key found in your app from the Branch dashboard.  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
 
 ### Register you app
 
@@ -157,7 +157,7 @@ public class AppDelegate
 
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 ```csharp
-Branch branch = Branch.GetInstance();
+Branch branch = Branch.GetInstance ();
 Dictionary<string, object> sessionParams = branch.GetLatestReferringParams();
 ```
 
@@ -165,7 +165,7 @@ Dictionary<string, object> sessionParams = branch.GetLatestReferringParams();
 
 If you ever want to access the original session params (the parameters passed in for the first install event only), you can use this line. This is useful if you only want to reward users who newly installed the app from a referral link or something.
 ```csharp
-Branch branch = Branch.GetInstance();
+Branch branch = Branch.GetInstance ();
 Dictionary<string, object> installParams = branch.GetFirstReferringParams();
 ```
 
@@ -175,7 +175,7 @@ Often, you might have your own user IDs, or want referral and event data to pers
 
 To identify a user, just call:
 ```csharp
-Branch branch = Branch.GetInstance();
+Branch branch = Branch.GetInstance ();
 branch.SetIdentityAsync("your user id", this);  // Where this implements IBranchIdentityInterface
 ```
 
@@ -193,20 +193,20 @@ Branch.GetInstance(getApplicationContext()).LogoutAsync(this); // Where this imp
 
 ### Register custom events
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.userCompletedAction("your_custom_event");
+```csharp
+Branch branch = Branch.GetInstance ();
+await branch.UserCompletedActionAsync("your_custom_event");
 ```
 
 OR if you want to store some state with the event
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.userCompletedAction("your_custom_event", (JSONObject)appState);
+```csharp
+Branch branch = Branch.GetInstance ();
+await branch.UserCompletedActionAsync("your_custom_event", (Dictionary<string, object> data) data);
 ```
 
 Some example events you might want to track:
-```java
+```csharp
 "complete_purchase"
 "wrote_message"
 "finished_level_ten"
@@ -220,16 +220,14 @@ There are a bunch of options for creating these links. You can tag them for anal
 
 For more details on how to create links, see the [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md)
 
-```java
+```csharp
 // associate data with a link
 // you can access this data from any instance that installs or opens the app from this link (amazing...)
 
-JSONObject dataToInclude = new JSONObject();
-try {
-	dataToInclude.put("user", "Joe");
-	dataToInclude.put("profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg");
-	dataToInclude.put("description", "Joe likes long walks on the beach...")
-} catch (JSONException ex) { }
+var data = new Dictionary<string, object>(); 
+data.Add("user", "Joe");
+data.Add("profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg");
+data.Add("description", "Joe likes long walks on the beach...") 
 
 // associate a url with a set of tags, channel, feature, and stage for better analytics.
 // tags: null or example set of tags could be "version1", "trial6", etc
@@ -237,6 +235,7 @@ try {
 // feature: null or examples: Branch.FEATURE_TAG_SHARE, Branch.FEATURE_TAG_REFERRAL, "unlock", etc
 // stage: null or examples: "past_customer", "logged_in", "level_6"
 
+#####Rob take a look at Array Lists
 ArrayList<String> tags = new ArrayList<String>();
 tags.put("version1");
 tags.put("trial6");
@@ -247,17 +246,8 @@ tags.put("trial6");
 // Link 'alias' can be used to label the endpoint on the link. For example: http://bnc.lt/AUSTIN28. 
 // Be careful about aliases: these are immutable objects permanently associated with the data and associated paramters you pass into the link. When you create one in the SDK, it's tied to that user identity as well (automatically specified by the Branch internals). If you want to retrieve the same link again, you'll need to call getShortUrl with all of the same parameters from before.
 
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.getShortUrl(tags, "text_message", Branch.FEATURE_TAG_SHARE, "level_3", dataToInclude, new BranchLinkCreateListener() {
-	@Override
-	public void onLinkCreate(String url, Branch.BranchError error) {
-		if (error == null) {
-			// show the link to the user or share it immediately
-		} else {
-			Log.i("MyApp", error.getMessage());
-		}
-	}
-});
+Branch branch = Branch.GetInstance ();
+await branch.GetShortUrlAsync(this, data, "alias","channel","stage", tags, "feature", uriType);
 
 // The callback will return null if the link generation fails (or if the alias specified is aleady taken.)
 ```
@@ -313,43 +303,93 @@ Warning: For a referral program, you should not use unique awards for custom eve
 
 Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.loadRewards(new BranchReferralStateChangedListener() {
-	@Override
-	public void onStateChanged(boolean changed, Branch.BranchError error) {
-		// changed boolean will indicate if the balance changed from what is currently in memory
+```csharp
+Branch branch = Branch.GetInstance ();
+await branch.LoadRewardsAsync(this);
 
-		// will return the balance of the current user's credits
-		int credits = branch.getCredits();
-	}
-});
+#region IBranchRewardsInterface implementation
+
+		public void RewardsLoaded ()
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void RewardsRedeemed (string bucket, int count)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void CreditHistory (List<CreditHistoryEntry> history)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void RewardsRequestError (BranchError error)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+#endregion
 ```
 
 ### Redeem all or some of the reward balance (store state)
 
 We will store how many of the rewards have been deployed so that you don't have to track it on your end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.redeemRewards(5);
+```csharp
+Branch branch = Branch.GetInstance ();
+await branch.RedeemRewardsAsync(this, amount, bucket);
+
+#region IBranchRewardsInterface implementation
+
+		public void RewardsLoaded ()
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void RewardsRedeemed (string bucket, int count)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void CreditHistory (List<CreditHistoryEntry> history)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void RewardsRequestError (BranchError error)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+			 // Do something with the data...
+			});
+		}
+
+		#endregion
+
 ```
 
 ### Get credit history
 
-This call will retrieve the entire history of credits and redemptions from the individual user. To use this call, implement like so:
+This call will retrieve the entire history of credits and redemptions from the individual user.  It also implements the IBranchRewardsInterface(see above). To use this call, implement like so:
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.getCreditHistory(new BranchListResponseListener() {
-	public void onReceivingResponse(JSONArray list, Branch.BranchError error) {
-		if (error == null) {
-			// show the list in your app
-		} else {
-			Log.i("MyApp", error.getMessage());
-		}
-	}
-});
+```csharp
+Branch branch = Branch.GetInstance ();
+await branch.GetCreditHistoryAsync(this);
+
 ```
 
 The response will return an array that has been parsed from the following JSON:
@@ -397,19 +437,44 @@ The response will return an array that has been parsed from the following JSON:
 
 Retrieve the referral code created by current user
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.getReferralCode(new BranchReferralInitListener() {
-	@Override
-	public void onInitFinished(JSONObject referralCode, Branch.BranchError error) {
-		try {
-			String code = referralCode.getString("referral_code");
-			// do whatever with code
-		} catch (JSONException e) {
-			e.printStackTrace();
+```csharp
+Branch branch = Branch.GetInstance ();
+await branch.GetReferralCodeAsync(this, amount);
+
+#region IBranchReferralInterface implementation
+
+		public void ReferralCodeCreated (string code)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
 		}
-	}
-});
+
+		public void ReferralCodeValidated (string code, bool valid)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void ReferralCodeApplied (string code)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		public void ReferralRequestError (BranchError error)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
+		}
+
+		#endregion
+
+		
+
 ```
 
 ### Create referral code
@@ -422,20 +487,23 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 **amount** _int_
 : The amount of credit to redeem when user applies the referral code
 
-```java
-// Create a referral code of 5 credits
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.getReferralCode(5, new BranchReferralInitListener() {
-	@Override
-	public void onInitFinished(JSONObject referralCode, Branch.BranchError error) {
-		try {
-			String code = referralCode.getString("referral_code");
-			// do whatever with code
-		} catch (JSONException e) {
-			e.printStackTrace();
+```csharp
+// Create a referral code of 5 credits 
+
+Branch branch = Branch.GetInstance();
+await branch.GetReferralCodeAsync(this, 5);
+
+#region IBranchReferralInterface implementation
+
+		public void ReferralCodeCreated (string code)
+		{
+			Device.BeginInvokeOnMainThread (() => { 
+				// Do something with the data...
+			});
 		}
-	}
-});
+...
+
+#endregion
 ```
 
 Alternatively, you can specify a prefix for the referral code.
@@ -444,19 +512,21 @@ The resulting code will have your prefix, concatenated with a 4 character long u
 **prefix** _String_
 : The prefix to the referral code that you desire
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.getReferralCode("BRANCH", 5, new BranchReferralInitListener() {
-	@Override
-	public void onInitFinished(JSONObject referralCode, Branch.BranchError error) {
-		try {
-			String code = referralCode.getString("referral_code");
-			// do whatever with code
-		} catch (JSONException e) {
-			e.printStackTrace();
+```csharp
+Branch branch = Branch.GetInstance();
+await branch.GetReferralCodeAsync(this, 5, "BRANCH");
+
+#region IBranchReferralInterface implementation
+
+		public void ReferralCodeCreated (string code)
+		{
+			Device.BeginInvokeOnMainThread (() => { 
+				// Do something with the data...
+			});
 		}
-	}
-});
+...
+
+#endregion 
 ```
 
 If you want to specify an expiration date for the referral code, you can add an expiration parameter.
@@ -465,19 +535,21 @@ The prefix parameter is optional here, i.e. it could be getReferralCode(5, expir
 **expiration** _Date_
 : The expiration date of the referral code
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.getReferralCode("BRANCH", 5, expirationDate, new BranchReferralInitListener() {
-	@Override
-	public void onInitFinished(JSONObject referralCode, Branch.BranchError error) {
-		try {
-			String code = referralCode.getString("referral_code");
-			// do whatever with code
-		} catch (JSONException e) {
-			e.printStackTrace();
+```csharp
+Branch branch = Branch.GetInstance();
+await branch.GetReferralCodeAsync(this, 5, "BRANCH", expirationDate);
+
+#region IBranchReferralInterface implementation
+
+		public void ReferralCodeCreated (string code)
+		{
+			Device.BeginInvokeOnMainThread (() => { 
+				// Do something with the data...
+			});
 		}
-	}
-});
+...
+
+#endregion  
 ```
 
 You can also tune the referral code to the finest granularity, with the following additional parameters:
@@ -498,19 +570,21 @@ You can also tune the referral code to the finest granularity, with the followin
 1. _REFERRAL_CODE_LOCATION_REFERRING_USER_ - the user who created the referral code receives credit
 1. _REFERRAL_CODE_LOCATION_BOTH_ - both the creator and applicant receive credit
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.getReferralCode("BRANCH", 5, expirationDate, "default", REFERRAL_CODE_AWARD_UNLIMITED, REFERRAL_CODE_LOCATION_REFERRING_USER, new BranchReferralInitListener() {
-	@Override
-	public void onInitFinished(JSONObject referralCode, Branch.BranchError error) {
-		try {
-			String code = referralCode.getString("referral_code");
-			// do whatever with code
-		} catch (JSONException e) {
-			e.printStackTrace();
+```charp
+Branch branch = Branch.GetInstance();
+await branch.GetReferralCodeAsync(this, 5, "BRANCH", expirationDate, "default", Constants.REFERRAL_CODE_AWARD_UNLIMITED,Constants.REFERRAL_CODE_LOCATION_REFERRING_USER);
+
+#region IBranchReferralInterface implementation
+
+		public void ReferralCodeCreated (string code)
+		{
+			Device.BeginInvokeOnMainThread (() => { 
+				// Do something with the data...
+			});
 		}
-	}
-});
+...
+
+#endregion  
 ```
 
 ### Validate referral code
@@ -526,27 +600,25 @@ If valid, returns the referral code JSONObject in the call back.
 **code** _String_
 : The referral code to validate
 
-```java
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.validateReferralCode(code, new BranchReferralInitListener() {
-	@Override
-	public void onInitFinished(JSONObject referralCode, Branch.BranchError error) {
-		try {
-			if (!referralCode.has("error_message")) {		// will change to using a second callback parameter for error code soon!
-				String referral_code = referralCode.getString("referral_code");
-				if (referral_code.equals(code)) {
-					// valid
-				} else {
-					// invalid (should never happen)
-				}
-			} else {
-				// invalid
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+```csharp
+Branch branch = Branch.GetInstance();
+await branch.ValidateReferralCodeAsync(this, "code");
+
+#region IBranchReferralInterface implementation
+
+		...
+
+		public void ReferralCodeValidated (string code, bool valid)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+				// Do something with the data...
+			});
 		}
-	}
-});
+
+		...
+
+#endregion
+ 
 ```
 
 ### Apply referral code
@@ -557,7 +629,28 @@ If the code is valid, returns the referral code JSONObject in the call back.
 **code** _String_
 : The referral code to apply
 
-```java
+```csharp
+
+Branch branch = Branch.GetInstance();
+await branch.ApplyReferralCodeAsync(this, "code");
+
+#region IBranchReferralInterface implementation
+
+		...
+
+		public void ReferralCodeApplied (string code)
+		{
+			Device.BeginInvokeOnMainThread (() => {
+			// Do something with the data...
+			});
+		}
+
+		...
+
+#endregion
+
+
+*****This needs to be checked
 Branch branch = Branch.getInstance(getApplicationContext());
 branch.applyReferralCode(code, new BranchReferralInitListener() {
 	@Override
