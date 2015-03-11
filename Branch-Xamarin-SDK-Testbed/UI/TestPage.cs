@@ -629,13 +629,13 @@ namespace BranchXamarinSDKTestbed
 		}
 
 		async void LoginClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().SetIdentity (UserEntry.Text, this);
+			await Branch.GetInstance ().SetIdentityAsync (UserEntry.Text, this);
 			UserEntry.IsEnabled = false;
 			LoginButton.IsEnabled = false;
 		}
 
 		async void LogoutClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().Logout ();
+			await Branch.GetInstance ().LogoutAsync ();
 			IsLoggedIn = false;
 			UserEntry.IsEnabled = true;
 			UserEntry.Text = "";
@@ -771,24 +771,32 @@ namespace BranchXamarinSDKTestbed
 
 		public void ReferralCodeCreated (string code)
 		{
-			StatusLabel.Text = "Ok";
-			ReferralCodeLabel.Text = code;
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+				ReferralCodeLabel.Text = code;
+			});
 		}
 
 		public void ReferralCodeValidated (string code, bool valid)
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void ReferralCodeApplied (string code)
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void ReferralRequestError (BranchError error)
 		{
-			StatusLabel.Text = error.ErrorMessage;
-			ReferralCodeLabel.Text = error.ErrorMessage;
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = error.ErrorMessage;
+				ReferralCodeLabel.Text = error.ErrorMessage;
+			});
 		}
 
 		#endregion
@@ -797,16 +805,20 @@ namespace BranchXamarinSDKTestbed
 
 		public void ReceivedUrl (Uri uri)
 		{
-			StatusLabel.Text = "Ok";
-			UriLabel.Text = uri.ToString ();
-			UriString = uri.ToString ();
-			SendEmailButton.IsEnabled = true;
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+				UriLabel.Text = uri.ToString ();
+				UriString = uri.ToString ();
+				SendEmailButton.IsEnabled = true;
+			});
 		}
 
 		public void UrlRequestError (BranchError error)
 		{
-			UriLabel.Text = error.ErrorMessage;
-			StatusLabel.Text = error.ErrorMessage;
+			Device.BeginInvokeOnMainThread (() => {
+				UriLabel.Text = error.ErrorMessage;
+				StatusLabel.Text = error.ErrorMessage;
+			});
 		}
 
 		#endregion
@@ -815,17 +827,23 @@ namespace BranchXamarinSDKTestbed
 
 		public void InitSessionComplete (Dictionary<string, object> data)
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void CloseSessionComplete ()
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void SessionRequestError (BranchError error)
 		{
-			StatusLabel.Text = error.ErrorMessage;
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = error.ErrorMessage;
+			});
 		}
 
 		#endregion
@@ -834,32 +852,38 @@ namespace BranchXamarinSDKTestbed
 
 		public void IdentitySet (string identity, Dictionary<string, object> data)
 		{
-			StatusLabel.Text = "Ok";
-			IsLoggedIn = true;
-			LogoutButton.IsEnabled = true;
-			LoginButton.IsEnabled = false;
-			UserEntry.IsEnabled = false;
-			UpdateLabels ();
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+				IsLoggedIn = true;
+				LogoutButton.IsEnabled = true;
+				LoginButton.IsEnabled = false;
+				UserEntry.IsEnabled = false;
+				UpdateLabels ();
+			});
 		}
 
 		public void LogoutComplete ()
 		{
-			StatusLabel.Text = "Ok";
-			IsLoggedIn = false;
-			LogoutButton.IsEnabled = false;
-			LoginButton.IsEnabled = false;
-			UserEntry.Text = "";
-			UserEntry.IsEnabled = true;
-			UpdateLabels ();
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+				IsLoggedIn = false;
+				LogoutButton.IsEnabled = false;
+				LoginButton.IsEnabled = false;
+				UserEntry.Text = "";
+				UserEntry.IsEnabled = true;
+				UpdateLabels ();
+			});
 		}
 
 		public void IdentityRequestError (BranchError error) {
-			IsLoggedIn = false;
-			LogoutButton.IsEnabled = false;
-			LoginButton.IsEnabled = false;
-			UserEntry.IsEnabled = true;
-			StatusLabel.Text = error.ErrorMessage;
-			UpdateLabels ();
+			Device.BeginInvokeOnMainThread (() => {
+				IsLoggedIn = false;
+				LogoutButton.IsEnabled = false;
+				LoginButton.IsEnabled = false;
+				UserEntry.IsEnabled = true;
+				StatusLabel.Text = error.ErrorMessage;
+				UpdateLabels ();
+			});
 		}
 
 		#endregion
@@ -868,17 +892,23 @@ namespace BranchXamarinSDKTestbed
 
 		public void ActionComplete (string eventStr)
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void LoadActionComplete ()
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void ActionRequestError (BranchError error)
 		{
-			StatusLabel.Text = error.ErrorMessage;
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = error.ErrorMessage;
+			});
 		}
 
 		#endregion
@@ -887,23 +917,31 @@ namespace BranchXamarinSDKTestbed
 
 		public void RewardsLoaded ()
 		{
-			StatusLabel.Text = "Ok";
-			CreditsLabel.Text = "Credit: " + Branch.GetInstance ().GetCreditsForBucket ("test");
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+				CreditsLabel.Text = "Credit: " + Branch.GetInstance ().GetCreditsForBucket ("test");
+			});
 		}
 
 		public void RewardsRedeemed (string bucket, int count)
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void CreditHistory (List<CreditHistoryEntry> history)
 		{
-			StatusLabel.Text = "Ok";
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = "Ok";
+			});
 		}
 
 		public void RewardsRequestError (BranchError error)
 		{
-			StatusLabel.Text = error.ErrorMessage;
+			Device.BeginInvokeOnMainThread (() => {
+				StatusLabel.Text = error.ErrorMessage;
+			});
 		}
 
 		#endregion

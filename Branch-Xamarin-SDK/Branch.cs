@@ -11,15 +11,14 @@ namespace BranchXamarinSDK
 	{
 		protected static Branch branch;
 
-		public String AppKey;
-
 		protected IBranchGetDeviceInformation DeviceInformation;
 		protected IBranchProperties Properties;
 		protected SemaphoreSlim QueueSema;
 		protected Queue<BranchRequest> RequestQueue;  // This semaphore is used to ensure access to the queue iss synchronized
 		protected SemaphoreSlim NetworkSema;  // This ensures that only one network operation happens at a time.
-		protected bool Inited;
 		protected Task InitTask;
+		protected volatile bool ClosePending;
+		protected CancellationTokenSource QueueTokenSource;
 
 		protected internal Dictionary<BranchLinkData, Uri> LinkDataCache;
 		protected internal Dictionary<string, int> TotalActionCounts;
@@ -32,11 +31,37 @@ namespace BranchXamarinSDK
 		protected internal String Identity;
 		protected internal String IdentityId;
 		protected internal String UserLink;
+		protected internal volatile bool Inited;
 
 		int timeout = -1;
 		int retries = -1;
 
-		public bool Debug;
+		/// <summary>
+		/// Gets or sets the application key. This is generally
+		/// set by the platform specific Init methods.
+		/// </summary>
+		/// <value>The app key.</value>
+		public String AppKey { get; set; }
+
+		/// <summary>
+		/// Gets or sets the debug value.  If true, a random device id
+		/// will be used and each install will be considered a new install.
+		/// </summary>
+		/// <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
+		public bool Debug { get; set; }
+
+		/// <summary>
+		/// Gets or sets the smart session value.  Generally set to true for an 
+		/// Android app that isn't using Xamarin Forms.  It will preserve a
+		/// session across Android Activities.  See docs for more infromation.
+		/// </summary>
+		/// <value><c>true</c> if smart session enabled; otherwise, <c>false</c>.</value>
+		public bool SmartSessionEnabled { get; set; }
+
+		/// <summary>
+		/// Gets or sets the timeout value for the REST APIs.
+		/// </summary>
+		/// <value>The timeout.</value>
 		public TimeSpan Timeout {
 			get {
 				if (timeout == -1) {
@@ -49,6 +74,11 @@ namespace BranchXamarinSDK
 				Properties.SetPropertyInt (Constants.TIMEOUT_KEY, timeout);
 			}
 		}
+
+		/// <summary>
+		/// Gets or sets the retries value for the REST APIs.
+		/// </summary>
+		/// <value>The retries.</value>
 		public int Retries {
 			get {
 				if (retries == -1) {
@@ -71,8 +101,33 @@ namespace BranchXamarinSDK
 			TotalActionCounts = new Dictionary<string, int> ();
 			UniqueActionCounts = new Dictionary<string, int> ();
 			Credits = new Dictionary<string, int> ();
+			ClosePending = false;
+
+			// Start the request processing loop
+			QueueTokenSource = new CancellationTokenSource ();
+			Task.Factory.StartNew (
+				() => {
+					ProcessQueue (QueueTokenSource.Token);
+				},
+				QueueTokenSource.Token,
+				TaskCreationOptions.LongRunning,
+				TaskScheduler.Default);
 		}
 
+		~Branch() {
+			// Ensure the processing thread is stopped
+			if (QueueTokenSource != null) {
+				QueueTokenSource.Cancel ();
+				QueueTokenSource.Dispose ();
+				QueueTokenSource = null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the singleton instance of the Branch object.  Use
+		/// this object to make Branch API calls.
+		/// </summary>
+		/// <returns>The instance.</returns>
 		public static Branch GetInstance() {
 			if (branch == null) {
 				throw new BranchException ("You must initialize Branch before you can use the Branch object!");
@@ -81,25 +136,45 @@ namespace BranchXamarinSDK
 			return branch;
 		}
 
+		/// <summary>
+		/// Initiate a session with the Branch server.  This should be called early in app startup.
+		/// If InitSession has already completed and no CloseSession called, this will call the
+		/// provided callback with an empty result.
+		/// </summary>
+		/// <returns>The session async.</returns>
+		/// <param name="callback">Callback.</param>
 		public async Task InitSessionAsync(IBranchSessionInterface callback) {
 			bool isReferrable = (DeviceInformation.GetUpdateState () == 0) && (IdentityId == null);
 			await InitSessionInternalAsync (callback, isReferrable);
 		}
 
+		/// <summary>
+		/// Initiate a session with the Branch server.  This should be called early in app startup.
+		/// If InitSession has already completed and no CloseSession called, this will call the
+		/// provided callback with an empty result.
+		/// </summary>
+		/// <returns>The session async.</returns>
+		/// <param name="callback">Callback.</param>
+		/// <param name="isReferrable">If set to <c>true</c> is referrable.</param>
 		public async Task InitSessionAsync(IBranchSessionInterface callback, bool isReferrable) {
 			await InitSessionInternalAsync (callback, isReferrable);
 		}
 
 		async Task InitSessionInternalAsync(IBranchSessionInterface callback, bool isReferrable) {
+			// Clear the ClosePending flag.  If SmartSessionEnabled is true, CloseSession will wait 2 seconds
+			// before executing.  This will stop a close/open cycle everytime we change activities in Android.
+			ClosePending = false;
+
 			// Init session takes priority over any other pending operation.  It does not get put on the queue
 			// and instead executes as soon as any inprogress operation finishes.
-
 			if (Inited) {
+				// Cancel the outstanding close
+
 				// Init has already been called.  If there is no outstanding
 				// init operation, just call the callback with an empty result.
 				if ((InitTask == null) || InitTask.IsCompleted) {
 					if (callback != null) {
-						callback.SessionRequestError (new BranchError ("Init is already completed"));
+						callback.InitSessionComplete (new Dictionary<string, object> ());
 					}
 				} else {
 					if (callback != null) {
@@ -159,18 +234,40 @@ namespace BranchXamarinSDK
 			}
 		}
 
+		/// <summary>
+		/// Close a currently open session with the Branch server.  The actual close
+		/// will be delayed if the SmartSessionEnabled property is set to <c>true</c>.
+		/// </summary>
+		/// <returns>The session async.</returns>
+		/// <param name="callback">Callback.</param>
 		public async Task CloseSessionAsync(IBranchSessionInterface callback = null) {
-			var req = new BranchCloseRequest (callback);
-			await EnqueueRequestAsync (req);
+			ClosePending = true;
+
+			if (SmartSessionEnabled) {
+				// Wait a couple of seconds.  If ClosePending is still true, execute the Close.
+				await Task.Delay (2000);
+				if (!ClosePending) {
+					return;
+				}
+			}
+
+			// At this point, we will execute the Close
+			ClosePending = false;
+
 			Inited = false;
+			var req = new BranchCloseRequest (callback);
+			await NetworkSema.WaitAsync ();
+			await req.Execute ();
+			NetworkSema.Release ();
+			ClearUserData ();
 		}
 
-		public async Task SetIdentity(String user, IBranchIdentityInterface callback) {
+		public async Task SetIdentityAsync(String user, IBranchIdentityInterface callback) {
 			var req = new BranchIdentifyRequest (user, callback);
 			await EnqueueRequestAsync (req);
 		}
 
-		public async Task Logout(IBranchIdentityInterface callback = null) {
+		public async Task LogoutAsync(IBranchIdentityInterface callback = null) {
 			var req = new BranchLogoutRequest (callback);
 			await EnqueueRequestAsync (req);
 		}
@@ -327,11 +424,41 @@ namespace BranchXamarinSDK
 			}
 		}
 
+		void ProcessQueue(CancellationToken token) {
+			while (!token.IsCancellationRequested) {
+				QueueSema.Wait ();
+				BranchRequest request = null;
+				if (RequestQueue.Count > 0) {
+					request = RequestQueue.Dequeue ();
+				}
+				QueueSema.Release ();
+				if (request != null) {
+					NetworkSema.Wait ();
+
+					// Need to catch exceptions here to ensure processing continues.
+					// Report the exception to the console and continue.
+					try {
+						request.Execute ().Wait ();
+					} catch (AggregateException e) {
+						if (e.InnerException != null) {
+							String message = "Error executing request: " + e.InnerException.Message + "\n" + e.InnerException.StackTrace;
+							DeviceInformation.WriteLog (message, "Request", 6);
+						}
+					}
+					NetworkSema.Release ();
+				}
+
+				Task.Delay (200).Wait ();
+			}
+
+			// Throw so that the task get's marked as cancelled.
+			token.ThrowIfCancellationRequested ();
+		}
+
 		async Task EnqueueRequestAsync(BranchRequest request) {
 			await QueueSema.WaitAsync ();
 			RequestQueue.Enqueue (request);
 			QueueSema.Release ();
-			await ExecuteNextRequestAsync ();
 		}
 
 		async Task<BranchRequest> PeekRequestAsync() {
@@ -359,6 +486,12 @@ namespace BranchXamarinSDK
 		}
 
 		// Some internal methods
+		protected void ClearUserData() {
+			TotalActionCounts.Clear ();
+			UniqueActionCounts.Clear ();
+			UserLink = null;
+		}
+
 		protected void InitUserAndSession() {
 			String userId = Properties.GetPropertyString ("identity_id");
 			if (!String.IsNullOrWhiteSpace(userId)) {

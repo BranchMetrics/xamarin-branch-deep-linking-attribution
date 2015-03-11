@@ -47,6 +47,7 @@ namespace BranchXamarinSDKTestbed
 		{
 			Branch branch = Branch.GetInstance ();
 			branch.Debug = true; // Each install is a "new" install
+			branch.SmartSessionEnabled = false;
 			branch.InitSessionAsync (this);
 		}
 

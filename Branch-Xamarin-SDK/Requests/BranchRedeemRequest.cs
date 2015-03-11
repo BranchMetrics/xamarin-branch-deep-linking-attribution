@@ -39,8 +39,6 @@ namespace BranchXamarinSDK
 			try {
 				HttpResponseMessage response = await ExecutePost ("v1/redeem");
 				if (response.StatusCode == HttpStatusCode.OK) {
-					String body = await response.Content.ReadAsStringAsync ();
-					Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
 					if (Callback != null) {
 						Callback.RewardsRedeemed(Bucket, Amount);
 					}
