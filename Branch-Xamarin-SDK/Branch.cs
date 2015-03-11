@@ -362,7 +362,7 @@ namespace BranchXamarinSDK
 			await EnqueueRequestAsync (req);
 		}
 
-		public Dictionary<String, object> GetLatestReferringParams() {
+		public Dictionary<String, object> GetLastReferringParams() {
 			String data = Properties.GetPropertyString ("last_referring_params");
 			if (!String.IsNullOrWhiteSpace(data)) {
 				var settings = new JsonSerializerSettings();

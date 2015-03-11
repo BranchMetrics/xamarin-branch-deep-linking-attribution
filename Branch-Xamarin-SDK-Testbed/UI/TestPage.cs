@@ -99,7 +99,7 @@ namespace BranchXamarinSDKTestbed
 				TextColor = Color.Blue,
 				FontSize = 18
 			};
-			Dictionary<string, object> latest = Branch.GetInstance ().GetLatestReferringParams ();
+			Dictionary<string, object> latest = Branch.GetInstance ().GetLastReferringParams ();
 			if (latest != null) {
 				LatestLabel.Text = prettyJSON(latest);
 			}
@@ -723,7 +723,7 @@ namespace BranchXamarinSDKTestbed
 		void UpdateLabels() {
 			var first = Branch.GetInstance ().GetFirstReferringParams ();
 			FirstLabel.Text = (first != null) ? prettyJSON (first) : "";
-			var latest = Branch.GetInstance ().GetLatestReferringParams ();
+			var latest = Branch.GetInstance ().GetLastReferringParams ();
 			LatestLabel.Text = (latest != null) ? prettyJSON (latest) : "";
 		}
 
