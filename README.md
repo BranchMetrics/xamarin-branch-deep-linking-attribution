@@ -189,8 +189,7 @@ If you provide a logout function in your app, be sure to clear the user when the
 Branch.GetInstance(getApplicationContext()).LogoutAsync(this); // Where this implements IBranchIdentityInterface
 ```
 
-## The rest of this is Android doc that I need to update.  Xamarin basically follows the same pattern except all the methods that make web calls have Async at the end of their names...
-
+## Rob I edited below here!!
 ### Register custom events
 
 ```csharp
