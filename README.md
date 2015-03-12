@@ -189,7 +189,6 @@ If you provide a logout function in your app, be sure to clear the user when the
 Branch.GetInstance(getApplicationContext()).LogoutAsync(this); // Where this implements IBranchIdentityInterface
 ```
 
-## Rob I edited below here!!
 ### Register custom events
 
 ```csharp
@@ -201,7 +200,9 @@ OR if you want to store some state with the event
 
 ```csharp
 Branch branch = Branch.GetInstance ();
-await branch.UserCompletedActionAsync("your_custom_event", (Dictionary<string, object> data) data);
+Dictionary<string, object> data = new Dictionary<string, object>();
+data.Add("sku", "123456789");
+await branch.UserCompletedActionAsync("purchase_event", data);
 ```
 
 Some example events you might want to track:
@@ -234,10 +235,9 @@ data.Add("description", "Joe likes long walks on the beach...")
 // feature: null or examples: Branch.FEATURE_TAG_SHARE, Branch.FEATURE_TAG_REFERRAL, "unlock", etc
 // stage: null or examples: "past_customer", "logged_in", "level_6"
 
-#####Rob take a look at Array Lists
-ArrayList<String> tags = new ArrayList<String>();
-tags.put("version1");
-tags.put("trial6");
+List<String> tags = new List<String>();
+tags.Add("version1");
+tags.Add("trial6");
 
 // Link 'type' can be used for scenarios where you want the link to only deep link the first time. 
 // Use _null_, _LINK_TYPE_UNLIMITED_USE_ or _LINK_TYPE_ONE_TIME_USE_
@@ -248,7 +248,7 @@ tags.put("trial6");
 Branch branch = Branch.GetInstance ();
 await branch.GetShortUrlAsync(this, data, "alias","channel","stage", tags, "feature", uriType);
 
-// The callback will return null if the link generation fails (or if the alias specified is aleady taken.)
+// The error method of the callback will be called if the link generation fails (or if the alias specified is aleady taken.)
 ```
 
 There are other methods which exclude tags and data if you don't want to pass those. Explore the autocomplete functionality.
@@ -648,21 +648,4 @@ await branch.ApplyReferralCodeAsync(this, "code");
 
 #endregion
 
-
-*****This needs to be checked
-Branch branch = Branch.getInstance(getApplicationContext());
-branch.applyReferralCode(code, new BranchReferralInitListener() {
-	@Override
-	public void onInitFinished(JSONObject referralCode, Branch.BranchError error) {
-		try {
-			if (!referralCode.has("error_message")) {
-				// applied. you can get the referral code amount from the referralCode JSONObject and deduct it in your UI.
-			} else {
-				// invalid code
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-});
 ```
