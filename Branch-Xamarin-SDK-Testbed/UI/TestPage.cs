@@ -45,9 +45,21 @@ namespace BranchXamarinSDKTestbed
 		readonly Label CreditsLabel;
 		readonly Entry RedeemEntry;
 		readonly Button RedeemButton;
+		readonly Entry ReferralAmount;
+		readonly Entry ReferralPrefix;
+		readonly Entry ReferralBucket;
+		readonly Picker ReferralCalc;
+		readonly Picker ReferralLoc;
+		readonly DatePicker ReferralExp;
+		readonly Entry CreditBucketEntry;
+		readonly StackLayout HistoryStack;
 
 		int urlType;
 		string feature;
+
+		int referralCalc = Constants.REFERRAL_CODE_AWARD_UNLIMITED;
+		int referralLoc = Constants.REFERRAL_CODE_LOCATION_REFERRING_USER;
+		DateTime? referralExp = null;
 
 		String UriString;
 		bool IsLoggedIn;
@@ -302,6 +314,44 @@ namespace BranchXamarinSDKTestbed
 				FontSize = 18
 			};
 
+			ReferralAmount = new Entry {
+				TextColor = entryTextColor,
+				Text = "10",
+				Keyboard = Keyboard.Numeric
+			};
+			ReferralAmount.TextChanged += ReferralAmountChanged;
+
+			ReferralBucket = new Entry {
+				TextColor = entryTextColor,
+				Placeholder = "Enter a bucket for the credits"
+			};
+
+			ReferralPrefix = new Entry {
+				TextColor = entryTextColor,
+				Placeholder = "Enter a string to prefix the code"
+			};
+
+			ReferralCalc = new Picker {
+				Title = "Unlimited",
+				VerticalOptions = LayoutOptions.CenterAndExpand,
+				SelectedIndex = 0,
+				Items = { "Unlimited", "Unique" }
+			};
+			ReferralCalc.SelectedIndexChanged += CalcSelected;
+
+			ReferralLoc = new Picker {
+				Title = "Referring User",
+				VerticalOptions = LayoutOptions.CenterAndExpand,
+				SelectedIndex = 0,
+				Items = { "Referring User", "Referree", "Both" }
+			};
+			ReferralLoc.SelectedIndexChanged += LocSelected;
+
+			ReferralExp = new DatePicker {
+				VerticalOptions = LayoutOptions.CenterAndExpand
+			};
+			ReferralExp.DateSelected += ExpSelected;
+
 			var getCodeButton = new Button {
 				Text = "Get Referral Code",
 				TextColor = Color.White,
@@ -344,6 +394,12 @@ namespace BranchXamarinSDKTestbed
 			};
 			loadRewardsButton.Clicked += LoadRewardsClicked;
 
+			CreditBucketEntry = new Entry {
+				TextColor = entryTextColor,
+				Placeholder = "Enter a bucket name to show credits for that bucket"
+			};
+			CreditBucketEntry.TextChanged += BucketChanged;
+
 			CreditsLabel = new Label {
 				TextColor = Color.Blue,
 				Text = "Press button to get credit count",
@@ -371,6 +427,10 @@ namespace BranchXamarinSDKTestbed
 				BackgroundColor = Color.Gray
 			};
 			historyButton.Clicked += GetCreditHistoryClicked;
+
+			HistoryStack = new StackLayout {
+				Padding = 5
+			};
 
 			var stack1 = new StackLayout {
 				Children = {
@@ -471,6 +531,12 @@ namespace BranchXamarinSDKTestbed
 
 			var stack7 = new StackLayout {
 				Children = {
+					ReferralAmount,
+					ReferralBucket,
+					ReferralPrefix,
+					ReferralCalc,
+					ReferralLoc,
+					ReferralExp,
 					getCodeButton,
 					ReferralCodeLabel,
 					ValidateCodeButton,
@@ -487,10 +553,12 @@ namespace BranchXamarinSDKTestbed
 			var stack8 = new StackLayout {
 				Children = {
 					loadRewardsButton,
+					CreditBucketEntry,
 					CreditsLabel,
 					RedeemEntry,
 					RedeemButton,
-					historyButton
+					historyButton,
+					HistoryStack
 				}
 			};
 			var frame8 = new Frame {
@@ -619,6 +687,16 @@ namespace BranchXamarinSDKTestbed
 			}
 		}
 
+		void BucketChanged(object sender, TextChangedEventArgs e) {
+			String bucket = "default";
+			if (!String.IsNullOrWhiteSpace (e.NewTextValue)) {
+				bucket = e.NewTextValue;
+			}
+
+			CreditsLabel.Text = "Credits: " +
+				Branch.GetInstance ().GetCreditsForBucket (bucket);
+		}
+
 		void CodeChanged(object sender, TextChangedEventArgs e) {
 			ValidateCodeButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
 			ApplyCodeButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
@@ -626,6 +704,17 @@ namespace BranchXamarinSDKTestbed
 
 		void RedeemChanged(object sender, TextChangedEventArgs e) {
 			RedeemButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
+		}
+
+		void ReferralAmountChanged(object sender, TextChangedEventArgs e) {
+			// We will default to 10 if the field is empty.
+			if (!String.IsNullOrWhiteSpace (e.NewTextValue)) {
+				int amt;
+				if (!int.TryParse (e.NewTextValue, out amt)) {
+					// Parse issue, revert to old.
+					ReferralAmount.Text = e.OldTextValue;
+				}
+			}
 		}
 
 		async void LoginClicked(object sender, EventArgs e) {
@@ -656,10 +745,12 @@ namespace BranchXamarinSDKTestbed
 
 		async void GetCodeClicked(object sender, EventArgs e) {
 			await Branch.GetInstance ().GetReferralCodeAsync (this,
-				10,
-				null,
-				null,
-				"test");
+				String.IsNullOrWhiteSpace(ReferralAmount.Text)?10:int.Parse (ReferralAmount.Text),
+				String.IsNullOrWhiteSpace (ReferralPrefix.Text) ? null : ReferralPrefix.Text,
+				referralExp,
+				String.IsNullOrWhiteSpace (ReferralBucket.Text) ? null : ReferralBucket.Text,
+				referralCalc,
+				referralLoc);
 		}
 
 		async void ValidateCodeClicked(object sender, EventArgs e) {
@@ -676,11 +767,19 @@ namespace BranchXamarinSDKTestbed
 
 		async void RedeemClicked(object sender, EventArgs e) {
 			int amount = int.Parse (RedeemEntry.Text);
-			await Branch.GetInstance ().RedeemRewardsAsync (this, amount, "test");
+			string bucket = "default";
+			if (!String.IsNullOrWhiteSpace (CreditBucketEntry.Text)) {
+				bucket = CreditBucketEntry.Text;
+			}
+			await Branch.GetInstance ().RedeemRewardsAsync (this, amount, bucket);
 		}
 
 		async void GetCreditHistoryClicked(object sender, EventArgs e) {
-			await Branch.GetInstance ().GetCreditHistoryAsync (this, "test");
+			string bucket = "default";
+			if (!String.IsNullOrWhiteSpace (CreditBucketEntry.Text)) {
+				bucket = CreditBucketEntry.Text;
+			}
+			await Branch.GetInstance ().GetCreditHistoryAsync (this, bucket);
 		}
 
 		void TypeSelected(object sender, EventArgs args) {
@@ -718,6 +817,35 @@ namespace BranchXamarinSDKTestbed
 				feature = null;
 				break;
 			}
+		}
+
+		void CalcSelected(object sender, EventArgs e) {
+			switch (ReferralCalc.SelectedIndex) {
+			case 1:
+				referralCalc = Constants.REFERRAL_CODE_AWARD_UNIQUE;
+				break;
+			default:
+				referralCalc = Constants.REFERRAL_CODE_AWARD_UNLIMITED;
+				break;
+			}
+		}
+
+		void LocSelected(object sender, EventArgs e) {
+			switch (ReferralLoc.SelectedIndex) {
+			case 1:
+				referralLoc = Constants.REFERRAL_CODE_LOCATION_REFERREE;
+				break;
+			case 2:
+				referralLoc = Constants.REFERRAL_CODE_LOCATION_BOTH;
+				break;
+			default:
+				referralLoc = Constants.REFERRAL_CODE_LOCATION_REFERRING_USER;
+				break;
+			}
+		}
+
+		void ExpSelected(object sender, EventArgs e) {
+			referralExp = ReferralExp.Date;
 		}
 
 		void UpdateLabels() {
@@ -780,7 +908,11 @@ namespace BranchXamarinSDKTestbed
 		public void ReferralCodeValidated (string code, bool valid)
 		{
 			Device.BeginInvokeOnMainThread (() => {
-				StatusLabel.Text = "Ok";
+				if (valid) {
+					StatusLabel.Text = "Ok";
+				} else {
+					StatusLabel.Text = "Invalid Referral Code";
+				}
 			});
 		}
 
@@ -795,7 +927,6 @@ namespace BranchXamarinSDKTestbed
 		{
 			Device.BeginInvokeOnMainThread (() => {
 				StatusLabel.Text = error.ErrorMessage;
-				ReferralCodeLabel.Text = error.ErrorMessage;
 			});
 		}
 
@@ -919,7 +1050,11 @@ namespace BranchXamarinSDKTestbed
 		{
 			Device.BeginInvokeOnMainThread (() => {
 				StatusLabel.Text = "Ok";
-				CreditsLabel.Text = "Credit: " + Branch.GetInstance ().GetCreditsForBucket ("test");
+				String bucket = "default";
+				if (!String.IsNullOrWhiteSpace(CreditBucketEntry.Text)) {
+					bucket = CreditBucketEntry.Text;
+				}
+				CreditsLabel.Text = "Credit: " + Branch.GetInstance ().GetCreditsForBucket (bucket);
 			});
 		}
 
@@ -934,6 +1069,17 @@ namespace BranchXamarinSDKTestbed
 		{
 			Device.BeginInvokeOnMainThread (() => {
 				StatusLabel.Text = "Ok";
+				while (HistoryStack.Children.Count > 0) {
+					HistoryStack.Children.RemoveAt(0);
+				}
+				foreach (var ch in history) {
+					Label che = new Label {
+						TextColor = Color.Black,
+						FontSize = 20
+					};
+					che.Text = ch.transaction.date + " Amount: " + ch.transaction.amount + " in " + ch.transaction.bucket;
+					HistoryStack.Children.Add(che);
+				}
 			});
 		}
 
