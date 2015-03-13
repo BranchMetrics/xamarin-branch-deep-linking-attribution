@@ -20,7 +20,7 @@ namespace BranchXamarinSDKTestbed.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			BranchAndroid.Init (this, "90830750554783802", Intent.Data);
+			BranchAndroid.Init (this, "YOUR APP KEY HERE", Intent.Data);
 
 			LoadApplication (new App ());
 		}
