@@ -596,6 +596,10 @@ namespace BranchXamarinSDKTestbed
 				StatusLabel.Text = app.Error.ErrorMessage;
 			}
 			app.ErrorChanged += ErrorChanged;
+
+			System.Threading.Tasks.Task.Delay (3000).ContinueWith ((System.Threading.Tasks.Task arg) => {
+				Device.BeginInvokeOnMainThread (UpdateLabels);
+			});
 		}
 
 		void ErrorChanged(object sender, PropertyChangedEventArgs e) {
@@ -1032,6 +1036,10 @@ namespace BranchXamarinSDKTestbed
 		{
 			Device.BeginInvokeOnMainThread (() => {
 				StatusLabel.Text = "Ok";
+				LoadActionLabel.Text = "Total: " +
+					Branch.GetInstance ().GetReferralCountsForAction (LoadActionEntry.Text, false) +
+					" Unique: " +
+					Branch.GetInstance ().GetReferralCountsForAction (LoadActionEntry.Text, true);
 			});
 		}
 

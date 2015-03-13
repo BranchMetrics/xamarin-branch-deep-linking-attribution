@@ -403,11 +403,13 @@ namespace BranchXamarinSDK
 		}
 
 		public int GetReferralCountsForAction(String action, bool unique) {
-			int ret;
-			if (unique) {
-				UniqueActionCounts.TryGetValue (action, out ret);
-			} else {
-				TotalActionCounts.TryGetValue (action, out ret);
+			int ret = 0;
+			if (!String.IsNullOrWhiteSpace (action)) {
+				if (unique) {
+					UniqueActionCounts.TryGetValue (action, out ret);
+				} else {
+					TotalActionCounts.TryGetValue (action, out ret);
+				}
 			}
 			return ret;
 		}
