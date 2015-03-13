@@ -4,7 +4,7 @@ The Xamarin SDK is a cross platform SDK you can use to access the Branch APIs fr
 
 ## A Word About Async Methods
 
-Most of the REST API calls in the SDK are submitted to a queue and executed in the background.  These request, and their subsequent callbacks, occur on a background thread.  Due to the nature of how exceptions are handled by C# in background threads, exceptions that occur in a callback that are not caught, will be output to the console and consumed by the processing loop.
+Most of the REST API calls in the SDK are submitted to a queue and executed in the background.  These requests, and their subsequent callbacks, occur on a background thread.  Due to the nature of how exceptions are handled by C# in background threads, exceptions that occur in a callback that are not caught, will be output to the console and consumed by the processing loop.
 
 Be aware of this when executing UI functions in a callback.  Make sure that the UI functions are being executed inside a BeginInvokeOnMainThread call or it's platform equivalents.
 
@@ -470,7 +470,7 @@ await branch.GetReferralCodeAsync(this, amount);
 			});
 		}
 
-		#endregion
+#endregion
 
 		
 
