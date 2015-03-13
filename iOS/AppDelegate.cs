@@ -1,6 +1,8 @@
 ﻿using Foundation;
 using UIKit;
 
+using BranchXamarinSDK;
+
 namespace BranchXamarinSDKTestbed.iOS
 {
 	[Register ("AppDelegate")]

@@ -81,15 +81,21 @@ namespace BranchXamarinSDK
 						Callback.InitSessionComplete(data);
 					}
 				} else {
+					// Clear the Inited flag from the branch object...
+					Branch.GetInstance().Inited = false;
 					if (Callback != null) {
 						Callback.SessionRequestError(new BranchError(response.ReasonPhrase, Convert.ToInt32(response.StatusCode)));
 					}
 				}
 			} catch (TaskCanceledException) {
+				// Clear the Inited flag from the branch object...
+				Branch.GetInstance().Inited = false;
 				if (Callback != null) {
 					Callback.SessionRequestError (new BranchError ("Operation timed out"));
 				}
 			} catch (Exception ex) {
+				// Clear the Inited flag from the branch object...
+				Branch.GetInstance().Inited = false;
 				if (Callback != null) {
 					Callback.SessionRequestError (new BranchError ("Exception: " + ex.Message));
 				}

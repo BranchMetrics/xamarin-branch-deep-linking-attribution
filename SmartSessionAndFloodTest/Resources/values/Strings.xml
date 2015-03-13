@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">SmartSessionAndFloodTest</string>
+	<string name="test_smart_session">Test Smart Session</string>
+	<string name="test_flood">Test Flood</string>
+</resources>

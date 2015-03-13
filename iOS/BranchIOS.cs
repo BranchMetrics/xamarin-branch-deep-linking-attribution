@@ -7,7 +7,7 @@ using AdSupport;
 
 using UIKit;
 
-namespace BranchXamarinSDKTestbed.iOS
+namespace BranchXamarinSDK
 {
 	public class BranchIOS : Branch, IBranchGetDeviceInformation, IBranchProperties
 	{

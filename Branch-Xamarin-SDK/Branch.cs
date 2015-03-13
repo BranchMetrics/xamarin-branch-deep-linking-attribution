@@ -18,6 +18,7 @@ namespace BranchXamarinSDK
 		protected SemaphoreSlim NetworkSema;  // This ensures that only one network operation happens at a time.
 		protected Task InitTask;
 		protected volatile bool ClosePending;
+		protected volatile bool KeepAlive;
 		protected CancellationTokenSource QueueTokenSource;
 
 		protected internal Dictionary<BranchLinkData, Uri> LinkDataCache;
@@ -168,7 +169,13 @@ namespace BranchXamarinSDK
 			// Init session takes priority over any other pending operation.  It does not get put on the queue
 			// and instead executes as soon as any inprogress operation finishes.
 			if (Inited) {
-				// Cancel the outstanding close
+				if (SmartSessionEnabled) {
+					ClosePending = false;
+					KeepAlive = true;
+					Task.Delay (2000).ContinueWith ((task) => {
+						KeepAlive = false;
+					});
+				}
 
 				// Init has already been called.  If there is no outstanding
 				// init operation, just call the callback with an empty result.
@@ -244,8 +251,15 @@ namespace BranchXamarinSDK
 			ClosePending = true;
 
 			if (SmartSessionEnabled) {
-				// Wait a couple of seconds.  If ClosePending is still true, execute the Close.
-				await Task.Delay (2000);
+				// KeepAlive is set, temporarily by InitSession when InitSession is
+				// called while we are already inited.  This is likely an action transition
+				// so we don't really want to close...
+				if (KeepAlive) {
+					return;
+				}
+
+				// Wait half a second.  If ClosePending is still true, execute the Close.
+				await Task.Delay (500);
 				if (!ClosePending) {
 					return;
 				}
@@ -426,6 +440,12 @@ namespace BranchXamarinSDK
 
 		void ProcessQueue(CancellationToken token) {
 			while (!token.IsCancellationRequested) {
+				// Don't execute if we don't have an initialized session
+				if (!Inited) {
+					Task.Delay (1000).Wait ();
+					continue;
+				}
+
 				QueueSema.Wait ();
 				BranchRequest request = null;
 				if (RequestQueue.Count > 0) {

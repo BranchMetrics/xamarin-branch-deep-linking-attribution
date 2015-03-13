@@ -2,6 +2,7 @@
 using Android.OS;
 using Android.Content.PM;
 
+using BranchXamarinSDK;
 using BranchXamarinSDKTestbed;
 
 namespace BranchXamarinSDKTestbed.Droid
