@@ -145,7 +145,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="BranchIOS.cs" />
     <Compile Include="EmailUrlIOS.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +161,10 @@
     <ProjectReference Include="..\Branch-Xamarin-SDK-Testbed\Branch-Xamarin-SDK-Testbed.csproj">
       <Project>{9920A718-6BBC-4822-A85E-48F2B5EC84A3}</Project>
       <Name>Branch-Xamarin-SDK-Testbed</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Branch-Xamarin-SDK.iOS\Branch-Xamarin-SDK.iOS.csproj">
+      <Project>{765EB48A-D13B-4824-BCB6-EE53817277AC}</Project>
+      <Name>Branch-Xamarin-SDK.iOS</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

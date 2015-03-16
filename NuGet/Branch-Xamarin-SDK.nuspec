@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Branch-Xamarin-SDK</id>
+    <title>Branch Xamarin SDK</title>
+    <version>1.0.1</version>
+    <authors>Branch</authors>
+    <owners>Branch</owners>
+    <projectUrl>https://github.com/BranchMetrics/Branch-Xamarin-SDK</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is the Branch Xamarin SDK for Android, iOS and Forms applications.</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Xamarin Branch</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.8" />
+      <dependency id="System.Net.Http" version="2.2.29" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="../Branch-Xamarin-SDK/bin/**/Branch-Xamarin-SDK.dll" target="lib/portable+MonoAndroid+MonoTouch1" />
+    <file src="../Branch-Xamarin-SDK.Droid/bin/**/Branch-Xamarin-SDK.Droid.dll" target="lib/MonoAndroid" />
+    <file src="../Branch-Xamarin-SDK/bin/**/Branch-Xamarin-SDK.dll" target="lib/MonoAndroid" />
+    <file src="../Branch-Xamarin-SDK.iOS/bin/**/Branch-Xamarin-SDK.iOS.dll" target="lib/MonoTouch1" />
+    <file src="../Branch-Xamarin-SDK/bin/**/Branch-Xamarin-SDK.dll" target="lib/MonoTouch1" />
+  </files>
+</package>
