@@ -12,9 +12,17 @@ Be aware of this when executing UI functions in a callback.  Make sure that the 
 
 ## Installation
 
-The Branch Xamarin SDK is now available as a NuGet package.  You will need to add the package to your Android, iOS and Forms (if applicable) projects.  Right click on each project and select Add->Add NuGet Package or double click on the Packages folder to bring up the NuGet package dialog in Xamarin Studio.  Find the Branch Xamarin SDK and select it.  This will add the required assemblies to your projects.  You need to do this for each project that will use Branch calls.  This include the Android and iOS projects even if this is a Forms based app since an initialization call needs to be added to each of the platform specific projects.  (See the next section.)
+The Branch Xamarin SDK is now available as a [NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK).  You will need to add the package to your Android, iOS and Forms (if applicable) projects.  
 
-If you would rather build and reference the assemblies directly, download the latest repository from Git.  Add the BranchXamarinSDK project to your solution and reference it from your Android, iOS and Forms (if applicable) project.  Add the BranchXamarinSDK.Droid project to your solution and reference it from your Android project, if any.  Add the BranchXamarinSDK.iOS project and reference it from you iOS project, if any.
+1. Right click on each project and select Add->Add NuGet Package or double click on the Packages folder to bring up the NuGet package dialog in Xamarin Studio.  
+2. Find the Branch Xamarin Linking SDK and select it.  This will add the required assemblies to your projects.  You need to do this for each project that will use Branch calls.  This include the Android and iOS projects even if this is a Forms based app since an initialization call needs to be added to each of the platform specific projects.  (See the next section.)
+
+If you would rather build and reference the assemblies directly:
+
+1. Download the latest repository from Git.  
+2. Add the BranchXamarinSDK project to your solution and reference it from your Android, iOS and Forms (if applicable) project.  
+3. Add the BranchXamarinSDK.Droid project to your solution and reference it from your Android project, if any.
+4. Add the BranchXamarinSDK.iOS project and reference it from you iOS project, if any.
 
 ### Initialize the SDK
 
