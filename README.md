@@ -10,17 +10,13 @@ Be aware of this when executing UI functions in a callback.  Make sure that the 
 
 ## Installation
 
-### Install the portable code library
+The Branch Xamarin SDK is now available as a NuGet package.  You will need to add the package to your Android, iOS and Forms (if applicable) projects.  Right click on each project and select Add->Add NuGet Package or double click on the Packages folder to bring up the NuGet package dialog in Xamarin Studio.  Find the Branch Xamarin SDK and select it.  This will add the required assemblies to your projects.  You need to do this for each project that will use Branch calls.  This include the Android and iOS projects even if this is a Forms based app since an initialization call needs to be added to each of the platform specific projects.  (See the next section.)
 
-Get the SDK from git.
+If you would rather build and reference the assemblies directly, download the latest repository from Git.  Add the BranchXamarinSDK project to your solution and reference it from your Android, iOS and Forms (if applicable) project.  Add the BranchXamarinSDK.Droid project to your solution and reference it from your Android project, if any.  Add the BranchXamarinSDK.iOS project and reference it from you iOS project, if any.
 
-### Install and initialize the device specific files
+### Initialize the SDK
 
-There is a C# source file for each of the Android and iOS platforms.  (While the SDK could be used with Windows Phone as well, a WP device specific file would need to be created.)
-
-There is a copy of the device specific file in the device specific testbed projects included in the SDK.  Copy the BranchAndroid.cs file to the root of your Android project and the BranchIOS.cs file to the root of your iOS project.
-
-Initialize the Branch SDK by calling the device specific Branch class's init method before using the SDK.  This should be done even if you are creating a Forms application.
+The SDK needs to be initialized at startup in each platform.  The code below shows how to do the platform specific initialization.  Note that this example shows a Xamarin Forms app.  The same Branch<platform>.Init calls need to be made whether Forms is used or not.
 
 For Android add the call to the onCreate of either your Application class or the first Activity you start.
 

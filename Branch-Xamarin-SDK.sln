@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Branch-Xamarin-SDK.Droid", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Branch-Xamarin-SDK.iOS", "Branch-Xamarin-SDK.iOS\Branch-Xamarin-SDK.iOS.csproj", "{765EB48A-D13B-4824-BCB6-EE53817277AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNuGet", "TestNuGet\TestNuGet.csproj", "{A413D8AC-44FB-49C3-BED8-A398CFC9A595}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,5 +141,21 @@ Global
 		{9920A718-6BBC-4822-A85E-48F2B5EC84A3}.Release|iPhone.Build.0 = Release|Any CPU
 		{9920A718-6BBC-4822-A85E-48F2B5EC84A3}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{9920A718-6BBC-4822-A85E-48F2B5EC84A3}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Debug|iPhone.Build.0 = Debug|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Release|Any CPU.Build.0 = Release|iPhoneSimulator
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Release|iPhone.ActiveCfg = Release|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Release|iPhone.Build.0 = Release|iPhone
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{A413D8AC-44FB-49C3-BED8-A398CFC9A595}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 EndGlobal
