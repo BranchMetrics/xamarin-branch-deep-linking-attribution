@@ -10,3 +10,9 @@ Branch-Xamarin-SDK/obj
 packages
 SmartSessionAndFloodTest/bin
 SmartSessionAndFloodTest/obj
+Branch-Xamarin-SDK.Droid/bin
+Branch-Xamarin-SDK.Droid/obj
+Branch-Xamarin-SDK.iOS/bin
+Branch-Xamarin-SDK.iOS/obj
+TestNuGet/bin
+TestNuGet/obj

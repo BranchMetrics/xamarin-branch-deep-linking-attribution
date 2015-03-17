@@ -14,7 +14,7 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <AssemblyName>Branch-Xamarin-SDK-Testbed.Droid</AssemblyName>
-    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
@@ -63,11 +63,20 @@
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.1.4.0.6341\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\monoandroid\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\monoandroid\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BranchAndroid.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="EmailUrlAndroid.cs" />
   </ItemGroup>
@@ -91,13 +100,17 @@
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Import Project="..\packages\Xamarin.Forms.1.4.0.6341\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.0.6341\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <ItemGroup>
-    <ProjectReference Include="..\Branch-Xamarin-SDK\Branch-Xamarin-SDK.csproj">
-      <Project>{86A1C8AD-D5FC-4CAC-B0D9-88878FC190D1}</Project>
-      <Name>Branch-Xamarin-SDK</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Branch-Xamarin-SDK-Testbed\Branch-Xamarin-SDK-Testbed.csproj">
       <Project>{9920A718-6BBC-4822-A85E-48F2B5EC84A3}</Project>
       <Name>Branch-Xamarin-SDK-Testbed</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Branch-Xamarin-SDK.Droid\Branch-Xamarin-SDK.Droid.csproj">
+      <Project>{70D5278B-9EA9-4C50-B6D5-B920784F654C}</Project>
+      <Name>Branch-Xamarin-SDK.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Branch-Xamarin-SDK\Branch-Xamarin-SDK.csproj">
+      <Project>{86A1C8AD-D5FC-4CAC-B0D9-88878FC190D1}</Project>
+      <Name>Branch-Xamarin-SDK</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
