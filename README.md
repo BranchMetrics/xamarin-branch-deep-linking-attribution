@@ -19,7 +19,7 @@ The Branch Xamarin SDK is now available as a [NuGet package](https://www.nuget.o
 
 If you would rather build and reference the assemblies directly:
 
-1. Download the latest repository from Git.  
+1. Clone this repository to your local machine  
 2. Add the BranchXamarinSDK project to your solution and reference it from your Android, iOS and Forms (if applicable) project.  
 3. Add the BranchXamarinSDK.Droid project to your solution and reference it from your Android project, if any.
 4. Add the BranchXamarinSDK.iOS project and reference it from you iOS project, if any.
