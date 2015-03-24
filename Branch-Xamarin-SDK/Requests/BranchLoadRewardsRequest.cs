@@ -18,6 +18,8 @@ namespace BranchXamarinSDK
 		}
 
 		override public async Task Execute() {
+			InitBaseParams ();
+
 			try {
 				HttpResponseMessage response = await ExecuteGet ("v1/credits/");
 				if (response.StatusCode == HttpStatusCode.OK) {

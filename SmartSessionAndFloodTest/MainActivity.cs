@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Android.App;
-using Android.Content;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
@@ -18,24 +18,27 @@ namespace SmartSessionAndFloodTest
 		IBranchSessionInterface,
 		IBranchActionsInterface,
 		IBranchReferralInterface,
-		IBranchRewardsInterface
+		IBranchRewardsInterface,
+	IBranchUrlInterface
 	{
 		TextView FloodStatus;
-		int Launched = 0;
-		int Completed = 0;
-		int Errored = 0;
+		int Launched;
+		int Completed;
+		int Errored;
+		int Retries;
 
-		protected override void OnCreate (Bundle bundle)
+		protected override void OnCreate (Bundle savedInstanceState)
 		{
-			base.OnCreate (bundle);
+			base.OnCreate (savedInstanceState);
 
 			BranchAndroid.Init (this, "90830750554783802", Intent.Data);
+			Branch.GetInstance ().Timeout = TimeSpan.FromSeconds (100);
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
-			Button tss = (Button)FindViewById (Resource.Id.test_smart_session);
+			var tss = (Button)FindViewById (Resource.Id.test_smart_session);
 			tss.SetOnClickListener (this);
-			Button tf = (Button)FindViewById (Resource.Id.test_flood);
+			var tf = (Button)FindViewById (Resource.Id.test_flood);
 			tf.SetOnClickListener (this);
 
 			FloodStatus = (TextView)FindViewById (Resource.Id.flood_status);
@@ -58,6 +61,7 @@ namespace SmartSessionAndFloodTest
 			Log.Debug ("TEST", "MainActivity OnStart");
 			base.OnStart();
 			Log.Debug ("TEST", "Doing init");
+			Retries = 0;
 			Branch.GetInstance ().InitSessionAsync (this);
 		}
 
@@ -82,7 +86,7 @@ namespace SmartSessionAndFloodTest
 			for (int i = 0; i < 10; i++) {
 				Launched++;
 				UpdateFloodStatus ();
-				Branch.GetInstance ().GetCreditHistoryAsync (this, "test");
+				await Branch.GetInstance ().GetCreditHistoryAsync (this, "test");
 				Launched++;
 				UpdateFloodStatus ();
 				await Branch.GetInstance ().GetReferralCodeAsync (this, i * 10);
@@ -107,9 +111,10 @@ namespace SmartSessionAndFloodTest
 
 		#region IBranchSessionInterface implementation
 
-		public void InitSessionComplete (System.Collections.Generic.Dictionary<string, object> data)
+		public void InitSessionComplete (Dictionary<string, object> data)
 		{
 			Log.Debug ("TEST", "Session init completed successfully");
+			Branch.GetInstance ().GetReferralCodeAsync (this, 1);
 		}
 
 		public void CloseSessionComplete ()
@@ -120,6 +125,12 @@ namespace SmartSessionAndFloodTest
 		public void SessionRequestError (BranchError error)
 		{
 			Log.Error ("TEST", "Session error: " + error.ErrorMessage);
+			/*
+			if (Retries < 3) {
+				Retries++;
+				Branch.GetInstance ().InitSessionAsync (this);
+			}
+			*/
 		}
 
 		#endregion
@@ -151,8 +162,20 @@ namespace SmartSessionAndFloodTest
 
 		public void ReferralCodeCreated (string code)
 		{
-			Completed++;
-			UpdateFloodStatus ();
+			if (Launched == 0) {
+				var branch = Branch.GetInstance ();
+				var tags = new List<String>();
+				var data = new Dictionary<string, object> {
+					{ "user", "test@test.com" }, // This is just an email address
+					{ "referral_code", code },
+					{ "inviteSource", "inviteSourceEmail" }
+				};
+
+				branch.GetShortUrlAsync (this, data, null, "inviteLink", null, tags, Constants.URL_FEATURE_INVITE);
+			} else {
+				Completed++;
+				UpdateFloodStatus ();
+			}
 		}
 
 		public void ReferralCodeValidated (string code, bool valid)
@@ -190,7 +213,7 @@ namespace SmartSessionAndFloodTest
 			UpdateFloodStatus ();
 		}
 
-		public void CreditHistory (System.Collections.Generic.List<CreditHistoryEntry> history)
+		public void CreditHistory (List<CreditHistoryEntry> history)
 		{
 			Completed++;
 			UpdateFloodStatus ();
@@ -201,6 +224,20 @@ namespace SmartSessionAndFloodTest
 			Completed++;
 			Errored++;
 			UpdateFloodStatus ();
+		}
+
+		#endregion
+
+		#region IBranchUrlInterface implementation
+
+		public void ReceivedUrl (Uri uri)
+		{
+			Branch.GetInstance ().Log ("Got URI: " + uri);
+		}
+
+		public void UrlRequestError (BranchError error)
+		{
+			Branch.GetInstance ().Log ("Error: " + error.ErrorMessage, "TEST", 6);
 		}
 
 		#endregion

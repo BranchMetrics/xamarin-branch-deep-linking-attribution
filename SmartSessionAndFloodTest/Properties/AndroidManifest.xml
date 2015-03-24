@@ -3,4 +3,5 @@
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 	<application android:label="SmartSessionAndFloodTest">
 	</application>
+	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>

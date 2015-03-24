@@ -43,14 +43,16 @@ namespace BranchXamarinSDK
 			LocalParams.link_identifier = Branch.GetInstance().LinkClickIdentifier;
 			LocalParams.ad_tracking_enabled = addTrackingEnabled;
 
-			// These are not used by OPEN...
-			Params.session_id = null;
-			Params.link_click_id = null;
-
 			Callback = callback;
 		}
 
 		override async public Task Execute() {
+			InitBaseParams ();
+
+			// These are not used by OPEN...
+			Params.session_id = null;
+			Params.link_click_id = null;
+
 			try {
 				HttpResponseMessage response = await ExecutePost ("v1/open");
  				if (response.StatusCode == HttpStatusCode.OK) {

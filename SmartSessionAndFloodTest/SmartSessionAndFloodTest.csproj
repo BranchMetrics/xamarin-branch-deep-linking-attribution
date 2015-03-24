@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
+    <AndroidLinkSkip>System.Core</AndroidLinkSkip>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -52,12 +53,6 @@
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\monoandroid\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
-    <Reference Include="Branch-Xamarin-SDK.Droid">
-      <HintPath>..\packages\Branch-Xamarin-SDK.1.0.0\lib\MonoAndroid\Branch-Xamarin-SDK.Droid.dll</HintPath>
-    </Reference>
-    <Reference Include="Branch-Xamarin-SDK">
-      <HintPath>..\packages\Branch-Xamarin-SDK.1.0.0\lib\MonoAndroid\Branch-Xamarin-SDK.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -82,4 +77,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <ItemGroup>
+    <ProjectReference Include="..\Branch-Xamarin-SDK.Droid\Branch-Xamarin-SDK.Droid.csproj">
+      <Project>{70D5278B-9EA9-4C50-B6D5-B920784F654C}</Project>
+      <Name>Branch-Xamarin-SDK.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Branch-Xamarin-SDK\Branch-Xamarin-SDK.csproj">
+      <Project>{86A1C8AD-D5FC-4CAC-B0D9-88878FC190D1}</Project>
+      <Name>Branch-Xamarin-SDK</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

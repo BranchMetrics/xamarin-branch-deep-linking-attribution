@@ -172,7 +172,7 @@ namespace BranchXamarinSDK
 				if (SmartSessionEnabled) {
 					ClosePending = false;
 					KeepAlive = true;
-					Task.Delay (2000).ContinueWith ((task) => {
+					Task.Delay (2000).ContinueWith (delegate (Task task) {
 						KeepAlive = false;
 					});
 				}
@@ -189,7 +189,11 @@ namespace BranchXamarinSDK
 					}
 				}
 			} else {
+				// Do this here to ensure nothing on the queue runs until the init is complete...
+				await NetworkSema.WaitAsync ();
+
 				Inited = true;
+
 				try {
 					BranchRequest request;
 					if (IdentityId != null) {
@@ -231,13 +235,13 @@ namespace BranchXamarinSDK
 					}
 
 					LinkClickIdentifier = null;
-					await NetworkSema.WaitAsync ();
 					InitTask = request.Execute ();
 					await InitTask;
-					NetworkSema.Release ();
 				} catch (Exception ex) {
 					System.Diagnostics.Debug.WriteLine ("Request Ex: " + ex.Message);
 				}
+
+				NetworkSema.Release ();
 			}
 		}
 
@@ -503,7 +507,7 @@ namespace BranchXamarinSDK
 			return ret;
 		}
 
-		public void Log (String message, String tag = null, int level = 3) {
+		public void Log (String message, String tag = "BRANCH", int level = 3) {
 			DeviceInformation.WriteLog (message, tag, level);
 		}
 

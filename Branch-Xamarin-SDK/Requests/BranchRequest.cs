@@ -51,7 +51,9 @@ namespace BranchXamarinSDK
 			if (Params == null) {
 				Params = new BranchParams ();
 			}
+		}
 
+		protected void InitBaseParams() {
 			Branch branch = Branch.GetInstance ();
 			Params.app_id = branch.AppKey;
 			Params.device_fingerprint_id = branch.DeviceFingerprintId;

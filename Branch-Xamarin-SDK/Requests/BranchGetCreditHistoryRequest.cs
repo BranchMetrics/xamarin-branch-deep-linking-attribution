@@ -31,6 +31,8 @@ namespace BranchXamarinSDK
 		}
 
 		override async public Task Execute() {
+			InitBaseParams ();
+
 			try {
 				String queryStr =
 					"app_id=" + Params.app_id + "&" +

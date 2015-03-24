@@ -42,6 +42,7 @@
     <AndroidSigningKeyAlias>Branch</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>BranchPass</AndroidSigningKeyPass>
     <DebugType>full</DebugType>
+    <AndroidLinkSkip>System.Core</AndroidLinkSkip>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -85,16 +85,18 @@ namespace BranchXamarinSDK
 			LocalParams.link_identifier = Branch.GetInstance().LinkClickIdentifier;
 			LocalParams.ad_tracking_enabled = addTrackingEnabled;
 
+			Callback = callback;
+		}
+
+		override async public Task Execute() {
+			InitBaseParams ();
+
 			// These aren't used in the INSTALL request
 			Params.session_id = null;
 			Params.device_fingerprint_id = null;
 			Params.identity_id = null;
 			Params.link_click_id = null;
 
-			Callback = callback;
-		}
-
-		override async public Task Execute() {
 			try {
 				HttpResponseMessage response = await ExecutePost ("v1/install");
 				if (response.StatusCode == HttpStatusCode.OK) {
