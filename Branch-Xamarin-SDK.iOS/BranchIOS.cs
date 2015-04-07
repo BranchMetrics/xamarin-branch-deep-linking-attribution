@@ -87,12 +87,41 @@ namespace BranchXamarinSDK
 			return NSBundle.MainBundle.ObjectForInfoDictionary ("CFBundleVersion").ToString ();
 		}
 
-		public int GetUpdateState() {
-			String bundlePath = NSBundle.MainBundle.BundlePath;
-			NSFileManager manager = NSFileManager.DefaultManager;
+		public int GetUpdateState(bool saveState = false) {
+			NSUserDefaults defs = NSUserDefaults.StandardUserDefaults;
+			String stored = defs.StringForKey ("bnc_app_version");
+			String current = GetAppVersion ();
+
+			if (stored != null) {
+				if (current.Equals (stored)) {
+					return 1;
+				} else {
+					if (saveState) {
+						defs.SetString (current, "bnc_app_version");
+					}
+					return 2;
+				}
+			}
+
+			if (saveState) {
+				defs.SetString (current, "bnc_app_version");
+			}
+
+			NSFileManager fileManager = NSFileManager.DefaultManager;
 			NSError error;
-			NSFileAttributes attrs = manager.GetAttributes (bundlePath, out error);
-			return (attrs.CreationDate == attrs.ModificationDate)?0:1;
+
+			// creation
+			var urlArray = fileManager.GetUrls(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User);
+			NSUrl docPath = urlArray [urlArray.Length - 1];
+			NSFileAttributes createAttrs = fileManager.GetAttributes (docPath.Path, out error);
+			int createDays = (int)(createAttrs.CreationDate.SecondsSinceReferenceDate / (60 * 60 * 24));
+
+			// modification
+			String bundlePath = NSBundle.MainBundle.BundlePath;
+			NSFileAttributes modAttrs = fileManager.GetAttributes (bundlePath, out error);
+			int modDays = (int)(modAttrs.ModificationDate.SecondsSinceReferenceDate / (60 * 60 * 24));
+
+			return (modDays == createDays)?0:2;
 		}
 
 		public string GetPhoneBrand() {

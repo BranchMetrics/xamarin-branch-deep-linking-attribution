@@ -145,8 +145,12 @@ namespace BranchXamarinSDK
 		/// <returns>The session async.</returns>
 		/// <param name="callback">Callback.</param>
 		public async Task InitSessionAsync(IBranchSessionInterface callback) {
-			bool isReferrable = (DeviceInformation.GetUpdateState () == 0) && (IdentityId == null);
+			try {
+			bool isReferrable = (DeviceInformation.GetUpdateState (false) == 0) && (IdentityId == null);
 			await InitSessionInternalAsync (callback, isReferrable);
+			} catch (Exception ex) {
+				Log (ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -219,7 +223,7 @@ namespace BranchXamarinSDK
 							DeviceInformation.GetOS (),
 							DeviceInformation.GetOSVersion (),
 							isReferrable,
-							DeviceInformation.GetUpdateState (),
+							DeviceInformation.GetUpdateState (true),
 							DeviceInformation.GetCarrier (),
 							DeviceInformation.GetNfcPresent (),
 							DeviceInformation.GetTelephonePresent (),

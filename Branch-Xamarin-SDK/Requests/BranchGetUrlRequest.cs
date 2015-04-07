@@ -21,6 +21,7 @@ namespace BranchXamarinSDK
 			public string data;
 
 			public UrlParams(BranchLinkData inData) {
+				alias = inData.alias;
 				tags = inData.tags;
 				type = inData.type;
 				channel = inData.channel;
