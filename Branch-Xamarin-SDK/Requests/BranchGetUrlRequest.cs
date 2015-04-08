@@ -21,6 +21,7 @@ namespace BranchXamarinSDK
 			public string data;
 
 			public UrlParams(BranchLinkData inData) {
+				alias = inData.alias;
 				tags = inData.tags;
 				type = inData.type;
 				channel = inData.channel;
@@ -42,6 +43,7 @@ namespace BranchXamarinSDK
 		}
 
 		override async public Task Execute() {
+			InitBaseParams ();
 			try {
 				HttpResponseMessage response = await ExecutePost ("v1/url");
 				if (response.StatusCode == HttpStatusCode.OK) {

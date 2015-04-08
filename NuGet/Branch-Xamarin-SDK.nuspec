@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
-    <id>Branch-Xamarin-SDK</id>
+    <id>Branch-Xamarin-Linking-SDK</id>
     <title>Branch Xamarin SDK</title>
     <description>This is the Branch Xamarin SDK for Android, iOS and Forms applications. It allows you to create trackable links that point to your app.
 

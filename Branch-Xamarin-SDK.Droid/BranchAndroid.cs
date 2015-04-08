@@ -72,14 +72,36 @@ namespace BranchXamarinSDK
 			return ret;
 		}
 
-		public int GetUpdateState() {
-			int ret = 0;
-			if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread) {
-				PackageInfo info = AppContext.PackageManager.GetPackageInfo (AppContext.PackageName, 0);
-				if (info.LastUpdateTime != info.FirstInstallTime) {
-					ret = 1;
+		public int GetUpdateState(bool saveState = false) {
+			String currentVersion = GetAppVersion ();
+			String storedVersion = GetPropertyString("bnc_app_version");
+
+			int ret = 1;
+
+			if (String.IsNullOrWhiteSpace (storedVersion)) {
+
+				if (saveState) {
+					SetPropertyString ("bnc_app_version", currentVersion);
 				}
+				if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread) {
+					PackageInfo info = AppContext.PackageManager.GetPackageInfo (AppContext.PackageName, 0);
+					if (info.LastUpdateTime != info.FirstInstallTime) {
+						ret = 2;
+					} else {
+						ret = 0;
+					}
+				} else {
+					ret = 0;
+				}
+			} else if (!currentVersion.Equals (storedVersion)) {
+				if (saveState) {
+					SetPropertyString ("bnc_app_version", currentVersion);
+				}
+				ret = 2;
+			} else {
+				ret = 1;
 			}
+
 			return ret;
 		}
 
@@ -128,7 +150,7 @@ namespace BranchXamarinSDK
 			BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
 			try {
 				ret |= ((adapter != null) && adapter.IsEnabled);
-			} catch (Java.Lang.SecurityException ex) {
+			} catch (Java.Lang.SecurityException) {
 				System.Diagnostics.Debug.WriteLine ("Need BT permissions to get Bluetooth present");
 			}
 

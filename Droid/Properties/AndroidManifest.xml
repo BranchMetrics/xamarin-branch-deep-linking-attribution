@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.16" package="Branch_Xamarin_SDK_Testbed.Droid" android:versionCode="16">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.18" package="Branch_Xamarin_SDK_Testbed.Droid" android:versionCode="18">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 	<application android:label="Branch-Xamarin-SDK-Testbed.Droid" android:icon="@drawable/icon">
 	</application>

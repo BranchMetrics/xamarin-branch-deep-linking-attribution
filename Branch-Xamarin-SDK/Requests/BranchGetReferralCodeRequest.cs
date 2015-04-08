@@ -46,6 +46,8 @@ namespace BranchXamarinSDK
 		}
 
 		override async public Task Execute() {
+			InitBaseParams ();
+
 			try {
 				HttpResponseMessage response = await ExecutePost ("v1/referralcode");
 				if (response.StatusCode == HttpStatusCode.OK) {

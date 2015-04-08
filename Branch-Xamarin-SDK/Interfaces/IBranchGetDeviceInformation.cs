@@ -8,7 +8,7 @@ namespace BranchXamarinSDK
 		String GetOS();
 		String GetOSVersion();
 		String GetAppVersion();
-		int GetUpdateState();
+		int GetUpdateState(bool saveState = false);
 		String GetPhoneBrand();
 		String GetPhoneModel();
 		bool GetNfcPresent();

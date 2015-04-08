@@ -145,8 +145,12 @@ namespace BranchXamarinSDK
 		/// <returns>The session async.</returns>
 		/// <param name="callback">Callback.</param>
 		public async Task InitSessionAsync(IBranchSessionInterface callback) {
-			bool isReferrable = (DeviceInformation.GetUpdateState () == 0) && (IdentityId == null);
+			try {
+			bool isReferrable = (DeviceInformation.GetUpdateState (false) == 0) && (IdentityId == null);
 			await InitSessionInternalAsync (callback, isReferrable);
+			} catch (Exception ex) {
+				Log (ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -172,7 +176,7 @@ namespace BranchXamarinSDK
 				if (SmartSessionEnabled) {
 					ClosePending = false;
 					KeepAlive = true;
-					Task.Delay (2000).ContinueWith ((task) => {
+					Task.Delay (2000).ContinueWith (delegate (Task task) {
 						KeepAlive = false;
 					});
 				}
@@ -189,7 +193,11 @@ namespace BranchXamarinSDK
 					}
 				}
 			} else {
+				// Do this here to ensure nothing on the queue runs until the init is complete...
+				await NetworkSema.WaitAsync ();
+
 				Inited = true;
+
 				try {
 					BranchRequest request;
 					if (IdentityId != null) {
@@ -215,7 +223,7 @@ namespace BranchXamarinSDK
 							DeviceInformation.GetOS (),
 							DeviceInformation.GetOSVersion (),
 							isReferrable,
-							DeviceInformation.GetUpdateState (),
+							DeviceInformation.GetUpdateState (true),
 							DeviceInformation.GetCarrier (),
 							DeviceInformation.GetNfcPresent (),
 							DeviceInformation.GetTelephonePresent (),
@@ -231,13 +239,15 @@ namespace BranchXamarinSDK
 					}
 
 					LinkClickIdentifier = null;
-					await NetworkSema.WaitAsync ();
 					InitTask = request.Execute ();
 					await InitTask;
-					NetworkSema.Release ();
 				} catch (Exception ex) {
+					// Reset the Inited state
+					Inited = false;
 					System.Diagnostics.Debug.WriteLine ("Request Ex: " + ex.Message);
 				}
+
+				NetworkSema.Release ();
 			}
 		}
 
@@ -451,20 +461,26 @@ namespace BranchXamarinSDK
 				QueueSema.Wait ();
 				BranchRequest request = null;
 				if (RequestQueue.Count > 0) {
-					request = RequestQueue.Dequeue ();
+					request = RequestQueue.Peek ();
 				}
 				QueueSema.Release ();
 				if (request != null) {
 					NetworkSema.Wait ();
 
-					// Need to catch exceptions here to ensure processing continues.
-					// Report the exception to the console and continue.
-					try {
-						request.Execute ().Wait ();
-					} catch (AggregateException e) {
-						if (e.InnerException != null) {
-							String message = "Error executing request: " + e.InnerException.Message + "\n" + e.InnerException.StackTrace;
-							DeviceInformation.WriteLog (message, "Request", 6);
+					// Verify once more that we are still inited.  It is possible that 
+					// init was in progress then failed so check again.
+					if (Inited) {
+						// Need to catch exceptions here to ensure processing continues.
+						// Report the exception to the console and continue.
+						try {
+							request.Execute ().Wait ();
+						} catch (AggregateException e) {
+							if (e.InnerException != null) {
+								String message = "Error executing request: " + e.InnerException.Message + "\n" + e.InnerException.StackTrace;
+								DeviceInformation.WriteLog (message, "Request", 6);
+							}
+						} finally {
+							RequestQueue.Dequeue ();
 						}
 					}
 					NetworkSema.Release ();
@@ -503,7 +519,7 @@ namespace BranchXamarinSDK
 			return ret;
 		}
 
-		public void Log (String message, String tag = null, int level = 3) {
+		public void Log (String message, String tag = "BRANCH", int level = 3) {
 			DeviceInformation.WriteLog (message, tag, level);
 		}
 
