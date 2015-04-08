@@ -134,7 +134,11 @@ namespace BranchXamarinSDK
 
 		public string GetCarrier() {
 			var info = new CTTelephonyNetworkInfo ();
-			return info.SubscriberCellularProvider.CarrierName;
+			if ((info.SubscriberCellularProvider != null) && (info.SubscriberCellularProvider.CarrierName != null)) {
+				return info.SubscriberCellularProvider.CarrierName;
+			}
+
+			return null;
 		}
 
 		public bool GetNfcPresent() {

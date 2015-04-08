@@ -242,6 +242,8 @@ namespace BranchXamarinSDK
 					InitTask = request.Execute ();
 					await InitTask;
 				} catch (Exception ex) {
+					// Reset the Inited state
+					Inited = false;
 					System.Diagnostics.Debug.WriteLine ("Request Ex: " + ex.Message);
 				}
 
@@ -459,20 +461,26 @@ namespace BranchXamarinSDK
 				QueueSema.Wait ();
 				BranchRequest request = null;
 				if (RequestQueue.Count > 0) {
-					request = RequestQueue.Dequeue ();
+					request = RequestQueue.Peek ();
 				}
 				QueueSema.Release ();
 				if (request != null) {
 					NetworkSema.Wait ();
 
-					// Need to catch exceptions here to ensure processing continues.
-					// Report the exception to the console and continue.
-					try {
-						request.Execute ().Wait ();
-					} catch (AggregateException e) {
-						if (e.InnerException != null) {
-							String message = "Error executing request: " + e.InnerException.Message + "\n" + e.InnerException.StackTrace;
-							DeviceInformation.WriteLog (message, "Request", 6);
+					// Verify once more that we are still inited.  It is possible that 
+					// init was in progress then failed so check again.
+					if (Inited) {
+						// Need to catch exceptions here to ensure processing continues.
+						// Report the exception to the console and continue.
+						try {
+							request.Execute ().Wait ();
+						} catch (AggregateException e) {
+							if (e.InnerException != null) {
+								String message = "Error executing request: " + e.InnerException.Message + "\n" + e.InnerException.StackTrace;
+								DeviceInformation.WriteLog (message, "Request", 6);
+							}
+						} finally {
+							RequestQueue.Dequeue ();
 						}
 					}
 					NetworkSema.Release ();
