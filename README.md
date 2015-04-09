@@ -226,6 +226,15 @@ protected override void OnCreate (Bundle savedInstanceState)
 		LoadApplication (new App ());
 	}
 
+	protected override void OnStop (Bundle savedInstanceState)
+	{
+		base.OnStop (savedInstanceState);
+		
+		Branch branch = Branch.GetInstance ();
+		// Await here ensure the thread stays alive long enough to complete the close.
+		await branch.CloseSessionAsync ();
+	}
+
 	#region IBranchSessionInterface implementation
 	
 	public void InitSessionComplete (Dictionary<string, object> data)
