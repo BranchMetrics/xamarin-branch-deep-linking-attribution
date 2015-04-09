@@ -151,7 +151,7 @@ public class App : Application, IBranchSessionInterface
 
 Required: this call will clear the deep link parameters when the app is closed, so they can be refreshed after a new link is clicked or the app is reopened.
 
-For Android this should be done in OnStop.  In a Forms App CloseSession is done in the OnSleep method of your App class.  See the example above.
+In a Forms App CloseSession is done in the OnSleep method of your App class. See the example above.
 
 ### Non-Forms Xamarin Setup
 
@@ -229,7 +229,7 @@ protected override void OnCreate (Bundle savedInstanceState)
 	protected override void OnStop (Bundle savedInstanceState)
 	{
 		base.OnStop (savedInstanceState);
-		
+
 		Branch branch = Branch.GetInstance ();
 		// Await here ensure the thread stays alive long enough to complete the close.
 		await branch.CloseSessionAsync ();
@@ -255,6 +255,12 @@ protected override void OnCreate (Bundle savedInstanceState)
 	#endregion
 }
 ```
+#### Close session
+
+Required: this call will clear the deep link parameters when the app is closed, so they can be refreshed after a new link is clicked or the app is reopened.
+
+For Android this should be done in OnStop. See the example above.
+
 ### Forms and non-Forms Functions
 
 #### Retrieve session (install or open) parameters
