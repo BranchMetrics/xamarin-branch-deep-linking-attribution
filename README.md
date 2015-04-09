@@ -30,11 +30,34 @@ If you would rather build and reference the assemblies directly:
 3. Add the BranchXamarinSDK.Droid project to your solution and reference it from your Android project, if any.
 4. Add the BranchXamarinSDK.iOS project and reference it from you iOS project, if any.
 
-### Initialize the SDK
+### Register your app
+
+You can sign up for your own app id at [https://dashboard.branch.io](https://dashboard.branch.io)
+
+## Configuration (for tracking)
+
+Ideally, you want to use our links any time you have an external link pointing to your app (share, invite, referral, etc) because:
+
+1. Our dashboard can tell you where your installs are coming from
+1. Our links are the highest possible converting channel to new downloads and users
+1. You can pass that shared data across install to give new users a custom welcome or show them the content they expect to see
+
+Our linking infrastructure will support anything you want to build. If it doesn't, we'll fix it so that it does: just reach out to alex@branch.io with requests.
+
+## Initialize a session on Xamarin
+
+Before starting, it's important to understand that we require a generic Xamarin initialization in addition to the Android and iOS initialization. To make matters worse, it's different depending on whether you're using Xamarin Forms or not. Please click one of the following to be linked to the appropriate init path to follow:
+
+1. [Click here](https://github.com/BranchMetrics/Branch-Xamarin-SDK#xamarin-forms-setup) if you're using Xamarin Forms
+2. [Click here](https://github.com/BranchMetrics/Branch-Xamarin-SDK#non-forms-xamarin-setup) if you're *not* using Xamarin Forms
+
+### Xamarin Forms Setup
 
 The SDK needs to be initialized at startup in each platform.  The code below shows how to do the platform specific initialization.  Note that this example shows a Xamarin Forms app.  The same Branch<platform>.Init calls need to be made whether Forms is used or not.
 
-For Android add the call to the onCreate of either your Application class or the first Activity you start.
+#### Android with Forms
+
+For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate app key but does not make any server requests
 
 ```csharp
 protected override void OnCreate (Bundle savedInstanceState)
@@ -54,7 +77,10 @@ protected override void OnCreate (Bundle savedInstanceState)
 }
 ```
 
-For iOS add the code to your AppDelegate
+#### iOS with Forms
+
+For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate app key but does not make any server requests
+
 ```csharp
 [Register ("AppDelegate")]
 public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
@@ -78,27 +104,11 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 
 Note that in both cases the first argument is the app key found in your app from the Branch dashboard.  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
 
-### Register you app
+#### Generic init with Forms
 
-You can sign up for your own app id at [https://dashboard.branch.io](https://dashboard.branch.io)
-
-## Configuration (for tracking)
-
-Ideally, you want to use our links any time you have an external link pointing to your app (share, invite, referral, etc) because:
-
-1. Our dashboard can tell you where your installs are coming from
-1. Our links are the highest possible converting channel to new downloads and users
-1. You can pass that shared data across install to give new users a custom welcome or show them the content they expect to see
-
-Our linking infrastructure will support anything you want to build. If it doesn't, we'll fix it so that it does: just reach out to alex@branch.io with requests.
-
-### Initialize SDK And Register Deep Link Routing Function
-
-Called in your splash activity where you handle. If you created a custom link with your own custom dictionary data, you probably want to know when the user session init finishes, so you can check that data. Think of this callback as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow.
+The following code will make a request to the Branch servers to initialize a new session, and retrieve any referring link parameters if available. For example, If you created a custom link with your own custom dictionary data, you probably want to know when the user session init finishes, so you can check that data. Think of this callback as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow.
 
 This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
-
-For Android, you will want to add this to your Activities OnStart methods.  In iOS it is added to the AppDelgate FinishedLaunching method.  Forms apps can add it to the OnResume method of the App class.
 
 ```csharp
 public class App : Application, IBranchSessionInterface
@@ -120,7 +130,7 @@ public class App : Application, IBranchSessionInterface
 	
 	public void InitSessionComplete (Dictionary<string, object> data)
 	{
-		// Do something with the data...
+		// Do something with the referring link data...
 	}
 
 	public void CloseSessionComplete ()
@@ -143,7 +153,13 @@ Required: this call will clear the deep link parameters when the app is closed, 
 
 For Android this should be done in OnStop.  In a Forms App CloseSession is done in the OnSleep method of your App class.  See the example above.
 
-#### iOS special case
+### Non-Forms Xamarin Setup
+
+The following code will make a request to the Branch servers to initialize a new session, and retrieve any referring link parameters if available. For example, If you created a custom link with your own custom dictionary data, you probably want to know when the user session init finishes, so you can check that data. Think of this callback as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow.
+
+This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
+
+#### iOS without Forms
 
 The iOS device specific code can register notification listeners to handle the init and close of sessions when the app is sent to the background or resumed.  The BranchIOS.Init call takes an optional third parameter that will enable this automatic close session behavior if the parameter is set to true.  If your iOS app is not a Forms app, use the following device specific init.
 
@@ -160,10 +176,77 @@ public class AppDelegate
 
 		BranchIOS.Init ("your branch app id here", url, true);
 		
+		Branch branch = Branch.GetInstance ();
+		branch.InitSessionAsync (this);
+
 		// Do your remaining launch stuff here...
 	}
+
+	#region IBranchSessionInterface implementation
+	
+	public void InitSessionComplete (Dictionary<string, object> data)
+	{
+		// Do something with the referring link data...
+	}
+
+	public void CloseSessionComplete ()
+	{
+		// Handle any additional cleanup after the session is closed
+	}
+
+	public void SessionRequestError (BranchError error)
+	{
+		// Handle the error case here
+	}
+
+	#endregion
 }
 ```
+
+#### Android without Forms
+
+For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate app key but does not make any server requests
+
+```csharp
+protected override void OnCreate (Bundle savedInstanceState)
+{
+	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+{
+	protected override void OnCreate (Bundle savedInstanceState)
+	{
+		base.OnCreate (savedInstanceState);
+
+		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
+
+		BranchAndroid.Init (this, "your branch app id here", Intent.Data);
+
+		Branch branch = Branch.GetInstance ();
+		branch.InitSessionAsync (this);
+
+		LoadApplication (new App ());
+	}
+
+	#region IBranchSessionInterface implementation
+	
+	public void InitSessionComplete (Dictionary<string, object> data)
+	{
+		// Do something with the referring link data...
+	}
+
+	public void CloseSessionComplete ()
+	{
+		// Handle any additional cleanup after the session is closed
+	}
+
+	public void SessionRequestError (BranchError error)
+	{
+		// Handle the error case here
+	}
+
+	#endregion
+}
+```
+### Forms and non-Forms Functions
 
 #### Retrieve session (install or open) parameters
 
