@@ -126,7 +126,7 @@ namespace BranchXamarinSDK
 					Branch.GetInstance ().UpdateUserAndSession(result, dataStr, true);
 
 					if (Callback != null) {
-						Callback.InitSessionComplete(result);
+						Callback.InitSessionComplete(data);
 					}
 				} else {
 					// Clear the Inited flag from the branch object...

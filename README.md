@@ -57,7 +57,7 @@ The SDK needs to be initialized at startup in each platform.  The code below sho
 
 #### Android with Forms
 
-For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate app key but does not make any server requests
+For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate app key but does not make any server requests.  Note also the addition of OnNewIntent.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
 
 ```csharp
 protected override void OnCreate (Bundle savedInstanceState)
@@ -74,12 +74,18 @@ protected override void OnCreate (Bundle savedInstanceState)
 
 		LoadApplication (new App ());
 	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	protected override void OnNewIntent(Intent intent) {
+		BranchAndroid.GetInstance().SetNewUrl(intent.Data);
+	}
 }
 ```
 
 #### iOS with Forms
 
-For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate app key but does not make any server requests
+For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate app key but does not make any server requests.  Note also the addition of the OpenUrl method.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
 
 ```csharp
 [Register ("AppDelegate")]
@@ -98,6 +104,18 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 
 		LoadApplication (new App ());
 		return base.FinishedLaunching (uiApplication, launchOptions);
+	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	public override bool OpenUrl(UIApplication application,
+		NSUrl url,
+		string sourceApplication,
+		NSObject annotation)
+	{
+		Console.WriteLine ("New URL: " + url.ToString ());
+		BranchIOS.getInstance ().SetNewUrl (url);
+		return true;
 	}
 }
 ```
@@ -181,6 +199,17 @@ public class AppDelegate
 
 		// Do your remaining launch stuff here...
 	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	public override bool OpenUrl(UIApplication application,
+		NSUrl url,
+		string sourceApplication,
+		NSObject annotation)
+	{
+		BranchIOS.getInstance ().SetNewUrl (url);
+		return true;
+	}
 
 	#region IBranchSessionInterface implementation
 	
@@ -233,6 +262,12 @@ protected override void OnCreate (Bundle savedInstanceState)
 		Branch branch = Branch.GetInstance ();
 		// Await here ensure the thread stays alive long enough to complete the close.
 		await branch.CloseSessionAsync ();
+	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	protected override void OnNewIntent(Intent intent) {
+		BranchAndroid.GetInstance().SetNewUrl(intent.Data);
 	}
 
 	#region IBranchSessionInterface implementation

@@ -32,6 +32,12 @@ namespace BranchXamarinSDK
 			}
 		}
 
+		public void SetNewUrl(Android.Net.Uri uri) {
+			if ((uri != null) && uri.IsHierarchical) {
+				LinkClickIdentifier = uri.GetQueryParameter ("link_click_id");
+			}
+		}
+
 		public static BranchAndroid getInstance() {
 			return (BranchAndroid)branch;
 		}

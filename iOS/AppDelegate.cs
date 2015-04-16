@@ -23,5 +23,14 @@ namespace BranchXamarinSDKTestbed.iOS
 
 			return base.FinishedLaunching (uiApplication, launchOptions);
 		}
+
+		public override bool OpenUrl(UIApplication application,
+			NSUrl url,
+			string sourceApplication,
+			NSObject annotation)
+		{
+			BranchIOS.getInstance ().SetNewUrl (url);
+			return true;
+		}
 	}
 }
