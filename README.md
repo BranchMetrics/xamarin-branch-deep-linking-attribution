@@ -102,7 +102,12 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 }
 ```
 
-Note that in both cases the first argument is the app key found in your app from the Branch dashboard.  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
+Note that in both cases the first argument is the app key found in your app from the Branch dashboard (see the screenshot below).  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
+
+Here is the location of the app key (API Key) (_soon to be deprecated but will always be supported_):
+
+![app key](resources/app_id.png)
+
 
 #### Generic init with Forms
 
