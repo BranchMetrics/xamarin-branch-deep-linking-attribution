@@ -24,6 +24,10 @@ namespace BranchXamarinSDKTestbed.Droid
 
 			LoadApplication (new App ());
 		}
+
+		protected override void OnNewIntent(Android.Content.Intent intent) {
+			BranchAndroid.getInstance ().SetNewUrl (intent.Data);
+		}
 	}
 }
 

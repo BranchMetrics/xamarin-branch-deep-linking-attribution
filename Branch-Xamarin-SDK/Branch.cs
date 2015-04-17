@@ -20,6 +20,8 @@ namespace BranchXamarinSDK
 		protected volatile bool ClosePending;
 		protected volatile bool KeepAlive;
 		protected CancellationTokenSource QueueTokenSource;
+		protected IBranchSessionInterface InitCallback;
+		protected bool AutoInitEnabled;
 
 		protected internal Dictionary<BranchLinkData, Uri> LinkDataCache;
 		protected internal Dictionary<string, int> TotalActionCounts;
@@ -170,6 +172,11 @@ namespace BranchXamarinSDK
 			// before executing.  This will stop a close/open cycle everytime we change activities in Android.
 			ClosePending = false;
 
+			// If auto init is enabled, store the callback for use when the automatic init call is made.
+			if (AutoInitEnabled) {
+				InitCallback = callback;
+			}
+
 			// Init session takes priority over any other pending operation.  It does not get put on the queue
 			// and instead executes as soon as any inprogress operation finishes.
 			if (Inited) {
@@ -182,14 +189,10 @@ namespace BranchXamarinSDK
 				}
 
 				// Init has already been called.  If there is no outstanding
-				// init operation, just call the callback with an empty result.
+				// init operation, just call the callback with the last param result.
 				if ((InitTask == null) || InitTask.IsCompleted) {
 					if (callback != null) {
-						callback.InitSessionComplete (new Dictionary<string, object> ());
-					}
-				} else {
-					if (callback != null) {
-						callback.SessionRequestError (new BranchError ("Init is already in progress"));
+						callback.InitSessionComplete (GetLastReferringParams());
 					}
 				}
 			} else {
@@ -197,6 +200,12 @@ namespace BranchXamarinSDK
 				await NetworkSema.WaitAsync ();
 
 				Inited = true;
+
+				// If we have a link click identifier, we were launched by a link click.  By
+				// definition, we are referrable.
+				if (LinkClickIdentifier != null) {
+					isReferrable = true;
+				}
 
 				try {
 					BranchRequest request;

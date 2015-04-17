@@ -21,15 +21,30 @@ namespace BranchXamarinSDK
 			newBranch.Properties = newBranch;
 			branch = newBranch;
 			newBranch.InitUserAndSession ();
+
 			if (autoClose) {
+				newBranch.AutoInitEnabled = true;
 				newBranch.setupNotificationCallbacks ();
 			}
 
+			newBranch.processUrl (url);
+		}
+
+		/// <summary>
+		/// Sets the new URL recently used to open/foreground the app.
+		/// </summary>
+		/// <param name="url">URL.</param>
+		public void SetNewUrl(NSUrl url) {
+			processUrl (url);
+		}
+
+		void processUrl(NSUrl url) {
 			if (url != null) {
 				foreach (string query in url.Query.Split (new [] { '&' })) {
 					if (query.StartsWith ("link_click_id")) {
-						if (query.Length > 13) {
-							newBranch.LinkClickIdentifier = WebUtility.UrlDecode(query.Substring(13).Trim());
+						if (query.Length > 14) {
+							LinkClickIdentifier = WebUtility.UrlDecode(query.Substring(14).Trim());
+							Console.WriteLine ("LCI: " + LinkClickIdentifier);
 						}
 					}
 				}
@@ -42,7 +57,8 @@ namespace BranchXamarinSDK
 		}
 
 		async public void DidBecomeActive(object sender, NSNotificationEventArgs e) {
-			await InitSessionAsync(null);
+			Console.WriteLine ("DidBecomeActive Automatic Init");
+			await InitSessionAsync(InitCallback);
 		}
 
 		async public void WillResignActive(object sender, NSNotificationEventArgs e) {

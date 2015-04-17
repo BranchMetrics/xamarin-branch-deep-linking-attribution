@@ -3,23 +3,8 @@
   <metadata>
     <id>Branch-Xamarin-Linking-SDK</id>
     <title>Branch Xamarin SDK</title>
-    <description>This is the Branch Xamarin SDK for Android, iOS and Forms applications. It allows you to create trackable links that point to your app.
-
-- Want the highest possible conversions on your sharing feature?
-
-- Want to measure the k-factor of your invite feature?
-
-- Want a whole referral program in 10 lines of code, with automatic user-user attribution and rewarding?
-
-- Want to pass data (deep link) from a URL across install and open?
-
-- Want custom onboarding post install?
-
-- Want it all for free?
-
-Use the Branch SDK (branch.io) to create and power the links that point back to your apps for all of these things and more. Branch makes it incredibly simple to create powerful deep links that can pass data across app install and open while handling all edge cases (using on desktop vs. mobile vs. already having the app installed, etc). Best of all, it's really simple to start using the links for your own app: only 2 lines of code to register the deep link router and one more line of code to create the links with custom data.</description>
-<summary>Hosted deep links for your Xamarin-based Android or iOS app by Branch</summary>
-    <version>1.0.3</version>
+    <summary>Hosted deep links for your Xamarin-based Android or iOS app by Branch</summary>
+    <version>1.0.4</version>
     <authors>Branch</authors>
     <owners>Branch</owners>
     <iconUrl> https://s3-us-west-1.amazonaws.com/branchhost/branch_icon.png</iconUrl>
