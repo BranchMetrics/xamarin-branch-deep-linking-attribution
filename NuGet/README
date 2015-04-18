@@ -6,7 +6,7 @@ Release build of the project.  Then update the .nuspec file with the
 appropriate version string.  Finally, build the nuget package with the
 following command:
 
-nuget pack Branch-Xamarain-SDK.nuspec -BasePath ./
+nuget pack Branch-Xamarin-SDK.nuspec -BasePath ./
 
 (The -BasePath ./ is necessary due to a bug in the Mac version of the
  nuget command.)
