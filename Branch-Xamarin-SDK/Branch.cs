@@ -287,10 +287,20 @@ namespace BranchXamarinSDK
 			// At this point, we will execute the Close
 			ClosePending = false;
 
-			Inited = false;
+			// If we are not inited, don't even bother to get the network semaphor,
+			// just return.
+			if (!Inited) {
+				return;
+			}
+
 			var req = new BranchCloseRequest (callback);
 			await NetworkSema.WaitAsync ();
-			await req.Execute ();
+			// The request holding the semaphore may have been an init.  If so, it may have failed.
+			// double check the init state.
+			if (Inited) {
+				Inited = false;
+				await req.Execute ();
+			}
 			NetworkSema.Release ();
 			ClearUserData ();
 		}
