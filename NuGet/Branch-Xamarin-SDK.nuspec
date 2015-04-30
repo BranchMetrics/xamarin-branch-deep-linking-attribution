@@ -4,7 +4,7 @@
     <id>Branch-Xamarin-Linking-SDK</id>
     <title>Branch Xamarin SDK</title>
     <summary>Hosted deep links for your Xamarin-based Android or iOS app by Branch</summary>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <authors>Branch</authors>
     <owners>Branch</owners>
     <iconUrl> https://s3-us-west-1.amazonaws.com/branchhost/branch_icon.png</iconUrl>
@@ -20,7 +20,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="../Branch-Xamarin-SDK/bin/Release/Branch-Xamarin-SDK.dll" target="lib/portable-net45+win+MonoTouch10+MonoAndroid10+xamarinmac20+xamarinios10" />
+    <file src="../Branch-Xamarin-SDK/bin/Release/Branch-Xamarin-SDK.dll" target="lib/portable-net45+win+wp80+MonoTouch10+MonoAndroid10+xamarinmac20+xamarinios10" />
     <file src="../Branch-Xamarin-SDK.Droid/bin/Release/Branch-Xamarin-SDK.Droid.dll" target="lib/MonoAndroid" />
     <file src="../Branch-Xamarin-SDK/bin/Release/Branch-Xamarin-SDK.dll" target="lib/MonoAndroid" />
     <file src="../Branch-Xamarin-SDK.iOS/bin/Release/Branch-Xamarin-SDK.iOS.dll" target="lib/Xamarin.iOS10" />
