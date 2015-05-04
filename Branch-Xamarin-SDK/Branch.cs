@@ -40,11 +40,11 @@ namespace BranchXamarinSDK
 		int retries = -1;
 
 		/// <summary>
-		/// Gets or sets the application key. This is generally
+		/// Gets or sets the Branch key. This is generally
 		/// set by the platform specific Init methods.
 		/// </summary>
-		/// <value>The app key.</value>
-		public String AppKey { get; set; }
+		/// <value>The Branch key.</value>
+		public string BranchKey { get; set; }
 
 		/// <summary>
 		/// Gets or sets the debug value.  If true, a random device id
