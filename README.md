@@ -124,7 +124,7 @@ Note that in both cases the first argument is the app key found in your app from
 
 Here is the location of the app key (API Key) (_soon to be deprecated but will always be supported_):
 
-![app key](resources/app_id.png)
+![app key](https://s3-us-west-1.amazonaws.com/branchhost/deprecated_app_id.png)
 
 
 #### Generic init with Forms
