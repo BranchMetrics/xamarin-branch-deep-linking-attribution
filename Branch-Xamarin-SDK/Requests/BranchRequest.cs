@@ -28,8 +28,8 @@ namespace BranchXamarinSDK
 	{
 		public class BranchParams
 		{
-            public string branch_key;
-            public string app_id;
+			public string branch_key;
+			public string app_id;
 			public string device_fingerprint_id;
 			public string identity_id;
 			public string session_id;
@@ -57,16 +57,16 @@ namespace BranchXamarinSDK
 		protected void InitBaseParams() {
 			Branch branch = Branch.GetInstance ();
 
-            // Use the appropriate field for the key
-            string branchKey = branch.BranchKey;
-            if (branchKey.StartsWith("key_")) {
-                Params.branch_key = branchKey;
-            }
-            else {
-                Params.app_id = branchKey;
-            }
+			// Use the appropriate field for the key
+			string branchKey = branch.BranchKey;
+			if (branchKey.StartsWith("key_")) {
+				Params.branch_key = branchKey;
+			}
+			else {
+				Params.app_id = branchKey;
+			}
 
-            Params.device_fingerprint_id = branch.DeviceFingerprintId;
+			Params.device_fingerprint_id = branch.DeviceFingerprintId;
 			Params.identity_id = branch.IdentityId;
 			Params.session_id = branch.SessionId;
 			Params.link_click_id = branch.LinkClickId;
@@ -80,16 +80,16 @@ namespace BranchXamarinSDK
 			client.Timeout = Branch.GetInstance().Timeout;
 			client.BaseAddress = Constants.BASE_URI;
 
-            String query = "?sdk=" + Params.sdk;
+			String query = "?sdk=" + Params.sdk;
 
-            if (Params.branch_key != null) {
-                query += "&branch_key=" + Params.branch_key;
-            }
-            else if (Params.app_id != null) {
-                query += "&app_id=" + Params.app_id;
-            }
+			if (Params.branch_key != null) {
+				query += "&branch_key=" + Params.branch_key;
+			}
+			else if (Params.app_id != null) {
+				query += "&app_id=" + Params.app_id;
+			}
 
-            if (queryString != null) {
+			if (queryString != null) {
 				query += "&" + queryString;
 			}
 			try {

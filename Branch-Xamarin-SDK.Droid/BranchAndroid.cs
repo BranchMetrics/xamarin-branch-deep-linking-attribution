@@ -20,12 +20,12 @@ namespace BranchXamarinSDK
 		}
 
 		public static void Init(Context context, String branchKey, Android.Net.Uri uri = null) {
-            if (!branchKey.StartsWith("key_")) {
-                Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
-            }
+			if (!branchKey.StartsWith("key_")) {
+				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
+			}
 
-            var newBranch = new BranchAndroid ();
-            newBranch.BranchKey = branchKey;
+			var newBranch = new BranchAndroid ();
+			newBranch.BranchKey = branchKey;
 			newBranch.DeviceInformation = newBranch;
 			newBranch.Properties = newBranch;
 			newBranch.AppContext = context.ApplicationContext;
