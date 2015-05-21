@@ -32,7 +32,7 @@ If you would rather build and reference the assemblies directly:
 
 ### Register your app
 
-You can sign up for your own app id at [https://dashboard.branch.io](https://dashboard.branch.io)
+You can sign up for your own Branch Key at [https://dashboard.branch.io](https://dashboard.branch.io)
 
 ## Configuration (for tracking)
 
@@ -57,7 +57,7 @@ The SDK needs to be initialized at startup in each platform.  The code below sho
 
 #### Android with Forms
 
-For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate app key but does not make any server requests.  Note also the addition of OnNewIntent.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
+For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of OnNewIntent.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
 
 ```csharp
 protected override void OnCreate (Bundle savedInstanceState)
@@ -70,7 +70,7 @@ protected override void OnCreate (Bundle savedInstanceState)
 
 		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-		BranchAndroid.Init (this, "your branch app id here", Intent.Data);
+		BranchAndroid.Init (this, "your branch key here", Intent.Data);
 
 		LoadApplication (new App ());
 	}
@@ -85,7 +85,7 @@ protected override void OnCreate (Bundle savedInstanceState)
 
 #### iOS with Forms
 
-For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate app key but does not make any server requests.  Note also the addition of the OpenUrl method.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
+For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of the OpenUrl method.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
 
 ```csharp
 [Register ("AppDelegate")]
@@ -100,7 +100,7 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
 		}
 
-		BranchIOS.Init ("your branch app id here", url);
+		BranchIOS.Init ("your branch key here", url);
 
 		LoadApplication (new App ());
 		return base.FinishedLaunching (uiApplication, launchOptions);
@@ -120,11 +120,11 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 }
 ```
 
-Note that in both cases the first argument is the app key found in your app from the Branch dashboard (see the screenshot below).  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
+Note that in both cases the first argument is the Branch key found in your app from the Branch dashboard (see the screenshot below).  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
 
-Here is the location of the app key (API Key) (_soon to be deprecated but will always be supported_):
+Here is the location of the Branch key
 
-![app key](https://s3-us-west-1.amazonaws.com/branchhost/deprecated_app_id.png)
+![branch key](https://dev.branch.io/img/ingredients/dashboard_setup/branch_key.png)
 
 
 #### Generic init with Forms
@@ -197,7 +197,7 @@ public class AppDelegate
 			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
 		}
 
-		BranchIOS.Init ("your branch app id here", url, true);
+		BranchIOS.Init ("your branch key here", url, true);
 		
 		Branch branch = Branch.GetInstance ();
 		branch.InitSessionAsync (this);
@@ -239,7 +239,7 @@ public class AppDelegate
 
 #### Android without Forms
 
-For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate app key but does not make any server requests
+For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests
 
 ```csharp
 protected override void OnCreate (Bundle savedInstanceState)
@@ -252,7 +252,7 @@ protected override void OnCreate (Bundle savedInstanceState)
 
 		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-		BranchAndroid.Init (this, "your branch app id here", Intent.Data);
+		BranchAndroid.Init (this, "your branch key here", Intent.Data);
 
 		Branch branch = Branch.GetInstance ();
 		branch.InitSessionAsync (this);
