@@ -4,7 +4,7 @@ namespace BranchXamarinSDK
 {
 	static public class Constants
 	{
-		public const String SDK_VERSION = "1.0.7";
+		public const String SDK_VERSION = "1.1.0";
 		public static Uri BASE_URI = new Uri("https://api.branch.io/");
 
 		// Link Types for GetShortURL
