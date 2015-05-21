@@ -44,7 +44,7 @@ namespace BranchXamarinSDK
 		/// set by the platform specific Init methods.
 		/// </summary>
 		/// <value>The Branch key.</value>
-		public string BranchKey { get; set; }
+		public String BranchKey { get; set; }
 
 		/// <summary>
 		/// Gets or sets the debug value.  If true, a random device id
