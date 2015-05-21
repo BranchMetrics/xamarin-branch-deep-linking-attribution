@@ -35,7 +35,6 @@ namespace BranchXamarinSDK
 
 			try {
 				String queryStr =
-					"app_id=" + Params.app_id + "&" +
 					"identity_id=" + Params.identity_id + "&" +
 					"device_fingerprint_id=" + Params.device_fingerprint_id + "&" +
 					"session_id=" + Params.session_id + "&" +

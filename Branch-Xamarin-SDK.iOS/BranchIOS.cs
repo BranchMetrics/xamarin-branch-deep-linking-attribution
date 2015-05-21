@@ -14,9 +14,13 @@ namespace BranchXamarinSDK
 		protected BranchIOS() {
 		}
 
-		public static void Init(String appKey, NSUrl url, bool autoClose = false) {
+		public static void Init(String branchKey, NSUrl url, bool autoClose = false) {
+			if (!branchKey.StartsWith("key_")) {
+				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
+			}
+
 			var newBranch = new BranchIOS ();
-			newBranch.AppKey = appKey;
+			newBranch.BranchKey = branchKey;
 			newBranch.DeviceInformation = newBranch;
 			newBranch.Properties = newBranch;
 			branch = newBranch;
