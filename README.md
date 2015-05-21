@@ -124,7 +124,7 @@ Note that in both cases the first argument is the Branch key found in your app f
 
 Here is the location of the Branch key
 
-![branch key](https://dev.branch.io/img/ingredients/dashboard_setup/branch_key.png)
+![branch key](docs/images/branch_key.png)
 
 
 #### Generic init with Forms
