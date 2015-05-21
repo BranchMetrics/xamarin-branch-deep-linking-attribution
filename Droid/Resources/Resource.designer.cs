@@ -64,8 +64,8 @@ namespace BranchXamarinSDKTestbed.Droid
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f030000
-			public const int library_name = 2130903040;
+			// aapt resource value: 0x7f040000
+			public const int library_name = 2130968576;
 			
 			static String()
 			{
@@ -80,8 +80,8 @@ namespace BranchXamarinSDKTestbed.Droid
 		public partial class Style
 		{
 			
-			// aapt resource value: 0x7f040000
-			public const int Mono_Android_Theme_Splash = 2130968576;
+			// aapt resource value: 0x7f030000
+			public const int Mono_Android_Theme_Splash = 2130903040;
 			
 			static Style()
 			{

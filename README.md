@@ -124,7 +124,7 @@ Note that in both cases the first argument is the app key found in your app from
 
 Here is the location of the app key (API Key) (_soon to be deprecated but will always be supported_):
 
-![app key](resources/app_id.png)
+![app key](https://s3-us-west-1.amazonaws.com/branchhost/deprecated_app_id.png)
 
 
 #### Generic init with Forms
@@ -719,7 +719,7 @@ You can also tune the referral code to the finest granularity, with the followin
 1. _REFERRAL_CODE_LOCATION_REFERRING_USER_ - the user who created the referral code receives credit
 1. _REFERRAL_CODE_LOCATION_BOTH_ - both the creator and applicant receive credit
 
-```charp
+```csharp
 Branch branch = Branch.GetInstance();
 await branch.GetReferralCodeAsync(this, 5, "BRANCH", expirationDate, "default", Constants.REFERRAL_CODE_AWARD_UNLIMITED,Constants.REFERRAL_CODE_LOCATION_REFERRING_USER);
 
