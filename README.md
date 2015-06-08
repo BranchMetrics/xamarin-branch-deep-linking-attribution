@@ -60,9 +60,7 @@ The SDK needs to be initialized at startup in each platform.  The code below sho
 For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of OnNewIntent.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
 
 ```csharp
-protected override void OnCreate (Bundle savedInstanceState)
-{
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 {
 	protected override void OnCreate (Bundle savedInstanceState)
 	{
