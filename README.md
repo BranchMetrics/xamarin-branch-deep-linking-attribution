@@ -242,7 +242,7 @@ For Android add the call to the onCreate of either your Application class or the
 ```csharp
 protected override void OnCreate (Bundle savedInstanceState)
 {
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+	public class MainActivity
 {
 	protected override void OnCreate (Bundle savedInstanceState)
 	{
