@@ -240,9 +240,7 @@ public class AppDelegate
 For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests
 
 ```csharp
-protected override void OnCreate (Bundle savedInstanceState)
-{
-	public class MainActivity
+public class MainActivity
 {
 	protected override void OnCreate (Bundle savedInstanceState)
 	{
