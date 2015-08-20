@@ -188,7 +188,7 @@ The iOS device specific code can register notification listeners to handle the i
 
 ```csharp
 [Register ("AppDelegate")]
-public class AppDelegate
+public class AppDelegate : IBranchSessionInterface
 {
 	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
 	{
@@ -242,7 +242,7 @@ public class AppDelegate
 For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests
 
 ```csharp
-public class MainActivity
+public class MainActivity : IBranchSessionInterface
 {
 	protected override void OnCreate (Bundle savedInstanceState)
 	{
