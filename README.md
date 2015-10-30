@@ -1,7 +1,4 @@
 # Branch-Xamarin-SDK
-
-## [New documentation portal](https://dev.branch.io) and [support portal with user forums](http://support.branch.io)
-
 ## Introduction
 
 The Xamarin SDK is a cross platform SDK you can use to access the Branch APIs from your Xamarin application.  The SDK is a PCL (Portable Class Library) that works with Xamarin Android, Xamarin iOS or Xamarin Forms applications.
@@ -21,7 +18,7 @@ Basically, right click on the project and select Options. Go to “Android Build
 
 ## Integration Checklist
 
-- Create Branch Account and get your [Branch Key]((https://dashboard.branch.io/#/settings)
+- Create Branch Account and get your [Branch Key](https://dashboard.branch.io/#/settings)
 - Install SDK
 - Configure Manifest
 - Set up routing for incoming deep links
@@ -32,8 +29,8 @@ Basically, right click on the project and select Options. Go to “Android Build
 - Set up referrals (optional)
 
 ## Additional Resources
-- [Integration guide](https://dev.branch.io/recipes/quickstart_guide/xamarin/)
-- Technical Reference (in this repo)
-- Changelog (in this repo)
+- [Integration guide](https://dev.branch.io/recipes/quickstart_guide/xamarin/) *Start Here*
+- [Technical Reference](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/blob/master/reference.md)
+- [Changelog](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
 - [Testing](https://dev.branch.io/recipes/testing_your_integration/xamarin/)
 - [Support portal, FAQ, and user forums](http://support.branch.io)
