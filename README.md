@@ -125,3 +125,113 @@ Note that in both cases the first argument is the Branch key found in your app f
 Here is the location of the Branch key
 
 ![branch key](docs/images/branch-key.png)
+
+#### Generic init with Forms
+
+The following code will make a request to the Branch servers to initialize a new session, and retrieve any referring link parameters if available. For example, If you created a custom link with your own custom dictionary data, you probably want to know when the user session init finishes, so you can check that data. Think of this callback as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow.
+
+This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
+
+```csharp
+public class App : Application, IBranchSessionInterface
+{
+	protected override void OnResume ()
+	{
+		Branch branch = Branch.GetInstance ();
+		branch.InitSessionAsync (this);
+	}
+	
+	protected override async void OnSleep ()
+	{
+		Branch branch = Branch.GetInstance ();
+		// Await here ensure the thread stays alive long enough to complete the close.
+		await branch.CloseSessionAsync ();
+	}
+	
+	#region IBranchSessionInterface implementation
+	
+	public void InitSessionComplete (Dictionary<string, object> data)
+	{
+		// Do something with the referring link data...
+	}
+
+	public void CloseSessionComplete ()
+	{
+		// Handle any additional cleanup after the session is closed
+	}
+
+	public void SessionRequestError (BranchError error)
+	{
+		// Handle the error case here
+	}
+
+	#endregion
+}
+```
+
+#### Close session
+
+Required: this call will clear the deep link parameters when the app is closed, so they can be refreshed after a new link is clicked or the app is reopened.
+
+In a Forms App CloseSession is done in the OnSleep method of your App class. See the example above.
+
+### Non-Forms Xamarin Setup
+
+The following code will make a request to the Branch servers to initialize a new session, and retrieve any referring link parameters if available. For example, If you created a custom link with your own custom dictionary data, you probably want to know when the user session init finishes, so you can check that data. Think of this callback as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow.
+
+This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
+
+#### iOS without Forms
+
+The iOS device specific code can register notification listeners to handle the init and close of sessions when the app is sent to the background or resumed.  The BranchIOS.Init call takes an optional third parameter that will enable this automatic close session behavior if the parameter is set to true.  If your iOS app is not a Forms app, use the following device specific init.
+
+```csharp
+[Register ("AppDelegate")]
+public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
+{
+	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
+	{
+		NSUrl url = null;
+		if ((launchOptions != null) && launchOptions.ContainsKey(UIApplication.LaunchOptionsUrlKey)) {
+			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
+		}
+
+		BranchIOS.Init ("your branch key here", url, true);
+		
+		Branch branch = Branch.GetInstance ();
+		branch.InitSessionAsync (this);
+
+		// Do your remaining launch stuff here...
+	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	public override bool OpenUrl(UIApplication application,
+		NSUrl url,
+		string sourceApplication,
+		NSObject annotation)
+	{
+		BranchIOS.getInstance ().SetNewUrl (url);
+		return true;
+	}
+
+	#region IBranchSessionInterface implementation
+	
+	public void InitSessionComplete (Dictionary<string, object> data)
+	{
+		// Do something with the referring link data...
+	}
+
+	public void CloseSessionComplete ()
+	{
+		// Handle any additional cleanup after the session is closed
+	}
+
+	public void SessionRequestError (BranchError error)
+	{
+		// Handle the error case here
+	}
+
+	#endregion
+}
+```
