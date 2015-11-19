@@ -55,3 +55,73 @@ Before starting, it's important to understand that we require a generic Xamarin 
 ### Xamarin Forms Setup
 
 The SDK needs to be initialized at startup in each platform.  The code below shows how to do the platform specific initialization.  Note that this example shows a Xamarin Forms app.  The same Branch<platform>.Init calls need to be made whether Forms is used or not.
+
+
+#### Android with Forms
+
+For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of OnNewIntent.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
+
+```csharp
+public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+{
+	protected override void OnCreate (Bundle savedInstanceState)
+	{
+		base.OnCreate (savedInstanceState);
+
+		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
+
+		BranchAndroid.Init (this, "your branch key here", Intent.Data);
+
+		LoadApplication (new App ());
+	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	protected override void OnNewIntent(Intent intent) {
+		BranchAndroid.GetInstance().SetNewUrl(intent.Data);
+	}
+}
+```
+
+#### iOS with Forms
+
+For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of the OpenUrl method.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
+
+```csharp
+[Register ("AppDelegate")]
+public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+{
+	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
+	{
+		global::Xamarin.Forms.Forms.Init ();
+		
+		NSUrl url = null;
+		if ((launchOptions != null) && launchOptions.ContainsKey(UIApplication.LaunchOptionsUrlKey)) {
+			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
+		}
+
+		BranchIOS.Init ("your branch key here", url);
+
+		LoadApplication (new App ());
+		return base.FinishedLaunching (uiApplication, launchOptions);
+	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	public override bool OpenUrl(UIApplication application,
+		NSUrl url,
+		string sourceApplication,
+		NSObject annotation)
+	{
+		Console.WriteLine ("New URL: " + url.ToString ());
+		BranchIOS.getInstance ().SetNewUrl (url);
+		return true;
+	}
+}
+```
+
+Note that in both cases the first argument is the Branch key found in your app from the Branch dashboard (see the screenshot below).  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
+
+Here is the location of the Branch key
+
+![branch key](docs/images/branch-key.png)
