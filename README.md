@@ -235,3 +235,97 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 	#endregion
 }
 ```
+
+#### Android without Forms
+
+For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests
+
+```csharp
+public class MainActivity : Activity, IBranchSessionInterface
+{
+	protected override void OnCreate (Bundle savedInstanceState)
+	{
+		base.OnCreate (savedInstanceState);
+
+		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
+
+		BranchAndroid.Init (this, "your branch key here", Intent.Data);
+
+		Branch branch = Branch.GetInstance ();
+		branch.InitSessionAsync (this);
+
+		LoadApplication (new App ());
+	}
+
+	protected override void OnStop (Bundle savedInstanceState)
+	{
+		base.OnStop (savedInstanceState);
+
+		Branch branch = Branch.GetInstance ();
+		// Await here ensure the thread stays alive long enough to complete the close.
+		await branch.CloseSessionAsync ();
+	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	protected override void OnNewIntent(Intent intent) {
+		BranchAndroid.GetInstance().SetNewUrl(intent.Data);
+	}
+
+	#region IBranchSessionInterface implementation
+	
+	public void InitSessionComplete (Dictionary<string, object> data)
+	{
+		// Do something with the referring link data...
+	}
+
+	public void CloseSessionComplete ()
+	{
+		// Handle any additional cleanup after the session is closed
+	}
+
+	public void SessionRequestError (BranchError error)
+	{
+		// Handle the error case here
+	}
+
+	#endregion
+}
+```
+
+#### Close session
+
+Required: this call will clear the deep link parameters when the app is closed, so they can be refreshed after a new link is clicked or the app is reopened.
+
+For Android this should be done in OnStop. See the example above.
+
+### Forms and non-Forms Functions
+
+#### Retrieve session (install or open) parameters
+
+These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
+
+```csharp
+Branch branch = Branch.GetInstance ();
+Dictionary<string, object> sessionParams = branch.GetLatestReferringParams();
+```
+
+#### Retrieve install (install only) parameters
+
+If you ever want to access the original session params (the parameters passed in for the first install event only), you can use this line. This is useful if you only want to reward users who newly installed the app from a referral link or something.
+
+```csharp
+Branch branch = Branch.GetInstance ();
+Dictionary<string, object> installParams = branch.GetFirstReferringParams();
+```
+
+### Persistent identities
+
+Often, you might have your own user IDs, or want referral and event data to persist across platforms or uninstall/reinstall. It's helpful if you know your users access your service from different devices. This where we introduce the concept of an 'identity'.
+
+To identify a user, just call:
+
+```csharp
+Branch branch = Branch.GetInstance ();
+branch.SetIdentityAsync("your user id", this);  // Where this implements IBranchIdentityInterface
+```
