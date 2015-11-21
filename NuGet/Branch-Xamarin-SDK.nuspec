@@ -4,12 +4,12 @@
     <id>Branch-Xamarin-Linking-SDK</id>
     <title>Branch Xamarin SDK</title>
     <summary>Hosted deep links for your Xamarin-based Android or iOS app by Branch</summary>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <authors>Branch</authors>
     <owners>Branch</owners>
     <iconUrl> https://s3-us-west-1.amazonaws.com/branchhost/branch_icon.png</iconUrl>
     <licenseUrl>https://raw.githubusercontent.com/BranchMetrics/Branch-Xamarin-SDK/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/BranchMetrics/Branch-Xamarin-SDK</projectUrl>
+    <projectUrl>https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This is the Branch Xamarin SDK for Android, iOS and Forms applications.</description>
     <copyright>Copyright 2015</copyright>
