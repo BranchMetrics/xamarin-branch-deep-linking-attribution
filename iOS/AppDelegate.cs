@@ -29,7 +29,7 @@ namespace BranchXamarinSDKTestbed.iOS
 			string sourceApplication,
 			NSObject annotation)
 		{
-			BranchIOS.getInstance ().SetNewUrl (url);
+			BranchIOS.getInstance().SetNewUrl (url);
 			return true;
 		}
 	}

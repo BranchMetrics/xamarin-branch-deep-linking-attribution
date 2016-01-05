@@ -43,7 +43,7 @@ namespace BranchXamarinSDK
 		}
 
 		void processUrl(NSUrl url) {
-			if (url != null) {
+			if (url != null && url.Query != null) {
 				foreach (string query in url.Query.Split (new [] { '&' })) {
 					if (query.StartsWith ("link_click_id")) {
 						if (query.Length > 14) {

@@ -42,7 +42,7 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		public static BranchAndroid GetInstance() {
+		public static BranchAndroid getInstance() {
 			return (BranchAndroid)branch;
 		}
 
