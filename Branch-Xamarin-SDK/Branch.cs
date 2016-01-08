@@ -34,6 +34,10 @@ namespace BranchXamarinSDK
 		protected internal String Identity;
 		protected internal String IdentityId;
 		protected internal String UserLink;
+		protected internal String AppLink;
+		protected internal String PushIdentifier;
+		protected internal String ExternalUri;
+		protected internal String ExternalExtra;
 		protected internal volatile bool Inited;
 
 		int timeout = -1;
@@ -60,6 +64,16 @@ namespace BranchXamarinSDK
 		/// </summary>
 		/// <value><c>true</c> if smart session enabled; otherwise, <c>false</c>.</value>
 		public bool SmartSessionEnabled { get; set; }
+
+		/// <summary>
+		/// Gets or sets the auto session value.
+		/// This feature only for Android app.
+		/// Register a IBranchSessionInterface callback through BranchAndroid.getInstance().SetLifeCycleHandlerCallback(...)
+		/// and an Android app will automatically manage Branch session.
+		/// Use this flag for checking type of Branch session management.
+		/// </summary>
+		/// <value><c>true</c> if auto session enabled; otherwise, <c>false</c>.</value>
+		public bool AutoSessionEnabled { get; protected set; }
 
 		/// <summary>
 		/// Gets or sets the timeout value for the REST APIs.

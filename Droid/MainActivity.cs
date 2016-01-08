@@ -20,9 +20,11 @@ namespace BranchXamarinSDKTestbed.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			BranchAndroid.Init (this, "YOUR APP KEY HERE", Intent.Data);
+			BranchAndroid.Init (this, "YOUR APP KEY HERE", Intent.Data, Intent.Extras);
+			App app = new App ();
+			BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);
 
-			LoadApplication (new App ());
+			LoadApplication (app);
 		}
 
 		protected override void OnNewIntent(Android.Content.Intent intent) {

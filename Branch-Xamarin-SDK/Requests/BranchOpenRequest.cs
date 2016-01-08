@@ -18,6 +18,10 @@ namespace BranchXamarinSDK
 			public string uri_scheme;
 			public string link_identifier;
 			public string ad_tracking_enabled;
+			public string android_app_link_url;
+			public string push_identifier;
+			public string external_intent_uri;
+			public string external_intent_extra;
 
 			public OpenParams() {
 			}
@@ -42,6 +46,10 @@ namespace BranchXamarinSDK
 			LocalParams.uri_scheme = uriScheme;
 			LocalParams.link_identifier = Branch.GetInstance().LinkClickIdentifier;
 			LocalParams.ad_tracking_enabled = addTrackingEnabled;
+			LocalParams.android_app_link_url = Branch.GetInstance().AppLink;
+			LocalParams.push_identifier = Branch.GetInstance().PushIdentifier;
+			LocalParams.external_intent_uri = Branch.GetInstance().ExternalUri;
+			LocalParams.external_intent_extra = Branch.GetInstance().ExternalExtra;
 
 			Callback = callback;
 		}
