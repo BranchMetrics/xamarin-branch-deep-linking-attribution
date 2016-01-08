@@ -46,7 +46,7 @@ namespace BranchXamarinSDK
 			LocalParams.uri_scheme = uriScheme;
 			LocalParams.link_identifier = Branch.GetInstance().LinkClickIdentifier;
 			LocalParams.ad_tracking_enabled = addTrackingEnabled;
-			LocalParams.android_app_link_url = Branch.GetInstance().AppLink;
+			LocalParams.android_app_link_url = Branch.GetInstance().AndroidAppLink;
 			LocalParams.push_identifier = Branch.GetInstance().PushIdentifier;
 			LocalParams.external_intent_uri = Branch.GetInstance().ExternalUri;
 			LocalParams.external_intent_extra = Branch.GetInstance().ExternalExtra;

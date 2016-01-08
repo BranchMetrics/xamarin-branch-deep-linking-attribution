@@ -93,7 +93,7 @@ namespace BranchXamarinSDK
 					if (!string.IsNullOrEmpty(scheme)) {
 						scheme = scheme.ToLower ();
 						if ((scheme.Equals("http") || scheme.Equals("https")) && !string.IsNullOrEmpty(uri.Host)) {
-							AppLink = uri.ToString();
+							AndroidAppLink = uri.ToString();
 						}
 					}
 				}

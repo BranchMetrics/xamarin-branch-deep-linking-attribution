@@ -34,7 +34,7 @@ namespace BranchXamarinSDK
 		protected internal String Identity;
 		protected internal String IdentityId;
 		protected internal String UserLink;
-		protected internal String AppLink;
+		protected internal String AndroidAppLink;
 		protected internal String PushIdentifier;
 		protected internal String ExternalUri;
 		protected internal String ExternalExtra;
