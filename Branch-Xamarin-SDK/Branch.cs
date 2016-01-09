@@ -38,6 +38,7 @@ namespace BranchXamarinSDK
 		protected internal String PushIdentifier;
 		protected internal String ExternalUri;
 		protected internal String ExternalExtra;
+		protected internal String UniversalLink;
 		protected internal volatile bool Inited;
 
 		int timeout = -1;
@@ -119,6 +120,7 @@ namespace BranchXamarinSDK
 			UniqueActionCounts = new Dictionary<string, int> ();
 			Credits = new Dictionary<string, int> ();
 			ClosePending = false;
+			AutoSessionEnabled = false;
 
 			// Start the request processing loop
 			QueueTokenSource = new CancellationTokenSource ();
@@ -262,6 +264,12 @@ namespace BranchXamarinSDK
 					}
 
 					LinkClickIdentifier = null;
+					AndroidAppLink = null;
+					PushIdentifier = null;
+					ExternalUri = null;
+					ExternalExtra = null;
+					UniversalLink = null;
+
 					InitTask = request.Execute ();
 					await InitTask;
 				} catch (Exception ex) {

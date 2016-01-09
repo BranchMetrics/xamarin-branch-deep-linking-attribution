@@ -36,6 +36,7 @@ namespace BranchXamarinSDK
 			public string push_identifier;
 			public string external_intent_uri;
 			public string external_intent_extra;
+			public string universal_link_url;
 
 			public InstallParams() {
 			}
@@ -92,6 +93,7 @@ namespace BranchXamarinSDK
 			LocalParams.push_identifier = Branch.GetInstance().PushIdentifier;
 			LocalParams.external_intent_uri = Branch.GetInstance().ExternalUri;
 			LocalParams.external_intent_extra = Branch.GetInstance().ExternalExtra;
+			LocalParams.universal_link_url = Branch.GetInstance ().UniversalLink;
 
 			Callback = callback;
 		}

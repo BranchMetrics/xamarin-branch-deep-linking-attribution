@@ -41,6 +41,7 @@ namespace BranchXamarinSDK
 		public void SetLifeCycleHandlerCallback(Context context, IBranchSessionInterface callback = null) {
 			BranchAndroidLifeCycleHandler lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
 			((Activity)context).Application.RegisterActivityLifecycleCallbacks (lifeCycleHandler);
+			AutoSessionEnabled = true;
 		}
 			
 		public void SetNewUrl(Android.Net.Uri uri, Android.OS.Bundle extras = null) {

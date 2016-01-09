@@ -70,57 +70,71 @@ public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicat
 
 		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-		BranchAndroid.Init (this, "your branch key here", Intent.Data);
+		BranchAndroid.Init (this, "YOUR APP KEY HERE", Intent.Data, Intent.Extras);
+		App app = new App ();
+		
+		// Call this method to enable automatic session management
+		BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);
 
-		LoadApplication (new App ());
+		LoadApplication (app);
 	}
 	
 	// Ensure we get the updated link identifier when the app is opened from the
 	// background with a new link.
 	protected override void OnNewIntent(Intent intent) {
-		BranchAndroid.GetInstance().SetNewUrl(intent.Data);
+		BranchAndroid.getInstance().SetNewUrl (intent.Data, intent.Extras);
 	}
 }
 ```
+Note that the first argument is the Branch key found in your app from the Branch dashboard. The second argument allows the Branch SDK to recognize if the application was launched from a content URI. The third argument allows to reconize if the application launched from Android App Links and from Push Notification.
+
 
 #### iOS with Forms
 
-For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of the OpenUrl method.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
+For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of the OpenUrl method.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link. Add method ContinueUserActivity to support Universal Links.
 
 ```csharp
 [Register ("AppDelegate")]
 public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 {
+	private App app = null;
+
 	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
 	{
 		global::Xamarin.Forms.Forms.Init ();
-		
+
 		NSUrl url = null;
 		if ((launchOptions != null) && launchOptions.ContainsKey(UIApplication.LaunchOptionsUrlKey)) {
 			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
 		}
 
-		BranchIOS.Init ("your branch key here", url);
+		BranchIOS.Init ("YOUR APP KEY HERE", url);
+		app = new App ();
+		LoadApplication (app);
 
-		LoadApplication (new App ());
 		return base.FinishedLaunching (uiApplication, launchOptions);
 	}
-	
-	// Ensure we get the updated link identifier when the app is opened from the
-	// background with a new link.
+
 	public override bool OpenUrl(UIApplication application,
 		NSUrl url,
 		string sourceApplication,
 		NSObject annotation)
 	{
-		Console.WriteLine ("New URL: " + url.ToString ());
-		BranchIOS.getInstance ().SetNewUrl (url);
+		BranchIOS.getInstance().SetNewUrl (url);
 		return true;
+	}
+
+	public override bool ContinueUserActivity (UIApplication application,
+		NSUserActivity userActivity,
+		UIApplicationRestorationHandler completionHandler)
+	{
+		bool handledByBranch = BranchIOS.getInstance ().ContinueUserActivity (userActivity, app);
+		return handledByBranch;
 	}
 }
 ```
 
-Note that in both cases the first argument is the Branch key found in your app from the Branch dashboard (see the screenshot below).  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
+Note that the first argument is the Branch key found in your app from the Branch dashboard (see the screenshot below).  The second argument allows the Branch SDK to recognize if the application was launched from a content URI.
 
 Here is the location of the Branch key
 
@@ -135,17 +149,32 @@ This deep link routing callback is called 100% of the time on init, with your li
 ```csharp
 public class App : Application, IBranchSessionInterface
 {
-	protected override void OnResume ()
+	protected override void OnStart ()
 	{
 		Branch branch = Branch.GetInstance ();
-		branch.InitSessionAsync (this);
+		if (!branch.AutoSessionEnabled) {
+			branch.Debug = true; // Each install is a "new" install
+			branch.InitSessionAsync (this);
+		}
 	}
 	
 	protected override async void OnSleep ()
 	{
 		Branch branch = Branch.GetInstance ();
-		// Await here ensure the thread stays alive long enough to complete the close.
-		await branch.CloseSessionAsync ();
+		if (!branch.AutoSessionEnabled) {
+			// Await here ensure the thread stays alive long enough to complete the close.
+			await branch.CloseSessionAsync ();
+		}
+	}
+
+	protected override void OnResume ()
+	{
+		Branch branch = Branch.GetInstance ();
+		if (!branch.AutoSessionEnabled) {
+			branch.Debug = true; // Each install is a "new" install
+			branch.SmartSessionEnabled = false;
+			branch.InitSessionAsync (this);
+		}
 	}
 	
 	#region IBranchSessionInterface implementation
@@ -168,12 +197,15 @@ public class App : Application, IBranchSessionInterface
 	#endregion
 }
 ```
+Note that if you will enable automatic session management for Android you can skip methods OnStart, OnSleep, OnResume. Initialization and closing sessions will be done through IActivityLifecycleCallbacks (this works for Android API 14 or later).
 
 #### Close session
 
 Required: this call will clear the deep link parameters when the app is closed, so they can be refreshed after a new link is clicked or the app is reopened.
 
 In a Forms App CloseSession is done in the OnSleep method of your App class. See the example above.
+
+For Android you can enable automatic session management. See the example above.
 
 ### Non-Forms Xamarin Setup
 
@@ -215,6 +247,14 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 		return true;
 	}
 
+	public override bool ContinueUserActivity (UIApplication application,
+		NSUserActivity userActivity,
+		UIApplicationRestorationHandler completionHandler)
+	{
+		bool handledByBranch = BranchIOS.getInstance ().ContinueUserActivity (userActivity, this);
+		return handledByBranch;
+	}
+
 	#region IBranchSessionInterface implementation
 	
 	public void InitSessionComplete (Dictionary<string, object> data)
@@ -240,6 +280,8 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 
 For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests
 
+#####Without automatic session management
+
 ```csharp
 public class MainActivity : Activity, IBranchSessionInterface
 {
@@ -249,7 +291,7 @@ public class MainActivity : Activity, IBranchSessionInterface
 
 		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-		BranchAndroid.Init (this, "your branch key here", Intent.Data);
+		BranchAndroid.Init (this, "your branch key here", Intent.Data, Intent.Extras);
 
 		Branch branch = Branch.GetInstance ();
 		branch.InitSessionAsync (this);
@@ -288,6 +330,52 @@ public class MainActivity : Activity, IBranchSessionInterface
 	{
 		// Handle the error case here
 	}
+		// Call this method to enable automatic session management
+		BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);
+
+	#endregion
+}
+```
+#####With automatic session management
+```csharp
+public class MainActivity : Activity, IBranchSessionInterface
+{
+	protected override void OnCreate (Bundle savedInstanceState)
+	{
+		base.OnCreate (savedInstanceState);
+
+		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
+
+		BranchAndroid.Init (this, "your branch key here", Intent.Data, Intent.Extras);
+
+		// Call this method to enable automatic session management
+		BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);
+
+		LoadApplication (new App ());
+	}
+	
+	// Ensure we get the updated link identifier when the app is opened from the
+	// background with a new link.
+	protected override void OnNewIntent(Intent intent) {
+		BranchAndroid.GetInstance().SetNewUrl(intent.Data);
+	}
+
+	#region IBranchSessionInterface implementation
+	
+	public void InitSessionComplete (Dictionary<string, object> data)
+	{
+		// Do something with the referring link data...
+	}
+
+	public void CloseSessionComplete ()
+	{
+		// Handle any additional cleanup after the session is closed
+	}
+
+	public void SessionRequestError (BranchError error)
+	{
+		// Handle the error case here
+	}
 
 	#endregion
 }
@@ -298,6 +386,8 @@ public class MainActivity : Activity, IBranchSessionInterface
 Required: this call will clear the deep link parameters when the app is closed, so they can be refreshed after a new link is clicked or the app is reopened.
 
 For Android this should be done in OnStop. See the example above.
+
+For Android you can enable automatic session management. See the example above.
 
 ### Forms and non-Forms Functions
 
