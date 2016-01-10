@@ -8,6 +8,8 @@ namespace BranchXamarinSDKTestbed.iOS
 	[Register ("AppDelegate")]
 	public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
+		private App app = null;
+
 		public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
 		{
 			global::Xamarin.Forms.Forms.Init ();
@@ -18,8 +20,8 @@ namespace BranchXamarinSDKTestbed.iOS
 			}
 
 			BranchIOS.Init ("YOUR APP KEY HERE", url);
-
-			LoadApplication (new App ());
+			app = new App ();
+			LoadApplication (app);
 
 			return base.FinishedLaunching (uiApplication, launchOptions);
 		}
@@ -29,8 +31,14 @@ namespace BranchXamarinSDKTestbed.iOS
 			string sourceApplication,
 			NSObject annotation)
 		{
-			BranchIOS.getInstance ().SetNewUrl (url);
+			BranchIOS.getInstance().SetNewUrl (url);
 			return true;
+		}
+
+		public override bool ContinueUserActivity (UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+		{
+			bool handledByBranch = BranchIOS.getInstance ().ContinueUserActivity (userActivity, app);
+			return handledByBranch;
 		}
 	}
 }

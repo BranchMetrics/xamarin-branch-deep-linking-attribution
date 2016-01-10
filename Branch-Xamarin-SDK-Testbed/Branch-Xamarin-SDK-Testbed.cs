@@ -32,23 +32,29 @@ namespace BranchXamarinSDKTestbed
 		protected override void OnStart ()
 		{
 			Branch branch = Branch.GetInstance ();
-			branch.Debug = true; // Each install is a "new" install
-			branch.InitSessionAsync (this);
+			if (!branch.AutoSessionEnabled) {
+				branch.Debug = true; // Each install is a "new" install
+				branch.InitSessionAsync (this);
+			}
 		}
 	
 		protected override async void OnSleep ()
 		{
 			Branch branch = Branch.GetInstance ();
-			// Await here ensure the thread stays alive long enough to complete the close.
-			await branch.CloseSessionAsync ();
+			if (!branch.AutoSessionEnabled) {
+				// Await here ensure the thread stays alive long enough to complete the close.
+				await branch.CloseSessionAsync ();
+			}
 		}
 
 		protected override void OnResume ()
 		{
 			Branch branch = Branch.GetInstance ();
-			branch.Debug = true; // Each install is a "new" install
-			branch.SmartSessionEnabled = false;
-			branch.InitSessionAsync (this);
+			if (!branch.AutoSessionEnabled) {
+				branch.Debug = true; // Each install is a "new" install
+				branch.SmartSessionEnabled = false;
+				branch.InitSessionAsync (this);
+			}
 		}
 
 		#region INotifyPropertyChanged

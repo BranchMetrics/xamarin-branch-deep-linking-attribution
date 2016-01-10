@@ -34,6 +34,32 @@ namespace BranchXamarinSDK
 			newBranch.processUrl (url);
 		}
 
+		public bool ContinueUserActivity (NSUserActivity userActivity, IBranchSessionInterface callback = null) {
+
+			if (userActivity.ActivityType.Equals (NSUserActivityType.BrowsingWeb)) {
+				this.UniversalLink = userActivity.WebPageUrl.AbsoluteString;
+				this.InitSessionAsync (callback);
+
+				var domains = NSBundle.MainBundle.ObjectForInfoDictionary ("branch_universal_link_domains");
+				if ((domains is NSString) && userActivity.WebPageUrl.AbsoluteString.Contains (domains.ToString ())) {
+					return true;
+				}
+				else if (domains is NSArray) {
+					NSArray arrDomains = (NSArray)domains;
+
+					for (nuint i = 0; i < arrDomains.Count; ++i) {
+						if (arrDomains.GetItem<NSString>(i) != null && userActivity.WebPageUrl.AbsoluteString.Contains (arrDomains.GetItem<NSString>(i).ToString ())) {
+							return true;
+						}
+					}
+				}
+
+				return userActivity.WebPageUrl.AbsoluteString.Contains ("bnc.lt");
+			}
+
+			return false;
+		}
+
 		/// <summary>
 		/// Sets the new URL recently used to open/foreground the app.
 		/// </summary>
@@ -43,7 +69,7 @@ namespace BranchXamarinSDK
 		}
 
 		void processUrl(NSUrl url) {
-			if (url != null) {
+			if (url != null && url.Query != null) {
 				foreach (string query in url.Query.Split (new [] { '&' })) {
 					if (query.StartsWith ("link_click_id")) {
 						if (query.Length > 14) {

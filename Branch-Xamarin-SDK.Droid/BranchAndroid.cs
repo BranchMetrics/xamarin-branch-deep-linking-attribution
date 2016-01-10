@@ -4,6 +4,9 @@ using Android.Content.PM;
 using Android.Net;
 using Android.Telephony;
 using Android.Util;
+using Android.App;
+using Android.OS;
+using Org.Json;
 
 using BranchXamarinSDK;
 
@@ -19,7 +22,7 @@ namespace BranchXamarinSDK
 		protected BranchAndroid() {
 		}
 
-		public static void Init(Context context, String branchKey, Android.Net.Uri uri = null) {
+		public static void Init(Context context, String branchKey, Android.Net.Uri uri = null, Android.OS.Bundle extras = null) {
 			if (!branchKey.StartsWith("key_")) {
 				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
@@ -29,21 +32,73 @@ namespace BranchXamarinSDK
 			newBranch.DeviceInformation = newBranch;
 			newBranch.Properties = newBranch;
 			newBranch.AppContext = context.ApplicationContext;
+
 			branch = newBranch;
 			newBranch.InitUserAndSession ();
-			if ((uri != null) && uri.IsHierarchical) {
-				newBranch.LinkClickIdentifier = uri.GetQueryParameter ("link_click_id");
-			}
+			newBranch.ReadAndStripParam (uri, extras);
 		}
 
-		public void SetNewUrl(Android.Net.Uri uri) {
-			if ((uri != null) && uri.IsHierarchical) {
-				LinkClickIdentifier = uri.GetQueryParameter ("link_click_id");
-			}
+		public void SetLifeCycleHandlerCallback(Context context, IBranchSessionInterface callback = null) {
+			BranchAndroidLifeCycleHandler lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
+			((Activity)context).Application.RegisterActivityLifecycleCallbacks (lifeCycleHandler);
+			AutoSessionEnabled = true;
+		}
+			
+		public void SetNewUrl(Android.Net.Uri uri, Android.OS.Bundle extras = null) {
+			ReadAndStripParam (uri ,extras);
 		}
 
-		public static BranchAndroid GetInstance() {
+		public static BranchAndroid getInstance() {
 			return (BranchAndroid)branch;
+		}
+
+		private void ReadAndStripParam(Android.Net.Uri uri, Android.OS.Bundle extras) {
+
+			// Capture the intent URI and extra for analytics in case started by external intents such as  google app search
+			if (uri != null) {
+				ExternalUri = uri.ToString ();
+			}
+			if (extras != null) {
+				if (extras.KeySet ().Count > 0) {
+					JSONObject extrasJson = new JSONObject();
+					foreach (string key in extras.KeySet ()) {
+						extrasJson.Put (key, extras.Get(key));
+					}
+					ExternalExtra = extrasJson.ToString ();
+				}
+			}
+
+			//Check for any push identifier in case app is launched by a push notification
+			if (extras != null) {
+				string pushIdentifier = extras.GetString("branch");
+				if (!string.IsNullOrEmpty(pushIdentifier)) {
+					PushIdentifier = pushIdentifier;
+					return;
+				}
+			}
+
+			//Check for link click id or app link
+			if (uri != null && uri.IsHierarchical) {
+
+				try {
+					LinkClickIdentifier = uri.GetQueryParameter ("link_click_id");
+				}
+				catch {
+					LinkClickIdentifier = "";
+				}
+
+				if (string.IsNullOrEmpty(LinkClickIdentifier)) {
+					// Check if the clicked url is an app link pointing to this app
+					string scheme = uri.Scheme;
+
+					if (!string.IsNullOrEmpty(scheme)) {
+						scheme = scheme.ToLower ();
+						if ((scheme.Equals("http") || scheme.Equals("https")) && !string.IsNullOrEmpty(uri.Host)) {
+							AndroidAppLink = uri.ToString();
+						}
+					}
+				}
+			}
 		}
 
 		#region IBranchGetDeviceInformation implementation
