@@ -212,7 +212,8 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
 		}
 
-		BranchIOS.Init ("Your Branch key here", url);
+		BranchIOS.Init ("Your Branch key here", url, true);
+
 		app = new App ();
 		LoadApplication (app);
 
@@ -256,21 +257,11 @@ public class App : Application, IBranchSessionInterface
 		}
 	}
 	
-	protected override async void OnSleep ()
-	{
-		Branch branch = Branch.GetInstance ();
-		if (!branch.AutoSessionEnabled) {
-			// Await here ensure the thread stays alive long enough to complete the close.
-			await branch.CloseSessionAsync ();
-		}
-	}
-
 	protected override void OnResume ()
 	{
 		Branch branch = Branch.GetInstance ();
 		if (!branch.AutoSessionEnabled) {
 			branch.Debug = true; // Each install is a "new" install
-			branch.SmartSessionEnabled = false;
 			branch.InitSessionAsync (this);
 		}
 	}
@@ -333,6 +324,7 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 		return true;
 	}
 
+	// Support Unieral Links
 	public override bool ContinueUserActivity (UIApplication application,
 		NSUserActivity userActivity,
 		UIApplicationRestorationHandler completionHandler)
