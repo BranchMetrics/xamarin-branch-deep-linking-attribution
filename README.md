@@ -175,6 +175,7 @@ public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicat
 		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
 		BranchAndroid.Init (this, "Your Branch key here", Intent.Data, Intent.Extras);
+
 		App app = new App ();
 		
 		// Call this method to enable automatic session management
@@ -314,7 +315,7 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 		return true;
 	}
 
-	// Support Unieral Links
+	// Support Universal Links
 	public override bool ContinueUserActivity (UIApplication application,
 		NSUserActivity userActivity,
 		UIApplicationRestorationHandler completionHandler)
@@ -360,10 +361,12 @@ public class MainActivity : Activity, IBranchSessionInterface
 
 		BranchAndroid.Init (this, "your branch key here", Intent.Data, Intent.Extras);
 
+		App app = new App ();
+		
 		// Call this method to enable automatic session management
 		BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);
 
-		LoadApplication (new App ());
+		LoadApplication (app);
 	}
 	
 	// Ensure we get the updated link identifier when the app is opened from the
