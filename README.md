@@ -39,7 +39,7 @@ ___
 
 ## Configure your app for deep linking
 
-## Android: Register a URI Scheme and add your Branch key
+### Android: Register a URI Scheme and add your Branch key
 
 In your project's `manifest` file, you can register your app to respond to direct deep links (`yourapp://` in a mobile
 browser) by adding the second intent filter block. Also, make sure to change `yourapp` to a unique string that
@@ -362,7 +362,7 @@ public class MainActivity : Activity, IBranchSessionInterface
 		BranchAndroid.Init (this, "your branch key here", Intent.Data, Intent.Extras);
 
 		App app = new App ();
-		
+
 		// Call this method to enable automatic session management
 		BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);
 
