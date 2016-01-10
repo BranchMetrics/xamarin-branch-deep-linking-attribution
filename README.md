@@ -248,20 +248,10 @@ The following code implements the callbacks for the Branch Session Interface and
 ```csharp
 public class App : Application, IBranchSessionInterface
 {
-	protected override void OnStart ()
-	{
-		Branch branch = Branch.GetInstance ();
-		if (!branch.AutoSessionEnabled) {
-			branch.Debug = true; // Each install is a "new" install
-			branch.InitSessionAsync (this);
-		}
-	}
-	
 	protected override void OnResume ()
 	{
 		Branch branch = Branch.GetInstance ();
 		if (!branch.AutoSessionEnabled) {
-			branch.Debug = true; // Each install is a "new" install
 			branch.InitSessionAsync (this);
 		}
 	}
