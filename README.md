@@ -369,6 +369,7 @@ public class MainActivity : Activity, IBranchSessionInterface
 		BranchAndroid.getInstance().SetNewUrl(intent.Data);
 	}
 
+
 	#region IBranchSessionInterface implementation
 
 	public void InitSessionComplete (Dictionary<string, object> data)
