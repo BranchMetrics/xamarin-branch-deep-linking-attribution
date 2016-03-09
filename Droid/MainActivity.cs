@@ -20,6 +20,7 @@ namespace BranchXamarinSDKTestbed.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
+			BranchAndroid.Debug = true;
 			BranchAndroid.Init (this, "YOUR APP KEY HERE", Intent.Data, Intent.Extras);
 			App app = new App ();
 			BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);

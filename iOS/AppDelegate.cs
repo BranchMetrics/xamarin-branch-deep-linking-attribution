@@ -19,6 +19,7 @@ namespace BranchXamarinSDKTestbed.iOS
 				url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
 			}
 
+			BranchIOS.Debug = true;
 			BranchIOS.Init ("YOUR APP KEY HERE", url);
 			app = new App ();
 			LoadApplication (app);

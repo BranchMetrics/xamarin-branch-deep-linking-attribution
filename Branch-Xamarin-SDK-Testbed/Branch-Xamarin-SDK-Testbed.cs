@@ -33,7 +33,7 @@ namespace BranchXamarinSDKTestbed
 		{
 			Branch branch = Branch.GetInstance ();
 			if (!branch.AutoSessionEnabled) {
-				branch.Debug = true; // Each install is a "new" install
+				Branch.Debug = true; // Each install is a "new" install
 				branch.InitSessionAsync (this);
 			}
 		}
@@ -51,7 +51,7 @@ namespace BranchXamarinSDKTestbed
 		{
 			Branch branch = Branch.GetInstance ();
 			if (!branch.AutoSessionEnabled) {
-				branch.Debug = true; // Each install is a "new" install
+				Branch.Debug = true; // Each install is a "new" install
 				branch.SmartSessionEnabled = false;
 				branch.InitSessionAsync (this);
 			}
