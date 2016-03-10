@@ -40,7 +40,7 @@ namespace BranchXamarinSDK
 			{
 				BranchAndroid.getInstance().SetNewUrl(activity.Intent.Data, activity.Intent.Extras);
 				Branch branch = Branch.GetInstance();
-				branch.Debug = true; // Each install is a "new" install
+				Branch.Debug = true; // Each install is a "new" install
 				branch.InitSessionAsync(_callback);
 			}
 

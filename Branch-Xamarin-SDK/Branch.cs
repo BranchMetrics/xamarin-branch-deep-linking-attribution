@@ -56,7 +56,7 @@ namespace BranchXamarinSDK
 		/// will be used and each install will be considered a new install.
 		/// </summary>
 		/// <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
-		public bool Debug { get; set; }
+		public static bool Debug = false;
 
 		/// <summary>
 		/// Gets or sets the smart session value.  Generally set to true for an 

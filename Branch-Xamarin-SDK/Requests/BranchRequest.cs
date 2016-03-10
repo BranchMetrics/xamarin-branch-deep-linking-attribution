@@ -93,7 +93,7 @@ namespace BranchXamarinSDK
 				query += "&" + queryString;
 			}
 			try {
-				if (Branch.GetInstance().Debug) {
+				if (Branch.Debug) {
 					Branch.GetInstance().Log("Sending " + StringForType() + " request", "API");
 				}
 				String newUrl = url;
@@ -105,22 +105,22 @@ namespace BranchXamarinSDK
 				}
 				HttpResponseMessage message = await client.GetAsync(newUrl + query);
 				if (message.StatusCode == HttpStatusCode.OK) {
-					if (Branch.GetInstance().Debug) {
+					if (Branch.Debug) {
 						Branch.GetInstance().Log(StringForType() + " request completed successfully", "API");
 					}
 				} else {
-					if (Branch.GetInstance().Debug) {
+					if (Branch.Debug) {
 						Branch.GetInstance().Log(StringForType() + " request failed with HTTP error: " + message.ReasonPhrase, "API");
 					}
 				}
 				return message;
 			} catch (TaskCanceledException) {
-				if (Branch.GetInstance().Debug) {
+				if (Branch.Debug) {
 					Branch.GetInstance().Log(StringForType() + " request timed out", "API");
 				}
 				throw;
 			} catch (Exception ex) {
-				if (Branch.GetInstance().Debug) {
+				if (Branch.Debug) {
 					Branch.GetInstance().Log(StringForType() + " request failed with exception: " + ex.Message, "API");
 				}
 				throw;
@@ -135,28 +135,28 @@ namespace BranchXamarinSDK
 			inSettings.NullValueHandling = NullValueHandling.Ignore;
 			String inBody = JsonConvert.SerializeObject(Params, inSettings);
 			try {
-				if (Branch.GetInstance().Debug) {
+				if (Branch.Debug) {
 					Branch.GetInstance().Log("Sending " + StringForType() + " request", "API");
 				}
 				HttpResponseMessage message = await client.PostAsync (url,
 					new StringContent (inBody, System.Text.Encoding.UTF8, "application/json"));
 				if (message.StatusCode == HttpStatusCode.OK) {
-					if (Branch.GetInstance().Debug) {
+					if (Branch.Debug) {
 						Branch.GetInstance().Log(StringForType() + " request completed successfully", "API");
 					}
 				} else {
-					if (Branch.GetInstance().Debug) {
+					if (Branch.Debug) {
 						Branch.GetInstance().Log(StringForType() + " request failed with HTTP error: " + message.ReasonPhrase, "API");
 					}
 				}
 				return message;
 			} catch (TaskCanceledException) {
-				if (Branch.GetInstance().Debug) {
+				if (Branch.Debug) {
 					Branch.GetInstance().Log(StringForType() + " request timed out", "API");
 				}
 				throw;
 			} catch (Exception ex) {
-				if (Branch.GetInstance().Debug) {
+				if (Branch.Debug) {
 					Branch.GetInstance().Log(StringForType() + " request failed with exception: " + ex.Message, "API");
 				}
 				throw;
