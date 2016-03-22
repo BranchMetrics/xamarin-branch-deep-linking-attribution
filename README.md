@@ -174,12 +174,11 @@ public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicat
 
 		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-		BranchAndroid.Init (this, "Your Branch key here", Intent.Data, Intent.Extras);
-
 		App app = new App ();
-		
-		// Call this method to enable automatic session management
-		BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, app);
+
+		// Enable debug mode.
+		BranchAndroid.Debug = true;
+		BranchAndroid.Init (this, "Your Branch key here", app);
 
 		LoadApplication (app);
 	}
@@ -187,7 +186,7 @@ public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicat
 	// Ensure we get the updated link identifier when the app is opened from the
 	// background with a new link.
 	protected override void OnNewIntent(Intent intent) {
-		BranchAndroid.getInstance().SetNewUrl (intent.Data, intent.Extras);
+		this.Intent = intent;
 	}
 }
 ```
@@ -208,14 +207,12 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 	{
 		global::Xamarin.Forms.Forms.Init ();
 
-		NSUrl url = null;
-		if ((launchOptions != null) && launchOptions.ContainsKey(UIApplication.LaunchOptionsUrlKey)) {
-			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
-		}
+		App app = new App ();
 
-		BranchIOS.Init ("Your Branch key here", url, true);
+		// Enable debug mode. 
+		BranchIOS.Debug = true;
+		BranchIOS.Init ("Your Branch key here", launchOptions, app);
 
-		app = new App ();
 		LoadApplication (app);
 
 		return base.FinishedLaunching (uiApplication, launchOptions);
@@ -227,8 +224,7 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 		string sourceApplication,
 		NSObject annotation)
 	{
-		BranchIOS.getInstance().SetNewUrl (url);
-		return true;
+		return BranchIOS.getInstance ().OpenUrl (url);
 	}
 
 	// For Universal Links
@@ -236,26 +232,25 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 		NSUserActivity userActivity,
 		UIApplicationRestorationHandler completionHandler)
 	{
-		bool handledByBranch = BranchIOS.getInstance ().ContinueUserActivity (userActivity, app);
-		return handledByBranch;
+		return BranchIOS.getInstance ().ContinueUserActivity (userActivity);
+	}
+	
+	// For Push Nitifications
+	public override void ReceivedRemoteNotification (UIApplication application,
+		NSDictionary userInfo)
+	{
+		BranchIOS.getInstance ().HandlePushNotification (userInfo);
 	}
 }
 ```
 
 #### Callbacks with deep link data in Forms
 
-The following code implements the callbacks for the Branch Session Interface and handles the life cycle calls for iOS. Think of these callbacks as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow. This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
+The following code implements the callbacks for the Branch Session Interface. Think of these callbacks as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow. This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
 
 ```csharp
 public class App : Application, IBranchSessionInterface
 {
-	protected override void OnResume ()
-	{
-		Branch branch = Branch.GetInstance ();
-		if (!branch.AutoSessionEnabled) {
-			branch.InitSessionAsync (this);
-		}
-	}
 
 	#region IBranchSessionInterface implementation
 
@@ -264,6 +259,11 @@ public class App : Application, IBranchSessionInterface
 		// Do something with the referring link data...
 	}
 
+	public void CloseSessionComplete ()
+	{
+		// Handle any additional cleanup after the session is closed
+	}
+	
 	public void SessionRequestError (BranchError error)
 	{
 		// Handle the error case here
@@ -291,37 +291,35 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 {
 	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
 	{
-		NSUrl url = null;
-		if ((launchOptions != null) && launchOptions.ContainsKey(UIApplication.LaunchOptionsUrlKey)) {
-			url = (NSUrl)launchOptions.ValueForKey (UIApplication.LaunchOptionsUrlKey);
-		}
-
-		BranchIOS.Init ("your branch key here", url, true);
-		
-		Branch branch = Branch.GetInstance ();
-		branch.InitSessionAsync (this);
+		// Enable debug mode. 
+		BranchIOS.Debug = true;
+		BranchIOS.Init ("Your Branch key here", launchOptions, this);
 
 		// Do your remaining launch stuff here...
 	}
 	
-	// Ensure we get the updated link identifier when the app is opened from the
-	// background with a new link.
+	// For direct deep linking
 	public override bool OpenUrl(UIApplication application,
 		NSUrl url,
 		string sourceApplication,
 		NSObject annotation)
 	{
-		BranchIOS.getInstance ().SetNewUrl (url);
-		return true;
+		return BranchIOS.getInstance ().OpenUrl (url);
 	}
 
-	// Support Universal Links
+	// For Universal Links
 	public override bool ContinueUserActivity (UIApplication application,
 		NSUserActivity userActivity,
 		UIApplicationRestorationHandler completionHandler)
 	{
-		bool handledByBranch = BranchIOS.getInstance ().ContinueUserActivity (userActivity, this);
-		return handledByBranch;
+		return BranchIOS.getInstance ().ContinueUserActivity (userActivity);
+	}
+	
+	// For Push Nitifications
+	public override void ReceivedRemoteNotification (UIApplication application,
+		NSDictionary userInfo)
+	{
+		BranchIOS.getInstance ().HandlePushNotification (userInfo);
 	}
 
 	#region IBranchSessionInterface implementation
@@ -333,7 +331,7 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 
 	public void CloseSessionComplete ()
 	{
-		// Handle any additional cleanup after the session is closed
+		// This method isn't used in iOS
 	}
 
 	public void SessionRequestError (BranchError error)
@@ -357,16 +355,14 @@ public class MainActivity : Activity, IBranchSessionInterface
 	{
 		base.OnCreate (savedInstanceState);
 
-		BranchAndroid.Init (this, "your branch key here", Intent.Data, Intent.Extras);
-
-		// Call this method to enable automatic session management
-		BranchAndroid.getInstance().SetLifeCycleHandlerCallback (this, this);
-	}
+		// Enable debug mode.
+		BranchAndroid.Debug = true;
+		BranchAndroid.Init (this, "Your Branch key here", app);	}
 
 	// Ensure we get the updated link identifier when the app is opened from the
 	// background with a new link.
 	protected override void OnNewIntent(Intent intent) {
-		BranchAndroid.getInstance().SetNewUrl(intent.Data);
+		this.Intent = intent;
 	}
 
 
@@ -420,8 +416,8 @@ Often, you might have your own user IDs, or want referral and event data to pers
 To identify a user, just call:
 
 ```csharp
-Branch branch = Branch.GetInstance ();
-branch.SetIdentityAsync("your user id", this);  // Where this implements IBranchIdentityInterface
+Branch branch = Branch.GetInstance (); 
+branch.SetIdentity("your user id", this);  // Where this implements IBranchIdentityInterface
 ```
 
 #### Logout
@@ -431,14 +427,15 @@ If you provide a logout function in your app, be sure to clear the user when the
 **Warning** this call will clear the referral credits and attribution on the device.
 
 ```csharp
-Branch.GetInstance(getApplicationContext()).LogoutAsync(this); // Where this implements IBranchIdentityInterface
+Branch branch = Branch.GetInstance ();
+branch.Logout(this); // Where this implements IBranchIdentityInterface
 ```
 
 ### Register custom events
 
 ```csharp
 Branch branch = Branch.GetInstance ();
-await branch.UserCompletedActionAsync("your_custom_event");
+branch.UserCompletedAction("your_custom_event");
 ```
 
 OR if you want to store some state with the event
@@ -447,7 +444,7 @@ OR if you want to store some state with the event
 Branch branch = Branch.GetInstance ();
 Dictionary<string, object> data = new Dictionary<string, object>();
 data.Add("sku", "123456789");
-await branch.UserCompletedActionAsync("purchase_event", data);
+branch.UserCompletedAction("purchase_event", data);
 ```
 
 Some example events you might want to track:
@@ -565,7 +562,7 @@ await branch.LoadRewardsAsync(this);
 			});
 		}
 
-		public void RewardsRedeemed (string bucket, int count)
+		public void RewardsRedeemed ()
 		{
 			Device.BeginInvokeOnMainThread (() => {
 				// Do something with the data...
@@ -606,7 +603,7 @@ await branch.RedeemRewardsAsync(this, amount, bucket);
 			});
 		}
 
-		public void RewardsRedeemed (string bucket, int count)
+		public void RewardsRedeemed ()
 		{
 			Device.BeginInvokeOnMainThread (() => {
 				// Do something with the data...
@@ -685,11 +682,39 @@ The response will return an array that has been parsed from the following JSON:
 
 ____
 
-## Note: A Word About Async Methods
+## Note: Mirgation from version 1.x.x to 2.x.x
 
-Most of the REST API calls in the SDK are submitted to a queue and executed in the background.  These requests, and their subsequent callbacks, occur on a background thread.  Due to the nature of how exceptions are handled by C# in background threads, exceptions that occur in a callback that are not caught, will be output to the console and consumed by the processing loop.
+New version of Branch SDK based on our native libraries that we built for iOS and Android.
+We changed Xamarin API in accordance with our native API.
 
-Be aware of this when executing UI functions in a callback.  Make sure that the UI functions are being executed inside a BeginInvokeOnMainThread call or it's platform equivalents.
+To migrate to version 2.x.x:
+
+1. delete old nuget package
+2. install new buget package
+3. change initialisation of Branch
+4. delete "Async" in called Branch methods
+5. change your code in accordance with changed and deleted list (see below)
+
+##### Changed Interfaces
+1. IBranchRewardsInterface
+2. IBranchUrlInterface
+
+##### Changed methods
+1. We add two methods GetShortUrl instead of GetShortUrlAsync, you need to change list of parameters in your old GetShortUrlAsync and delete "Async"
+
+##### Deleted Interfaces
+1. IBranchProperties
+2. IBranchActionsInterface
+3. IBranchGetDeviceInformation
+4. IBranchReferralInterface
+
+##### Deleted methods
+1. LoadReferralActionCountsAsync
+2. GetReferralCodeAsync
+3. ValidateReferralCodeAsync
+4. ApplyReferralCodeAsync
+5. GetReferralCountsForAction
+
 
 ## Troubleshooting: Ensure Newtonsoft built properly
 

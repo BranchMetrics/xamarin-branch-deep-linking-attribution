@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- v2.1.0
+  * New version of Xamarin SDK based on native libraries. 
+
 - v1.2.1
   * Debug field has been become static.
 
