@@ -1,301 +1,237 @@
 ﻿using System;
-using System.Net;
-using BranchXamarinSDK;
-using CoreTelephony;
+using System.Collections;
+using System.Collections.Generic;
 using Foundation;
-using AdSupport;
-
-using UIKit;
+using BranchXamarinSDK.iOS;
 
 namespace BranchXamarinSDK
 {
-	public class BranchIOS : Branch, IBranchGetDeviceInformation, IBranchProperties
+	public class BranchIOS : Branch
 	{
-		protected BranchIOS() {
-		}
+		#region Singleton
 
-		public static void Init(String branchKey, NSUrl url, bool autoClose = false) {
-			if (!branchKey.StartsWith("key_")) {
-				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
-			}
+		private static BranchIOS instance = null;
 
-			var newBranch = new BranchIOS ();
-			newBranch.BranchKey = branchKey;
-			newBranch.DeviceInformation = newBranch;
-			newBranch.Properties = newBranch;
-			branch = newBranch;
-			newBranch.InitUserAndSession ();
-
-			if (autoClose) {
-				newBranch.AutoInitEnabled = true;
-				newBranch.setupNotificationCallbacks ();
-			}
-
-			newBranch.processUrl (url);
-		}
-
-		public bool ContinueUserActivity (NSUserActivity userActivity, IBranchSessionInterface callback = null) {
-
-			if (userActivity.ActivityType.Equals (NSUserActivityType.BrowsingWeb)) {
-				this.UniversalLink = userActivity.WebPageUrl.AbsoluteString;
-				this.InitSessionAsync (callback);
-
-				var domains = NSBundle.MainBundle.ObjectForInfoDictionary ("branch_universal_link_domains");
-				if ((domains is NSString) && userActivity.WebPageUrl.AbsoluteString.Contains (domains.ToString ())) {
-					return true;
-				}
-				else if (domains is NSArray) {
-					NSArray arrDomains = (NSArray)domains;
-
-					for (nuint i = 0; i < arrDomains.Count; ++i) {
-						if (arrDomains.GetItem<NSString>(i) != null && userActivity.WebPageUrl.AbsoluteString.Contains (arrDomains.GetItem<NSString>(i).ToString ())) {
-							return true;
-						}
-					}
-				}
-
-				return userActivity.WebPageUrl.AbsoluteString.Contains ("bnc.lt");
-			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// Sets the new URL recently used to open/foreground the app.
-		/// </summary>
-		/// <param name="url">URL.</param>
-		public void SetNewUrl(NSUrl url) {
-			processUrl (url);
-		}
-
-		void processUrl(NSUrl url) {
-			if (url != null && url.Query != null) {
-				foreach (string query in url.Query.Split (new [] { '&' })) {
-					if (query.StartsWith ("link_click_id")) {
-						if (query.Length > 14) {
-							LinkClickIdentifier = WebUtility.UrlDecode(query.Substring(14).Trim());
-							Console.WriteLine ("LCI: " + LinkClickIdentifier);
-						}
-					}
-				}
-			}
-		}
-
-		void setupNotificationCallbacks() {
-			UIApplication.Notifications.ObserveWillResignActive (WillResignActive);
-			UIApplication.Notifications.ObserveDidBecomeActive (DidBecomeActive);
-		}
-
-		async public void DidBecomeActive(object sender, NSNotificationEventArgs e) {
-			Console.WriteLine ("DidBecomeActive Automatic Init");
-			await InitSessionAsync(InitCallback);
-		}
-
-		async public void WillResignActive(object sender, NSNotificationEventArgs e) {
-			await CloseSessionAsync ();
-		}
+		private BranchIOS () { }
 
 		public static BranchIOS getInstance() {
-			return (BranchIOS)branch;
-		}
-
-		#region IBranchGetDeviceInformation implementation
-
-		public string GetDeviceId (bool isDebug, out bool isReal)
-		{
-			string ret;
-			isReal = true;
-
-			if (isDebug) {
-				isReal = false;
-				ret = Guid.NewGuid ().ToString ();
-			} else {
-				ret = ASIdentifierManager.SharedManager.AdvertisingIdentifier.AsString ();
-				if (ret == null) {
-					ret = UIDevice.CurrentDevice.IdentifierForVendor.AsString ();
-				}
-			}
-			return ret;
-		}
-
-		public string GetOS ()
-		{
-			return "iOS";
-		}
-
-		public string GetOSVersion ()
-		{
-			return UIDevice.CurrentDevice.SystemVersion;
-		}
-
-		public string GetAppVersion ()
-		{
-			return NSBundle.MainBundle.ObjectForInfoDictionary ("CFBundleVersion").ToString ();
-		}
-
-		public int GetUpdateState(bool saveState = false) {
-			NSUserDefaults defs = NSUserDefaults.StandardUserDefaults;
-			String stored = defs.StringForKey ("bnc_app_version");
-			String current = GetAppVersion ();
-
-			if (stored != null) {
-				if (current.Equals (stored)) {
-					return 1;
-				} else {
-					if (saveState) {
-						defs.SetString (current, "bnc_app_version");
-					}
-					return 2;
-				}
+			if (instance == null) {
+				throw new BranchException ("You must initialize Branch before you can use the Branch object!");
 			}
 
-			if (saveState) {
-				defs.SetString (current, "bnc_app_version");
-			}
-
-			NSFileManager fileManager = NSFileManager.DefaultManager;
-			NSError error;
-
-			// creation
-			var urlArray = fileManager.GetUrls(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User);
-			NSUrl docPath = urlArray [urlArray.Length - 1];
-			NSFileAttributes createAttrs = fileManager.GetAttributes (docPath.Path, out error);
-			int createDays = (int)(createAttrs.CreationDate.SecondsSinceReferenceDate / (60 * 60 * 24));
-
-			// modification
-			String bundlePath = NSBundle.MainBundle.BundlePath;
-			NSFileAttributes modAttrs = fileManager.GetAttributes (bundlePath, out error);
-			int modDays = (int)(modAttrs.ModificationDate.SecondsSinceReferenceDate / (60 * 60 * 24));
-
-			return (modDays == createDays)?0:2;
+			return instance;
 		}
-
-		public string GetPhoneBrand() {
-			return "Apple";
-		}
-
-		public string GetPhoneModel() {
-			return "iPhone";
-		}
-
-		public string GetCarrier() {
-			var info = new CTTelephonyNetworkInfo ();
-			if ((info.SubscriberCellularProvider != null) && (info.SubscriberCellularProvider.CarrierName != null)) {
-				return info.SubscriberCellularProvider.CarrierName;
-			}
-
-			return null;
-		}
-
-		public bool GetNfcPresent() {
-			return false;
-		}
-
-		public bool GetBluetoothPresent() {
-			return true;
-		}
-
-		public bool GetTelephonePresent() {
-			return true;
-		}
-
-		public string GetBluetoothVersion() {
-			return "unknown";
-		}
-
-		public bool GetWifiConnected() {
-			return false;
-		}
-
-		public int GetDpi(out int width, out int height) {
-			UIScreen screen = UIScreen.MainScreen;
-			width = (int)(screen.Bounds.Width * screen.Scale);
-			height = (int)(screen.Bounds.Height * screen.Scale);
-			return (int)screen.Scale;
-		}
-
-		public String GetURIScheme() {
-			String scheme = "";
-			var urlTypes = (NSArray)NSBundle.MainBundle.ObjectForInfoDictionary ("CFBundleURLTypes");
-			if (urlTypes != null) {
-				for (nuint i = 0; i < urlTypes.Count; i++) {
-					NSDictionary urlType = urlTypes.GetItem<NSDictionary> (i);
-					var urlSchemes = (NSArray)urlType.ObjectForKey (new NSString("CFBundleURLScheme"));
-					if (urlSchemes != null) {
-						for (nuint j = 0; j < urlSchemes.Count; j++) {
-							NSString urlScheme = urlSchemes.GetItem<NSString> (i);
-							if (urlScheme.ToString().StartsWith("fb") || urlScheme.ToString().StartsWith ("db") || urlScheme.ToString().StartsWith ("pin")) {
-								continue;
-							} else {
-								scheme = urlScheme;
-								break;
-							}
-						}
-					}
-					if (!String.IsNullOrWhiteSpace (scheme)) {
-						break;
-					}
-				}
-			}
-
-			return scheme;
-		}
-
-		public String GetAdTrackingEnabled() {
-			return ASIdentifierManager.SharedManager.IsAdvertisingTrackingEnabled ? "true" : "false";
-		}
-
-		public void WriteLog(String message, String tag = null, int level = 3) {
-			Console.WriteLine (message);
+			
+		private IOSNativeBranch.Branch NativeBranch {
+			get { return IOSNativeBranch.Branch.GetInstance(branchKey); }
 		}
 
 		#endregion
 
-		#region IBranchProperties implementation
 
-		public String GetPropertyString (string key)
-		{
-			String ret = null;
-			if (!String.IsNullOrWhiteSpace(key)) {
-				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-				ret = defaults.StringForKey (key);
+		#region Initialization
+
+		private NSDictionary launchOptions = null;
+
+		public static void Init(String branchKey, NSDictionary launchOptions, IBranchSessionInterface callback) {
+			if (!branchKey.StartsWith("key_")) {
+				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
-			return ret;
-		}
 
-		public void SetPropertyString ( string key, string value)
-		{
-			NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-			if (!String.IsNullOrWhiteSpace(key) && (value != null)) {
-				defaults.SetString (value, key);
-			} else if (!String.IsNullOrWhiteSpace(key)) {
-				defaults.SetString (value, key);
-			} 
-			defaults.Synchronize ();
-		}
+			instance = new BranchIOS ();
+			Branch.branchInstance = instance;
+			instance.branchKey = branchKey;
 
-		public int GetPropertyInt ( string key, int defaultValue)
-		{
-			int ret = defaultValue;
-			if (!String.IsNullOrWhiteSpace(key)) {
-				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-				ret = (int)defaults.IntForKey (key);
-				if (ret == 0) {
-					ret = defaultValue;
-				}
-			} 
-			return ret;
-		}
-
-		public void SetPropertyInt( string key, int value) {
-			if (!String.IsNullOrWhiteSpace (key)) {
-				NSUserDefaults defaults = NSUserDefaults.StandardUserDefaults;
-				defaults.SetInt ((nint)value, key);
-				defaults.Synchronize ();
+			if (launchOptions != null) {
+				instance.launchOptions = new NSDictionary (launchOptions);
+			} else {
+				instance.launchOptions = new NSDictionary ();
 			}
+
+			if (Debug) {
+				instance.SetDebug ();
+			}
+				
+			instance.InitSession (callback);
+		}
+
+		protected override void SetDebug() {
+			NativeBranch.SetDebug ();
+		}
+
+		#endregion
+
+
+		#region Session methods
+
+		public override void InitSession(IBranchSessionInterface callback) {
+			base.InitSession (callback);
+			BranchSessionListener obj = new BranchSessionListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.InitSessionWithLaunchOptions(launchOptions, obj.InitCallback);
+		}
+
+		public override void CloseSession() {
+			// we need not CloseSession iOS
+		}
+
+		public override Dictionary<String, object> GetLastReferringParams () {
+			return BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringParams());
+		}
+
+		public override Dictionary<String, object> GetFirstReferringParams () {
+			return BranchIOSUtils.ToDictionary(NativeBranch.FirstReferringParams());
+		}
+
+		#endregion
+
+
+		#region Identity methods
+
+		public override void SetIdentity(String user, IBranchIdentityInterface callback) {
+			BranchIdentityListener obj = new BranchIdentityListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.SetIdentity (user, obj.SetIdentityCallback);
+		}
+
+		public override void Logout(IBranchIdentityInterface callback = null) {
+			BranchIdentityListener obj = new BranchIdentityListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.LogoutWithCallback (obj.LogoutCallback);
+		}
+
+		#endregion
+
+
+		#region Short Links methods
+
+		public override void GetShortUrl (IBranchUrlInterface callback,
+			Dictionary<String, dynamic> parameters = null,
+			string channel = "",
+			string stage = "",
+			ICollection<String> tags = null,
+			string feature = "",
+			int duration = 0) {
+
+			BranchUrlListener obj = new BranchUrlListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.GetShortUrlWithParams(BranchIOSUtils.ToNSDictionary(parameters),
+				BranchIOSUtils.ToNSObjectArray(tags), "", (nuint)duration, channel, feature, stage, obj.GetShortUrlCallback);
+		}
+
+		public override void GetShortUrl (IBranchUrlInterface callback,
+			int type = Constants.URL_TYPE_UNLIMITED,
+			Dictionary<String, dynamic> parameters = null,
+			string channel = "",
+			string stage = "",
+			ICollection<String> tags = null,
+			string feature = "") {
+
+			BranchUrlListener obj = new BranchUrlListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.GetShortURLWithParams (BranchIOSUtils.ToNSDictionary(parameters),
+				BranchIOSUtils.ToNSObjectArray(tags), channel, feature, stage,
+				(IOSNativeBranch.BranchLinkType)type, obj.GetShortUrlCallback);
+		}
+
+		#endregion
+
+
+		#region Action methods
+
+		public override void UserCompletedAction (String action, Dictionary<string, object> metadata = null) {
+			NativeBranch.UserCompletedAction (action, BranchIOSUtils.ToNSDictionary (metadata));
+		}
+
+		#endregion
+
+
+		#region Credits methods
+
+		public override void LoadRewards (IBranchRewardsInterface callback) {
+			BranchRewardsListener obj = new BranchRewardsListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.LoadRewardsWithCallback (obj.LoadRewardsCallback);
+		}
+
+		public override void RedeemRewards (IBranchRewardsInterface callback, int amount, string bucket = "default") {
+			BranchRewardsListener obj = new BranchRewardsListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.RedeemRewards (amount, bucket, obj.RedeemRewardsCallback);
+		}
+
+		public override void GetCreditHistory (IBranchRewardsInterface callback,
+			string bucket = "",
+			string afterId = "",
+			int length = 100,
+			bool mostRecentFirst = true) {
+
+			BranchRewardsListener obj = new BranchRewardsListener (callback);
+			callbacksList.Add (obj as Object);
+
+			if (mostRecentFirst) {
+				NativeBranch.GetCreditHistoryForBucket(bucket, afterId, (nint)length,
+					IOSNativeBranch.BranchCreditHistoryOrder.MostRecentFirst, obj.GetCreditHistoryCallback);
+			}
+			else {
+				NativeBranch.GetCreditHistoryForBucket(bucket, afterId, (nint)length,
+					IOSNativeBranch.BranchCreditHistoryOrder.LeastRecentFirst, obj.GetCreditHistoryCallback);
+			}
+		}
+
+		public override int GetCredits () {
+			return (int)NativeBranch.GetCredits();
+		}
+
+		public override int GetCreditsForBucket (string bucket) {
+			return (int)NativeBranch.GetCreditsForBucket(bucket);
+		}
+
+		#endregion
+
+
+		#region Configuration methods
+
+		public override void SetRetryInterval (int retryInterval) {
+			NativeBranch.SetRetryInterval (retryInterval);
+		}
+
+		public override void SetMaxRetries (int maxRetries) {
+			NativeBranch.SetMaxRetries ((nint)maxRetries);
+		}
+
+		public override void SetNetworkTimeout (int timeout) {
+			NativeBranch.SetNetworkTimeout (timeout);
+		}
+
+		public override void AccountForFacebookSDKPreventingAppLaunch () {
+			NativeBranch.AccountForFacebookSDKPreventingAppLaunch ();
+		}
+
+		#endregion
+
+
+		#region Handle deeplinking
+
+		public bool ContinueUserActivity(NSUserActivity activity) {
+			return NativeBranch.ContinueUserActivity(activity);
+		}
+
+		public bool OpenUrl (NSUrl url) {
+			return NativeBranch.HandleDeepLink(url);
+		}
+
+		public void HandlePushNotification (NSDictionary userInfo) {
+			NativeBranch.HandlePushNotification(userInfo);
 		}
 
 		#endregion
 	}
 }
-

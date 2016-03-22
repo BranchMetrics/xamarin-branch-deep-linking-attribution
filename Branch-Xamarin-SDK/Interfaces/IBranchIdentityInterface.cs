@@ -5,7 +5,7 @@ namespace BranchXamarinSDK
 {
 	public interface IBranchIdentityInterface
 	{
-		void IdentitySet(String identity, Dictionary<string, object> data);
+		void IdentitySet(Dictionary<string, object> data);
 		void LogoutComplete();
 		void IdentityRequestError(BranchError error);
 	}

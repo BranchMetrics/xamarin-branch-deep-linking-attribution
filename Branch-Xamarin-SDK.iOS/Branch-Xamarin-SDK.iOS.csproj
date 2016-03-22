@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{765EB48A-D13B-4824-BCB6-EE53817277AC}</ProjectGuid>
+    <ProjectGuid>{C78784FE-584B-46B3-BAA7-67A0937D160B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>BranchXamarinSDK.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
@@ -33,19 +33,38 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\Xamarin.iOS10\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\Xamarin.iOS10\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BranchIOS.cs" />
+    <Compile Include="BranchIOSUtils.cs" />
+    <Compile Include="Helpers\BranchIdentityListener.cs" />
+    <Compile Include="Helpers\BranchRewardsListener.cs" />
+    <Compile Include="Helpers\BranchSessionListener.cs" />
+    <Compile Include="Helpers\BranchUrlListener.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <ItemGroup>
+    <ProjectReference Include="..\Branch-Xamarin-Lib.iOS\Branch-Xamarin-Lib.iOS.csproj">
+      <Project>{D2DE7611-F6B8-4516-988E-45B4679E6F65}</Project>
+      <Name>Branch-Xamarin-Lib.iOS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Branch-Xamarin-SDK\Branch-Xamarin-SDK.csproj">
-      <Project>{86A1C8AD-D5FC-4CAC-B0D9-88878FC190D1}</Project>
+      <Project>{75851B44-995D-499D-9A54-904700FD8730}</Project>
       <Name>Branch-Xamarin-SDK</Name>
     </ProjectReference>
   </ItemGroup>
