@@ -55,6 +55,7 @@
     <Compile Include="Helpers\BranchRewardsListener.cs" />
     <Compile Include="Helpers\BranchSessionListener.cs" />
     <Compile Include="Helpers\BranchUrlListener.cs" />
+    <Compile Include="Helpers\BranchBUOSessionListener.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

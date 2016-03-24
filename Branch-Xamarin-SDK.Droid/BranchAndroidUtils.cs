@@ -18,6 +18,34 @@ namespace BranchXamarinSDK.Droid
 			return dict;
 		}
 
+		public static Dictionary<string, object> ToDictionary(IO.Branch.Indexing.BranchUniversalObject data) {
+
+			if (data == null) {
+				return new Dictionary<string, object> ();
+			}
+
+			return ToDictionary(data.ConvertToJson());
+		}
+
+		public static Dictionary<string, object> ToDictionary(IO.Branch.Referral.Util.LinkProperties data) {
+
+			if (data == null) {
+				return new Dictionary<string, object> ();
+			}
+
+			var dict = new Dictionary<string, object>();
+
+			dict.Add("~tags", data.Tags == null ? new List<string>() : data.Tags );
+			dict.Add("~feature", data.Feature == null ? "" : data.Feature );
+			dict.Add("~alias", data.Alias == null ? "" : data.Alias);
+			dict.Add("~channel", data.Channel == null ? "" : data.Channel);
+			dict.Add("~stage", data.Stage == null ? "" : data.Stage);
+			dict.Add("~duration", data.MatchDuration.ToString());
+			dict.Add("control_params", data.ControlParams == null ? new Dictionary<string,string>() : data.ControlParams);
+
+			return dict;
+		}
+
 		public static JSONObject ToJSONObject(Dictionary<string, object> data) {
 			if (data != null) {
 				return new JSONObject (data);

@@ -12,9 +12,7 @@ namespace BranchXamarinSDK.Droid
 		IO.Branch.Referral.AndroidNativeBranch.IBranchListResponseListener
 	{
 		public delegate void OnResponseRewards(bool status, IO.Branch.Referral.BranchError error);
-		public delegate void OnResponseHistory(JSONArray list, IO.Branch.Referral.BranchError error);
 		public OnResponseRewards onResponseRewards = null;
-		public OnResponseHistory onResponseHistory = null;
 		private IBranchRewardsInterface callback = null;
 
 		public BranchRewardsListener (IBranchRewardsInterface callback)
@@ -29,8 +27,16 @@ namespace BranchXamarinSDK.Droid
 		}
 
 		public void OnReceivingResponse (JSONArray data, IO.Branch.Referral.BranchError error) {
-			if (onResponseHistory != null) {
-				onResponseHistory (data, error);
+			if (callback == null) {
+				return;
+			}
+
+			if (error == null) {
+				callback.CreditHistory (BranchAndroidUtils.ToCreditHistoryArray(data));
+			} else {
+
+				BranchError err = new BranchError (error.Message, (int)error.ErrorCode);
+				callback.RewardsRequestError (err);
 			}
 		}
 
@@ -41,7 +47,6 @@ namespace BranchXamarinSDK.Droid
 			}
 
 			if (error == null) {
-
 				callback.RewardsLoaded ();
 			} else {
 
@@ -57,24 +62,7 @@ namespace BranchXamarinSDK.Droid
 			}
 
 			if (error == null) {
-
 				callback.RewardsRedeemed ();
-			} else {
-
-				BranchError err = new BranchError (error.Message, (int)error.ErrorCode);
-				callback.RewardsRequestError (err);
-			}
-		}
-
-		public void GetCreditHistoryCallback(JSONArray list, IO.Branch.Referral.BranchError error) {
-
-			if (callback == null) {
-				return;
-			}
-
-			if (error == null) {
-
-				callback.CreditHistory (BranchAndroidUtils.ToCreditHistoryArray(list));
 			} else {
 
 				BranchError err = new BranchError (error.Message, (int)error.ErrorCode);

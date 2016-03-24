@@ -124,4 +124,10 @@ Global
 		{FD4E7FC2-652B-47AC-A149-F1AA6A46D53D}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{FD4E7FC2-652B-47AC-A149-F1AA6A46D53D}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+	EndGlobalSection
 EndGlobal

@@ -9,8 +9,6 @@ namespace BranchXamarinSDK.Droid
 {
 	public class BranchSessionListener: Java.Lang.Object, IO.Branch.Referral.AndroidNativeBranch.IBranchReferralInitListener
 	{
-		public delegate void OnResponseInit(JSONObject data, IO.Branch.Referral.BranchError error);
-		public OnResponseInit onResponseInit = null;
 		private IBranchSessionInterface callback = null;
 
 		public BranchSessionListener(IBranchSessionInterface callback) {
@@ -18,13 +16,6 @@ namespace BranchXamarinSDK.Droid
 		}
 
 		public void OnInitFinished (JSONObject data, IO.Branch.Referral.BranchError error) {
-			if (onResponseInit != null) {
-				onResponseInit (data, error);
-			}
-		}
-
-		public void InitCallback (JSONObject data, IO.Branch.Referral.BranchError error) {
-
 			if (callback == null) {
 				return;
 			}

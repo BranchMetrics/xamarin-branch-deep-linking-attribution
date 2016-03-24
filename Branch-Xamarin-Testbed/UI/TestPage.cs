@@ -409,9 +409,7 @@ namespace BranchXamarinTestbed
 
 			var array = new List<String> ();
 			var tags = TagsEntry.Text;
-			if (String.IsNullOrWhiteSpace (tags)) {
-				array = null;
-			} else {
+			if (!String.IsNullOrWhiteSpace (tags)) {
 				String[] tagStrs = tags.Split(',');
 				foreach (String tag in tagStrs) {
 					array.Add(tag.Trim());

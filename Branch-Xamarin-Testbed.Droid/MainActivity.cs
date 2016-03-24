@@ -22,12 +22,16 @@ namespace BranchXamarinTestbed.Droid
 			base.OnCreate (savedInstanceState);
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			App app = new App ();
-
 			BranchAndroid.Debug = true;
-			BranchAndroid.Init (this, "Your Branch key here", app);
 
+			App app = new App ();
+			BranchAndroid.Init (this, "Your Branch key here", app);
 			LoadApplication (app);
+
+			// uncomment to try BranchUniversalObject
+//			AppBUO appBUO = new AppBUO ();
+//			BranchAndroid.Init (this, "Your Branch key here", appBUO);
+//			LoadApplication (appBUO);
 		}
 
 		protected override void OnNewIntent(Intent intent) {
