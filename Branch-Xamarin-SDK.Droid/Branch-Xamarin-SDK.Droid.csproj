@@ -61,6 +61,8 @@
     <Compile Include="Helpers\BranchRewardsListener.cs" />
     <Compile Include="Helpers\BranchSessionListener.cs" />
     <Compile Include="Helpers\BranchUrlListener.cs" />
+    <Compile Include="Helpers\BranchBUOSessionListener.cs" />
+    <Compile Include="Helpers\BranchLinkShareListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

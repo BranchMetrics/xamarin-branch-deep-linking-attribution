@@ -12,12 +12,17 @@ namespace BranchXamarinTestbed.iOS
 		{
 			global::Xamarin.Forms.Forms.Init ();
 
-			App app = new App ();
-
+			// set Debug mode
 			BranchIOS.Debug = true;
-			BranchIOS.Init ("Your Branch key here", launchOptions, app);
 
+			App app = new App ();
+			BranchIOS.Init ("Your Branch key here", launchOptions, app);
 			LoadApplication (app);
+
+			// uncomment to try BranchUniversalObject
+//			AppBUO appBUO = new AppBUO ();
+//			BranchIOS.Init ("Your Branch key here", launchOptions, appBUO);
+//			LoadApplication (appBUO);
 
 			return base.FinishedLaunching(application, launchOptions);
 		}

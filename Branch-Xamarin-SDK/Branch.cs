@@ -43,8 +43,14 @@ namespace BranchXamarinSDK
 		/// <summary>
 		/// Initiate a Branch session.
 		/// </summary>
-		/// <param name="callback">Callback.</param>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
 		public virtual void InitSession (IBranchSessionInterface callback) { callbacksList.Clear (); }
+
+		/// <summary>
+		/// Initiate a Branch session.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		public virtual void InitSession (IBranchBUOSessionInterface callback) { callbacksList.Clear (); }
 
 		/// <summary>
 		/// Closes the session.
@@ -58,10 +64,34 @@ namespace BranchXamarinSDK
 		abstract public Dictionary<String, object> GetLastReferringParams ();
 
 		/// <summary>
+		/// Gets the branch universal object from last open.
+		/// </summary>
+		/// <returns>The last referring branch universal object.</returns>
+		abstract public BranchUniversalObject GetLastReferringBranchUniversalObject ();
+
+		/// <summary>
+		/// Gets link properties from last open.
+		/// </summary>
+		/// <returns>The last referring branch link properties.</returns>
+		abstract public BranchLinkProperties GetLastReferringBranchLinkProperties ();
+
+		/// <summary>
 		/// Get the referring parameters from the initial install.
 		/// </summary>
 		/// <returns>The referring parameters from the initial install.</returns>
 		abstract public Dictionary<String, object> GetFirstReferringParams ();
+
+		/// <summary>
+		/// Gets the branch universal object from initial install.
+		/// </summary>
+		/// <returns>The first referring branch universal object.</returns>
+		abstract public BranchUniversalObject GetFirstReferringBranchUniversalObject ();
+
+		/// <summary>
+		/// Gets link properties from initial install.
+		/// </summary>
+		/// <returns>The first referring branch link properties.</returns>
+		abstract public BranchLinkProperties GetFirstReferringBranchLinkProperties ();
 
 		/// <summary>
 		/// Internal method: Sets debug mode. Use Debug instead.
@@ -127,6 +157,33 @@ namespace BranchXamarinSDK
 		                                  string stage = "",
 		                                  ICollection<String> tags = null,
 		                                  string feature = "");
+
+		/// <summary>
+		/// Get a short url with specified universal object and link properties.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		/// <param name="universalObject">Universal object.</param>
+		/// <param name="linkProperties">Link properties.</param>
+		abstract public void GetShortURL (IBranchUrlInterface callback,
+		                                  BranchUniversalObject universalObject,
+		                                  BranchLinkProperties linkProperties);
+
+		#endregion
+
+
+		#region Share Link methods
+
+		/// <summary>
+		/// Shares the link.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		/// <param name="universalObject">Universal object.</param>
+		/// <param name="linkProperties">Link properties.</param>
+		/// <param name="message">Message.</param>
+		abstract public void ShareLink (IBranchLinkShareInterface callback,
+		                                BranchUniversalObject universalObject,
+		                                BranchLinkProperties linkProperties,
+		                                string message);
 
 		#endregion
 
@@ -216,7 +273,13 @@ namespace BranchXamarinSDK
 		/// from returning YES/true when a Universal Link is clicked, you should enable this option.
 		/// </summary>
 		abstract public void AccountForFacebookSDKPreventingAppLaunch ();
-			
+
+		/// <summary>
+		/// Registers the view.
+		/// </summary>
+		/// <param name="universalObject">Universal object.</param>
+		abstract public void RegisterView (BranchUniversalObject universalObject);
+
 		#endregion
 	}
 }

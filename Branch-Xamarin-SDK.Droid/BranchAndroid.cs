@@ -43,6 +43,7 @@ namespace BranchXamarinSDK
 		#region Initialization
 
 		private Context appContext = null;
+		public Activity CurrActivity { get; set; }
 
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
 
@@ -68,6 +69,31 @@ namespace BranchXamarinSDK
 			((Activity)context).Application.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
 		}
 
+		public static void Init(Context context, String branchKey, IBranchBUOSessionInterface callback) {
+
+			if (instance != null) {
+				instance.lifeCycleHandler.callbackBUO = callback;
+				return;
+			}
+
+			if (!branchKey.StartsWith("key_")) {
+				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
+			}
+
+			instance = new BranchAndroid ();
+			Branch.branchInstance = instance;
+			instance.appContext = context.ApplicationContext;
+			instance.branchKey = branchKey;
+
+			if (Debug) {
+				instance.SetDebug ();
+			}
+
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
+			((Activity)context).Application.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
+		}
+
+
 		protected override void SetDebug() {
 			NativeBranch.SetDebug ();
 		}
@@ -80,7 +106,14 @@ namespace BranchXamarinSDK
 		public override void InitSession(IBranchSessionInterface callback) {
 			base.InitSession (callback);
 			BranchSessionListener obj = new BranchSessionListener (callback);
-			obj.onResponseInit = obj.InitCallback;
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.InitSession (obj);
+		}
+
+		public override void InitSession (IBranchBUOSessionInterface callback) {
+			base.InitSession (callback);
+			BranchBUOSessionListener obj = new BranchBUOSessionListener (callback);
 			callbacksList.Add (obj as Object);
 
 			NativeBranch.InitSession (obj);
@@ -94,8 +127,24 @@ namespace BranchXamarinSDK
 			return BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams);
 		}
 
+		public override BranchUniversalObject GetLastReferringBranchUniversalObject () {
+			return new BranchUniversalObject (BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams));
+		}
+
+		public override BranchLinkProperties GetLastReferringBranchLinkProperties () {
+			return new BranchLinkProperties (BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams));
+		}
+
 		public override Dictionary<String, object> GetFirstReferringParams () {
 			return BranchAndroidUtils.ToDictionary(NativeBranch.FirstReferringParams);
+		}
+
+		public override BranchUniversalObject GetFirstReferringBranchUniversalObject () {
+			return new BranchUniversalObject (BranchAndroidUtils.ToDictionary(NativeBranch.FirstReferringParams));
+		}
+
+		public override BranchLinkProperties GetFirstReferringBranchLinkProperties () {
+			return new BranchLinkProperties (BranchAndroidUtils.ToDictionary(NativeBranch.FirstReferringParams));
 		}
 
 		#endregion
@@ -105,7 +154,6 @@ namespace BranchXamarinSDK
 
 		public override void SetIdentity(String user, IBranchIdentityInterface callback) {
 			BranchIdentityListener obj = new BranchIdentityListener (callback);
-			obj.onResponseIndentitySet = obj.SetIdentityCallback;
 			callbacksList.Add (obj as Object);
 
 			NativeBranch.SetIdentity (user, obj);
@@ -113,7 +161,6 @@ namespace BranchXamarinSDK
 
 		public override void Logout (IBranchIdentityInterface callback = null) {
 			BranchIdentityListener obj = new BranchIdentityListener (callback);
-			obj.onResponseLogout = obj.LogoutCallback;
 			callbacksList.Add (obj as Object);
 
 			NativeBranch.Logout (obj);
@@ -130,10 +177,10 @@ namespace BranchXamarinSDK
 			string stage = "",
 			ICollection<String> tags = null,
 			string feature = "",
-			int duration = 0) {
+			int duration = 0)
+		{
 
 			BranchUrlListener obj = new BranchUrlListener (callback);
-			obj.onResponseUrl = obj.GetShortUrlCallback;
 			callbacksList.Add (obj as Object);
 
 			NativeBranch.GetShortUrl (tags, channel, feature, stage, BranchAndroidUtils.ToJSONObject(parameters), duration, obj);
@@ -145,13 +192,92 @@ namespace BranchXamarinSDK
 			string channel = "",
 			string stage = "",
 			ICollection<String> tags = null,
-			string feature = "") {
+			string feature = "")
+		{
 
 			BranchUrlListener obj = new BranchUrlListener (callback);
-			obj.onResponseUrl = obj.GetShortUrlCallback;
 			callbacksList.Add (obj as Object);
 
 			NativeBranch.GetShortUrl(type, tags, channel, feature, stage, BranchAndroidUtils.ToJSONObject(parameters), obj);
+		}
+
+		public override void GetShortURL (IBranchUrlInterface callback,
+			BranchUniversalObject universalObject,
+			BranchLinkProperties linkProperties)
+		{
+
+			BranchUrlListener obj = new BranchUrlListener (callback);
+			callbacksList.Add (obj as Object);
+
+			IO.Branch.Indexing.BranchUniversalObject resBuo = 
+				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
+
+			IO.Branch.Referral.Util.LinkProperties resBlp =
+				new IO.Branch.Referral.Util.LinkProperties ();
+
+			foreach (string tag in linkProperties.tags) {
+				resBlp.AddTag (tag);
+			}
+
+			foreach (string key in linkProperties.controlParams.Keys) {
+				resBlp.AddControlParameter (key, linkProperties.controlParams[key]);
+			}
+
+			resBlp.SetAlias (linkProperties.alias);
+			resBlp.SetChannel (linkProperties.channel);
+			resBlp.SetDuration (linkProperties.matchDuration);
+			resBlp.SetFeature (linkProperties.feature);
+			resBlp.SetStage (linkProperties.stage);
+
+			resBuo.GenerateShortUrl (appContext, resBlp, obj);
+		}
+
+		#endregion
+
+
+		#region Share Link methods
+
+		public override void ShareLink (IBranchLinkShareInterface callback,
+			BranchUniversalObject universalObject,
+			BranchLinkProperties linkProperties,
+			string message)
+		{
+
+			BranchLinkShareListener obj = new BranchLinkShareListener (callback);
+			callbacksList.Add (obj as Object);
+
+			IO.Branch.Indexing.BranchUniversalObject resBuo = 
+				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
+
+			IO.Branch.Referral.Util.LinkProperties resBlp =
+				new IO.Branch.Referral.Util.LinkProperties ();
+
+			foreach (string tag in linkProperties.tags) {
+				resBlp.AddTag (tag);
+			}
+
+			foreach (string key in linkProperties.controlParams.Keys) {
+				resBlp.AddControlParameter (key, linkProperties.controlParams[key]);
+			}
+
+			resBlp.SetAlias (linkProperties.alias);
+			resBlp.SetChannel (linkProperties.channel);
+			resBlp.SetDuration (linkProperties.matchDuration);
+			resBlp.SetFeature (linkProperties.feature);
+			resBlp.SetStage (linkProperties.stage);
+
+			IO.Branch.Referral.Util.ShareSheetStyle style = 
+				new IO.Branch.Referral.Util.ShareSheetStyle(appContext, "", message);
+			
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Facebook);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Twitter);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Message);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Email);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Flickr);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.GoogleDoc);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.WhatsApp);
+
+			resBuo.ShowShareSheet (CurrActivity, resBlp, style, obj);
 		}
 
 		#endregion
@@ -188,10 +314,10 @@ namespace BranchXamarinSDK
 			string bucket = "",
 			string afterId = "",
 			int length = 100,
-			bool mostRecentFirst = true) {
+			bool mostRecentFirst = true)
+		{
 
 			BranchRewardsListener obj = new BranchRewardsListener (callback);
-			obj.onResponseHistory = obj.GetCreditHistoryCallback;
 			callbacksList.Add (obj as Object);
 
 			if (mostRecentFirst) {
@@ -229,6 +355,13 @@ namespace BranchXamarinSDK
 
 		public override void AccountForFacebookSDKPreventingAppLaunch () {
 			// We don't have this method in Android version
+		}
+
+		public override void RegisterView (BranchUniversalObject universalObject) {
+			IO.Branch.Indexing.BranchUniversalObject resBuo = 
+				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
+
+			resBuo.RegisterView ();
 		}
 
 		#endregion

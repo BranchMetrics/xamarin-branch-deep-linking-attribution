@@ -8,9 +8,16 @@ namespace BranchXamarinSDK
 	{
 		private static int activeCounter;
 		public IBranchSessionInterface callback { get; set; }
+		public IBranchBUOSessionInterface callbackBUO { get; set; }
 
 		public BranchAndroidLifeCycleHandler(IBranchSessionInterface callback = null) {
 			this.callback = callback;
+			this.callbackBUO = null;
+		}
+
+		public BranchAndroidLifeCycleHandler(IBranchBUOSessionInterface callback = null) {
+			this.callback = null;
+			this.callbackBUO = callback;
 		}
 
 		public void OnActivityCreated(Activity activity, Bundle savedInstanceState) { }
@@ -21,6 +28,7 @@ namespace BranchXamarinSDK
 
 		public void OnActivityStarted(Activity activity)
 		{
+			BranchAndroid.getInstance().CurrActivity = activity;
 			IncreaseActivityCounter (activity);
 		}
 
@@ -33,7 +41,11 @@ namespace BranchXamarinSDK
 		{
 			if (activeCounter == 0)
 			{
-				BranchAndroid.getInstance ().InitSession (callback);
+				if (callback != null) {
+					BranchAndroid.getInstance ().InitSession (callback);
+				} else if (callbackBUO != null) {
+					BranchAndroid.getInstance ().InitSession (callbackBUO);
+				}
 			}
 
 			activeCounter++;
