@@ -39,90 +39,46 @@ ___
 
 ## Configure your app for deep linking
 
-### Android: Register a URI Scheme and add your Branch key
+### Android: Configure your project
 
-In your project's `manifest` file, you can register your app to respond to direct deep links (`yourapp://` in a mobile
-browser) by adding the second intent filter block. Also, make sure to change `yourapp` to a unique string that
-represents your app name.
+In your project's `manifest` file, you can register your app to respond to direct deep links (`yourapp://` in a mobile browser) by adding the second intent filter block. Also, make sure to change `yourapp` to a unique string that represents your app name.
 
-Secondly, make sure that this activity is launched as a `singleTask`. This is important to handle proper deep linking
-from other apps like Facebook.
+Make sure that this activity is launched as a `singleTask`. This is important to handle proper deep linking from other apps like Facebook.
 
-```xml
-<activity
-    android:name=".TestbedActivity"
-    android:label="@string/app_name"
-    <!-- Make sure the activity is launched as "singleTask" -->
-    android:launchMode="singleTask">
-    <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-    </intent-filter>
+```
+[Activity (Label = "Your app label", MainLauncher = true, Icon = "@mipmap/icon",
+		LaunchMode = LaunchMode.SingleTask)]
 
-    <!-- Add this intent filter below, and change yourapp to your app name -->
-    <intent-filter>
-        <data android:scheme="yourapp" android:host="open" />
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-    </intent-filter>
-</activity>
+[IntentFilter (new[]{"android.intent.action.VIEW"},
+		Categories=new[]{"android.intent.category.DEFAULT", 
+		"android.intent.category.BROWSABLE"},
+		DataScheme="branchtesturi",
+		DataHost="open")]
 ```
 
-After you register your app, your Branch key can be retrieved on the Settings page of the dashboard. Add it
-(them, if you want to do it for both your live and test apps) to your project's manifest file as a meta data.
 
-Edit your manifest file to have the following items:
+Make sure that your project has permissions:
 
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.branch.sample"
-    android:versionCode="1"
-    android:versionName="1.0" >
+- AccessNetworkState
+- Internet
 
-    <uses-permission android:name="android.permission.INTERNET" />
+To understand how to work with android manifest, read Xamarin documentation:
 
-    <application>
-        <!-- Other existing entries -->
+- [Working with android manifest](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
+- [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
 
-        <!-- Add this meta-data below, and change "key_live_xxxxxxx" to your actual live Branch key -->
-        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_xxxxxxx" />
 
-        <!-- For your test app, if you have one; Again, use your actual test Branch key -->
-        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_yyyyyyy" />
-    </application>
-</manifest>
-```
 
-### iOS: Register a URI Scheme and add your Branch key
+### iOS: Configure your project
 
 In your project's `YourProject-Info.plist` file:
 
-1. You can register your app to respond to direct deep links (`yourapp://` in a mobile browser) by adding `CFBundleURLTypes` block. Also, make sure to change `yourapp` to a unique string that represents your app name. 
-In https://dashboard.branch.io/#/settings/link, tick `I have an iOS App` checkbox and enter your URI Scheme (e.g.: `yourapp://`) into the text box.
-2. Add your `Branch key` found on the settings page here https://dashboard.branch.io/#/settings
+1. In https://dashboard.branch.io/#/settings/link, tick `I have an iOS App` checkbox and enter your URI Scheme (e.g.: `yourapp://`) into the text box.
 
-```xml
-<dict>
-  
-  <!-- Add branch key as key-value pair -->
-  <key>branch_key</key>
-  <string>key_live_xxxxxxxxxxxxxxx</string>
+2. You can register your app to respond to direct deep links (`yourapp://` in a mobile browser) by adding `CFBundleURLTypes` block. Also, make sure to change `yourapp` to a unique string that represents your app name. 
 
-  <!-- Add unique string for direct deep links -->
-  <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>yourapp</string>
-      </array>
-    </dict>
-  </array>
+![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
 
-  ... other stuff
-</dict>
-```
 
 ### iOS: Enable Universal Links
 
@@ -130,24 +86,15 @@ In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Univ
 
 1. enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier. 
 2. In https://dashboard.branch.io/#/settings/link, tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes. 
-3. Finally, create a new file named `Entitlements.plist` in the root directory of your project with the `associated-domains` key like below. You may add more entitlement keys if you have any.
+3. Finally, create a new file named `Entitlements.plist` in the root directory of your project. Enable `associated-domains` and add `applinks:bnc.lt`. You may add more entitlement keys if you have any.
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>com.apple.developer.associated-domains</key>
-    <array>
-        <string>applinks:bnc.lt</string>
-    </array>
-</dict>
-</plist>
-```
+![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
 
 ___
 
-## Initialize a session on Xamarin
+## Initialize Branch on Xamarin
+
+To Initialize Branch you need to use your own Branch key [https://dashboard.branch.io](https://dashboard.branch.io)
 
 Before starting, it's important to understand that we require a generic Xamarin initialization in addition to the Android and iOS initialization. To make matters worse, it's different depending on whether you're using Xamarin Forms or not. Please click one of the following to be linked to the appropriate init path to follow:
 
@@ -259,11 +206,6 @@ public class App : Application, IBranchSessionInterface
 		// Do something with the referring link data...
 	}
 
-	public void CloseSessionComplete ()
-	{
-		// Handle any additional cleanup after the session is closed
-	}
-	
 	public void SessionRequestError (BranchError error)
 	{
 		// Handle the error case here
@@ -315,7 +257,7 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 		return BranchIOS.getInstance ().ContinueUserActivity (userActivity);
 	}
 	
-	// For Push Nitifications
+	// For Push Notifications
 	public override void ReceivedRemoteNotification (UIApplication application,
 		NSDictionary userInfo)
 	{
@@ -327,12 +269,7 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 	public void InitSessionComplete (Dictionary<string, object> data)
 	{
 		// Do something with the referring link data...
-	}
-
-	public void CloseSessionComplete ()
-	{
-		// This method isn't used in iOS
-	}
+	}s
 
 	public void SessionRequestError (BranchError error)
 	{
@@ -357,7 +294,7 @@ public class MainActivity : Activity, IBranchSessionInterface
 
 		// Enable debug mode.
 		BranchAndroid.Debug = true;
-		BranchAndroid.Init (this, "Your Branch key here", app);	}
+		BranchAndroid.Init (this, "Your Branch key here", this);	}
 
 	// Ensure we get the updated link identifier when the app is opened from the
 	// background with a new link.
@@ -371,11 +308,6 @@ public class MainActivity : Activity, IBranchSessionInterface
 	public void InitSessionComplete (Dictionary<string, object> data)
 	{
 		// Do something with the referring link data...
-	}
-
-	public void CloseSessionComplete ()
-	{
-		// Handle any additional cleanup after the session is closed
 	}
 
 	public void SessionRequestError (BranchError error)
@@ -551,36 +483,28 @@ Reward balances change randomly on the backend when certain actions are taken (d
 
 ```csharp
 Branch branch = Branch.GetInstance ();
-await branch.LoadRewardsAsync(this);
+branch.LoadRewards(this);
 
 #region IBranchRewardsInterface implementation
 
 		public void RewardsLoaded ()
 		{
-			Device.BeginInvokeOnMainThread (() => {
-				// Do something with the data...
-			});
+			// Do something with the data...
 		}
 
 		public void RewardsRedeemed ()
 		{
-			Device.BeginInvokeOnMainThread (() => {
-				// Do something with the data...
-			});
+			// Do something with the data...
 		}
 
 		public void CreditHistory (List<CreditHistoryEntry> history)
 		{
-			Device.BeginInvokeOnMainThread (() => {
-				// Do something with the data...
-			});
+			// Do something with the data...
 		}
 
 		public void RewardsRequestError (BranchError error)
 		{
-			Device.BeginInvokeOnMainThread (() => {
-				// Do something with the data...
-			});
+			// Do something with the data...
 		}
 
 #endregion
@@ -592,36 +516,28 @@ We will store how many of the rewards have been deployed so that you don't have 
 
 ```csharp
 Branch branch = Branch.GetInstance ();
-await branch.RedeemRewardsAsync(this, amount, bucket);
+branch.RedeemRewards(this, amount, bucket);
 
 #region IBranchRewardsInterface implementation
 
 		public void RewardsLoaded ()
 		{
-			Device.BeginInvokeOnMainThread (() => {
-				// Do something with the data...
-			});
+			// Do something with the data...
 		}
 
 		public void RewardsRedeemed ()
 		{
-			Device.BeginInvokeOnMainThread (() => {
-				// Do something with the data...
-			});
+			// Do something with the data...
 		}
 
 		public void CreditHistory (List<CreditHistoryEntry> history)
 		{
-			Device.BeginInvokeOnMainThread (() => {
-				// Do something with the data...
-			});
+			// Do something with the data...
 		}
 
 		public void RewardsRequestError (BranchError error)
 		{
-			Device.BeginInvokeOnMainThread (() => {
-			 // Do something with the data...
-			});
+		 // Do something with the data...
 		}
 
 		#endregion
@@ -634,7 +550,7 @@ This call will retrieve the entire history of credits and redemptions from the i
 
 ```csharp
 Branch branch = Branch.GetInstance ();
-await branch.GetCreditHistoryAsync(this);
+branch.GetCreditHistory(this);
 
 ```
 
@@ -682,6 +598,78 @@ The response will return an array that has been parsed from the following JSON:
 
 ____
 
+## New feature: BranchUniversalObject
+### What is the Branch Universal Object?
+
+
+Our previous method of creating links was a single call `GetShortUrl`, where you passed in all of the metadata and link properties in order to get a deep link back. We’re adding just one more step in between that we believe makes a lot more sense.
+
+```
+Dictionary<string, object> parameters = new Dictionary<string, object>();
+parameters.Add("name", "test name");
+parameters.Add("message", "hello there with short url");
+parameters.Add("$og_title", "this is a title");
+parameters.Add("$og_description", "this is a description");
+parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
+
+List<string> tags = new List<string>();
+tags.Add("tag1");
+tags.Add("tag2");
+
+Branch.GetInstance().GetShortUrl (callback,
+		                          Constants.URL_TYPE_UNLIMITED,
+		                          parameters,
+		                          "test_channel",
+		                          "test_stage",
+		                          tags,
+		                          "test_feature");
+
+```
+
+#### Here’s the new mechanism using the Branch Universal Object:
+```
+BranchUniversalObject universalObject = new BranchUniversalObject();
+universalObject.canonicalIdentifier = "id12345";
+universalObject.title = "id12345 title";
+universalObject.contentDescription = "My awesome piece of content!";
+universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+universalObject.metadata.Add("foo", "bar");
+
+BranchLinkProperties linkProperties = new BranchLinkProperties();
+linkProperties.tags.Add("tag1");
+linkProperties.tags.Add("tag2");
+linkProperties.feature = "sharing";
+linkProperties.channel = "facebook";
+linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+
+Branch.GetInstance().GetShortURL (callback,
+		                          universalObject,
+		                          linkProperties);
+
+```
+As you can see, it’s a bit more code but a lot more structured. What’s really cool about this is that once you’ve created the Universal Object, you can then do a bunch of neat things like:
+
+######1. Initialize Branch
+
+```
+InitSession (IBranchBUOSessionInterface callback)
+```
+
+######2. Register a view on the content (for a new product coming soon)
+
+```
+RegisterView (BranchUniversalObject universalObject)
+```
+
+######3. Create a share sheet that lets the user share across all channels
+
+```
+ShareLink (IBranchLinkShareInterface callback,
+		   BranchUniversalObject universalObject,
+		   BranchLinkProperties linkProperties,
+		   string message)
+```
+
 ## Note: Mirgation from version 1.x.x to 2.x.x
 
 New version of Branch SDK based on our native libraries that we built for iOS and Android.
@@ -690,9 +678,9 @@ We changed Xamarin API in accordance with our native API.
 To migrate to version 2.x.x:
 
 1. delete old nuget package
-2. install new buget package
+2. install new Xamarin SDK nuget package
 3. change initialisation of Branch
-4. delete "Async" in called Branch methods
+4. delete word "Async" in called Branch methods
 5. change your code in accordance with changed and deleted list (see below)
 
 ##### Changed Interfaces
