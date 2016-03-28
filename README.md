@@ -1,26 +1,36 @@
-# Branch-Xamarin-SDK
+# Branch Metrics Xamarin SDK Reference
 
-## Full documentation
+## IMPORTANT: Upgrading to V 2.1
 
-Exhaustive documentation can be found on our [documentation portal](https://dev.branch.io).  you may also find our [support portal and user forums](http://support.branch.io) helpful.
+On 3/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. If you don't have time to do so, just use a reference to version 1.2.1, which we're storing in [locked branch called 'locked-v.1.2.1'](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/tree/locked-v.1.2.1).
 
-This is a repository of our open source Branch SDK for Xamarin, and the information presented here serves as a reference
-manual for our Xamarin packages.
+## Get the Demo App
 
-_____
+There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/testbed).
 
-## Demo App
+## Additional Resources
+- [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
+- [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
+- [Testing](https://dev.branch.io/recipes/testing_your_integration/cordova/)
+- [Support portal, FAQ](http://support.branch.io)
 
-There's a full demo app embedded in the repository, but you should also check out our live demo: Branch Monster Factory. We've open sourced the Branchster's app as well if you'd like to dig in.
+## Installation
+
+**The compiled iOS SDK footprint is 180kb**
+
+**The compiled Android SDK footprint is 187kb**
 
 ___
 
-## Installation
+### Nuget
+
 
 The Branch Xamarin SDK is now available as a [NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK).  You will need to add the package to your Android, iOS and Forms (if applicable) projects.  
 
 1. Right click on each project and select `Add` -> `Add NuGet Package` or double click on the Packages folder to bring up the NuGet package dialog in Xamarin Studio.  
 2. Find the _Branch Xamarin Linking SDK_ and select it.  This will add the required assemblies to your projects.  You need to do this for each project that will use Branch calls.  This includes the Android and iOS projects even if this is a Forms based app _since an initialization call needs to be added to each of the platform specific projects._
+
+### Source
 
 If you would rather build and reference the assemblies directly:
 
@@ -66,7 +76,6 @@ To understand how to work with android manifest, read Xamarin documentation:
 
 - [Working with android manifest](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
 - [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
-
 
 
 ### iOS: Configure your project
