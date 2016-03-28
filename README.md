@@ -2,7 +2,10 @@
 
 ## IMPORTANT: Upgrading to V 2.1
 
-On 3/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. If you don't have time to do so, just use a reference to version 1.2.1, which we're storing in [locked branch called 'locked-v.1.2.1'](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/tree/locked-v.1.2.1).
+On 3/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. Please see this section at the bottom for a [full migration guide](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK#note-mirgation-from-version-1xx-to-2xx).
+
+
+If you don't have time to do so, just use a reference to version 1.2.1, which we're storing in [locked branch called 'locked-v.1.2.1'](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/tree/locked-v.1.2.1).
 
 ## Get the Demo App
 
@@ -679,7 +682,7 @@ ShareLink (IBranchLinkShareInterface callback,
 		   string message)
 ```
 
-## Note: Mirgation from version 1.x.x to 2.x.x
+## Note: Migration from version 1.x.x to 2.x.x
 
 New version of Branch SDK based on our native libraries that we built for iOS and Android.
 We changed Xamarin API in accordance with our native API.
