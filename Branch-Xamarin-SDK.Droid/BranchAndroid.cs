@@ -1,322 +1,367 @@
-﻿using Android.Bluetooth;
-using Android.Content;
-using Android.Content.PM;
-using Android.Net;
-using Android.Telephony;
-using Android.Util;
-using Android.App;
-using Android.OS;
-using Org.Json;
-
-using BranchXamarinSDK;
-
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Android.Content;
+using Android.App;
+using Org.Json;
+using Newtonsoft.Json;
+using IO.Branch.Referral;
+using BranchXamarinSDK.Droid;
 
 namespace BranchXamarinSDK
 {
-	public class BranchAndroid : Branch, IBranchGetDeviceInformation, IBranchProperties
+	public class BranchAndroid : Branch
 	{
-		Context AppContext;
+		#region Singleton
 
-		protected BranchAndroid() {
-		}
+		private static BranchAndroid instance = null;
 
-		public static void Init(Context context, String branchKey, Android.Net.Uri uri = null, Android.OS.Bundle extras = null) {
-			if (!branchKey.StartsWith("key_")) {
-				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
-			}
-
-			var newBranch = new BranchAndroid ();
-			newBranch.BranchKey = branchKey;
-			newBranch.DeviceInformation = newBranch;
-			newBranch.Properties = newBranch;
-			newBranch.AppContext = context.ApplicationContext;
-
-			branch = newBranch;
-			newBranch.InitUserAndSession ();
-			newBranch.ReadAndStripParam (uri, extras);
-		}
-
-		public void SetLifeCycleHandlerCallback(Context context, IBranchSessionInterface callback = null) {
-			BranchAndroidLifeCycleHandler lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
-			((Activity)context).Application.RegisterActivityLifecycleCallbacks (lifeCycleHandler);
-			AutoSessionEnabled = true;
-		}
-			
-		public void SetNewUrl(Android.Net.Uri uri, Android.OS.Bundle extras = null) {
-			ReadAndStripParam (uri ,extras);
-		}
+		private BranchAndroid () { }
 
 		public static BranchAndroid getInstance() {
-			return (BranchAndroid)branch;
-		}
-
-		private void ReadAndStripParam(Android.Net.Uri uri, Android.OS.Bundle extras) {
-
-			// Capture the intent URI and extra for analytics in case started by external intents such as  google app search
-			if (uri != null) {
-				ExternalUri = uri.ToString ();
-			}
-			if (extras != null) {
-				if (extras.KeySet ().Count > 0) {
-					JSONObject extrasJson = new JSONObject();
-					foreach (string key in extras.KeySet ()) {
-						extrasJson.Put (key, extras.Get(key));
-					}
-					ExternalExtra = extrasJson.ToString ();
-				}
+			if (instance == null) {
+				throw new BranchException ("You must initialize Branch before you can use the Branch object!");
 			}
 
-			//Check for any push identifier in case app is launched by a push notification
-			if (extras != null) {
-				string pushIdentifier = extras.GetString("branch");
-				if (!string.IsNullOrEmpty(pushIdentifier)) {
-					PushIdentifier = pushIdentifier;
-					return;
-				}
-			}
-
-			//Check for link click id or app link
-			if (uri != null && uri.IsHierarchical) {
-
-				try {
-					LinkClickIdentifier = uri.GetQueryParameter ("link_click_id");
-				}
-				catch {
-					LinkClickIdentifier = "";
-				}
-
-				if (string.IsNullOrEmpty(LinkClickIdentifier)) {
-					// Check if the clicked url is an app link pointing to this app
-					string scheme = uri.Scheme;
-
-					if (!string.IsNullOrEmpty(scheme)) {
-						scheme = scheme.ToLower ();
-						if ((scheme.Equals("http") || scheme.Equals("https")) && !string.IsNullOrEmpty(uri.Host)) {
-							AndroidAppLink = uri.ToString();
-						}
-					}
-				}
-			}
+			return instance;
 		}
 
-		#region IBranchGetDeviceInformation implementation
-
-		public string GetDeviceId (bool isDebug, out bool isReal)
-		{
-			isReal = true;
-			string id = null;
-			if (!isDebug) {
-				id = Android.Provider.Settings.Secure.GetString (AppContext.ContentResolver, Android.Provider.Settings.Secure.AndroidId);
-			}
-			if (id == null) {
-				isReal = false;
-				return Java.Util.UUID.RandomUUID().ToString();
-			}
-			return id;
-		}
-
-		public string GetOS ()
-		{
-			return "Android";
-		}
-
-		public String GetOSVersion ()
-		{
-			return Android.OS.Build.VERSION.Sdk;
-		}
-
-		public string GetAppVersion ()
-		{
-			String ret = "";
-			if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread) {
-				PackageInfo info = AppContext.PackageManager.GetPackageInfo (AppContext.PackageName, 0);
-				ret = info.VersionName;
-			}
-			return ret;
-		}
-
-		public int GetUpdateState(bool saveState = false) {
-			String currentVersion = GetAppVersion ();
-			String storedVersion = GetPropertyString("bnc_app_version");
-
-			int ret = 1;
-
-			if (String.IsNullOrWhiteSpace (storedVersion)) {
-
-				if (saveState) {
-					SetPropertyString ("bnc_app_version", currentVersion);
-				}
-				if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread) {
-					PackageInfo info = AppContext.PackageManager.GetPackageInfo (AppContext.PackageName, 0);
-					if (info.LastUpdateTime != info.FirstInstallTime) {
-						ret = 2;
-					} else {
-						ret = 0;
-					}
-				} else {
-					ret = 0;
-				}
-			} else if (!currentVersion.Equals (storedVersion)) {
-				if (saveState) {
-					SetPropertyString ("bnc_app_version", currentVersion);
-				}
-				ret = 2;
-			} else {
-				ret = 1;
-			}
-
-			return ret;
-		}
-
-		public string GetPhoneBrand() {
-			return Android.OS.Build.Manufacturer;
-		}
-
-		public string GetPhoneModel() {
-			return Android.OS.Build.Model;
-		}
-
-		public string GetCarrier() {
-			if (GetTelephonePresent()) {
-				var tm = (TelephonyManager)AppContext.GetSystemService (Context.TelephonyService);
-				if (tm != null) {
-					return tm.NetworkOperatorName;
-				}
-			}
-
-			return "";
-		}
-
-		public bool GetTelephonePresent() {
-			return AppContext.PackageManager.HasSystemFeature(PackageManager.FeatureTelephony);
-		}
-
-		public bool GetNfcPresent() {
-			return AppContext.PackageManager.HasSystemFeature(PackageManager.FeatureNfc);
-		}
-
-		public String GetBluetoothVersion() {
-			if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread) {
-				if ((Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.JellyBeanMr2) &&
-					AppContext.PackageManager.HasSystemFeature (PackageManager.FeatureBluetoothLe)) {
-					return "ble";
-				} else if (AppContext.PackageManager.HasSystemFeature(PackageManager.FeatureBluetooth)) {
-					return "classic";
-				}
-			}
-
-			return "";
-		}
-
-		public bool GetBluetoothPresent() {
-			bool ret = false;
-			BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
-			try {
-				ret |= ((adapter != null) && adapter.IsEnabled);
-			} catch (Java.Lang.SecurityException) {
-				System.Diagnostics.Debug.WriteLine ("Need BT permissions to get Bluetooth present");
-			}
-
-			return ret;
-		}
-
-		public bool GetWifiConnected() {
-			if (AppContext.CheckCallingOrSelfPermission(Android.Manifest.Permission.AccessNetworkState) ==
-				Permission.Granted) {
-				var cm = (ConnectivityManager)AppContext.GetSystemService(Context.ConnectivityService);
-				return cm.GetNetworkInfo(ConnectivityType.Wifi).IsConnected;
-			}
-
-			return false;
-		}
-
-		public int GetDpi(out int width, out int height) {
-			DisplayMetrics dm = AppContext.Resources.DisplayMetrics;
-			width = dm.WidthPixels;
-			height = dm.HeightPixels;
-			return Convert.ToInt32 (dm.DensityDpi);
-		}
-
-		public string GetURIScheme() {
-			return "";
-		}
-
-		public string GetAdTrackingEnabled() {
-			// Not valid on Android right now?
-			return null;
-		}
-
-		public void WriteLog(String message, String tag = null, int level = 3) {
-			String localTag = "";
-			if (tag != null) {
-				localTag = tag;
-			}
-			switch (level) {
-			case 2:
-				Android.Util.Log.Verbose (localTag, message);
-				break;
-			case 3:
-				Android.Util.Log.Debug (localTag, message);
-				break;
-			case 4:
-				Android.Util.Log.Info (localTag, message);
-				break;
-			case 5:
-				Android.Util.Log.Warn (localTag, message);
-				break;
-			case 6:
-				Android.Util.Log.Error (localTag, message);
-				break;
-			default:
-				Android.Util.Log.Debug (localTag, message);
-				break;
-			}
+		private AndroidNativeBranch NativeBranch {
+			get { return AndroidNativeBranch.GetInstance (appContext, branchKey); }
 		}
 
 		#endregion
 
-		#region IBranchProperties implementation
 
-		public String GetPropertyString (string key)
+		#region Helpers declaration
+
+		private BranchAndroidLifeCycleHandler lifeCycleHandler = null;
+
+		#endregion
+
+
+		#region Initialization
+
+		private Context appContext = null;
+		public Activity CurrActivity { get; set; }
+
+		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
+
+			if (instance != null) {
+				instance.lifeCycleHandler.callback = callback;
+				return;
+			}
+
+			if (!branchKey.StartsWith("key_")) {
+				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
+			}
+
+			instance = new BranchAndroid ();
+			Branch.branchInstance = instance;
+			instance.appContext = context.ApplicationContext;
+			instance.branchKey = branchKey;
+
+			if (Debug) {
+				instance.SetDebug ();
+			}
+
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
+			((Activity)context).Application.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
+		}
+
+		public static void Init(Context context, String branchKey, IBranchBUOSessionInterface callback) {
+
+			if (instance != null) {
+				instance.lifeCycleHandler.callbackBUO = callback;
+				return;
+			}
+
+			if (!branchKey.StartsWith("key_")) {
+				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
+			}
+
+			instance = new BranchAndroid ();
+			Branch.branchInstance = instance;
+			instance.appContext = context.ApplicationContext;
+			instance.branchKey = branchKey;
+
+			if (Debug) {
+				instance.SetDebug ();
+			}
+
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
+			((Activity)context).Application.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
+		}
+
+
+		protected override void SetDebug() {
+			NativeBranch.SetDebug ();
+		}
+
+		#endregion
+
+
+		#region Session methods
+
+		public override void InitSession(IBranchSessionInterface callback) {
+			base.InitSession (callback);
+			BranchSessionListener obj = new BranchSessionListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.InitSession (obj);
+		}
+
+		public override void InitSession (IBranchBUOSessionInterface callback) {
+			base.InitSession (callback);
+			BranchBUOSessionListener obj = new BranchBUOSessionListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.InitSession (obj);
+		}
+
+		public override void CloseSession() {
+			NativeBranch.CloseSession ();
+		}
+
+		public override Dictionary<String, object> GetLastReferringParams () {
+			return BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams);
+		}
+
+		public override BranchUniversalObject GetLastReferringBranchUniversalObject () {
+			return new BranchUniversalObject (BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams));
+		}
+
+		public override BranchLinkProperties GetLastReferringBranchLinkProperties () {
+			return new BranchLinkProperties (BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams));
+		}
+
+		public override Dictionary<String, object> GetFirstReferringParams () {
+			return BranchAndroidUtils.ToDictionary(NativeBranch.FirstReferringParams);
+		}
+
+		public override BranchUniversalObject GetFirstReferringBranchUniversalObject () {
+			return new BranchUniversalObject (BranchAndroidUtils.ToDictionary(NativeBranch.FirstReferringParams));
+		}
+
+		public override BranchLinkProperties GetFirstReferringBranchLinkProperties () {
+			return new BranchLinkProperties (BranchAndroidUtils.ToDictionary(NativeBranch.FirstReferringParams));
+		}
+
+		#endregion
+
+
+		#region Identity methods
+
+		public override void SetIdentity(String user, IBranchIdentityInterface callback) {
+			BranchIdentityListener obj = new BranchIdentityListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.SetIdentity (user, obj);
+		}
+
+		public override void Logout (IBranchIdentityInterface callback = null) {
+			BranchIdentityListener obj = new BranchIdentityListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.Logout (obj);
+		}
+
+		#endregion
+
+
+		#region Short Links methods
+
+		public override void GetShortUrl (IBranchUrlInterface callback,
+			Dictionary<String, dynamic> parameters = null,
+			string channel = "",
+			string stage = "",
+			ICollection<String> tags = null,
+			string feature = "",
+			int duration = 0)
 		{
-			ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
-			return prefs.GetString (key, "");
+
+			BranchUrlListener obj = new BranchUrlListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.GetShortUrl (tags, channel, feature, stage, BranchAndroidUtils.ToJSONObject(parameters), duration, obj);
 		}
 
-		public void SetPropertyString (string key, string value)
+		public override void GetShortUrl (IBranchUrlInterface callback,
+			int type = Constants.URL_TYPE_UNLIMITED,
+			Dictionary<String, dynamic> parameters = null,
+			string channel = "",
+			string stage = "",
+			ICollection<String> tags = null,
+			string feature = "")
 		{
-			if (!String.IsNullOrWhiteSpace (key)) {
-				ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
-				ISharedPreferencesEditor editor = prefs.Edit ();
-				if (value != null) {
-					editor.PutString (key, value);
-				} else {
-					editor.Remove (key);
-				}
-				editor.Commit();
+
+			BranchUrlListener obj = new BranchUrlListener (callback);
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.GetShortUrl(type, tags, channel, feature, stage, BranchAndroidUtils.ToJSONObject(parameters), obj);
+		}
+
+		public override void GetShortURL (IBranchUrlInterface callback,
+			BranchUniversalObject universalObject,
+			BranchLinkProperties linkProperties)
+		{
+
+			BranchUrlListener obj = new BranchUrlListener (callback);
+			callbacksList.Add (obj as Object);
+
+			IO.Branch.Indexing.BranchUniversalObject resBuo = 
+				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
+
+			IO.Branch.Referral.Util.LinkProperties resBlp =
+				new IO.Branch.Referral.Util.LinkProperties ();
+
+			foreach (string tag in linkProperties.tags) {
+				resBlp.AddTag (tag);
+			}
+
+			foreach (string key in linkProperties.controlParams.Keys) {
+				resBlp.AddControlParameter (key, linkProperties.controlParams[key]);
+			}
+
+			resBlp.SetAlias (linkProperties.alias);
+			resBlp.SetChannel (linkProperties.channel);
+			resBlp.SetDuration (linkProperties.matchDuration);
+			resBlp.SetFeature (linkProperties.feature);
+			resBlp.SetStage (linkProperties.stage);
+
+			resBuo.GenerateShortUrl (appContext, resBlp, obj);
+		}
+
+		#endregion
+
+
+		#region Share Link methods
+
+		public override void ShareLink (IBranchLinkShareInterface callback,
+			BranchUniversalObject universalObject,
+			BranchLinkProperties linkProperties,
+			string message)
+		{
+
+			BranchLinkShareListener obj = new BranchLinkShareListener (callback);
+			callbacksList.Add (obj as Object);
+
+			IO.Branch.Indexing.BranchUniversalObject resBuo = 
+				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
+
+			IO.Branch.Referral.Util.LinkProperties resBlp =
+				new IO.Branch.Referral.Util.LinkProperties ();
+
+			foreach (string tag in linkProperties.tags) {
+				resBlp.AddTag (tag);
+			}
+
+			foreach (string key in linkProperties.controlParams.Keys) {
+				resBlp.AddControlParameter (key, linkProperties.controlParams[key]);
+			}
+
+			resBlp.SetAlias (linkProperties.alias);
+			resBlp.SetChannel (linkProperties.channel);
+			resBlp.SetDuration (linkProperties.matchDuration);
+			resBlp.SetFeature (linkProperties.feature);
+			resBlp.SetStage (linkProperties.stage);
+
+			IO.Branch.Referral.Util.ShareSheetStyle style = 
+				new IO.Branch.Referral.Util.ShareSheetStyle(appContext, "", message);
+			
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Facebook);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Twitter);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Message);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Email);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.Flickr);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.GoogleDoc);
+			style.AddPreferredSharingOption(IO.Branch.Referral.SharingHelper.SHARE_WITH.WhatsApp);
+
+			resBuo.ShowShareSheet (CurrActivity, resBlp, style, obj);
+		}
+
+		#endregion
+
+
+		#region Action methods
+
+		public override void UserCompletedAction (String action, Dictionary<string, object> metadata = null) {
+			NativeBranch.UserCompletedAction (action, BranchAndroidUtils.ToJSONObject(metadata));
+		}
+
+		#endregion
+
+
+		#region Credits methods
+
+		public override void LoadRewards (IBranchRewardsInterface callback) {
+			BranchRewardsListener obj = new BranchRewardsListener (callback);
+			obj.onResponseRewards = obj.LoadRewardsCallback;
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.LoadRewards (obj);
+		}
+
+		public override void RedeemRewards (IBranchRewardsInterface callback, int amount, string bucket = "default") {
+			BranchRewardsListener obj = new BranchRewardsListener (callback);
+			obj.onResponseRewards = obj.RedeemRewardsCallback;
+			callbacksList.Add (obj as Object);
+
+			NativeBranch.RedeemRewards (bucket, amount, obj);
+		}
+
+		public override void GetCreditHistory (IBranchRewardsInterface callback,
+			string bucket = "",
+			string afterId = "",
+			int length = 100,
+			bool mostRecentFirst = true)
+		{
+
+			BranchRewardsListener obj = new BranchRewardsListener (callback);
+			callbacksList.Add (obj as Object);
+
+			if (mostRecentFirst) {
+				NativeBranch.GetCreditHistory (bucket, afterId, length, AndroidNativeBranch.CreditHistoryOrder.KMostRecentFirst, obj);
+			}
+			else {
+				NativeBranch.GetCreditHistory (bucket, afterId, length, AndroidNativeBranch.CreditHistoryOrder.KLeastRecentFirst, obj);
 			}
 		}
 
-		public int GetPropertyInt(string key, int defaultValue) {
-			int ret = defaultValue;
-			if (!String.IsNullOrWhiteSpace (key)) {
-				ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
-				if (prefs.Contains(key)) {
-					ret = prefs.GetInt(key, defaultValue);
-				}
-			}
-			return ret;
+		public override int GetCredits () {
+			return NativeBranch.Credits;
 		}
 
-		public void SetPropertyInt(string key, int value) {
-			ISharedPreferences prefs = AppContext.GetSharedPreferences ("branchsharedprefs", FileCreationMode.Private);
-			ISharedPreferencesEditor editor = prefs.Edit ();
-			if (!String.IsNullOrWhiteSpace (key)) {
-				editor.PutInt (key, value);
-				editor.Commit ();
-			}
+		public override int GetCreditsForBucket (string bucket) {
+			return NativeBranch.GetCreditsForBucket (bucket);
+		}
+
+		#endregion
+
+
+		#region Configuration methods
+
+		public override void SetRetryInterval (int retryInterval) {
+			NativeBranch.SetRetryInterval (retryInterval);
+		}
+
+		public override void SetMaxRetries (int maxRetries) {
+			NativeBranch.SetRetryCount (maxRetries);
+		}
+
+		public override void SetNetworkTimeout (int timeout) {
+			NativeBranch.SetNetworkTimeout (timeout);
+		}
+
+		public override void AccountForFacebookSDKPreventingAppLaunch () {
+			// We don't have this method in Android version
+		}
+
+		public override void RegisterView (BranchUniversalObject universalObject) {
+			IO.Branch.Indexing.BranchUniversalObject resBuo = 
+				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
+
+			resBuo.RegisterView ();
 		}
 
 		#endregion
