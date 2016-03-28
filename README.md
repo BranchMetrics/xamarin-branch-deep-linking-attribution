@@ -65,7 +65,7 @@ Make sure that this activity is launched as a `singleTask`. This is important to
 [IntentFilter (new[]{"android.intent.action.VIEW"},
 		Categories=new[]{"android.intent.category.DEFAULT", 
 		"android.intent.category.BROWSABLE"},
-		DataScheme="branchtesturi",
+		DataScheme="yourapp",
 		DataHost="open")]
 ```
 
