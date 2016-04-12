@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+-v2.1.2
+  * Fixing non-string parameters
+
 -v2.1.1
   * Fixing BranchUniversalObject expiration date
 
