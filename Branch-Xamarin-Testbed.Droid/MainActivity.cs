@@ -14,7 +14,13 @@ namespace BranchXamarinTestbed.Droid
 		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
 		DataScheme="branchtesturi",
 		DataHost="open")]
-	
+
+//	[IntentFilter (new[]{"android.intent.action.VIEW"},
+//		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
+//		DataScheme="https",
+//		DataHost="bnc.lt",
+//		DataPathPrefix="/You Prefix here")]
+
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate (Bundle savedInstanceState)

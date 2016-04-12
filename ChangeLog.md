@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+-v2.1.1
+  * Fixing BranchUniversalObject expiration date
+
 - v2.1.0
   * New version of Xamarin SDK based on native libraries. 
 
