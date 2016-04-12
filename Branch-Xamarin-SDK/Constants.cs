@@ -4,7 +4,7 @@ namespace BranchXamarinSDK
 {
 	static public class Constants
 	{
-		public const String SDK_VERSION = "2.1.1";
+		public const String SDK_VERSION = "2.1.2";
 
 		// Link Types for GetShortURL
 		public const int URL_TYPE_UNLIMITED = 0;
