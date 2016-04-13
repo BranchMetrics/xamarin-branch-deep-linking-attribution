@@ -1,4 +1,6 @@
 Branch Xamarin SDK change log
+-v2.1.3
+  * Fixing trouble with empty expired data string
 
 -v2.1.2
   * Fixing non-string parameters
