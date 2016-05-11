@@ -1,55 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 
 namespace BranchXamarinSDK
 {
-	public class Branch
+	abstract public class Branch
 	{
-		protected static Branch branch;
+		#region Singleton
 
-		protected IBranchGetDeviceInformation DeviceInformation;
-		protected IBranchProperties Properties;
-		protected SemaphoreSlim QueueSema;
-		protected Queue<BranchRequest> RequestQueue;  // This semaphore is used to ensure access to the queue iss synchronized
-		protected SemaphoreSlim NetworkSema;  // This ensures that only one network operation happens at a time.
-		protected Task InitTask;
-		protected volatile bool ClosePending;
-		protected volatile bool KeepAlive;
-		protected CancellationTokenSource QueueTokenSource;
-		protected IBranchSessionInterface InitCallback;
-		protected bool AutoInitEnabled;
+		protected static Branch branchInstance = null;
 
-		protected internal Dictionary<BranchLinkData, Uri> LinkDataCache;
-		protected internal Dictionary<string, int> TotalActionCounts;
-		protected internal Dictionary<string, int> UniqueActionCounts;
-		protected internal Dictionary<string, int> Credits;
-		protected internal String LinkClickIdentifier;
-		protected internal String SessionId;
-		protected internal String DeviceFingerprintId;
-		protected internal String LinkClickId;
-		protected internal String Identity;
-		protected internal String IdentityId;
-		protected internal String UserLink;
-		protected internal String AndroidAppLink;
-		protected internal String PushIdentifier;
-		protected internal String ExternalUri;
-		protected internal String ExternalExtra;
-		protected internal String UniversalLink;
-		protected internal volatile bool Inited;
+		protected Branch () { }
 
-		int timeout = -1;
-		int retries = -1;
+		public static Branch GetInstance() {
+			if (branchInstance == null) {
+				throw new BranchException ("You must initialize Branch before you can use the Branch object!");
+			}
 
-		/// <summary>
-		/// Gets or sets the Branch key. This is generally
-		/// set by the platform specific Init methods.
-		/// </summary>
-		/// <value>The Branch key.</value>
-		public String BranchKey { get; set; }
+			return branchInstance;
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Gets or sets the debug value.  If true, a random device id
@@ -59,604 +30,257 @@ namespace BranchXamarinSDK
 		public static bool Debug = false;
 
 		/// <summary>
-		/// Gets or sets the smart session value.  Generally set to true for an 
-		/// Android app that isn't using Xamarin Forms.  It will preserve a
-		/// session across Android Activities.  See docs for more infromation.
+		/// Gets or sets the Branch key. This is generally
+		/// set by the platform specific Init methods.
 		/// </summary>
-		/// <value><c>true</c> if smart session enabled; otherwise, <c>false</c>.</value>
-		public bool SmartSessionEnabled { get; set; }
+		/// <value>The Branch key.</value>
+		protected String branchKey { get; set; }
+
+		protected List<Object> callbacksList = new List<object>();
+
+
+		#region Session methods
+		/// <summary>
+		/// Initiate a Branch session.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		public virtual void InitSession (IBranchSessionInterface callback) { callbacksList.Clear (); }
 
 		/// <summary>
-		/// Gets or sets the auto session value.
-		/// This feature only for Android app.
-		/// Register a IBranchSessionInterface callback through BranchAndroid.getInstance().SetLifeCycleHandlerCallback(...)
-		/// and an Android app will automatically manage Branch session.
-		/// Use this flag for checking type of Branch session management.
+		/// Initiate a Branch session.
 		/// </summary>
-		/// <value><c>true</c> if auto session enabled; otherwise, <c>false</c>.</value>
-		public bool AutoSessionEnabled { get; protected set; }
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		public virtual void InitSession (IBranchBUOSessionInterface callback) { callbacksList.Clear (); }
 
 		/// <summary>
-		/// Gets or sets the timeout value for the REST APIs.
+		/// Closes the session.
 		/// </summary>
-		/// <value>The timeout.</value>
-		public TimeSpan Timeout {
-			get {
-				if (timeout == -1) {
-					timeout = Properties.GetPropertyInt (Constants.TIMEOUT_KEY, 5);
-				}
-				return TimeSpan.FromSeconds(timeout);
-			}
-			set {
-				timeout = (int)value.TotalSeconds;
-				Properties.SetPropertyInt (Constants.TIMEOUT_KEY, timeout);
-			}
-		}
+		abstract public void CloseSession ();
 
 		/// <summary>
-		/// Gets or sets the retries value for the REST APIs.
+		/// Get the referring parameters from the last open.
 		/// </summary>
-		/// <value>The retries.</value>
-		public int Retries {
-			get {
-				if (retries == -1) {
-					retries = Properties.GetPropertyInt (Constants.RETRY_KEY, 1);
-				}
-				return retries;
-			}
-			set {
-				retries = value;
-				Properties.SetPropertyInt (Constants.RETRY_KEY, retries);
-			}
-		}
-
-		protected Branch ()
-		{
-			RequestQueue = new Queue<BranchRequest> ();
-			QueueSema = new SemaphoreSlim (1, 1);
-			NetworkSema = new SemaphoreSlim (1, 1);
-			LinkDataCache = new Dictionary<BranchLinkData, Uri>();
-			TotalActionCounts = new Dictionary<string, int> ();
-			UniqueActionCounts = new Dictionary<string, int> ();
-			Credits = new Dictionary<string, int> ();
-			ClosePending = false;
-			AutoSessionEnabled = false;
-
-			// Start the request processing loop
-			QueueTokenSource = new CancellationTokenSource ();
-			Task.Factory.StartNew (
-				() => {
-					ProcessQueue (QueueTokenSource.Token);
-				},
-				QueueTokenSource.Token,
-				TaskCreationOptions.LongRunning,
-				TaskScheduler.Default);
-		}
-
-		~Branch() {
-			// Ensure the processing thread is stopped
-			if (QueueTokenSource != null) {
-				QueueTokenSource.Cancel ();
-				QueueTokenSource.Dispose ();
-				QueueTokenSource = null;
-			}
-		}
+		/// <returns>The referring parameters from the last open.</returns>
+		abstract public Dictionary<String, object> GetLastReferringParams ();
 
 		/// <summary>
-		/// Gets the singleton instance of the Branch object.  Use
-		/// this object to make Branch API calls.
+		/// Gets the branch universal object from last open.
 		/// </summary>
-		/// <returns>The instance.</returns>
-		public static Branch GetInstance() {
-			if (branch == null) {
-				throw new BranchException ("You must initialize Branch before you can use the Branch object!");
-			}
-
-			return branch;
-		}
+		/// <returns>The last referring branch universal object.</returns>
+		abstract public BranchUniversalObject GetLastReferringBranchUniversalObject ();
 
 		/// <summary>
-		/// Initiate a session with the Branch server.  This should be called early in app startup.
-		/// If InitSession has already completed and no CloseSession called, this will call the
-		/// provided callback with an empty result.
+		/// Gets link properties from last open.
 		/// </summary>
-		/// <returns>The session async.</returns>
+		/// <returns>The last referring branch link properties.</returns>
+		abstract public BranchLinkProperties GetLastReferringBranchLinkProperties ();
+
+		/// <summary>
+		/// Get the referring parameters from the initial install.
+		/// </summary>
+		/// <returns>The referring parameters from the initial install.</returns>
+		abstract public Dictionary<String, object> GetFirstReferringParams ();
+
+		/// <summary>
+		/// Gets the branch universal object from initial install.
+		/// </summary>
+		/// <returns>The first referring branch universal object.</returns>
+		abstract public BranchUniversalObject GetFirstReferringBranchUniversalObject ();
+
+		/// <summary>
+		/// Gets link properties from initial install.
+		/// </summary>
+		/// <returns>The first referring branch link properties.</returns>
+		abstract public BranchLinkProperties GetFirstReferringBranchLinkProperties ();
+
+		/// <summary>
+		/// Internal method: Sets debug mode. Use Debug instead.
+		/// </summary>
+		abstract protected void SetDebug ();
+
+		#endregion
+
+		#region Identity methods
+
+		/// <summary>
+		/// Set the user's identity to an ID used by your system, so that it is identifiable by you elsewhere.
+		/// If you call setIdentity, this device will have that identity associated with this user until `logout` is called.
+		/// This includes persisting through uninstalls, as we track device id.
+		/// </summary>
+		/// <param name="user">The ID Branch should use to identify this user.</param>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		abstract public void SetIdentity(String user, IBranchIdentityInterface callback);
+
+		/// <summary>
+		/// Clear all of the current user's session items.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		abstract public void Logout (IBranchIdentityInterface callback = null);
+
+		#endregion
+
+
+		#region Short Links methods
+
+		/// <summary>
+		/// Get a short url with specified tags, params, channel, feature, stage, and match duration.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		/// <param name="parameters">Dictionary of parameters to include in the link.</param>
+		/// <param name="channel">The channel for the link. Examples could be Facebook, Twitter, SMS, etc.</param>
+		/// <param name="stage">The stage used for the generated link, indicating what part of a funnel the user is in.</param>
+		/// <param name="tags">An array of tags to associate with this link, useful for tracking.</param>
+		/// <param name="feature">The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.</param>
+		/// <param name="duration">How long to keep an unmatched link click in the Branch backend server's queue before discarding.</param>
+		abstract public void GetShortUrl (IBranchUrlInterface callback,
+		                                  Dictionary<String, dynamic> parameters = null,
+		                                  string channel = "",
+		                                  string stage = "",
+		                                  ICollection<String> tags = null,
+		                                  string feature = "",
+		                                  int duration = 0);
+
+		/// <summary>
+		/// Get a short url with specified tags, params, channel, feature, stage, and type.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		/// <param name="type">The type of link this is, one of Single Use or Unlimited Use. Single use means once *per user*, not once period.</param>
+		/// <param name="parameters">Dictionary of parameters to include in the link.</param>
+		/// <param name="channel">The channel for the link. Examples could be Facebook, Twitter, SMS, etc.</param>
+		/// <param name="stage">The stage used for the generated link, indicating what part of a funnel the user is in.</param>
+		/// <param name="tags">An array of tags to associate with this link, useful for tracking.</param>
+		/// <param name="feature">The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.</param>
+		abstract public void GetShortUrl (IBranchUrlInterface callback,
+		                                  int type = Constants.URL_TYPE_UNLIMITED,
+		                                  Dictionary<String, dynamic> parameters = null,
+		                                  string channel = "",
+		                                  string stage = "",
+		                                  ICollection<String> tags = null,
+		                                  string feature = "");
+
+		/// <summary>
+		/// Get a short url with specified universal object and link properties.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		/// <param name="universalObject">Universal object.</param>
+		/// <param name="linkProperties">Link properties.</param>
+		abstract public void GetShortURL (IBranchUrlInterface callback,
+		                                  BranchUniversalObject universalObject,
+		                                  BranchLinkProperties linkProperties);
+
+		#endregion
+
+
+		#region Share Link methods
+
+		/// <summary>
+		/// Shares the link.
+		/// </summary>
 		/// <param name="callback">Callback.</param>
-		public async Task InitSessionAsync(IBranchSessionInterface callback) {
-			try {
-			bool isReferrable = (DeviceInformation.GetUpdateState (false) == 0) && (IdentityId == null);
-			await InitSessionInternalAsync (callback, isReferrable);
-			} catch (Exception ex) {
-				Log (ex.Message);
-			}
-		}
+		/// <param name="universalObject">Universal object.</param>
+		/// <param name="linkProperties">Link properties.</param>
+		/// <param name="message">Message.</param>
+		abstract public void ShareLink (IBranchLinkShareInterface callback,
+		                                BranchUniversalObject universalObject,
+		                                BranchLinkProperties linkProperties,
+		                                string message);
+
+		#endregion
+
+
+		#region Action methods
 
 		/// <summary>
-		/// Initiate a session with the Branch server.  This should be called early in app startup.
-		/// If InitSession has already completed and no CloseSession called, this will call the
-		/// provided callback with an empty result.
+		/// Send a user action to the server. Some examples actions could be things like `viewed_personal_welcome`, `purchased_an_item`, etc.
 		/// </summary>
-		/// <returns>The session async.</returns>
-		/// <param name="callback">Callback.</param>
-		/// <param name="isReferrable">If set to <c>true</c> is referrable.</param>
-		public async Task InitSessionAsync(IBranchSessionInterface callback, bool isReferrable) {
-			await InitSessionInternalAsync (callback, isReferrable);
-		}
+		/// <param name="action">The action string.</param>
+		/// <param name="metadata">The additional state items associated with the action.</param>
+		abstract public void UserCompletedAction (String action, Dictionary<string, object> metadata = null);
 
-		async Task InitSessionInternalAsync(IBranchSessionInterface callback, bool isReferrable) {
-			// Clear the ClosePending flag.  If SmartSessionEnabled is true, CloseSession will wait 2 seconds
-			// before executing.  This will stop a close/open cycle everytime we change activities in Android.
-			ClosePending = false;
+		#endregion
 
-			// If auto init is enabled, store the callback for use when the automatic init call is made.
-			if (AutoInitEnabled) {
-				InitCallback = callback;
-			}
 
-			// Init session takes priority over any other pending operation.  It does not get put on the queue
-			// and instead executes as soon as any inprogress operation finishes.
-			if (Inited) {
-				if (SmartSessionEnabled) {
-					ClosePending = false;
-					KeepAlive = true;
-					Task.Delay (2000).ContinueWith (delegate (Task task) {
-						KeepAlive = false;
-					});
-				}
-
-				// Init has already been called.  If there is no outstanding
-				// init operation, just call the callback with the last param result.
-				if ((InitTask == null) || InitTask.IsCompleted) {
-					if (callback != null) {
-						callback.InitSessionComplete (GetLastReferringParams());
-					}
-				}
-			} else {
-				// Do this here to ensure nothing on the queue runs until the init is complete...
-				await NetworkSema.WaitAsync ();
-
-				Inited = true;
-
-				// If we have a link click identifier, we were launched by a link click.  By
-				// definition, we are referrable.
-				if (LinkClickIdentifier != null) {
-					isReferrable = true;
-				}
-
-				try {
-					BranchRequest request;
-					if (IdentityId != null) {
-						request = new BranchOpenRequest (
-							isReferrable,
-							DeviceInformation.GetAppVersion(),
-							DeviceInformation.GetOSVersion(),
-							DeviceInformation.GetOS(),
-							DeviceInformation.GetURIScheme(),
-							DeviceInformation.GetAdTrackingEnabled(),
-							callback);
-					} else {
-						bool isReal;
-						String deviceId = DeviceInformation.GetDeviceId (Debug, out isReal);
-
-						int width, height;
-						int density = DeviceInformation.GetDpi (out width, out height);
-						request = new BranchInstallRequest (deviceId,
-							isReal,
-							DeviceInformation.GetAppVersion (),
-							DeviceInformation.GetPhoneBrand (),
-							DeviceInformation.GetPhoneModel (),
-							DeviceInformation.GetOS (),
-							DeviceInformation.GetOSVersion (),
-							isReferrable,
-							DeviceInformation.GetUpdateState (true),
-							DeviceInformation.GetCarrier (),
-							DeviceInformation.GetNfcPresent (),
-							DeviceInformation.GetTelephonePresent (),
-							DeviceInformation.GetBluetoothPresent (),
-							DeviceInformation.GetBluetoothVersion (),
-							density,
-							width,
-							height,
-							DeviceInformation.GetWifiConnected (),
-							DeviceInformation.GetURIScheme(),
-							DeviceInformation.GetAdTrackingEnabled(),
-							callback);
-					}
-
-					LinkClickIdentifier = null;
-					AndroidAppLink = null;
-					PushIdentifier = null;
-					ExternalUri = null;
-					ExternalExtra = null;
-					UniversalLink = null;
-
-					InitTask = request.Execute ();
-					await InitTask;
-				} catch (Exception ex) {
-					// Reset the Inited state
-					Inited = false;
-					System.Diagnostics.Debug.WriteLine ("Request Ex: " + ex.Message);
-				}
-
-				NetworkSema.Release ();
-			}
-		}
+		#region Credits methods
 
 		/// <summary>
-		/// Close a currently open session with the Branch server.  The actual close
-		/// will be delayed if the SmartSessionEnabled property is set to <c>true</c>.
+		/// Loads credit totals from the server.
 		/// </summary>
-		/// <returns>The session async.</returns>
-		/// <param name="callback">Callback.</param>
-		public async Task CloseSessionAsync(IBranchSessionInterface callback = null) {
-			ClosePending = true;
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		abstract public void LoadRewards (IBranchRewardsInterface callback);
 
-			if (SmartSessionEnabled) {
-				// KeepAlive is set, temporarily by InitSession when InitSession is
-				// called while we are already inited.  This is likely an action transition
-				// so we don't really want to close...
-				if (KeepAlive) {
-					return;
-				}
+		/// <summary>
+		/// Redeem credits from the specified bucket.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		/// <param name="amount">The number of credits to redeem.</param>
+		/// <param name="bucket">The bucket to redeem credits from.</param>
+		abstract public void RedeemRewards (IBranchRewardsInterface callback, int amount, string bucket = "default");
 
-				// Wait half a second.  If ClosePending is still true, execute the Close.
-				await Task.Delay (500);
-				if (!ClosePending) {
-					return;
-				}
-			}
+		/// <summary>
+		/// Gets the credit history.
+		/// </summary>
+		/// <param name="callback">The callback that is called once the request has completed.</param>
+		/// <param name="bucket">The bucket to get transaction history for.</param>
+		/// <param name="afterId">The ID of the transaction to start from.</param>
+		/// <param name="length">The number of transactions to pull.</param>
+		/// <param name="mostRecentFirst">he direction to order transactions in the callback list.
+		/// Least recent first means oldest items will be in the front of the response array,
+		/// most recent means newest items will be front.</param>
+		abstract public void GetCreditHistory (IBranchRewardsInterface callback,
+		                                       string bucket = "",
+		                                       string afterId = "",
+		                                       int length = 100,
+		                                       bool mostRecentFirst = true);
 
-			// At this point, we will execute the Close
-			ClosePending = false;
+		/// <summary>
+		/// Get the local credit balance for the default bucket. You must `LoadRewards` before calling `GetCredits`. This method does not make a request for the balance.
+		/// </summary>
+		/// <returns>The credits.</returns>
+		abstract public int GetCredits ();
 
-			// If we are not inited, don't even bother to get the network semaphor,
-			// just return.
-			if (!Inited) {
-				return;
-			}
+		/// <summary>
+		/// Get the local credit balance for the specified bucket. You must `LoadRewards` before calling `GetCredits`. This method does not make a request for the balance.
+		/// </summary>
+		/// <returns>The credits for bucket.</returns>
+		/// <param name="bucket">The bucket to get credits balance from.</param>
+		abstract public int GetCreditsForBucket (string bucket);
 
-			var req = new BranchCloseRequest (callback);
-			await NetworkSema.WaitAsync ();
-			// The request holding the semaphore may have been an init.  If so, it may have failed.
-			// double check the init state.
-			if (Inited) {
-				Inited = false;
-				await req.Execute ();
-			}
-			NetworkSema.Release ();
-			ClearUserData ();
-		}
+		#endregion
 
-		public async Task SetIdentityAsync(String user, IBranchIdentityInterface callback) {
-			var req = new BranchIdentifyRequest (user, callback);
-			await EnqueueRequestAsync (req);
-		}
 
-		public async Task LogoutAsync(IBranchIdentityInterface callback = null) {
-			var req = new BranchLogoutRequest (callback);
-			await EnqueueRequestAsync (req);
-		}
+		#region Configuration methods
 
-		public async Task GetShortUrlAsync(IBranchUrlInterface callback,
-			Dictionary<String, dynamic> parameters = null,
-			String alias = null,
-			string channel = null,
-			string stage = null,
-			ICollection<String> tags = null,
-			string feature = null,
-			int type = Constants.URL_TYPE_UNLIMITED)
-		{
-			String jsonStr = null;
-			if (parameters != null) {
-				jsonStr = JsonConvert.SerializeObject (parameters);
-			}
+		/// <summary>
+		/// Specify the time to wait in seconds between retries in the case of a Branch server error.
+		/// </summary>
+		/// <param name="retryInterval">Number of seconds to wait between retries.</param>
+		abstract public void SetRetryInterval (int retryInterval);
 
-			var data = new BranchLinkData(tags, alias, type, channel, feature, stage, jsonStr);
+		/// <summary>
+		/// Specify the max number of times to retry in the case of a Branch server error.
+		/// </summary>
+		/// <param name="maxRetries">Number of retries to make.</param>
+		abstract public void SetMaxRetries (int maxRetries);
 
-			Uri cachedUri;
-			LinkDataCache.TryGetValue (data, out cachedUri);
-			if (cachedUri == null) {
-				var req = new BranchGetUrlRequest (data,
-					          callback);
-				await EnqueueRequestAsync (req);
-			} else {
-				if (callback != null) {
-					callback.ReceivedUrl (cachedUri);
-				}
-			}
-		}
+		/// <summary>
+		/// Specify the amount of time before a request should be considered "timed out".
+		/// </summary>
+		/// <param name="timeout">Number of seconds to before a request is considered timed out.</param>
+		abstract public void SetNetworkTimeout (int timeout);
 
-		public async Task UserCompletedActionAsync(String action, Dictionary<string, object> metadata = null, IBranchActionsInterface callback = null) {
-			var req = new BranchCompleteActionRequest (action, metadata, callback);
-			await EnqueueRequestAsync (req);
-		}
+		/// <summary>
+		/// If you're using a version of the Facebook SDK that prevents application:didFinishLaunchingWithOptions:
+		/// from returning YES/true when a Universal Link is clicked, you should enable this option.
+		/// </summary>
+		abstract public void AccountForFacebookSDKPreventingAppLaunch ();
 
-		public async Task LoadReferralActionCountsAsync(IBranchActionsInterface callback = null) {
-			var req = new BranchLoadReferralActionCountsRequest (callback);
-			await EnqueueRequestAsync (req);
-		}
+		/// <summary>
+		/// Registers the view.
+		/// </summary>
+		/// <param name="universalObject">Universal object.</param>
+		abstract public void RegisterView (BranchUniversalObject universalObject);
 
-		public async Task GetReferralCodeAsync(IBranchReferralInterface callback,
-			int amount,
-			String prefix = null,
-			DateTime? expiration = null,
-			String bucket = null,
-			int calculationType = Constants.REFERRAL_CODE_AWARD_UNLIMITED,
-			int location = Constants.REFERRAL_CODE_LOCATION_REFERRING_USER) {
-			var req = new BranchGetReferralCodeRequest(
-				amount,
-				prefix,
-				expiration,
-				bucket,
-				calculationType,
-				location,
-				callback);
-			await EnqueueRequestAsync(req);
-		}
-
-		public async Task ValidateReferralCodeAsync(IBranchReferralInterface callback, String code) {
-			var req = new BranchValidateReferralCodeRequest (code, callback);
-			await EnqueueRequestAsync (req);
-		}
-
-		public async Task ApplyReferralCodeAsync(IBranchReferralInterface callback, String code) {
-			var req = new BranchApplyReferralCodeRequest (code, callback);
-			await EnqueueRequestAsync (req);
-		}
-
-		public async Task LoadRewardsAsync(IBranchRewardsInterface callback) {
-			var req = new BranchLoadRewardsRequest (callback);
-			await EnqueueRequestAsync (req);
-		}
-
-		public async Task RedeemRewardsAsync(IBranchRewardsInterface callback, int amount, string bucket = "default") {
-			if (String.IsNullOrWhiteSpace(bucket)) {
-				bucket = "default";
-			}
-
-			var req = new BranchRedeemRequest (bucket, amount, callback);
-			await EnqueueRequestAsync (req);
-		}
-
-		public async Task GetCreditHistoryAsync(IBranchRewardsInterface callback,
-			string bucket = null,
-			string afterId = null,
-			int length = 100,
-			bool mostRecentFirst = true) {
-			var req = new BranchGetCreditHistoryRequest (bucket, afterId, length, mostRecentFirst ? 0 : 1, callback);
-			await EnqueueRequestAsync (req);
-		}
-
-		public Dictionary<String, object> GetLastReferringParams() {
-			String data = Properties.GetPropertyString ("last_referring_params");
-			if (!String.IsNullOrWhiteSpace(data)) {
-				var settings = new JsonSerializerSettings();
-				var converterList = new List<JsonConverter>();
-				converterList.Add(new DictionaryConverter());
-				settings.Converters = converterList;
-				return JsonConvert.DeserializeObject < Dictionary<String, object>> (data, settings);
-			}
-
-			return null;
-		}
-
-		public Dictionary<String, object> GetFirstReferringParams() {
-			String data = Properties.GetPropertyString ("first_referring_params");
-			if (!String.IsNullOrWhiteSpace(data)) {
-				var settings = new JsonSerializerSettings();
-				var converterList = new List<JsonConverter>();
-				converterList.Add(new DictionaryConverter());
-				settings.Converters = converterList;
-				return JsonConvert.DeserializeObject < Dictionary<String, object>> (data, settings);
-			}
-
-			return null;
-		}
-
-		public int GetReferralCountsForAction(String action, bool unique) {
-			int ret = 0;
-			if (!String.IsNullOrWhiteSpace (action)) {
-				if (unique) {
-					UniqueActionCounts.TryGetValue (action, out ret);
-				} else {
-					TotalActionCounts.TryGetValue (action, out ret);
-				}
-			}
-			return ret;
-		}
-
-		public int GetCredits() {
-			int count;
-			Credits.TryGetValue("default", out count);
-			return count;
-		}
-
-		public int GetCreditsForBucket(string bucket) {
-			int count = 0;
-			if (!String.IsNullOrWhiteSpace(bucket)) {
-				Credits.TryGetValue(bucket, out count);
-			}
-			return count;
-		}
-
-		// Private Methods
-
-		// Methods to manipulate the request queue
-		async Task ExecuteNextRequestAsync() {
-			BranchRequest request = await DequueRequestAsync ();
-			if (request != null) {
-				await NetworkSema.WaitAsync ();
-				await request.Execute ();
-				NetworkSema.Release ();
-			}
-		}
-
-		void ProcessQueue(CancellationToken token) {
-			while (!token.IsCancellationRequested) {
-				// Don't execute if we don't have an initialized session
-				if (!Inited) {
-					Task.Delay (1000).Wait ();
-					continue;
-				}
-
-				QueueSema.Wait ();
-				BranchRequest request = null;
-				if (RequestQueue.Count > 0) {
-					request = RequestQueue.Peek ();
-				}
-				QueueSema.Release ();
-				if (request != null) {
-					NetworkSema.Wait ();
-
-					// Verify once more that we are still inited.  It is possible that 
-					// init was in progress then failed so check again.
-					if (Inited) {
-						// Need to catch exceptions here to ensure processing continues.
-						// Report the exception to the console and continue.
-						try {
-							request.Execute ().Wait ();
-						} catch (AggregateException e) {
-							if (e.InnerException != null) {
-								String message = "Error executing request: " + e.InnerException.Message + "\n" + e.InnerException.StackTrace;
-								DeviceInformation.WriteLog (message, "Request", 6);
-							}
-						} finally {
-							RequestQueue.Dequeue ();
-						}
-					}
-					NetworkSema.Release ();
-				}
-
-				Task.Delay (200).Wait ();
-			}
-
-			// Throw so that the task get's marked as cancelled.
-			token.ThrowIfCancellationRequested ();
-		}
-
-		async Task EnqueueRequestAsync(BranchRequest request) {
-			await QueueSema.WaitAsync ();
-			RequestQueue.Enqueue (request);
-			QueueSema.Release ();
-		}
-
-		async Task<BranchRequest> PeekRequestAsync() {
-			BranchRequest ret = null;
-			await QueueSema.WaitAsync ();
-			if (RequestQueue.Count > 0) {
-				ret = RequestQueue.Peek ();
-			}
-			QueueSema.Release ();
-			return ret;
-		}
-
-		async Task<BranchRequest> DequueRequestAsync() {
-			BranchRequest ret = null;
-			await QueueSema.WaitAsync ();
-			if (RequestQueue.Count > 0) {
-				ret = RequestQueue.Dequeue ();
-			}
-			QueueSema.Release ();
-			return ret;
-		}
-
-		public void Log (String message, String tag = "BRANCH", int level = 3) {
-			DeviceInformation.WriteLog (message, tag, level);
-		}
-
-		// Some internal methods
-		protected void ClearUserData() {
-			TotalActionCounts.Clear ();
-			UniqueActionCounts.Clear ();
-			UserLink = null;
-		}
-
-		protected void InitUserAndSession() {
-			String userId = Properties.GetPropertyString ("identity_id");
-			if (!String.IsNullOrWhiteSpace(userId)) {
-				IdentityId = userId;
-			}
-			String deviceFingerprintId = Properties.GetPropertyString ("device_fingerprint_id");
-			if (!String.IsNullOrWhiteSpace(deviceFingerprintId)) {
-				DeviceFingerprintId = deviceFingerprintId;
-			}
-		}
-
-		protected internal void UpdateUser (String identity, Dictionary<string, object> result, String dataStr) {
-			String identityId;
-			String urlStr;
-
-			object temp;
-
-			result.TryGetValue ("identity_id", out temp);
-			identityId = temp as String;
-
-			result.TryGetValue ("link", out temp);
-			urlStr = temp as String;
-
-			if (identityId != null) {
-				Properties.SetPropertyString ("identity_id", identityId);
-			}
-
-			IdentityId = identityId;
-			Identity = identity;
-			UserLink = urlStr;
-
-			if (dataStr != null) {
-				Properties.SetPropertyString ("first_referring_params", dataStr);
-			}
-		}
-
-		protected internal void UpdateUserAndSession(Dictionary<string, object> result, String dataStr, bool isInstall) {
-			String sessionId;
-			String identityId;
-			String deviceFingerprintId;
-			String link;
-			String clicked;
-
-			object temp;
-
-			result.TryGetValue ("session_id", out temp);
-			sessionId = temp as String;
-
-			result.TryGetValue ("identity_id", out temp);
-			identityId = temp as String;
-
-			result.TryGetValue ("device_fingerprint_id", out temp);
-			deviceFingerprintId = temp as String;
-
-			result.TryGetValue ("link", out temp);
-			link = temp as String;
-
-			result.TryGetValue ("link_click_id", out temp);
-			clicked = temp as String;
-
-			SessionId = sessionId;
-			DeviceFingerprintId = deviceFingerprintId;
-			LinkClickId = clicked;
-			IdentityId = identityId;
-			UserLink = link;
-
-			if (identityId != null) {
-				Properties.SetPropertyString ("identity_id", identityId);
-			}
-
-			if (deviceFingerprintId != null) {
-				Properties.SetPropertyString ("device_fingerprint_id", deviceFingerprintId);
-			}
-
-			if (dataStr != null) {
-				Properties.SetPropertyString ("last_referring_params", dataStr);
-				if (isInstall) {
-					Properties.SetPropertyString ("first_referring_params", dataStr);
-				}
-			} else {
-				Properties.SetPropertyString ("last_referring_params", "");
-				if (isInstall) {
-					Properties.SetPropertyString ("first_referring_params", "");
-				}
-			}
-		}
+		#endregion
 	}
 }
 

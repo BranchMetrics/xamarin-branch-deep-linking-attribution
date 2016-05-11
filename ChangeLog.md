@@ -1,4 +1,15 @@
 Branch Xamarin SDK change log
+-v2.1.3
+  * Fixing trouble with empty expired data string
+
+-v2.1.2
+  * Fixing non-string parameters
+
+-v2.1.1
+  * Fixing BranchUniversalObject expiration date
+
+- v2.1.0
+  * New version of Xamarin SDK based on native libraries. 
 
 - v1.2.1
   * Debug field has been become static.

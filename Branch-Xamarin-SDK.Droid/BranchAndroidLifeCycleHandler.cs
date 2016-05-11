@@ -1,60 +1,65 @@
 ﻿using System;
 using Android.OS;
 using Android.App;
-using BranchXamarinSDK;
 
 namespace BranchXamarinSDK
 {
 	public class BranchAndroidLifeCycleHandler : Java.Lang.Object, Application.IActivityLifecycleCallbacks
 	{
-		private static int _activeCounter;
-		private IBranchSessionInterface _callback;
+		private static int activeCounter;
+		public IBranchSessionInterface callback { get; set; }
+		public IBranchBUOSessionInterface callbackBUO { get; set; }
 
 		public BranchAndroidLifeCycleHandler(IBranchSessionInterface callback = null) {
-			_callback = callback;
+			this.callback = callback;
+			this.callbackBUO = null;
 		}
 
-		public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
-		{
+		public BranchAndroidLifeCycleHandler(IBranchBUOSessionInterface callback = null) {
+			this.callback = null;
+			this.callbackBUO = callback;
 		}
 
-		public void OnActivityDestroyed(Activity activity)
-		{
-		}
-
-		public void OnActivityPaused(Activity activity)
-		{
-		}
-
-		public void OnActivityResumed(Activity activity)
-		{
-		}
-
-		public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
-		{
-		}
+		public void OnActivityCreated(Activity activity, Bundle savedInstanceState) { }
+		public void OnActivityDestroyed(Activity activity) { }
+		public void OnActivitySaveInstanceState(Activity activity, Bundle outState) { }
+		public void OnActivityResumed(Activity activity) { }
+		public void OnActivityPaused(Activity activity) { }
 
 		public void OnActivityStarted(Activity activity)
 		{
-			if (_activeCounter == 0)
-			{
-				BranchAndroid.getInstance().SetNewUrl(activity.Intent.Data, activity.Intent.Extras);
-				Branch branch = Branch.GetInstance();
-				Branch.Debug = true; // Each install is a "new" install
-				branch.InitSessionAsync(_callback);
-			}
-
-			_activeCounter++;
+			BranchAndroid.getInstance().CurrActivity = activity;
+			IncreaseActivityCounter (activity);
 		}
 
-		public async void OnActivityStopped(Activity activity)
+		public void OnActivityStopped(Activity activity)
 		{
-			_activeCounter--;
+			DecreaseActivityCounter (activity);
+		}
 
-			if (_activeCounter == 0)
+		private void IncreaseActivityCounter(Activity activity)
+		{
+			if (activeCounter == 0)
 			{
-				Branch branch = Branch.GetInstance();
-				await branch.CloseSessionAsync();
+				if (callback != null) {
+					BranchAndroid.getInstance ().InitSession (callback);
+				} else if (callbackBUO != null) {
+					BranchAndroid.getInstance ().InitSession (callbackBUO);
+				}
+			}
+
+			activeCounter++;
+		}
+
+		private void DecreaseActivityCounter(Activity activity)
+		{
+			if (activeCounter > 0) {
+				activeCounter--;
+
+				if (activeCounter == 0)
+				{
+					BranchAndroid.getInstance ().CloseSession ();
+				}
 			}
 		}
 	}
