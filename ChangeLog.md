@@ -1,4 +1,9 @@
 Branch Xamarin SDK change log
+-v2.1.4
+  * Updating iOS native library to version 0.12.1
+  * Updating Android native library to version 1.11.3
+  * Adding Init(Application app...) to Xamarin Android SDK
+
 -v2.1.3
   * Fixing trouble with empty expired data string
 
