@@ -62,12 +62,6 @@ namespace IOSNativeBranch
 		[Static]
 		[Export ("getBranchLinkPropertiesFromDictionary:")]
 		BranchLinkProperties GetBranchLinkPropertiesFromDictionary (NSDictionary dictionary);
-
-		// -(NSString *)description;
-		[Export ("description")]
-	//	[Verify (MethodToProperty)]
-	//	string Description { get; }
-		string Description ();
 	}
 
 	// typedef void (^callback)();
@@ -189,12 +183,6 @@ namespace IOSNativeBranch
 		[Static]
 		[Export ("getBranchUniversalObjectFromDictionary:")]
 		BranchUniversalObject GetBranchUniversalObjectFromDictionary (NSDictionary dictionary);
-
-		// -(NSString *)description;
-		[Export ("description")]
-	//	[Verify (MethodToProperty)]
-	//	string Description { get; }
-		string Description ();
 	}
 
 	// typedef void (^callbackWithBranchUniversalObject)(BranchUniversalObject *, BranchLinkProperties *, NSError *);

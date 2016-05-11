@@ -47,6 +47,16 @@ namespace BranchXamarinSDK
 
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
 
+			Init (((Activity)context).Application, branchKey, callback);
+		}
+
+		public static void Init(Context context, String branchKey, IBranchBUOSessionInterface callback) {
+
+			Init (((Activity)context).Application, branchKey, callback);
+		}
+
+		public static void Init(Application app, String branchKey, IBranchSessionInterface callback) {
+
 			if (instance != null) {
 				instance.lifeCycleHandler.callback = callback;
 				return;
@@ -58,7 +68,7 @@ namespace BranchXamarinSDK
 
 			instance = new BranchAndroid ();
 			Branch.branchInstance = instance;
-			instance.appContext = context.ApplicationContext;
+			instance.appContext = app.ApplicationContext;
 			instance.branchKey = branchKey;
 
 			if (Debug) {
@@ -66,10 +76,10 @@ namespace BranchXamarinSDK
 			}
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
-			((Activity)context).Application.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
+			app.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
 		}
 
-		public static void Init(Context context, String branchKey, IBranchBUOSessionInterface callback) {
+		public static void Init(Application app, String branchKey, IBranchBUOSessionInterface callback) {
 
 			if (instance != null) {
 				instance.lifeCycleHandler.callbackBUO = callback;
@@ -82,7 +92,7 @@ namespace BranchXamarinSDK
 
 			instance = new BranchAndroid ();
 			Branch.branchInstance = instance;
-			instance.appContext = context.ApplicationContext;
+			instance.appContext = app.ApplicationContext;
 			instance.branchKey = branchKey;
 
 			if (Debug) {
@@ -90,7 +100,7 @@ namespace BranchXamarinSDK
 			}
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
-			((Activity)context).Application.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
+			app.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
 		}
 
 
