@@ -473,6 +473,79 @@ You have the ability to control the direct deep linking of each link by insertin
 | "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure. 
 | "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in your app from a Branch link (has been cookied and deep linked by Branch)
 
+
+## New feature: BranchUniversalObject
+### What is the Branch Universal Object?
+
+
+Our previous method of creating links was a single call `GetShortUrl`, where you passed in all of the metadata and link properties in order to get a deep link back. We’re adding just one more step in between that we believe makes a lot more sense.
+
+```
+Dictionary<string, object> parameters = new Dictionary<string, object>();
+parameters.Add("name", "test name");
+parameters.Add("message", "hello there with short url");
+parameters.Add("$og_title", "this is a title");
+parameters.Add("$og_description", "this is a description");
+parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
+
+List<string> tags = new List<string>();
+tags.Add("tag1");
+tags.Add("tag2");
+
+Branch.GetInstance().GetShortUrl (callback,
+		                          Constants.URL_TYPE_UNLIMITED,
+		                          parameters,
+		                          "test_channel",
+		                          "test_stage",
+		                          tags,
+		                          "test_feature");
+
+```
+
+#### Here’s the new mechanism using the Branch Universal Object:
+```
+BranchUniversalObject universalObject = new BranchUniversalObject();
+universalObject.canonicalIdentifier = "id12345";
+universalObject.title = "id12345 title";
+universalObject.contentDescription = "My awesome piece of content!";
+universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+universalObject.metadata.Add("foo", "bar");
+
+BranchLinkProperties linkProperties = new BranchLinkProperties();
+linkProperties.tags.Add("tag1");
+linkProperties.tags.Add("tag2");
+linkProperties.feature = "sharing";
+linkProperties.channel = "facebook";
+linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+
+Branch.GetInstance().GetShortURL (callback,
+		                          universalObject,
+		                          linkProperties);
+
+```
+As you can see, it’s a bit more code but a lot more structured. What’s really cool about this is that once you’ve created the Universal Object, you can then do a bunch of neat things like:
+
+######1. Initialize Branch
+
+```
+InitSession (IBranchBUOSessionInterface callback)
+```
+
+######2. Register a view on the content (for a new product coming soon)
+
+```
+RegisterView (BranchUniversalObject universalObject)
+```
+
+######3. Create a share sheet that lets the user share across all channels
+
+```
+ShareLink (IBranchLinkShareInterface callback,
+		   BranchUniversalObject universalObject,
+		   BranchLinkProperties linkProperties,
+		   string message)
+```
+
 ____
 
 ## Referral system rewarding functionality
@@ -610,77 +683,6 @@ The response will return an array that has been parsed from the following JSON:
 
 ____
 
-## New feature: BranchUniversalObject
-### What is the Branch Universal Object?
-
-
-Our previous method of creating links was a single call `GetShortUrl`, where you passed in all of the metadata and link properties in order to get a deep link back. We’re adding just one more step in between that we believe makes a lot more sense.
-
-```
-Dictionary<string, object> parameters = new Dictionary<string, object>();
-parameters.Add("name", "test name");
-parameters.Add("message", "hello there with short url");
-parameters.Add("$og_title", "this is a title");
-parameters.Add("$og_description", "this is a description");
-parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
-
-List<string> tags = new List<string>();
-tags.Add("tag1");
-tags.Add("tag2");
-
-Branch.GetInstance().GetShortUrl (callback,
-		                          Constants.URL_TYPE_UNLIMITED,
-		                          parameters,
-		                          "test_channel",
-		                          "test_stage",
-		                          tags,
-		                          "test_feature");
-
-```
-
-#### Here’s the new mechanism using the Branch Universal Object:
-```
-BranchUniversalObject universalObject = new BranchUniversalObject();
-universalObject.canonicalIdentifier = "id12345";
-universalObject.title = "id12345 title";
-universalObject.contentDescription = "My awesome piece of content!";
-universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-universalObject.metadata.Add("foo", "bar");
-
-BranchLinkProperties linkProperties = new BranchLinkProperties();
-linkProperties.tags.Add("tag1");
-linkProperties.tags.Add("tag2");
-linkProperties.feature = "sharing";
-linkProperties.channel = "facebook";
-linkProperties.controlParams.Add("$desktop_url", "http://example.com");
-
-Branch.GetInstance().GetShortURL (callback,
-		                          universalObject,
-		                          linkProperties);
-
-```
-As you can see, it’s a bit more code but a lot more structured. What’s really cool about this is that once you’ve created the Universal Object, you can then do a bunch of neat things like:
-
-######1. Initialize Branch
-
-```
-InitSession (IBranchBUOSessionInterface callback)
-```
-
-######2. Register a view on the content (for a new product coming soon)
-
-```
-RegisterView (BranchUniversalObject universalObject)
-```
-
-######3. Create a share sheet that lets the user share across all channels
-
-```
-ShareLink (IBranchLinkShareInterface callback,
-		   BranchUniversalObject universalObject,
-		   BranchLinkProperties linkProperties,
-		   string message)
-```
 
 ## Note: Migration from version 1.x.x to 2.x.x
 
