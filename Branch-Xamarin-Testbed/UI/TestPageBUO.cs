@@ -573,7 +573,7 @@ namespace BranchXamarinTestbed
 				var value = obj as Dictionary<string, object>;
 				if (value != null) {
 					ret += prettyJSON (level + 1, value);
-				} else {
+				} else if (obj != null) {
 					ret += blankString (level + 1);
 					ret += key;
 					ret += " : ";

@@ -82,7 +82,7 @@ public class BranchLinkProperties {
 		}
 		if (data.ContainsKey("control_params")) {
 			if (data["control_params"] != null) {
-				Dictionary<string, object> paramsTemp = data["control_params"] as Dictionary<string, object>;
+				IDictionary<string, object> paramsTemp = data["control_params"] as IDictionary<string, object>;
 
 				if (paramsTemp != null) {
 					foreach(string key in paramsTemp.Keys) {
