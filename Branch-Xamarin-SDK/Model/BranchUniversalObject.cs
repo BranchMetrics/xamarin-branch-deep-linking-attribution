@@ -112,7 +112,7 @@ public class BranchUniversalObject {
 		}
 		if (data.ContainsKey("$keywords")) {
 			if (data["$keywords"] != null) {
-				List<object> keywordsTemp = data["$keywords"] as List<object>;
+				IList<object> keywordsTemp = data["$keywords"] as IList<object>;
 
 				if (keywordsTemp != null) {
 					foreach(object obj in keywordsTemp) {
@@ -123,7 +123,7 @@ public class BranchUniversalObject {
 		}
 		if (data.ContainsKey("metadata")) {
 			if (data["metadata"] != null) {
-				Dictionary<string, object> metaTemp = data["metadata"] as Dictionary<string, object>;
+				IDictionary<string, object> metaTemp = data["metadata"] as IDictionary<string, object>;
 
 				if (metaTemp != null) {
 					foreach(string key in metaTemp.Keys) {

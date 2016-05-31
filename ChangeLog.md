@@ -1,4 +1,10 @@
 Branch Xamarin SDK change log
+-v2.1.5
+  * Updating iOS native library to version 0.12.2
+  * Updating Android native library to version 1.12.1
+  * Fixing keywords and metadata in BUO
+  * Fixing controls parameters in BLP
+
 -v2.1.4
   * Updating iOS native library to version 0.12.1
   * Updating Android native library to version 1.11.3
