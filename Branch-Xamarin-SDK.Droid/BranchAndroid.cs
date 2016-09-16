@@ -33,6 +33,13 @@ namespace BranchXamarinSDK
 		#endregion
 
 
+		#region Helpers declaration
+
+		private BranchAndroidLifeCycleHandler lifeCycleHandler = null;
+
+		#endregion
+
+
 		#region Initialization
 
 		private Context appContext = null;
@@ -66,6 +73,10 @@ namespace BranchXamarinSDK
 			if (Debug) {
 				instance.SetDebug ();
 			}
+
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler();
+			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
+			getInstance().InitSession(callback);
 		}
 
 		public static void Init(Application app, String branchKey, IBranchBUOSessionInterface callback) {
@@ -86,6 +97,10 @@ namespace BranchXamarinSDK
 			if (Debug) {
 				instance.SetDebug ();
 			}
+
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler();
+			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
+			getInstance().InitSession(callback);
 		}
 
 

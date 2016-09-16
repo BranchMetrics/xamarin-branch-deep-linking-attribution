@@ -1,26 +1,36 @@
 Branch Xamarin SDK change log
--v2.1.6
+
+- v3.0.0
+  * Updating iOS native library to version 0.12.9
+  * Updating Android native library to version 2.4.0
+  * Adding ResetUserSession()
+  * Adding ListOnSpotlight(BranchUniversalObject universalObject)
+  * Deleting CloseSession ()
+  * Deleting GetShortUrl (IBranchUrlInterface callback, Dictionary<String, dynamic> parameters = null, string channel = "", string stage = "", ICollection<String> tags = null, string feature = "", int duration = 0)
+  * Deleting GetShortUrl (IBranchUrlInterface callback, int type = Constants.URL_TYPE_UNLIMITED, Dictionary<String, dynamic> parameters = null, string channel = "", string stage = "", ICollection<String> tags = null, string feature = "")
+
+- v2.1.6
   * Updating iOS native library to version 0.12.3
   * Updating Android native library to version 1.14.3
 
--v2.1.5
+- v2.1.5
   * Updating iOS native library to version 0.12.2
   * Updating Android native library to version 1.12.1
   * Fixing keywords and metadata in BUO
   * Fixing controls parameters in BLP
 
--v2.1.4
+- v2.1.4
   * Updating iOS native library to version 0.12.1
   * Updating Android native library to version 1.11.3
   * Adding Init(Application app...) to Xamarin Android SDK
 
--v2.1.3
+- v2.1.3
   * Fixing trouble with empty expired data string
 
--v2.1.2
+- v2.1.2
   * Fixing non-string parameters
 
--v2.1.1
+- v2.1.1
   * Fixing BranchUniversalObject expiration date
 
 - v2.1.0

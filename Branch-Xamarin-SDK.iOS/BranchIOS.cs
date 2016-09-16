@@ -192,7 +192,7 @@ namespace BranchXamarinSDK
 			IOSNativeBranch.BranchLinkProperties blp = BranchIOSUtils.ToNativeLinkProperties (linkProperties);
 			UIKit.UIWindow window = UIKit.UIApplication.SharedApplication.KeyWindow;
 
-			buo.ShowShareSheetWithLinkProperties (blp, message, window.RootViewController, delegate() {});
+			buo.ShowShareSheetWithLinkProperties (blp, message, window.RootViewController, delegate(string url, bool isShared) {});
 		}
 
 		#endregion

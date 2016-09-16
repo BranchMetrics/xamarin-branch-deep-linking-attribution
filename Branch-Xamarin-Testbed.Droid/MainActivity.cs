@@ -33,7 +33,7 @@ namespace BranchXamarinTestbed.Droid
 			base.OnCreate (savedInstanceState);
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			BranchAndroid.Debug = true;
+			//BranchAndroid.Debug = true;
 
 			//App app = new App ();
 			//BranchAndroid.Init (this, "key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", app);

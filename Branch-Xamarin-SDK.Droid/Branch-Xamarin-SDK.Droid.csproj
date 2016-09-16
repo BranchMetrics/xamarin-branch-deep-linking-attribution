@@ -62,6 +62,7 @@
     <Compile Include="Helpers\BranchUrlListener.cs" />
     <Compile Include="Helpers\BranchBUOSessionListener.cs" />
     <Compile Include="Helpers\BranchLinkShareListener.cs" />
+    <Compile Include="BranchAndroidLifeCycleHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

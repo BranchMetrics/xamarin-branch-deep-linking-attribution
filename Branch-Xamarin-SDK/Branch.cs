@@ -6,6 +6,8 @@ namespace BranchXamarinSDK
 {
 	abstract public class Branch
 	{
+		public const string version = "3.0.0";
+
 		#region Singleton
 
 		protected static Branch branchInstance = null;
