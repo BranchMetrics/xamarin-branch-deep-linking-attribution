@@ -53,11 +53,6 @@ namespace BranchXamarinSDK
 		public virtual void InitSession (IBranchBUOSessionInterface callback) { callbacksList.Clear (); }
 
 		/// <summary>
-		/// Closes the session.
-		/// </summary>
-		abstract public void CloseSession ();
-
-		/// <summary>
 		/// Get the referring parameters from the last open.
 		/// </summary>
 		/// <returns>The referring parameters from the last open.</returns>
@@ -103,6 +98,11 @@ namespace BranchXamarinSDK
 		#region Identity methods
 
 		/// <summary>
+		/// Reset the current session.
+		/// </summary>
+		abstract public void ResetUserSession();
+
+		/// <summary>
 		/// Set the user's identity to an ID used by your system, so that it is identifiable by you elsewhere.
 		/// If you call setIdentity, this device will have that identity associated with this user until `logout` is called.
 		/// This includes persisting through uninstalls, as we track device id.
@@ -121,42 +121,6 @@ namespace BranchXamarinSDK
 
 
 		#region Short Links methods
-
-		/// <summary>
-		/// Get a short url with specified tags, params, channel, feature, stage, and match duration.
-		/// </summary>
-		/// <param name="callback">The callback that is called once the request has completed.</param>
-		/// <param name="parameters">Dictionary of parameters to include in the link.</param>
-		/// <param name="channel">The channel for the link. Examples could be Facebook, Twitter, SMS, etc.</param>
-		/// <param name="stage">The stage used for the generated link, indicating what part of a funnel the user is in.</param>
-		/// <param name="tags">An array of tags to associate with this link, useful for tracking.</param>
-		/// <param name="feature">The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.</param>
-		/// <param name="duration">How long to keep an unmatched link click in the Branch backend server's queue before discarding.</param>
-		abstract public void GetShortUrl (IBranchUrlInterface callback,
-		                                  Dictionary<String, dynamic> parameters = null,
-		                                  string channel = "",
-		                                  string stage = "",
-		                                  ICollection<String> tags = null,
-		                                  string feature = "",
-		                                  int duration = 0);
-
-		/// <summary>
-		/// Get a short url with specified tags, params, channel, feature, stage, and type.
-		/// </summary>
-		/// <param name="callback">The callback that is called once the request has completed.</param>
-		/// <param name="type">The type of link this is, one of Single Use or Unlimited Use. Single use means once *per user*, not once period.</param>
-		/// <param name="parameters">Dictionary of parameters to include in the link.</param>
-		/// <param name="channel">The channel for the link. Examples could be Facebook, Twitter, SMS, etc.</param>
-		/// <param name="stage">The stage used for the generated link, indicating what part of a funnel the user is in.</param>
-		/// <param name="tags">An array of tags to associate with this link, useful for tracking.</param>
-		/// <param name="feature">The feature this is utilizing. Examples could be Sharing, Referring, Inviting, etc.</param>
-		abstract public void GetShortUrl (IBranchUrlInterface callback,
-		                                  int type = Constants.URL_TYPE_UNLIMITED,
-		                                  Dictionary<String, dynamic> parameters = null,
-		                                  string channel = "",
-		                                  string stage = "",
-		                                  ICollection<String> tags = null,
-		                                  string feature = "");
 
 		/// <summary>
 		/// Get a short url with specified universal object and link properties.
@@ -279,6 +243,12 @@ namespace BranchXamarinSDK
 		/// </summary>
 		/// <param name="universalObject">Universal object.</param>
 		abstract public void RegisterView (BranchUniversalObject universalObject);
+
+		/// <summary>
+		/// Index the content on Spotlight Search.
+		/// </summary>
+		/// <param name="universalObject">Universal object.</param>
+		abstract public void ListOnSpotlight(BranchUniversalObject universalObject);
 
 		#endregion
 	}

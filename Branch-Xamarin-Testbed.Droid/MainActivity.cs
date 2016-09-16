@@ -15,11 +15,16 @@ namespace BranchXamarinTestbed.Droid
 		DataScheme="branchtesturi",
 		DataHost="open")]
 
-	[IntentFilter (new[]{"android.intent.action.VIEW"},
-		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
-		DataScheme="https",
-		DataHost="bnc.lt",
-		DataPathPrefix="/LOmd")]
+	//[IntentFilter (new[]{"android.intent.action.VIEW"},
+	//	Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
+	//	DataScheme="https",
+	//	DataHost="bnc.lt",
+	//	DataPathPrefix="/LOmd")]
+
+	[IntentFilter(new[] { "android.intent.action.VIEW" },
+		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+		DataScheme = "https",
+		DataHost = "fa36.app.link")]
 
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
@@ -30,14 +35,14 @@ namespace BranchXamarinTestbed.Droid
 
 			BranchAndroid.Debug = true;
 
-			App app = new App ();
-			BranchAndroid.Init (this, "key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", app);
-			LoadApplication (app);
+			//App app = new App ();
+			//BranchAndroid.Init (this, "key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", app);
+			//LoadApplication (app);
 
 			// uncomment to try BranchUniversalObject
-//			AppBUO appBUO = new AppBUO ();
-//			BranchAndroid.Init (this, "Your Branch key here", appBUO);
-//			LoadApplication (appBUO);
+			AppBUO appBUO = new AppBUO ();
+			BranchAndroid.Init (this, "key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", appBUO);
+			LoadApplication (appBUO);
 		}
 
 		protected override void OnNewIntent(Intent intent) {
