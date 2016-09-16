@@ -36,12 +36,12 @@ namespace BranchXamarinTestbed.Droid
 			//BranchAndroid.Debug = true;
 
 			//App app = new App ();
-			//BranchAndroid.Init (this, "key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", app);
+			//BranchAndroid.Init (this, "your Branch key", app);
 			//LoadApplication (app);
 
 			// uncomment to try BranchUniversalObject
 			AppBUO appBUO = new AppBUO ();
-			BranchAndroid.Init (this, "key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", appBUO);
+			BranchAndroid.Init (this, "your Branch key", appBUO);
 			LoadApplication (appBUO);
 		}
 

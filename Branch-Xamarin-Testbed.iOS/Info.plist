@@ -55,6 +55,6 @@
 		</dict>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.zoom2games.test</string>
+	<string>io.branch.testbed</string>
 </dict>
 </plist>
