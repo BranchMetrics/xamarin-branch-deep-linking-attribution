@@ -35,7 +35,11 @@ namespace BranchXamarinSDK
 		private NSDictionary launchOptions = null;
 
 		public static void Init(String branchKey, NSDictionary launchOptions, IBranchSessionInterface callback) {
-			if (!branchKey.StartsWith("key_")) {
+			if (instance != null) {
+				return;
+			}
+
+			if (!branchKey.StartsWith("key_", StringComparison.Ordinal)) {
 				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
 
@@ -57,7 +61,11 @@ namespace BranchXamarinSDK
 		}
 
 		public static void Init(String branchKey, NSDictionary launchOptions, IBranchBUOSessionInterface callback) {
-			if (!branchKey.StartsWith("key_")) {
+			if (instance != null) {
+				return;
+			}
+
+			if (!branchKey.StartsWith("key_", StringComparison.Ordinal)) {
 				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
 
@@ -103,10 +111,6 @@ namespace BranchXamarinSDK
 			NativeBranch.InitSessionWithLaunchOptions(launchOptions, obj.InitCallback);
 		}
 
-		public override void CloseSession() {
-			// we need not CloseSession iOS
-		}
-
 		public override Dictionary<String, object> GetLastReferringParams () {
 			return BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringParams());
 		}
@@ -136,6 +140,10 @@ namespace BranchXamarinSDK
 
 		#region Identity methods
 
+		public override void ResetUserSession() {
+			NativeBranch.ResetUserSession();
+		}
+
 		public override void SetIdentity(String user, IBranchIdentityInterface callback) {
 			BranchIdentityListener obj = new BranchIdentityListener (callback);
 			callbacksList.Add (obj as Object);
@@ -154,39 +162,6 @@ namespace BranchXamarinSDK
 
 
 		#region Short Links methods
-
-		public override void GetShortUrl (IBranchUrlInterface callback,
-			Dictionary<String, dynamic> parameters = null,
-			string channel = "",
-			string stage = "",
-			ICollection<String> tags = null,
-			string feature = "",
-			int duration = 0)
-		{
-
-			BranchUrlListener obj = new BranchUrlListener (callback);
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.GetShortUrlWithParams(BranchIOSUtils.ToNSDictionary(parameters),
-				BranchIOSUtils.ToNSObjectArray(tags), "", (nuint)duration, channel, feature, stage, obj.GetShortUrlCallback);
-		}
-
-		public override void GetShortUrl (IBranchUrlInterface callback,
-			int type = Constants.URL_TYPE_UNLIMITED,
-			Dictionary<String, dynamic> parameters = null,
-			string channel = "",
-			string stage = "",
-			ICollection<String> tags = null,
-			string feature = "")
-		{
-
-			BranchUrlListener obj = new BranchUrlListener (callback);
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.GetShortURLWithParams (BranchIOSUtils.ToNSDictionary(parameters),
-				BranchIOSUtils.ToNSObjectArray(tags), channel, feature, stage,
-				(IOSNativeBranch.BranchLinkType)type, obj.GetShortUrlCallback);
-		}
 
 		public override void GetShortURL (IBranchUrlInterface callback,
 			BranchUniversalObject universalObject,
@@ -217,7 +192,7 @@ namespace BranchXamarinSDK
 			IOSNativeBranch.BranchLinkProperties blp = BranchIOSUtils.ToNativeLinkProperties (linkProperties);
 			UIKit.UIWindow window = UIKit.UIApplication.SharedApplication.KeyWindow;
 
-			buo.ShowShareSheetWithLinkProperties (blp, message, window.RootViewController, delegate() {});
+			buo.ShowShareSheetWithLinkProperties (blp, message, window.RootViewController, delegate(string url, bool isShared) {});
 		}
 
 		#endregion
@@ -299,6 +274,10 @@ namespace BranchXamarinSDK
 
 		public override void RegisterView (BranchUniversalObject universalObject) {
 			BranchIOSUtils.ToNativeUniversalObject (universalObject).RegisterView();
+		}
+
+		public override void ListOnSpotlight(BranchUniversalObject universalObject) {
+			BranchIOSUtils.ToNativeUniversalObject(universalObject).ListOnSpotlight();
 		}
 
 		#endregion

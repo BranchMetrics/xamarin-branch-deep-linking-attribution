@@ -13,8 +13,10 @@ namespace BranchXamarinSDK.iOS
 			if (data != null) {
 				foreach (NSObject obj in data.Keys) {
 
-					NSString key = new NSString( obj.ToString () );
-					dict.Add (key, data.ValueForKey (key));
+					if (obj != null) {
+						NSString key = new NSString( obj.ToString () );
+						dict.Add (key, data.ValueForKey (key));
+					}
 				}
 			}
 
@@ -162,10 +164,13 @@ namespace BranchXamarinSDK.iOS
 				NSString jsonString = null;
 
 				foreach (NSObject obj in data) {
-					jsonData = NSJsonSerialization.Serialize (obj, NSJsonWritingOptions.PrettyPrinted, out error);
-					jsonString = new NSString (jsonData, NSStringEncoding.UTF8);
 
-					list.Add (JsonConvert.DeserializeObject<CreditHistoryEntry> ((string)jsonString));
+					if (obj != null) {
+						jsonData = NSJsonSerialization.Serialize (obj, NSJsonWritingOptions.PrettyPrinted, out error);
+						jsonString = new NSString (jsonData, NSStringEncoding.UTF8);
+
+						list.Add (JsonConvert.DeserializeObject<CreditHistoryEntry> ((string)jsonString));
+					}
 				}
 			}
 

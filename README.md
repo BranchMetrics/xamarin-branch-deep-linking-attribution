@@ -1,5 +1,8 @@
 # Branch Metrics Xamarin SDK Reference
 
+## IMPORTANT: Upgrading to V 3.0
+[full migration guide](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK#note-mirgation-from-version-2xx-to-3xx)
+
 ## IMPORTANT: Upgrading to V 2.1
 
 On 3/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. Please see this section at the bottom for a [full migration guide](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK#note-mirgation-from-version-1xx-to-2xx).
@@ -67,6 +70,22 @@ Make sure that this activity is launched as a `singleTask`. This is important to
 		"android.intent.category.BROWSABLE"},
 		DataScheme="yourapp",
 		DataHost="open")]
+
+//Before 07/26/2016
+[IntentFilter (new[]{"android.intent.action.VIEW"},
+		Categories=new[]{"android.intent.category.DEFAULT", 
+		"android.intent.category.BROWSABLE"},
+		DataScheme="https",
+		DataHost="bnc.lt",
+		DataPathPrefix="/your-prefix")]
+		
+//After 07/26/2016
+[IntentFilter(new[] { "android.intent.action.VIEW" },
+		Categories = new[] { "android.intent.category.DEFAULT",
+		"android.intent.category.BROWSABLE" },
+		DataScheme = "https",
+		DataHost = "your-domain.app.link")]
+
 ```
 
 
@@ -98,7 +117,7 @@ In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Univ
 
 1. enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier. 
 2. In https://dashboard.branch.io/#/settings/link, tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes. 
-3. Finally, create a new file named `Entitlements.plist` in the root directory of your project. Enable `associated-domains` and add `applinks:bnc.lt`. You may add more entitlement keys if you have any.
+3. Finally, create a new file named `Entitlements.plist` in the root directory of your project. Enable `associated-domains` and add `applinks:bnc.lt (before 07/26/2016)` add `applinks:your-domain.app.link (after 07/26/2016)`. You may add more entitlement keys if you have any.
 
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
 
@@ -409,38 +428,29 @@ There are a bunch of options for creating these links. You can tag them for anal
 
 For more details on how to create links, see the [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md)
 
+
 ```csharp
 // associate data with a link
 // you can access this data from any instance that installs or opens the app from this link (amazing...)
 
-var data = new Dictionary<string, object>(); 
-data.Add("user", "Joe");
-data.Add("profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg");
-data.Add("description", "Joe likes long walks on the beach...") 
+BranchUniversalObject universalObject = new BranchUniversalObject();
+universalObject.canonicalIdentifier = "id12345";
+universalObject.title = "id12345 title";
+universalObject.contentDescription = "My awesome piece of content!";
+universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+universalObject.metadata.Add("foo", "bar");
 
-// associate a url with a set of tags, channel, feature, and stage for better analytics.
-// tags: null or example set of tags could be "version1", "trial6", etc
-// channel: null or examples: "facebook", "twitter", "text_message", etc
-// feature: null or examples: Branch.FEATURE_TAG_SHARE, Branch.FEATURE_TAG_REFERRAL, "unlock", etc
-// stage: null or examples: "past_customer", "logged_in", "level_6"
+BranchLinkProperties linkProperties = new BranchLinkProperties();
+linkProperties.tags.Add("tag1");
+linkProperties.tags.Add("tag2");
+linkProperties.feature = "sharing";
+linkProperties.channel = "facebook";
+linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 
-List<String> tags = new List<String>();
-tags.Add("version1");
-tags.Add("trial6");
-
-// Link 'type' can be used for scenarios where you want the link to only deep link the first time. 
-// Use _null_, _LINK_TYPE_UNLIMITED_USE_ or _LINK_TYPE_ONE_TIME_USE_
-
-// Link 'alias' can be used to label the endpoint on the link. For example: http://bnc.lt/AUSTIN28. 
-// Be careful about aliases: these are immutable objects permanently associated with the data and associated paramters you pass into the link. When you create one in the SDK, it's tied to that user identity as well (automatically specified by the Branch internals). If you want to retrieve the same link again, you'll need to call getShortUrl with all of the same parameters from before.
-
-Branch branch = Branch.GetInstance ();
-await branch.GetShortUrlAsync(this, data, "alias","channel","stage", tags, "feature", uriType);
-
-// The error method of the callback will be called if the link generation fails (or if the alias specified is aleady taken.)
+Branch.GetInstance().GetShortURL (callback,
+		                          universalObject,
+		                          linkProperties);
 ```
-
-There are other methods which exclude tags and data if you don't want to pass those. Explore the autocomplete functionality.
 
 **Note**
 You can customize the Facebook OG tags of each URL if you want to dynamically share content by using the following _optional keys in the data dictionary_. Please use this [Facebook tool](https://developers.facebook.com/tools/debug/og/object) to debug your OG tags!
@@ -682,6 +692,18 @@ The response will return an array that has been parsed from the following JSON:
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
 ____
+
+
+## Note: Migration from version 2.x.x to 3.x.x
+To migrate to version 3.x.x you just need to use
+
+* GetShortUrl(IBranchUrlInterface callback, BranchUniversalObject universalObject, BranchLinkProperties linkProperties);
+
+instead of methods
+
+* GetShortUrl(IBranchUrlInterface callback, Dictionary<String, dynamic> ...)
+* GetShortUrl(IBranchUrlInterface callback, Dictionary<String, dynamic> ...)
+
 
 
 ## Note: Migration from version 1.x.x to 2.x.x

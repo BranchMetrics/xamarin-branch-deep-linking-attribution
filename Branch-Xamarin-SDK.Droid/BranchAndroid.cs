@@ -58,11 +58,10 @@ namespace BranchXamarinSDK
 		public static void Init(Application app, String branchKey, IBranchSessionInterface callback) {
 
 			if (instance != null) {
-				instance.lifeCycleHandler.callback = callback;
 				return;
 			}
 
-			if (!branchKey.StartsWith("key_")) {
+			if (!branchKey.StartsWith("key_", StringComparison.Ordinal)) {
 				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
 
@@ -75,18 +74,18 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 
-			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
-			app.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler();
+			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
+			getInstance().InitSession(callback);
 		}
 
 		public static void Init(Application app, String branchKey, IBranchBUOSessionInterface callback) {
 
 			if (instance != null) {
-				instance.lifeCycleHandler.callbackBUO = callback;
 				return;
 			}
 
-			if (!branchKey.StartsWith("key_")) {
+			if (!branchKey.StartsWith("key_", StringComparison.Ordinal)) {
 				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
 
@@ -99,8 +98,9 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 
-			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler (callback);
-			app.RegisterActivityLifecycleCallbacks (instance.lifeCycleHandler);
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler();
+			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
+			getInstance().InitSession(callback);
 		}
 
 
@@ -127,10 +127,6 @@ namespace BranchXamarinSDK
 			callbacksList.Add (obj as Object);
 
 			NativeBranch.InitSession (obj);
-		}
-
-		public override void CloseSession() {
-			NativeBranch.CloseSession ();
 		}
 
 		public override Dictionary<String, object> GetLastReferringParams () {
@@ -162,6 +158,10 @@ namespace BranchXamarinSDK
 
 		#region Identity methods
 
+		public override void ResetUserSession() {
+			NativeBranch.ResetUserSession();
+		}
+
 		public override void SetIdentity(String user, IBranchIdentityInterface callback) {
 			BranchIdentityListener obj = new BranchIdentityListener (callback);
 			callbacksList.Add (obj as Object);
@@ -180,36 +180,6 @@ namespace BranchXamarinSDK
 
 
 		#region Short Links methods
-
-		public override void GetShortUrl (IBranchUrlInterface callback,
-			Dictionary<String, dynamic> parameters = null,
-			string channel = "",
-			string stage = "",
-			ICollection<String> tags = null,
-			string feature = "",
-			int duration = 0)
-		{
-
-			BranchUrlListener obj = new BranchUrlListener (callback);
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.GetShortUrl (tags, channel, feature, stage, BranchAndroidUtils.ToJSONObject(parameters), duration, obj);
-		}
-
-		public override void GetShortUrl (IBranchUrlInterface callback,
-			int type = Constants.URL_TYPE_UNLIMITED,
-			Dictionary<String, dynamic> parameters = null,
-			string channel = "",
-			string stage = "",
-			ICollection<String> tags = null,
-			string feature = "")
-		{
-
-			BranchUrlListener obj = new BranchUrlListener (callback);
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.GetShortUrl(type, tags, channel, feature, stage, BranchAndroidUtils.ToJSONObject(parameters), obj);
-		}
 
 		public override void GetShortURL (IBranchUrlInterface callback,
 			BranchUniversalObject universalObject,
@@ -372,6 +342,13 @@ namespace BranchXamarinSDK
 				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
 
 			resBuo.RegisterView ();
+		}
+
+		public override void ListOnSpotlight(BranchUniversalObject universalObject) {
+			IO.Branch.Indexing.BranchUniversalObject resBuo =
+				IO.Branch.Indexing.BranchUniversalObject.CreateInstance(BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
+
+			resBuo.ListOnGoogleSearch(appContext);
 		}
 
 		#endregion

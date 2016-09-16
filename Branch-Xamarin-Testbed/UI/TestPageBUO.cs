@@ -23,7 +23,6 @@ namespace BranchXamarinTestbed
 		readonly Button LoginButton;
 		readonly Button LogoutButton;
 		readonly Button ShareLinkButton;
-		readonly Picker TypePicker;
 		readonly Picker FeaturePicker;
 		readonly Entry ChannelEntry;
 		readonly Entry StageEntry;
@@ -37,10 +36,7 @@ namespace BranchXamarinTestbed
 		readonly Entry CreditBucketEntry;
 		readonly StackLayout HistoryStack;
 
-		int urlType = 0;
 		string feature = "";
-
-		String UriString = "";
 		bool IsLoggedIn = false;
 
 		Color entryTextColor = Color.Black;
@@ -134,20 +130,6 @@ namespace BranchXamarinTestbed
 				TextColor = entryTextColor,
 				Placeholder = "Enter params"
 			};
-
-			var utLabel = new Label {
-				TextColor = Color.Blue,
-				FontSize = 24,
-				Text = "URL Type"
-			};
-
-			TypePicker = new Picker {
-				Title = "Unlimited",
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				SelectedIndex = 0,
-				Items = { "Unlimited", "Single Use" }
-			};
-			TypePicker.SelectedIndexChanged += TypeSelected;
 
 			var ufLabel = new Label {
 				TextColor = Color.Blue,
@@ -313,8 +295,6 @@ namespace BranchXamarinTestbed
 					TagsEntry,
 					upLabel,
 					ParamsEntry,
-					utLabel,
-					TypePicker,
 					ufLabel,
 					FeaturePicker,
 					getUrlButton,
@@ -510,20 +490,6 @@ namespace BranchXamarinTestbed
 			Branch.GetInstance ().GetCreditHistory (this, bucket);
 		}
 
-		void TypeSelected(object sender, EventArgs args) {
-			switch (TypePicker.SelectedIndex) {
-			case 0:
-				urlType = Constants.URL_TYPE_UNLIMITED;
-				break;
-			case 1:
-				urlType = Constants.URL_TYPE_SINGLE_USE;
-				break;
-			default:
-				urlType = Constants.URL_TYPE_UNLIMITED;
-				break;
-			}
-		}
-
 		void FeatureSelected(object sender, EventArgs args) {
 			switch (FeaturePicker.SelectedIndex) {
 			case 1:
@@ -594,7 +560,6 @@ namespace BranchXamarinTestbed
 		{
 			StatusLabel.Text = "ReceivedUrl";
 			UriLabel.Text = uri;
-			UriString = uri;
 			ShareLinkButton.IsEnabled = true;
 		}
 
