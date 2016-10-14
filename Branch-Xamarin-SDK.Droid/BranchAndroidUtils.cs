@@ -58,6 +58,15 @@ namespace BranchXamarinSDK.Droid
 				return new Dictionary<string, object> ();
 			}
 
+			var tagsList = new List<object>();
+			if (data.Tags != null)
+			{
+				foreach (object obj in data.Tags)
+				{
+					tagsList.Add(obj);
+				}
+			}
+
 			var controlParamsDict = new Dictionary<string, object>();
 			if (data.ControlParams != null) {
 				foreach(string key in data.ControlParams.Keys) {
@@ -66,7 +75,7 @@ namespace BranchXamarinSDK.Droid
 			}
 
 			var dict = new Dictionary<string, object>();
-			dict.Add("~tags", data.Tags == null ? new List<string>() : data.Tags );
+			dict.Add("~tags", tagsList );
 			dict.Add("~feature", data.Feature == null ? "" : data.Feature );
 			dict.Add("~alias", data.Alias == null ? "" : data.Alias);
 			dict.Add("~channel", data.Channel == null ? "" : data.Channel);
@@ -89,6 +98,55 @@ namespace BranchXamarinSDK.Droid
 			string res = data.ToString();
 			List<CreditHistoryEntry> list = JsonConvert.DeserializeObject<List<CreditHistoryEntry>> (res);
 			return list;
+		}
+
+		public static IO.Branch.Indexing.BranchUniversalObject ToNativeBUO(BranchUniversalObject buo) {
+			IO.Branch.Indexing.BranchUniversalObject resBuo = new IO.Branch.Indexing.BranchUniversalObject();
+
+			foreach (string keyword in buo.keywords) {
+				resBuo.AddKeyWord(keyword);
+			}
+
+			foreach (string key in buo.metadata.Keys)
+			{
+				resBuo.AddContentMetadata(key, buo.metadata[key]);
+			}
+
+			resBuo.SetCanonicalUrl(buo.canonicalIdentifier);
+			resBuo.SetTitle(buo.title);
+			resBuo.SetContentDescription(buo.contentDescription);
+			resBuo.SetContentImageUrl(buo.imageUrl);
+			resBuo.SetContentType(buo.type);
+
+			if (buo.contentIndexMode == 0)
+				resBuo.SetContentIndexingMode(IO.Branch.Indexing.BranchUniversalObject.CONTENT_INDEX_MODE.Public);
+			else
+				resBuo.SetContentIndexingMode(IO.Branch.Indexing.BranchUniversalObject.CONTENT_INDEX_MODE.Private);
+
+			Java.Util.Date date = new Java.Util.Date(buo.expirationDate.HasValue ? (buo.expirationDate.Value.Ticks / 10000) : 0);
+			resBuo.SetContentExpiration(date);
+
+			return resBuo;
+		}
+
+		public static IO.Branch.Referral.Util.LinkProperties ToNativeBLP(BranchLinkProperties blp) {
+			IO.Branch.Referral.Util.LinkProperties resBlp = new IO.Branch.Referral.Util.LinkProperties();
+
+			foreach (string tag in blp.tags) {
+				resBlp.AddTag(tag);
+			}
+
+			foreach (string key in blp.controlParams.Keys) {
+				resBlp.AddControlParameter(key, blp.controlParams[key]);
+			}
+
+			resBlp.SetAlias(blp.alias);
+			resBlp.SetChannel(blp.channel);
+			resBlp.SetDuration(blp.matchDuration);
+			resBlp.SetFeature(blp.feature);
+			resBlp.SetStage(blp.stage);
+
+			return resBlp;
 		}
 	}
 }

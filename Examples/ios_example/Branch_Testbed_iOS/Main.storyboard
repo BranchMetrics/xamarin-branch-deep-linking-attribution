@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="NO" initialViewController="317">
+    <dependencies>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+    </dependencies>
+    <scenes>
+        <!--Branch-SDK-Testbed-->
+        <scene sceneID="200">
+            <objects>
+                <viewController storyboardIdentifier="BranchView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="201" customClass="BranchViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="198"/>
+                        <viewControllerLayoutGuide type="bottom" id="199"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="202">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Branch link" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="364">
+                                <rect key="frame" x="50" y="26" width="280" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="368">
+                                <rect key="frame" x="50" y="76" width="280" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="200" constant="280" id="417"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Create Branch link">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="CreateBranchLink:" destination="201" eventType="touchDown" id="451"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Reward Points = " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="129" translatesAutoresizingMaskIntoConstraints="NO" id="372">
+                                <rect key="frame" x="47.5" y="114" width="284" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="284" id="xQF-KN-5nA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="373">
+                                <rect key="frame" x="25" y="146" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="381"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Redeem 5">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="RedeemPoints:" destination="201" eventType="touchDown" id="460"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="374">
+                                <rect key="frame" x="210" y="146" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="387"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Set user ID">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="SetUserID:" destination="201" eventType="touchDown" id="461"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="388">
+                                <rect key="frame" x="25" y="185" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="389"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Refresh Rewards">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="RefreshRewards:" destination="201" eventType="touchDown" id="464"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="390">
+                                <rect key="frame" x="25" y="224" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="398"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Send &quot;Buy&quot; Event">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="SendBuyEvent:" destination="201" eventType="touchDown" id="465"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="393">
+                                <rect key="frame" x="25" y="263" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="401"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Show Reward History">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ShowRewardHistory:" destination="201" eventType="touchDown" id="738"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="402">
+                                <rect key="frame" x="210" y="185" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="406"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Simulate Logout">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="SimulateLogout:" destination="201" eventType="touchDown" id="466"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="407">
+                                <rect key="frame" x="210" y="224" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="410"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Send Complex Event">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="SendComplexEvent:" destination="201" eventType="touchDown" id="475"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="411">
+                                <rect key="frame" x="210" y="264" width="140" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="420"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Share Link">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ShareLink:" destination="201" eventType="touchDown" id="476"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="412">
+                                <rect key="frame" x="50" y="316" width="280" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="200" constant="280" id="416"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="View FirstReferringParams">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ViewFirstReferringParams:" destination="201" eventType="touchDown" id="741"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="423">
+                                <rect key="frame" x="50" y="352" width="280" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="200" constant="225" id="426"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="View LatestReferringParams">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="ViewLatestReferringParams:" destination="201" eventType="touchDown" id="744"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="428">
+                                <rect key="frame" x="50" y="386" width="280" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="200" constant="225" id="432"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Simulate Content Access">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="SimulateContentAccess:" destination="201" eventType="touchDown" id="745"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="435">
+                                <rect key="frame" x="50" y="421" width="280" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="200" constant="225" id="438"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Register For Spotlight">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="RegisterForSpotlight:" destination="201" eventType="touchDown" id="746"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="440">
+                                <rect key="frame" x="50" y="456" width="280" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="200" constant="225" id="444"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Open Log">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="518" kind="show" identifier="LogPush" id="542"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="364" secondAttribute="trailing" constant="45" id="365"/>
+                            <constraint firstItem="364" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="50" id="366"/>
+                            <constraint firstItem="364" firstAttribute="top" secondItem="198" secondAttribute="bottom" constant="26" id="367"/>
+                            <constraint firstAttribute="trailing" secondItem="368" secondAttribute="trailing" constant="45" id="369"/>
+                            <constraint firstItem="368" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="50" id="370"/>
+                            <constraint firstItem="368" firstAttribute="top" secondItem="364" secondAttribute="bottom" constant="20" id="371"/>
+                            <constraint firstItem="373" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="25" id="375"/>
+                            <constraint firstItem="373" firstAttribute="top" secondItem="198" secondAttribute="bottom" constant="146" id="380"/>
+                            <constraint firstAttribute="trailing" secondItem="374" secondAttribute="trailing" constant="25" id="384"/>
+                            <constraint firstItem="374" firstAttribute="top" secondItem="198" secondAttribute="bottom" constant="146" id="386"/>
+                            <constraint firstItem="388" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="25" id="394"/>
+                            <constraint firstItem="388" firstAttribute="top" secondItem="373" secondAttribute="bottom" constant="10" id="395"/>
+                            <constraint firstItem="390" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="25" id="396"/>
+                            <constraint firstItem="390" firstAttribute="top" secondItem="388" secondAttribute="bottom" constant="10" id="397"/>
+                            <constraint firstItem="393" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="25" id="399"/>
+                            <constraint firstItem="393" firstAttribute="top" secondItem="390" secondAttribute="bottom" constant="10" id="400"/>
+                            <constraint firstAttribute="trailing" secondItem="402" secondAttribute="trailing" constant="25" id="404"/>
+                            <constraint firstItem="402" firstAttribute="top" secondItem="374" secondAttribute="bottom" constant="10" id="405"/>
+                            <constraint firstAttribute="trailing" secondItem="407" secondAttribute="trailing" constant="25" id="408"/>
+                            <constraint firstItem="407" firstAttribute="top" secondItem="402" secondAttribute="bottom" constant="10" id="409"/>
+                            <constraint firstAttribute="trailing" secondItem="412" secondAttribute="trailing" constant="45" id="413"/>
+                            <constraint firstItem="412" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="50" id="414"/>
+                            <constraint firstItem="412" firstAttribute="top" secondItem="198" secondAttribute="bottom" constant="316" id="415"/>
+                            <constraint firstAttribute="trailing" secondItem="411" secondAttribute="trailing" constant="25" id="418"/>
+                            <constraint firstItem="411" firstAttribute="top" secondItem="407" secondAttribute="bottom" constant="11" id="419"/>
+                            <constraint firstAttribute="trailing" secondItem="423" secondAttribute="trailing" constant="45" id="424"/>
+                            <constraint firstItem="423" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="50" id="425"/>
+                            <constraint firstItem="423" firstAttribute="top" secondItem="412" secondAttribute="bottom" constant="6" id="427"/>
+                            <constraint firstAttribute="trailing" secondItem="428" secondAttribute="trailing" constant="45" id="429"/>
+                            <constraint firstItem="428" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="50" id="430"/>
+                            <constraint firstItem="428" firstAttribute="top" secondItem="198" secondAttribute="bottom" constant="386" id="434"/>
+                            <constraint firstAttribute="trailing" secondItem="435" secondAttribute="trailing" constant="45" id="436"/>
+                            <constraint firstItem="435" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="50" id="437"/>
+                            <constraint firstItem="435" firstAttribute="top" secondItem="198" secondAttribute="bottom" constant="421" id="439"/>
+                            <constraint firstAttribute="trailing" secondItem="440" secondAttribute="trailing" constant="45" id="441"/>
+                            <constraint firstItem="440" firstAttribute="leading" secondItem="202" secondAttribute="leading" constant="50" id="442"/>
+                            <constraint firstItem="440" firstAttribute="top" secondItem="198" secondAttribute="bottom" constant="456" id="443"/>
+                            <constraint firstItem="372" firstAttribute="centerX" secondItem="202" secondAttribute="centerX" constant="2" id="2NZ-u1-52t"/>
+                            <constraint firstItem="372" firstAttribute="top" secondItem="368" secondAttribute="bottom" constant="8" id="FTK-cY-7Yi"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Branch-SDK-Testbed" id="359"/>
+                    <connections>
+                        <outlet property="btnSetUserID" destination="374" id="name-outlet-374"/>
+                        <outlet property="inputShortLink" destination="364" id="name-outlet-364"/>
+                        <outlet property="lblRewardPoints" destination="372" id="name-outlet-372"/>
+                        <segue destination="661" kind="show" identifier="HistoryPush" id="736"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="203" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1200" y="43.75"/>
+        </scene>
+        <!--Error View Controller-->
+        <scene sceneID="221">
+            <objects>
+                <viewController storyboardIdentifier="ErrorScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="222" customClass="ErrorViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="219"/>
+                        <viewControllerLayoutGuide type="bottom" id="220"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="223">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Error title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="230">
+                                <rect key="frame" x="20" y="51" width="335" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" text="Error description" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="245">
+                                <rect key="frame" x="20" y="80" width="335" height="490"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="230" secondAttribute="trailing" constant="20" id="231"/>
+                            <constraint firstItem="230" firstAttribute="leading" secondItem="223" secondAttribute="leading" constant="20" id="232"/>
+                            <constraint firstItem="230" firstAttribute="top" secondItem="219" secondAttribute="bottom" constant="31" id="233"/>
+                            <constraint firstItem="220" firstAttribute="top" secondItem="245" secondAttribute="bottom" constant="97" id="246"/>
+                            <constraint firstItem="245" firstAttribute="leading" secondItem="223" secondAttribute="leading" constant="20" id="247"/>
+                            <constraint firstAttribute="trailing" secondItem="245" secondAttribute="trailing" constant="20" id="248"/>
+                            <constraint firstItem="245" firstAttribute="top" secondItem="219" secondAttribute="bottom" constant="60" id="249"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="errorTextView" destination="245" id="name-outlet-245"/>
+                        <outlet property="errorTitleLabel" destination="230" id="name-outlet-230"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="224" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1033" y="810"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="316">
+            <objects>
+                <navigationController storyboardIdentifier="BranchRoot" modalPresentationStyle="currentContext" useStoryboardIdentifierAsRestorationIdentifier="YES" id="317" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="319">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="201" kind="relationship" relationship="rootViewController" id="360"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="320" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="506" y="44"/>
+        </scene>
+        <!--Log-->
+        <scene sceneID="517">
+            <objects>
+                <viewController id="518" customClass="LogViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="515"/>
+                        <viewControllerLayoutGuide type="bottom" id="516"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="519">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" text="Log text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="544">
+                                <rect key="frame" x="0.0" y="-1" width="375" height="604"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="544" firstAttribute="trailing" secondItem="519" secondAttribute="trailing" id="545"/>
+                            <constraint firstItem="544" firstAttribute="leading" secondItem="519" secondAttribute="leading" id="546"/>
+                            <constraint firstItem="544" firstAttribute="bottom" secondItem="519" secondAttribute="bottom" id="547"/>
+                            <constraint firstItem="515" firstAttribute="bottom" secondItem="544" secondAttribute="top" constant="1" id="578"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Log" id="583"/>
+                    <connections>
+                        <outlet property="lblLog" destination="544" id="name-outlet-544"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="520" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1775" y="612"/>
+        </scene>
+        <!--Credit History-->
+        <scene sceneID="660">
+            <objects>
+                <tableViewController id="661" customClass="HistoryTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="662">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HistoryCell" rowHeight="44" id="665">
+                                <rect key="frame" x="0.0" y="1" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="665" id="666">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="661" id="663"/>
+                            <outlet property="delegate" destination="661" id="664"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Credit History" id="703"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="667" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1775" y="-118"/>
+        </scene>
+    </scenes>
+</document>

@@ -14,6 +14,11 @@ If you don't have time to do so, just use a reference to version 1.2.1, which we
 
 There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/testbed).
 
+You can download our Xamarin SDK and you can find:
+1. Xamarin Forms applications
+2. iOS application in folder Examples
+3. Android application in folder Examples
+
 ## Additional Resources
 - [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
 - [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
@@ -57,9 +62,58 @@ ___
 
 ### Android: Configure your project
 
+#### Add Branch Key into Strings.xml
+
+Add your Branch Key into Strings.xml, you will use this value for configuration your Application class.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hello">Hello World, Click Me!</string>
+	<string name="app_name">Branch-Xamarin-Testbed.Droid</string>
+	<string name="branch_key">your Branch key here</string>
+</resources>
+```
+
+#### Configure your Application
+
+You should to add your Apllication class and configure blocks of parameteres for android manifest.
+
+You should to override method OnCreate() to call BranchAndroid.GetAutoInstance method.
+
+```csharp
+	[Application (AllowBackup = true, Icon = "@mipmap/icon", Label = "@string/app_name")]
+	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
+	[MetaData("io.branch.sdk.TestMode", Value = "true")]
+	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
+
+	public class TestBedApplication: Application
+	{
+		public TestBedApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+    	{
+		}
+
+		public override void OnCreate()
+		{
+			base.OnCreate();
+			BranchAndroid.GetAutoInstance(this.ApplicationContext);
+		}
+	}
+```
+
+| Key | Value
+| --- | ---
+| "io.branch.sdk.TestMode" | "true" - for simulation of fresh installs (for testing), "false" - set that flag to false when you will build a release verion of your application.
+| "io.branch.sdk.BranchKey" | Your Branch Key. You can add into Strings.xml both keys: "life" and "test" and change keys when you want (don't forget change key in Init method).
+
+#### Configure your Activity
+
 In your project's `manifest` file, you can register your app to respond to direct deep links (`yourapp://` in a mobile browser) by adding the second intent filter block. Also, make sure to change `yourapp` to a unique string that represents your app name.
 
 Make sure that this activity is launched as a `singleTask`. This is important to handle proper deep linking from other apps like Facebook.
+
+You should to override method OnCreate to call Branch initialization.
+You should to override method OnNewIntent for receiving data when you r app will be in background.
 
 ```
 [Activity (Label = "Your app label", MainLauncher = true, Icon = "@mipmap/icon",
@@ -86,6 +140,18 @@ Make sure that this activity is launched as a `singleTask`. This is important to
 		DataScheme = "https",
 		DataHost = "your-domain.app.link")]
 
+public class MainActivity : Activity, IBranchSessionInterface
+{
+	protected override void OnCreate (Bundle savedInstanceState)
+	{
+		base.OnCreate (savedInstanceState);
+		BranchAndroid.Init (this, GetString(Resource.String.branch_key), this);
+	}
+
+	protected override void OnNewIntent(Intent intent) {
+		this.Intent = intent;
+	}
+}
 ```
 
 
@@ -168,7 +234,6 @@ public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicat
 	}
 }
 ```
-Note that the first argument is the Branch key found in your app from the Branch dashboard. The second argument allows the Branch SDK to recognize if the application was launched from a content URI. The third argument allows to reconize if the application launched from Android App Links and from Push Notification.
 
 
 #### iOS with Forms
@@ -187,7 +252,7 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 
 		App app = new App ();
 
-		// Enable debug mode. 
+		// Enable simulation of fresh installs. 
 		BranchIOS.Debug = true;
 		BranchIOS.Init ("Your Branch key here", launchOptions, app);
 
@@ -264,7 +329,7 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 {
 	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
 	{
-		// Enable debug mode. 
+		// Enable simulation of fresh installs. 
 		BranchIOS.Debug = true;
 		BranchIOS.Init ("Your Branch key here", launchOptions, this);
 
@@ -359,9 +424,15 @@ ____
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 
 ```csharp
-Branch branch = Branch.GetInstance ();
-Dictionary<string, object> sessionParams = branch.GetLatestReferringParams();
+Dictionary<string, object> sessionParams = Branch.GetInstance().GetLatestReferringParams();
 ```
+or
+
+```csharp
+BranchUniversalObject buo = Branch.GetInstance().GetLastReferringBranchUniversalObject();
+BranchLinkProperties blp = Branch.GetInstance().GetLastReferringBranchLinkProperties();
+```
+
 
 ### Retrieve install (install only) parameters
 
@@ -370,6 +441,12 @@ If you ever want to access the original session params (the parameters passed in
 ```csharp
 Branch branch = Branch.GetInstance ();
 Dictionary<string, object> installParams = branch.GetFirstReferringParams();
+```
+or
+
+```csharp
+BranchUniversalObject buo = Branch.GetInstance().GetFirstReferringBranchUniversalObject();
+BranchLinkProperties blp = Branch.GetInstance().GetFirstReferringBranchLinkProperties();
 ```
 
 ### Persistent identities
@@ -693,6 +770,78 @@ The response will return an array that has been parsed from the following JSON:
 
 ____
 
+## New feature: BranchUniversalObject
+### What is the Branch Universal Object?
+
+
+Our previous method of creating links was a single call `GetShortUrl`, where you passed in all of the metadata and link properties in order to get a deep link back. We’re adding just one more step in between that we believe makes a lot more sense.
+
+```
+Dictionary<string, object> parameters = new Dictionary<string, object>();
+parameters.Add("name", "test name");
+parameters.Add("message", "hello there with short url");
+parameters.Add("$og_title", "this is a title");
+parameters.Add("$og_description", "this is a description");
+parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
+
+List<string> tags = new List<string>();
+tags.Add("tag1");
+tags.Add("tag2");
+
+Branch.GetInstance().GetShortUrl (callback,
+		                          Constants.URL_TYPE_UNLIMITED,
+		                          parameters,
+		                          "test_channel",
+		                          "test_stage",
+		                          tags,
+		                          "test_feature");
+
+```
+
+#### Here’s the new mechanism using the Branch Universal Object:
+
+```
+BranchUniversalObject universalObject = new BranchUniversalObject();
+universalObject.canonicalIdentifier = "id12345";
+universalObject.title = "id12345 title";
+universalObject.contentDescription = "My awesome piece of content!";
+universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+universalObject.metadata.Add("foo", "bar");
+
+BranchLinkProperties linkProperties = new BranchLinkProperties();
+linkProperties.tags.Add("tag1");
+linkProperties.tags.Add("tag2");
+linkProperties.feature = "sharing";
+linkProperties.channel = "facebook";
+linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+
+Branch.GetInstance().GetShortURL (callback,
+		                          universalObject,
+		                          linkProperties);
+
+```
+As you can see, it’s a bit more code but a lot more structured. What’s really cool about this is that once you’ve created the Universal Object, you can then do a bunch of neat things like:
+
+######1. Initialize Branch
+
+```
+InitSession (IBranchBUOSessionInterface callback)
+```
+
+######2. Register a view on the content (for a new product coming soon)
+
+```
+RegisterView (BranchUniversalObject universalObject)
+```
+
+######3. Create a share sheet that lets the user share across all channels
+
+```
+ShareLink (IBranchLinkShareInterface callback,
+		   BranchUniversalObject universalObject,
+		   BranchLinkProperties linkProperties,
+		   string message)
+```
 
 ## Note: Migration from version 2.x.x to 3.x.x
 To migrate to version 3.x.x you just need to use

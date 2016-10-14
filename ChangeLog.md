@@ -1,8 +1,9 @@
 Branch Xamarin SDK change log
 
 - v3.0.0
-  * Updating iOS native library to version 0.12.9
-  * Updating Android native library to version 2.4.0
+  * Updating iOS native library to version 0.12.11
+  * Updating Android native library to version 2.4.5
+  * Adding examples for iOS and Android applications
   * Adding ResetUserSession()
   * Adding ListOnSpotlight(BranchUniversalObject universalObject)
   * Deleting CloseSession ()
