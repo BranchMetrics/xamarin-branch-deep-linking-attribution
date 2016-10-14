@@ -33,15 +33,13 @@ namespace BranchXamarinTestbed.Droid
 			base.OnCreate (savedInstanceState);
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			//BranchAndroid.Debug = true;
-
 			//App app = new App ();
-			//BranchAndroid.Init (this, "your Branch key", app);
+			//BranchAndroid.Init (this, GetString(Resource.String.branch_key), app);
 			//LoadApplication (app);
 
 			// uncomment to try BranchUniversalObject
 			AppBUO appBUO = new AppBUO ();
-			BranchAndroid.Init (this, "your Branch key", appBUO);
+			BranchAndroid.Init (this, GetString(Resource.String.branch_key), appBUO);
 			LoadApplication (appBUO);
 		}
 

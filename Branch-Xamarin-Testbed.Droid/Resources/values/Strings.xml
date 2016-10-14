@@ -2,4 +2,5 @@
 <resources>
 	<string name="hello">Hello World, Click Me!</string>
 	<string name="app_name">Branch-Xamarin-Testbed.Droid</string>
+	<string name="branch_key">your Branch key here</string>
 </resources>

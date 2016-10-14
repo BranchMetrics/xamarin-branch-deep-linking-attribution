@@ -14,6 +14,11 @@ If you don't have time to do so, just use a reference to version 1.2.1, which we
 
 There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/testbed).
 
+You can download our Xamarin SDK and you can find:
+1. Xamarin Forms applications
+2. iOS application in folder Examples
+3. Android application in folder Examples
+
 ## Additional Resources
 - [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
 - [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
@@ -57,9 +62,58 @@ ___
 
 ### Android: Configure your project
 
+#### Add Branch Key into Strings.xml
+
+Add your Branch Key into Strings.xml, you will use this value for configuration your Application class.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hello">Hello World, Click Me!</string>
+	<string name="app_name">Branch-Xamarin-Testbed.Droid</string>
+	<string name="branch_key">your Branch key here</string>
+</resources>
+```
+
+#### Configure your Application
+
+You should to add your Apllication class and configure blocks of parameteres for android manifest.
+
+You should to override method OnCreate() to call BranchAndroid.GetAutoInstance method.
+
+```csharp
+	[Application (AllowBackup = true, Icon = "@mipmap/icon", Label = "@string/app_name")]
+	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
+	[MetaData("io.branch.sdk.TestMode", Value = "true")]
+	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
+
+	public class TestBedApplication: Application
+	{
+		public TestBedApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+    	{
+		}
+
+		public override void OnCreate()
+		{
+			base.OnCreate();
+			BranchAndroid.GetAutoInstance(this.ApplicationContext);
+		}
+	}
+```
+
+| Key | Value
+| --- | ---
+| "io.branch.sdk.TestMode" | "true" - for simulation of fresh installs (for testing), "false" - set that flag to false when you will build a release verion of your application.
+| "io.branch.sdk.BranchKey" | Your Branch Key. You can add into Strings.xml both keys: "life" and "test" and change keys when you want (don't forget change key in Init method).
+
+#### Configure your Activity
+
 In your project's `manifest` file, you can register your app to respond to direct deep links (`yourapp://` in a mobile browser) by adding the second intent filter block. Also, make sure to change `yourapp` to a unique string that represents your app name.
 
 Make sure that this activity is launched as a `singleTask`. This is important to handle proper deep linking from other apps like Facebook.
+
+You should to override method OnCreate to call Branch initialization.
+You should to override method OnNewIntent for receiving data when you r app will be in background.
 
 ```
 [Activity (Label = "Your app label", MainLauncher = true, Icon = "@mipmap/icon",
@@ -86,6 +140,18 @@ Make sure that this activity is launched as a `singleTask`. This is important to
 		DataScheme = "https",
 		DataHost = "your-domain.app.link")]
 
+public class MainActivity : Activity, IBranchSessionInterface
+{
+	protected override void OnCreate (Bundle savedInstanceState)
+	{
+		base.OnCreate (savedInstanceState);
+		BranchAndroid.Init (this, GetString(Resource.String.branch_key), this);
+	}
+
+	protected override void OnNewIntent(Intent intent) {
+		this.Intent = intent;
+	}
+}
 ```
 
 
@@ -168,7 +234,6 @@ public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicat
 	}
 }
 ```
-Note that the first argument is the Branch key found in your app from the Branch dashboard. The second argument allows the Branch SDK to recognize if the application was launched from a content URI. The third argument allows to reconize if the application launched from Android App Links and from Push Notification.
 
 
 #### iOS with Forms
@@ -187,7 +252,7 @@ public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDe
 
 		App app = new App ();
 
-		// Enable debug mode. 
+		// Enable simulation of fresh installs. 
 		BranchIOS.Debug = true;
 		BranchIOS.Init ("Your Branch key here", launchOptions, app);
 
@@ -264,7 +329,7 @@ public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
 {
 	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
 	{
-		// Enable debug mode. 
+		// Enable simulation of fresh installs. 
 		BranchIOS.Debug = true;
 		BranchIOS.Init ("Your Branch key here", launchOptions, this);
 
@@ -359,9 +424,15 @@ ____
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 
 ```csharp
-Branch branch = Branch.GetInstance ();
-Dictionary<string, object> sessionParams = branch.GetLatestReferringParams();
+Dictionary<string, object> sessionParams = Branch.GetInstance().GetLatestReferringParams();
 ```
+or
+
+```csharp
+BranchUniversalObject buo = Branch.GetInstance().GetLastReferringBranchUniversalObject();
+BranchLinkProperties blp = Branch.GetInstance().GetLastReferringBranchLinkProperties();
+```
+
 
 ### Retrieve install (install only) parameters
 
@@ -370,6 +441,12 @@ If you ever want to access the original session params (the parameters passed in
 ```csharp
 Branch branch = Branch.GetInstance ();
 Dictionary<string, object> installParams = branch.GetFirstReferringParams();
+```
+or
+
+```csharp
+BranchUniversalObject buo = Branch.GetInstance().GetFirstReferringBranchUniversalObject();
+BranchLinkProperties blp = Branch.GetInstance().GetFirstReferringBranchLinkProperties();
 ```
 
 ### Persistent identities
@@ -649,6 +726,7 @@ Branch.GetInstance().GetShortUrl (callback,
 ```
 
 #### Here’s the new mechanism using the Branch Universal Object:
+
 ```
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
