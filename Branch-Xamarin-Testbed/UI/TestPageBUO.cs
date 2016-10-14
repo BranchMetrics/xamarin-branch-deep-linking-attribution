@@ -67,7 +67,7 @@ namespace BranchXamarinTestbed
 			var FLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
-				Text = "First Params:"
+				Text = "Universal Object:"
 			};
 
 			FirstLabel = new Label {
@@ -78,7 +78,7 @@ namespace BranchXamarinTestbed
 			var LLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
-				Text = "Latest Params"
+				Text = "Link Properties:"
 			};
 
 			LatestLabel = new Label {
@@ -382,6 +382,10 @@ namespace BranchXamarinTestbed
 			universalObject.title = "id12345 title";
 			universalObject.contentDescription = "My awesome piece of content!";
 			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+			universalObject.keywords = new List<string>();
+			universalObject.keywords.Add("key01");
+			universalObject.keywords.Add("key02");
+			universalObject.keywords.Add("key03");
 
 			var paramStr = ParamsEntry.Text;
 			if (!String.IsNullOrWhiteSpace (paramStr)) {
@@ -400,6 +404,10 @@ namespace BranchXamarinTestbed
 			linkProperties.channel = ChannelEntry.Text;
 			linkProperties.stage = StageEntry.Text;
 			linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+			linkProperties.tags = new List<string>();
+			linkProperties.tags.Add("tag01");
+			linkProperties.tags.Add("tag02");
+			linkProperties.tags.Add("tag03");
 
 			var tags = TagsEntry.Text;
 			if (!String.IsNullOrWhiteSpace (tags)) {
@@ -415,7 +423,7 @@ namespace BranchXamarinTestbed
 		void ShareLinkClicked(object sender, EventArgs e) {
 			if (universalObject != null) {
 
-				Branch.GetInstance ().ShareLink (this, universalObject, linkProperties, "hello there with short url");
+				Branch.GetInstance ().ShareLink (this, universalObject, linkProperties, "");
 			}
 		}
 			
@@ -593,10 +601,10 @@ namespace BranchXamarinTestbed
 			StatusLabel.Text = "InitBUOSessionComplete";
 
 			var first = buo.ToDictionary();
-			FirstLabel.Text = (first != null) ? prettyJSON (first) : "";
+			FirstLabel.Text = (first != null) ? buo.ToJsonString() : "";
 
 			var latest = blp.ToDictionary();
-			LatestLabel.Text = (latest != null) ? prettyJSON (latest) : "";
+			LatestLabel.Text = (latest != null) ? blp.ToJsonString() : "";
 		}
 
 		public void SessionRequestError (BranchError error)

@@ -27,8 +27,8 @@ namespace IOSNativeBranch
 	{
 		// @property (nonatomic, strong) NSArray * tags;
 		[Export ("tags", ArgumentSemantic.Strong)]
-	//	[Verify (StronglyTypedNSArray)]
-		NSObject[] Tags { get; set; }
+		//[Verify (StronglyTypedNSArray)]
+		NSArray Tags { get; set; }
 
 		// @property (nonatomic, strong) NSString * feature;
 		[Export ("feature", ArgumentSemantic.Strong)]
@@ -109,7 +109,7 @@ namespace IOSNativeBranch
 		// @property (nonatomic, strong) NSArray * keywords;
 		[Export ("keywords", ArgumentSemantic.Strong)]
 	//	[Verify (StronglyTypedNSArray)]
-		NSObject[] Keywords { get; set; }
+		NSArray Keywords { get; set; }
 
 		// @property (nonatomic, strong) NSDate * expirationDate;
 		[Export ("expirationDate", ArgumentSemantic.Strong)]

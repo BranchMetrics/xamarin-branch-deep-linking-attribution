@@ -45,6 +45,10 @@ namespace BranchXamarinSDK
 		private Context appContext = null;
 		public Activity CurrActivity { get; set; }
 
+		public static void GetAutoInstance(Context appContext) {
+			AndroidNativeBranch.GetAutoInstance(appContext);
+		}
+
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
 
 			Init (((Activity)context).Application, branchKey, callback);
@@ -62,7 +66,7 @@ namespace BranchXamarinSDK
 			}
 
 			if (!branchKey.StartsWith("key_", StringComparison.Ordinal)) {
-				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
+				Console.WriteLine (branchKey + ":  Usage of App Key is deprecated, please move toward using a Branch key");
 			}
 
 			instance = new BranchAndroid ();
@@ -74,7 +78,7 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 
-			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler();
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
 			getInstance().InitSession(callback);
 		}
@@ -86,7 +90,7 @@ namespace BranchXamarinSDK
 			}
 
 			if (!branchKey.StartsWith("key_", StringComparison.Ordinal)) {
-				Console.WriteLine ("Usage of App Key is deprecated, please move toward using a Branch key");
+				Console.WriteLine (branchKey + ":  Usage of App Key is deprecated, please move toward using a Branch key");
 			}
 
 			instance = new BranchAndroid ();
@@ -98,7 +102,7 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 
-			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler();
+			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
 			getInstance().InitSession(callback);
 		}
@@ -189,25 +193,8 @@ namespace BranchXamarinSDK
 			BranchUrlListener obj = new BranchUrlListener (callback);
 			callbacksList.Add (obj as Object);
 
-			IO.Branch.Indexing.BranchUniversalObject resBuo = 
-				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
-
-			IO.Branch.Referral.Util.LinkProperties resBlp =
-				new IO.Branch.Referral.Util.LinkProperties ();
-
-			foreach (string tag in linkProperties.tags) {
-				resBlp.AddTag (tag);
-			}
-
-			foreach (string key in linkProperties.controlParams.Keys) {
-				resBlp.AddControlParameter (key, linkProperties.controlParams[key]);
-			}
-
-			resBlp.SetAlias (linkProperties.alias);
-			resBlp.SetChannel (linkProperties.channel);
-			resBlp.SetDuration (linkProperties.matchDuration);
-			resBlp.SetFeature (linkProperties.feature);
-			resBlp.SetStage (linkProperties.stage);
+			IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
+			IO.Branch.Referral.Util.LinkProperties resBlp = BranchAndroidUtils.ToNativeBLP(linkProperties);
 
 			resBuo.GenerateShortUrl (appContext, resBlp, obj);
 		}
@@ -226,25 +213,8 @@ namespace BranchXamarinSDK
 			BranchLinkShareListener obj = new BranchLinkShareListener (callback);
 			callbacksList.Add (obj as Object);
 
-			IO.Branch.Indexing.BranchUniversalObject resBuo = 
-				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
-
-			IO.Branch.Referral.Util.LinkProperties resBlp =
-				new IO.Branch.Referral.Util.LinkProperties ();
-
-			foreach (string tag in linkProperties.tags) {
-				resBlp.AddTag (tag);
-			}
-
-			foreach (string key in linkProperties.controlParams.Keys) {
-				resBlp.AddControlParameter (key, linkProperties.controlParams[key]);
-			}
-
-			resBlp.SetAlias (linkProperties.alias);
-			resBlp.SetChannel (linkProperties.channel);
-			resBlp.SetDuration (linkProperties.matchDuration);
-			resBlp.SetFeature (linkProperties.feature);
-			resBlp.SetStage (linkProperties.stage);
+			IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
+			IO.Branch.Referral.Util.LinkProperties resBlp = BranchAndroidUtils.ToNativeBLP(linkProperties);
 
 			IO.Branch.Referral.Util.ShareSheetStyle style = 
 				new IO.Branch.Referral.Util.ShareSheetStyle(appContext, "", message);
@@ -338,16 +308,12 @@ namespace BranchXamarinSDK
 		}
 
 		public override void RegisterView (BranchUniversalObject universalObject) {
-			IO.Branch.Indexing.BranchUniversalObject resBuo = 
-				IO.Branch.Indexing.BranchUniversalObject.CreateInstance (BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
-
+			IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
 			resBuo.RegisterView ();
 		}
 
 		public override void ListOnSpotlight(BranchUniversalObject universalObject) {
-			IO.Branch.Indexing.BranchUniversalObject resBuo =
-				IO.Branch.Indexing.BranchUniversalObject.CreateInstance(BranchAndroidUtils.ToJSONObject(universalObject.ToDictionary()));
-
+			IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
 			resBuo.ListOnGoogleSearch(appContext);
 		}
 
