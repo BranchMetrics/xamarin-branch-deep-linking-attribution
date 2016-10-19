@@ -8,11 +8,11 @@ using BranchXamarinTestbed;
 
 namespace BranchXamarinTestbed.Droid
 {
-	[Activity (Label = "Branch-Xamarin-Testbed.Droid", MainLauncher = true, Icon = "@mipmap/icon", LaunchMode = LaunchMode.SingleTask)]
+	[Activity (Label = "io.branch.testbed-xamarinforms", MainLauncher = true, Icon = "@mipmap/icon", LaunchMode = LaunchMode.SingleTask)]
 
 	[IntentFilter (new[]{"android.intent.action.VIEW"},
 		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
-		DataScheme="branchtesturi",
+		DataScheme="testbed-xamarinforms",
 		DataHost="open")]
 
 	//[IntentFilter (new[]{"android.intent.action.VIEW"},
@@ -24,7 +24,7 @@ namespace BranchXamarinTestbed.Droid
 	[IntentFilter(new[] { "android.intent.action.VIEW" },
 		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
 		DataScheme = "https",
-		DataHost = "fa36.app.link")]
+		DataHost = "testbed-xamarinforms.app.link")]
 
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{

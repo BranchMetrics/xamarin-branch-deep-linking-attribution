@@ -30,6 +30,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
@@ -55,6 +56,6 @@
 		</dict>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>io.branch.testbed</string>
+	<string>io.branch.TestBed-XamarinForms</string>
 </dict>
 </plist>

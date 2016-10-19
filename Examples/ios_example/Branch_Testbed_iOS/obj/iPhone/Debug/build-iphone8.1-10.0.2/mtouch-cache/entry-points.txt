@@ -1,0 +1,14 @@
+CreateZStream
+CloseZStream
+Flush
+ReadZStream
+WriteZStream
+xamarin_start_wwan
+UIApplicationMain
+xamarin_get_block_descriptor
+xamarin_IntPtr_objc_msgSend_IntPtr
+xamarin_IntPtr_objc_msgSendSuper_IntPtr
+xamarin_timezone_get_data
+xamarin_GetFolderPath
+xamarin_log
+mono_pmip

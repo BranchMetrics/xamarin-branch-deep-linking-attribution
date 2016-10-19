@@ -25,8 +25,10 @@
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
     <MtouchUseSGen>true</MtouchUseSGen>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution: Branch Metrics, Inc. (R63EM248DP)</CodesignKey>
     <MtouchFastDev>true</MtouchFastDev>
+    <CodesignProvision>86db74e5-b4f0-416f-99b0-09f16dc1bdca</CodesignProvision>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>full</DebugType>
@@ -76,6 +78,7 @@
     <MtouchUseSGen>true</MtouchUseSGen>
     <IpaPackageName>
     </IpaPackageName>
+    <CodesignProvision></CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

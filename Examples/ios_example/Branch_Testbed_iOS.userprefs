@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{46044160-9BBB-41E4-8E06-1FAD0A51326C}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Branch_Testbed_iOS/Info.plist">
+    <Files>
+      <File FileName="Branch_Testbed_iOS/Entitlements.plist" />
+      <File FileName="Branch_Testbed_iOS/Constants.cs" Line="6" Column="79" />
+      <File FileName="Branch_Testbed_iOS/Info.plist" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" />
+  <MonoDevelop.Ide.ItemProperties.Branch__Testbed__iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.4c95ca2c38c08e9662727f7ba3989d680fdc4b32" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

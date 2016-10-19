@@ -21,7 +21,7 @@ namespace BranchXamarinTestbed.iOS
 
 			// uncomment to try BranchUniversalObject
 			AppBUO appBUO = new AppBUO ();
-			BranchIOS.Init ("your Branch key", launchOptions, appBUO);
+			BranchIOS.Init ("key_live_bmEetSmsaI8OS6fCiyS5VmjhDqnfXBxP", launchOptions, appBUO);
 			LoadApplication (appBUO);
 
 			return base.FinishedLaunching(application, launchOptions);
