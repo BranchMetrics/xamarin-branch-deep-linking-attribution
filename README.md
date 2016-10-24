@@ -31,11 +31,9 @@ Should you run into issues with the SDK, please check that they are present in t
 
 ___
 
-## Configuring Xamarin apps for deep linking
+## Overview of Branch links and Branch keys 
 
-### Overview of Branch links and Branch keys
-
-#### Format of Branch links
+### Format of Branch links
 
 Branch links consist of an app-specific base domain (*testbed-xamarin.app.link*, for example) followed by an alphanumeric suffix. This suffix, referred to as the *alias*, can be either randomly generated (*FCIWxFeBGx*, for example) or manually-defined (*testlink*, for example). The app-specific base domain used to create the links is termed the *Branch link domain*.
 
@@ -46,18 +44,21 @@ A Branch-integrated app called TestBed-Xamarin and assigned the dafult Branch li
 
 Note that when using the 'app.link' default link domain there is a second, alternate, form of the link domain that comes into play when displaying Branch Deepviews - the *alternate link domain*. This *alternate link domain* sees the domain's '.app.link' string replaced by '-alternate.app.link'. Both the regular and alternate link domains must be configured within each project.
 
-#### Branch keys
+### Branch keys
 
 Branch keys start with a prefix *key_live_* or *key_test_* and are followed by a string of 32 aphanumeric characters (*key_live_kdzhBMBYt5Pi4g4DVRfQbdkbqDlm5rIv*, for example). Branch associates apps with Branch links via the Branch key, which must be supplied when initializing the Branch SDK. Data associated with Branch links can only be read by apps that are using the same Branch key.
 
 Note that the Live and Test apps on the Branch dashboard are completely separate and each has its own Branch key. Even when Live and Test have been configured identically and links from both are able to open up a particular app, the app will only receive link data for which it has the matching Branch key.
 
-### Creating a Branch link domain and Branch key for the app
+### Creating a Branch link domain and Branch key for an app
 
 Register the app on the Branch dashboard, here: [https://dashboard.branch.io](https://dashboard.branch.io)
 
 The Branch key can be found on the [General Settings](https://dashboard.branch.io/settings) page. The app's Branch link domain  will be listed at the very bottom of the [Link Settings](https://dashboard.branch.io/link) page.
 
+___
+
+## Configuring Xamarin apps for deep linking
 
 ### Adding the Branch SDK to a Xamarin Solution
 
