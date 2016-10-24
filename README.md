@@ -42,13 +42,13 @@ A Branch-integrated app called TestBed-Xamarin and assigned the dafult Branch li
 - https://testbed-xamarin.app.link/FCIWxFeBGx
 - https://testbed-xamarin.app.link/testlink
 
-Note that when using the 'app.link' default link domain there is a second, alternate, form of the link domain that comes into play when displaying Branch Deepviews - the *alternate link domain*. This *alternate link domain* sees the domain's '.app.link' string replaced by '-alternate.app.link'. Both the regular and alternate link domains must be configured within each project.
+Note that when using the 'app.link' default link domain there is a second, alternate, form of the link domain that comes into play when displaying Branch Deepviews - the *alternate link domain*. This *alternate link domain* sees the domain's '.app.link' string replaced by '-alternate.app.link'. If you are using a default app.link link domain, both the regular and alternate domains will be needed when configuring a project to support deep linking.
 
 ### Branch keys
 
-Branch keys start with a prefix *key_live_* or *key_test_* and are followed by a string of 32 aphanumeric characters (*key_live_kdzhBMBYt5Pi4g4DVRfQbdkbqDlm5rIv*, for example). Branch associates apps with Branch links via the Branch key, which must be supplied when initializing the Branch SDK. Data associated with Branch links can only be read by apps that are using the same Branch key.
+Branch keys consist of a prefix (**key_live_** or **key_test_**) followed by a string of 32 aphanumeric characters (*key_live_kdzhBMBYt5Pi4g4DVRfQbdkbqDlm5rIv*, for example). Branch keys are used to associate apps with Branch links. An app's Branch key is required to initialize the Branch SDK. Data associated with Branch links can only be read by apps that  use the same Branch key.
 
-Note that the Live and Test apps on the Branch dashboard are completely separate and each has its own Branch key. Even when Live and Test have been configured identically and links from both are able to open up a particular app, the app will only receive link data for which it has the matching Branch key.
+Note that the **Live** and **Test** apps on the Branch dashboard are completely separate; each has its own Branch key. Even when **Live** and **Test** sections of the dashboard have been configured identically and links from both are able to open up a particular app, the app will only receive link data for which it has the matching Branch key.
 
 ### Creating a Branch link domain and Branch key for an app
 
