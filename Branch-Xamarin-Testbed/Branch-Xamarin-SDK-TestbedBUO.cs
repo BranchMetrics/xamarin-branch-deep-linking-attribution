@@ -1,8 +1,6 @@
 ﻿using BranchXamarinSDK;
-
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using Xamarin.Forms;
 
 namespace BranchXamarinTestbed
@@ -34,4 +32,3 @@ namespace BranchXamarinTestbed
 		#endregion
 	}
 }
-

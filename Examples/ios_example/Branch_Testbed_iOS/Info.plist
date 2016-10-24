@@ -41,7 +41,7 @@
 			<string>Branch Scheme</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>branchtesturi</string>
+				<string>testbed-xamarin</string>
 			</array>
 			<key>CFBundleURLTypes</key>
 			<string>Editor</string>
