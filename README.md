@@ -15,7 +15,7 @@ ___
 
 ### Branch-integrated Xamarin Demo Apps
 
-There are four fully-functional demo apps included in this repository: a native and a Forms app for both iOS and Android platforms. Use these apps as reference models for integrating the Branch SDK. Should you run into any bugs with the SDK, please check that they are present in the appropriate demo app before submitting the issue as a bug.
+There are four fully-functional demo apps included in this repository: a Xamarin Native and Xamarin Forms apps for both iOS and Android platforms. Use these apps as reference models for integrating the Branch SDK.
 
 **Testbed-Xamarin (Native apps)**
 
@@ -26,6 +26,8 @@ There are four fully-functional demo apps included in this repository: a native 
 
 - [iOS](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Branch-Xamarin-Testbed.iOS)  
 - [Android](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Branch-Xamarin-Testbed.Droid)  
+
+Should you run into issues with the SDK, please check that they are present in the appropriate demo app before submitting any issue as a bug.
 
 ___
 
