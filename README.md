@@ -1,15 +1,37 @@
 # Branch Xamarin SDK
 
-**The compiled iOS SDK footprint is 180kb**  
-**The compiled Android SDK footprint is 187kb**
-
+Branch's deep linking SDK for Xamarin
 ___
 
-[Getting Started](#Getting-Started)
+## Table of Contents
+
+1. [Getting Started](#Getting-Started)
+  + [SDK Details](SDK-Details)
+  + [Resources]()
+  + [Branch-integrated Xamarin Demo Apps](Branch-integrated-Xamarin-Demo-Apps)
+
+2. Overview of Branch links and Branch keys
+  + [Format of Branch links](Format-of-Branch-links)
+  + [Branch keys](Branch-keys)
+  + [Creating a Branch link domain and Branch key for an app](Creating-a-Branch-link-domain-and-Branch-key-for-an-app)
+  
+3. Configuring Xamarin apps for deep linking
+  + []()
+  + []()
+  + []()
+  + []()
+  + []()
+  + []()
 
 ___
 
 ## Getting Started
+
+### SDK Details
+
+Current version: **3.0**
+iOS SDK compiled footprint: **180kb**
+Android SDK compiled footprint: **187kb**
 
 ### Resources
 - This document - *Start Here*
