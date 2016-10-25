@@ -5,6 +5,10 @@
 
 ___
 
+[Getting Started](#Getting-Started)
+
+___
+
 ## Getting Started
 
 ### Resources
@@ -69,7 +73,7 @@ The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet packag
 To add the Branch NuGet package to a project:
 
 1. Right-click on each project and select `Add` > `Add NuGet Package`  
-2. Find the _Branch Xamarin Linking SDK_ and add it to the project
+2. Find the _Branch Xamarin SDK_ package and add it to the project
 
 #### Adding the Branch SDK without NuGet
 
@@ -80,10 +84,11 @@ If, instead of using NuGet, you would rather build and reference the Branch asse
 3. Add the `Branch-Xamarin-SDK.Droid` project to the solution and reference it from the Android project, if any
 4. Add the `Branch-Xamarin-SDK.iOS` project and reference it from the iOS project, if any
 
+___
+
 ### Integrating the Branch SDK with a Xamarin Project
 
 The steps for integrating the Branch SDK with a project differ depending on whether or not the project is creating a Xamarin Forms application and on which mobile platform the project is intended, iOS or Android. Instructions for each of the four scenarios are provided below.
-
 ___
 
 #### Xamarin Native projects
@@ -93,9 +98,9 @@ ___
 ###### Create an Apple device Provisioning Profile for the app
 
 1. Open Xcode and create a new project with the same name as your Xamarin iOS project
-2. On the Xcode project's **General** tab, enter the app's Bundle Identifier and select the appropriate Team (be sure to resolve any errors here)
+2. On the Xcode project's **General** tab, verify the app's Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
 3. Select the **Capabilities** tab and enable the **Associated Domains** entitlement
-4. Create 'applinks:' entries for the Branch link domain assigned to the app (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestBed-Xamarin* would be:
+4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestBed-Xamarin* would be:
   - `applinks:testbed-xamarin.app.link`  
   - `applinks:testbed-xamarin-alternate.app.link` 
 5. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.
@@ -117,11 +122,11 @@ ___
   - **URL Schemes:** {the app's URI Scheme - 'appname', for example}
   - **Role:** Editor  
 
-![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
+![iOS URI Scheme](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
 
 ###### Configure the Xamarin project's **Associated Domains** entitlement
 
-1. Open the **Entitlements.plist** file and browse to **Associated Domains** (if this file does not already exist, create it)
+1. Open the **Entitlements.plist** file and browse to **Associated Domains**
 2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:
     - `applinks:testbed-xamarin.app.link` 
     - `applinks:testbed-xamarin-alternate.app.link`  
@@ -129,66 +134,75 @@ ___
 
 ##### Add Branch calls to the **AppDelegate.cs** file
 
-To ensure that the Branch SDK initializes when the app starts and can retrieve link parameters whenever the app becomes active, Branch initialization occurs within the `FinishedLaunching` method of the AppDelegate.cs file. Branch calls are also required in the OpenUrl, ContinueUserActivity, and ReceiveRemoteNotification methods to ensure that Branch link information is handled properly whenever the app becomes active.
+Branch initialization occurs within the `FinishedLaunching` method of the **AppDelegate.cs** file. Branch calls are also required in the `OpenUrl`, `ContinueUserActivity`, and `ReceiveRemoteNotification` methods to ensure that Branch link information is handled properly whenever the app becomes active.
+
+Whenever the app becomes active, the Branch SDK will reach out to the Branch back end to retrieve any available link parameters. If the app became active due to a click on a Branch link, the link data will be returned in the `InitSessionComplete method`. This is where any deep link routing logic should reside. Any error in retrieving Branch link data from the back end will returned in the `SessionRequestError method`.
 
 ```csharp
-[Register("AppDelegate")]
-public class AppDelegate : UIApplicationDelegate, IBranchBUOSessionInterface
+using Foundation;
+using UIKit;
+using BranchXamarinSDK;
+using BranchXamarinSDK.iOS;
+using System;
+
+namespace TestiOSApp.iOS
 {
-
-	public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+	[Register("AppDelegate")]
+	public class AppDelegate : UIApplicationDelegate, IBranchBUOSessionInterface
 	{
-		storyboard = UIStoryboard.FromName("Main", null);
-
-		BranchIOS.Debug = true;
-		BranchIOS.Init(Constants.Branch_key, launchOptions, this);
-
-		return true;
-	}
-
-	public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
-	{
-		return BranchIOS.getInstance().OpenUrl(url);
-	}
-
-	public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
-						  UIApplicationRestorationHandler completionHandler)
-	{
-		return BranchIOS.getInstance().ContinueUserActivity(userActivity);
-	}
-
-	public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
-	{
-		BranchIOS.getInstance().HandlePushNotification(userInfo);
-	}
-
-	public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
-	{
-		NSObject[] keys = {
-			NSObject.FromObject("+is_first_session")
-		};
-
-		NSObject[] values = {NSObject.FromObject(0)};
-		if (buo.metadata.ContainsKey("+is_first_session")) {
-			values[0] = NSObject.FromObject(buo.metadata["+is_first_session"]);
+	
+		public override UIWindow Window
+		{
+			get;
+			set;
 		}
 
-		NSDictionary nsData = NSDictionary.FromObjectsAndKeys(values, keys);
-		NSNotificationCenter.DefaultCenter.PostNotificationName(Constants.Branch_notification, null, nsData);
+		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+		{
+			BranchIOS.Debug = true; // Set to 'false' before releasing to production
+			BranchIOS.Init("key_live_cgEguO4UiDJSL4HIyTu85dkkDAdz38ER", launchOptions, this);
+
+			return true;
+		}
+
+		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+		{
+			return BranchIOS.getInstance().OpenUrl(url);
+		}
+
+		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
+					  UIApplicationRestorationHandler completionHandler)
+		{
+			return BranchIOS.getInstance().ContinueUserActivity(userActivity);
+		}
+
+		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+		{
+			BranchIOS.getInstance().HandlePushNotification(userInfo);
+		}
+
+		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
+		{
+			NSObject[] keys = {
+				NSObject.FromObject("+is_first_session")
+			};
+
+			NSObject[] values = { NSObject.FromObject(0) };
+			if (buo.metadata.ContainsKey("+is_first_session"))
+			{
+				values[0] = NSObject.FromObject(buo.metadata["+is_first_session"]);
+			}
+
+			NSDictionary nsData = NSDictionary.FromObjectsAndKeys(values, keys);
+		}
+
+		public void SessionRequestError(BranchError error)
+		{
+			Console.WriteLine("Branch error: " + error.ErrorCode);
+			Console.WriteLine(error.ErrorMessage);
+		}
+
 	}
-
-	public void SessionRequestError(BranchError error)
-	{
-		Console.WriteLine("Branch error: " + error.ErrorCode);
-		Console.WriteLine(error.ErrorMessage);
-
-		ErrorViewController errorController = (ErrorViewController)storyboard.InstantiateViewController("ErrorScreen");
-
-		Window.RootViewController.PresentViewController(errorController, false, delegate {
-			errorController.SetError("Branch error: " + error.ErrorCode, error.ErrorMessage);
-		});
-	}
-
 }
 ```
 
@@ -216,29 +230,70 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 In the sample Xamarin Native project included in the Branch SDK's **Examples/droid_example** folder this is is the TestBedApp.cs file:
 
 ```csharp
-using System;
-using Android.App;
-using Android.Content;
-using Android.Runtime;
+using Foundation;
+using UIKit;
 using BranchXamarinSDK;
+using BranchXamarinSDK.iOS;
+using System;
 
-namespace BranchXamarinTestbed.Droid
+namespace TestiOSApp.iOS
 {
-	[Application (AllowBackup = true, Icon = "@mipmap/icon", Label = "@string/app_name")]
-	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
-	[MetaData("io.branch.sdk.TestMode", Value = "true")]
-	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
-
-	public class TestBedApplication: Application
+	// The UIApplicationDelegate for the application. This class is responsible for launching the
+	// User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
+	[Register("AppDelegate")]
+	public class AppDelegate : UIApplicationDelegate, IBranchBUOSessionInterface
 	{
-		public TestBedApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
-    	{
+		// class-level declarations
+
+		public override UIWindow Window
+		{
+			get;
+			set;
 		}
 
-		public override void OnCreate()
+		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
 		{
-			base.OnCreate();
-			BranchAndroid.GetAutoInstance(this.ApplicationContext);
+			BranchIOS.Debug = true; // Set to 'false' before releasing to production
+			BranchIOS.Init("key_live_cgEguO4UiDJSL4HIyTu85dkkDAdz38ER", launchOptions, this);
+
+			return true;
+		}
+
+		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+		{
+			return BranchIOS.getInstance().OpenUrl(url);
+		}
+
+		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
+					  UIApplicationRestorationHandler completionHandler)
+		{
+			return BranchIOS.getInstance().ContinueUserActivity(userActivity);
+		}
+
+		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+		{
+			BranchIOS.getInstance().HandlePushNotification(userInfo);
+		}
+
+		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
+		{
+			NSObject[] keys = {
+				NSObject.FromObject("+is_first_session")
+			};
+
+			NSObject[] values = { NSObject.FromObject(0) };
+			if (buo.metadata.ContainsKey("+is_first_session"))
+			{
+				values[0] = NSObject.FromObject(buo.metadata["+is_first_session"]);
+			}
+
+			NSDictionary nsData = NSDictionary.FromObjectsAndKeys(values, keys);
+		}
+
+		public void SessionRequestError(BranchError error)
+		{
+			Console.WriteLine("Branch error: " + error.ErrorCode);
+			Console.WriteLine(error.ErrorMessage);
 		}
 	}
 }
