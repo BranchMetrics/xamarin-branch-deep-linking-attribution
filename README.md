@@ -10,7 +10,7 @@ ___
   + [Resources](#resources)
   + [Branch-integrated Xamarin Demo Apps](#branch-integrated-xamarin-demo-apps)
 
-2. Overview of Branch links and Branch keys
+2. [**Overview of Branch links and Branch keys**](#overview-of-branch-links-and-branch-keys)
   + [Format of Branch links](#format-of-branch-links)
   + [Branch keys](#branch-keys)
   + [Creating a Branch link domain and Branch key for an app](#creating-a-branch-link-domain-and-branch-key-for-an-app)
