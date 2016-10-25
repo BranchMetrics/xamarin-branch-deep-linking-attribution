@@ -5,7 +5,7 @@ ___
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
+1. [**Introduction**](#introduction)
   + [SDK Details](#sdk-details)
   + [Resources](#resources)
   + [Branch-integrated Xamarin Demo Apps](#branch-integrated-xamarin-demo-apps)
@@ -15,7 +15,7 @@ ___
   + [Branch keys](#branch-keys)
   + [Creating a Branch link domain and Branch key for an app](#creating-a-branch-link-domain-and-branch-key-for-an-app)
   
-3. [Configuring Xamarin apps for deep linking](#configuring-xamarin-apps-for-deep-linking)
+3. [**Configuring Xamarin apps for deep linking**](#configuring-xamarin-apps-for-deep-linking)
   + [Adding the Branch SDK to a Xamarin Solution](#adding-the-branch-sdk-to-a-xamarin-solution)
     + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
     + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
@@ -101,8 +101,9 @@ The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet packag
 
 To add the Branch NuGet package to a project:
 
-1. Right-click on each project and select `Add` > `Add NuGet Package`  
-2. Find the _Branch Xamarin SDK_ package and add it to the project
+1. Right-click on each project and select `Add` > `Add NuGet Packages`
+2. If not already present, find the _Microsoft BCL Build Components_ package and add it to the project
+3. Find the _Branch Xamarin SDK_ package and add it to the project
 
 #### Adding the Branch SDK without NuGet
 
@@ -122,7 +123,7 @@ ___
 
 #### Xamarin Native projects
 
-##### Integrating with an iOS Native project
+##### Integrating the Branch SDK with an iOS Native project
 
 ###### Create an Apple device Provisioning Profile for the app
 
@@ -165,7 +166,7 @@ ___
 
 Branch initialization occurs within the `FinishedLaunching` method of the **AppDelegate.cs** file. Branch calls are also required in the `OpenUrl`, `ContinueUserActivity`, and `ReceiveRemoteNotification` methods to ensure that Branch link information is handled properly whenever the app becomes active.
 
-Whenever the app becomes active, the Branch SDK will reach out to the Branch back end to retrieve any available link parameters. If the app became active due to a click on a Branch link, the link data will be returned in the `InitSessionComplete method`. This is where any deep link routing logic should reside. Any error in retrieving Branch link data from the back end will returned in the `SessionRequestError method`.
+Whenever the app becomes active, the Branch SDK will reach out to the Branch back end to retrieve any available link parameters. If the app became active due to a click on a Branch link, the link data will be returned in the `InitSessionComplete method`. This is where any deep link routing logic should reside. Any error in retrieving Branch link data from the back end will returned in the `SessionRequestError` method.
 
 ```csharp
 using Foundation;
@@ -235,9 +236,15 @@ namespace TestiOSApp.iOS
 }
 ```
 
+###### Update the project's Signing Identity and Provisioning Profile 
+
+1. Right-click on the iOS project and select **Options**
+2. Select **iOS Bundle Signing** 
+3. Set the **Signing Identity** and **Provisioning Profile values** to the values used when deploying the Provisioning Profile to the device above
+
 ___
 
-##### Integrating with an Android Native project
+##### Integrating the Branch SDK with an Android Native project
 
 ###### Add the app's Branch key to the Strings.xml file
 
@@ -247,82 +254,43 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">TestBed-Xamarin</string>
-	<string name="branch_key">key_live_kdzhBMBYt5Pi4g4DVRfQbdkbqDlm5rIv</string>
+	<string name="branch_key">key_live_howbsM2XwBp7V5DNfw0refdartp0njwG</string>
 </resources>
 ```
 
-##### Configure project's *Application* class
+##### Create the project's *Application* class
 
-- Set the Branch SDK's initialization parameters  
-- Override the `OnCreate()` method to call `BranchAndroid.GetAutoInstance`
+Create an Application.cs file
 
-In the sample Xamarin Native project included in the Branch SDK's **Examples/droid_example** folder this is is the TestBedApp.cs file:
+1. Right-click on the .Droid project and select **Add > New File...**
+2. Select: **Empty File**
+3. Rename the file: **Application.cs**
+4. Enter the following code, replacing 'TestAndroidApp' with the name of the app
 
 ```csharp
-using Foundation;
-using UIKit;
-using BranchXamarinSDK;
-using BranchXamarinSDK.iOS;
 using System;
+using Android.App;
+using Android.Content;
+using Android.Runtime;
+using BranchXamarinSDK;
 
-namespace TestiOSApp.iOS
+namespace TestAndroidApp
 {
-	// The UIApplicationDelegate for the application. This class is responsible for launching the
-	// User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
-	[Register("AppDelegate")]
-	public class AppDelegate : UIApplicationDelegate, IBranchBUOSessionInterface
+	[Application(AllowBackup = true, Icon = "@mipmap/icon", Label = "@string/app_name")]
+	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
+	[MetaData("io.branch.sdk.TestMode", Value = "true")]
+	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
+
+	public class TestAndroidApp: Application
 	{
-		// class-level declarations
-
-		public override UIWindow Window
+		public TestAndroidApp(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
 		{
-			get;
-			set;
 		}
 
-		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+		public override void OnCreate()
 		{
-			BranchIOS.Debug = true; // Set to 'false' before releasing to production
-			BranchIOS.Init("key_live_cgEguO4UiDJSL4HIyTu85dkkDAdz38ER", launchOptions, this);
-
-			return true;
-		}
-
-		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
-		{
-			return BranchIOS.getInstance().OpenUrl(url);
-		}
-
-		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
-					  UIApplicationRestorationHandler completionHandler)
-		{
-			return BranchIOS.getInstance().ContinueUserActivity(userActivity);
-		}
-
-		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
-		{
-			BranchIOS.getInstance().HandlePushNotification(userInfo);
-		}
-
-		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
-		{
-			NSObject[] keys = {
-				NSObject.FromObject("+is_first_session")
-			};
-
-			NSObject[] values = { NSObject.FromObject(0) };
-			if (buo.metadata.ContainsKey("+is_first_session"))
-			{
-				values[0] = NSObject.FromObject(buo.metadata["+is_first_session"]);
-			}
-
-			NSDictionary nsData = NSDictionary.FromObjectsAndKeys(values, keys);
-		}
-
-		public void SessionRequestError(BranchError error)
-		{
-			Console.WriteLine("Branch error: " + error.ErrorCode);
-			Console.WriteLine(error.ErrorMessage);
+			base.OnCreate();
+			BranchAndroid.GetAutoInstance(this.ApplicationContext);
 		}
 	}
 }
@@ -332,6 +300,19 @@ namespace TestiOSApp.iOS
 | --- | ---
 | io.branch.sdk.TestMode | Setting this parameter to *true* enables Debug Mode, which causes simple uninstall/reinstalls of the app to trigger *install* events. Be sure to disable this before deploying to production. Note that enabling Debug Mode on Android also forces the app to use the Branch *Test* key if this key has been added to the project. Apps running with a *Test* key will be unable to receive data from Branch links created with the *Live* key.
 | io.branch.sdk.BranchKey | The app's Branch key. Both a *Live* key and a *Test* key can be added to the Strings.xml file. When *Test* Mode is enabled the app will automatically use the *Test* key, if one has been specified.
+
+##### Add a **BranchActivity.cs** file to the .Droid project
+
+Create an **BranchActivity.cs** file
+
+1. Right-click on the .Droid project and select **Add > New File...**
+2. Select: **Android > Activity**
+3. Rename the file: **BranchActivity.cs**
+4. Enter the following code, replacing 'TestAndroidApp' with the name of the app
+
+```csharp
+
+```
 
 ##### Initialize Branch and configure Branch session management
 
@@ -423,6 +404,8 @@ Additional reading on the Android manifest
 
 - [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
 - [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
+
+
 
 ___
 
