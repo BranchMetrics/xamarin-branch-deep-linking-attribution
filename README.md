@@ -6,14 +6,14 @@ ___
 ## Table of Contents
 
 1. [Getting Started](#Getting-Started)
-  + [SDK Details](#SDK-Details)
-  + [Resources](#Resources)
-  + [Branch-integrated Xamarin Demo Apps](Branch-integrated-Xamarin-Demo-Apps)
+  + [SDK Details](#sdk-details)
+  + [Resources](#resources)
+  + [Branch-integrated Xamarin Demo Apps](#branch-integrated-xamarin-demo-apps)
 
 2. Overview of Branch links and Branch keys
-  + [Format of Branch links](Format-of-Branch-links)
-  + [Branch keys](Branch-keys)
-  + [Creating a Branch link domain and Branch key for an app](Creating-a-Branch-link-domain-and-Branch-key-for-an-app)
+  + [Format of Branch links](#format-of-branch-links)
+  + [Branch keys](#branch-keys)
+  + [Creating a Branch link domain and Branch key for an app](#creating-a-branch-link-domain-and-branch-key-for-an-app)
   
 3. Configuring Xamarin apps for deep linking
   + []()
