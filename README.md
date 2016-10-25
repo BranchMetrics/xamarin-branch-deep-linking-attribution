@@ -6,8 +6,8 @@ ___
 ## Table of Contents
 
 1. [Getting Started](#Getting-Started)
-  + [SDK Details](SDK-Details)
-  + [Resources]()
+  + [SDK Details](#SDK-Details)
+  + [Resources](#Resources)
   + [Branch-integrated Xamarin Demo Apps](Branch-integrated-Xamarin-Demo-Apps)
 
 2. Overview of Branch links and Branch keys
