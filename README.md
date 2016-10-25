@@ -5,7 +5,7 @@ ___
 
 ## Table of Contents
 
-1. [Getting Started](#Getting-Started)
+1. [Introduction](#introduction)
   + [SDK Details](#sdk-details)
   + [Resources](#resources)
   + [Branch-integrated Xamarin Demo Apps](#branch-integrated-xamarin-demo-apps)
@@ -15,9 +15,9 @@ ___
   + [Branch keys](#branch-keys)
   + [Creating a Branch link domain and Branch key for an app](#creating-a-branch-link-domain-and-branch-key-for-an-app)
   
-3. Configuring Xamarin apps for deep linking
-  + []()
-  + []()
+3. [Configuring Xamarin apps for deep linking](#configuring-xamarin-apps-for-deep-linking)
+  + [Adding the Branch SDK to a Xamarin Solution](#adding-the-branch-sdk-to-a-xamarin-solution)
+    + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
   + []()
   + []()
   + []()
@@ -25,13 +25,13 @@ ___
 
 ___
 
-## Getting Started
+## Introduction
 
 ### SDK Details
 
-Current version: **3.0**
-iOS SDK compiled footprint: **180kb**
-Android SDK compiled footprint: **187kb**
+Current version: **3.0**  
+iOS SDK compiled footprint: **180kb**  
+Android SDK compiled footprint: **187kb**  
 
 ### Resources
 - This document - *Start Here*
