@@ -18,10 +18,17 @@ ___
 3. [Configuring Xamarin apps for deep linking](#configuring-xamarin-apps-for-deep-linking)
   + [Adding the Branch SDK to a Xamarin Solution](#adding-the-branch-sdk-to-a-xamarin-solution)
     + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
-  + []()
-  + []()
-  + []()
-  + []()
+    + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
+  + [Integrating the Branch SDK with a Xamarin Project](#integrating-the-branch-sdk-with-a-xamarin-project)
+    + [Xamarin Native projects](#xamarin-native-projects)
+      + [Integrating with an iOS Native project](#integrating-with-an-ios-native-project)
+        + [Create an Apple device Provisioning Profile for the app](#create-an-apple-device-provisioning-profile-for-the-app)
+        + [Enter the app's settings on the Branch dashboard](#enter-the-app's-settings-on-the-branch-dashboard)
+        + [Configure the Xamarin project's Info.plist file](#configure-the-xamarin-project's-info.plist-file)
+        + [Configure the Xamarin project's Associated Domains entitlement](#configure-the-xamarin-project's-associated-domains-entitlement)
+        + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegate.cs-file)
+      + [Integrating with an Android Native project](#integrating-with-an-android-native-project)
+        + [Add the app's Branch key to the Strings.xml file](#add-the-app's-branch-key-to-the-strings.xml-file)
 
 ___
 
