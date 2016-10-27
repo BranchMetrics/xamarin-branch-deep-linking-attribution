@@ -247,7 +247,7 @@ ___
 
 ##### Integrating the Branch SDK with an Android Native project
 
-###### Ensure that the Android project isnot using the shared Mono Runtime
+###### Ensure that the Android project is not using the Shared Mono Runtime
 
 1. Right-click on the Android project and select: **Options**
 2. Select: **Android Build**
