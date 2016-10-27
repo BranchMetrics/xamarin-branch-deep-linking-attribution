@@ -27,6 +27,7 @@ ___
         + [Configure the Xamarin project's Info.plist file](#configure-the-xamarin-project's-info.plist-file)
         + [Configure the Xamarin project's Associated Domains entitlement](#configure-the-xamarin-project's-associated-domains-entitlement)
         + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegate.cs-file)
+	+ [Update the project's Signing Identity and Provisioning Profile](#update-the-projects-signing-identity-and-provisioning-profile)
       + [Integrating with an Android Native project](#integrating-with-an-android-native-project)
         + [Add the app's Branch key to the Strings.xml file](#add-the-app's-branch-key-to-the-strings.xml-file)
 
@@ -245,6 +246,12 @@ namespace TestiOSApp.iOS
 ___
 
 ##### Integrating the Branch SDK with an Android Native project
+
+###### Ensure that the Android project isnot using the shared Mono Runtime
+
+1. Right-click on the Android project and select: **Options**
+2. Select: **Android Build**
+3. On the **General** tab, un-check: **Use Shared Mono Runtime**
 
 ###### Add the app's Branch key to the Strings.xml file
 
@@ -1269,6 +1276,4 @@ To migrate to version 2.x.x:
 
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
 
-Basically, right-click on the project and select Options. Go to “Android Build” and select the “Linker” tab. Make sure the Release build configuration is selected. In the “Ignore assemblies” box, add “System.Core”. Rebuild the app. It should now run successfully.
-
-
+Right-click on the project and select Options. Go to “Android Build” and select the “Linker” tab. Make sure the Release build configuration is selected. In the “Ignore assemblies” box, add “System.Core”. Rebuild the app. It should now run successfully.
