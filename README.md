@@ -587,6 +587,12 @@ ___
 
 ##### Integrating with an Android Forms app
 
+###### Ensure that the Android project is not using the Shared Mono Runtime
+
+1. Right-click on the Android project and select: **Options**
+2. Select: **Android Build**
+3. On the **General** tab, un-check: **Use Shared Mono Runtime**
+
 ###### Add the app's Branch key to the Strings.xml file
 
 Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
