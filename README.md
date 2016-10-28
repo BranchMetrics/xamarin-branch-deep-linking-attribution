@@ -259,6 +259,19 @@ ___
 2. Select: **Android Build**
 3. On the **General** tab, un-check: **Use Shared Mono Runtime**
 
+
+##### Add app capabilities in the **AndroidManifest.xml** file
+
+In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
+
+- *AccessNetworkState*
+- *Internet*
+
+Additional reading on the Android manifest
+
+- [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
+- [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
+
 ###### Add the app's Branch key to the Strings.xml file
 
 Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
@@ -266,7 +279,7 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">TestAndroidApp</string>
+	<string name="app_name">TestAndroidApp.Droid</string>
 	<string name="branch_key">key_live_howbsM2XwBp7V5DNfw0refdartp0njwG</string>
 </resources>
 ```
@@ -277,8 +290,8 @@ Create an Application.cs file
 
 1. Right-click on the .Droid project and select **Add > New File...**
 2. Select: **General > Empty File**
-3. Rename the file: **Application.cs**
-4. Enter the following code, replacing 'TestAndroidApp' with the name of the app
+3. Name the file: **Application.cs**
+4. Enter the following code (replace 'TestAndroidApp' with the actual name of the app):
 
 ```csharp
 using System;
@@ -314,17 +327,109 @@ namespace TestAndroidApp
 | io.branch.sdk.TestMode | Setting this parameter to *true* enables Debug Mode, which causes simple uninstall/reinstalls of the app to trigger *install* events. Be sure to disable this before deploying to production. Note that enabling Debug Mode on Android also forces the app to use the Branch *Test* key if this key has been added to the project. Apps running with a *Test* key will be unable to receive data from Branch links created with the *Live* key.
 | io.branch.sdk.BranchKey | The app's Branch key. Both a *Live* key and a *Test* key can be added to the Strings.xml file. When *Test* Mode is enabled the app will automatically use the *Test* key, if one has been specified.
 
-##### Add a **BranchActivity.cs** file to the .Droid project
-
-Create an **BranchActivity.cs** file
+##### Create an activity to handle Branch events: **BranchActivity**
 
 1. Right-click on the .Droid project and select **Add > New File...**
 2. Select: **Android > Activity**
 3. Rename the file: **BranchActivity.cs**
-4. Enter the following code, replacing 'TestAndroidApp' with the name of the app
+4. Enter the following code (replace 'TestAndroidApp' with the actual name of the app):
 
 ```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Newtonsoft.Json;
+using BranchXamarinSDK;
 
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace TestAndroidApp.Droid
+{
+	[Activity(Label = "BranchActivity")]
+	public class BranchActivity : Activity
+
+	{
+		private string logString = "";
+
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+
+			LogMessage("Branch initialization completed: ");
+
+			Dictionary<string, object> data = JsonConvert.DeserializeObject<Dictionary<string, object>>(Intent.GetStringExtra("BranchData"));
+			foreach (var key in data.Keys)
+			{
+				LogMessage(key + " : " + data[key].ToString());
+			}
+		}
+
+		#region Utils
+
+		void LogMessage(string message)
+		{
+			Console.WriteLine(message);
+			logString += DateTime.Now.ToLongTimeString() + "> " + message + "\n";
+		}
+
+		#endregion
+	}
+}
+```
+
+##### Create an activity to handle Branch errors: **BranchErrorActivity**
+
+1. Right-click on the .Droid project and select **Add > New File...**
+2. Select: **Android > Activity**
+3. Rename the file: **BranchErrorActivity.cs**
+4. Enter the following code (replace 'TestAndroidApp' with the actual name of the app):
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace TestAndroidApp.Droid
+{
+	[Activity(Label = "BranchErrorActivity")]
+	public class BranchErrorActivity : Activity
+	{
+		private string logString = "";
+
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+
+			LogMessage("Branch initialization failed");
+			LogMessage("Error code: " + Intent.Extras.GetInt("ErrorCode").ToString());
+			LogMessage(Intent.Extras.GetString("ErrorMessage"));
+		}
+
+		#region Utils
+
+		void LogMessage(string message)
+		{
+			Console.WriteLine(message);
+			logString += DateTime.Now.ToLongTimeString() + "> " + message + "\n";
+		}
+
+		#endregion
+	}
+}
 ```
 
 ##### Initialize Branch and configure Branch session management
@@ -405,20 +510,6 @@ namespace Branch_Testbed_Android
 	}
 }
 ```
-
-##### Add app capabilities in the **AndroidManifest.xml** file
-
-In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
-
-- *AccessNetworkState*
-- *Internet*
-
-Additional reading on the Android manifest
-
-- [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
-- [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
-
-
 
 ___
 
