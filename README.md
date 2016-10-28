@@ -26,10 +26,10 @@ ___
         + [Enter the app's settings on the Branch dashboard](#enter-the-apps-settings-on-the-branch-dashboard)
         + [Configure the Xamarin project's Info.plist file](#configure-the-xamarin-projects-infoplist-file)
         + [Configure the Xamarin project's Associated Domains entitlement](#configure-the-xamarin-projects-associated-domains-entitlement)
-        + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegate.cs-file)
+        + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegatecs-file)
 	+ [Update the project's Signing Identity and Provisioning Profile](#update-the-projects-signing-identity-and-provisioning-profile)
       + [Integrating with an Android Native project](#integrating-with-an-android-native-project)
-        + [Add the app's Branch key to the Strings.xml file](#add-the-app's-branch-key-to-the-strings.xml-file)
+        + [Add the app's Branch key to the Strings.xml file](#add-the-app's-branch-key-to-the-stringsxml-file)
 
 ___
 
