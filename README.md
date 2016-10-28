@@ -276,7 +276,7 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 Create an Application.cs file
 
 1. Right-click on the .Droid project and select **Add > New File...**
-2. Select: **Empty File**
+2. Select: **General > Empty File**
 3. Rename the file: **Application.cs**
 4. Enter the following code, replacing 'TestAndroidApp' with the name of the app
 
