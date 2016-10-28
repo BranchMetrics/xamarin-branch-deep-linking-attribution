@@ -21,7 +21,7 @@ ___
     + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
   + [Integrating the Branch SDK with a Xamarin Project](#integrating-the-branch-sdk-with-a-xamarin-project)
     + [Xamarin Native projects](#xamarin-native-projects)
-      + [Integrating with an iOS Native project](#integrating-with-an-ios-native-project)
+      + [Integrating the Branch SDK with an iOS Native project](#integrating-the-branch-sdk-with-an-ios-native-project)
         + [Create an Apple device Provisioning Profile for the app](#create-an-apple-device-provisioning-profile-for-the-app)
         + [Enter the app's settings on the Branch dashboard](#enter-the-app's-settings-on-the-branch-dashboard)
         + [Configure the Xamarin project's Info.plist file](#configure-the-xamarin-project's-info.plist-file)
