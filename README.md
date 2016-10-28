@@ -104,8 +104,8 @@ The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet packag
 To add the Branch NuGet package to a project:
 
 1. Right-click on each project and select `Add` > `Add NuGet Packages`
-2. If not already present, find the _Microsoft BCL Build Components_ package and add it to the project
-3. Find the _Branch Xamarin SDK_ package and add it to the project
+2. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project
+3. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project
 
 #### Adding the Branch SDK without NuGet
 
