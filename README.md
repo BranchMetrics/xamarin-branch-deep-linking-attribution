@@ -28,8 +28,9 @@ ___
         + [Configure the Xamarin project's Associated Domains entitlement](#configure-the-xamarin-projects-associated-domains-entitlement)
         + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegatecs-file)
 	+ [Update the project's Signing Identity and Provisioning Profile](#update-the-projects-signing-identity-and-provisioning-profile)
-      + [Integrating with an Android Native project](#integrating-with-an-android-native-project)
-        + [Add the app's Branch key to the Strings.xml file](#add-the-app's-branch-key-to-the-stringsxml-file)
+      + [Integrating with an Android Native project](#integrating-the-branch-sdk-with-an-android-native-project)
+      + [Ensure that the android project is not using the Shared Mono Runtime](#ensure-that-the-android-project-is-not-using-the-shared-mono-runtime)
+        + [Add the app's Branch key to the Strings.xml file](#add-the-apps-branch-key-to-the-stringsxml-file)
 
 ___
 
