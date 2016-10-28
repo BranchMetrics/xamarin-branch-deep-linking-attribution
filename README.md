@@ -266,7 +266,7 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">TestBed-Xamarin</string>
+	<string name="app_name">TestAndroidApp</string>
 	<string name="branch_key">key_live_howbsM2XwBp7V5DNfw0refdartp0njwG</string>
 </resources>
 ```
