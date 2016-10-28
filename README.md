@@ -27,10 +27,15 @@ ___
         + [Configure the Xamarin project's Info.plist file](#configure-the-xamarin-projects-infoplist-file)
         + [Configure the Xamarin project's Associated Domains entitlement](#configure-the-xamarin-projects-associated-domains-entitlement)
         + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegatecs-file)
-	+ [Update the project's Signing Identity and Provisioning Profile](#update-the-projects-signing-identity-and-provisioning-profile)
+        + [Update the project's Signing Identity and Provisioning Profile](#update-the-projects-signing-identity-and-provisioning-profile)
       + [Integrating with an Android Native project](#integrating-the-branch-sdk-with-an-android-native-project)
-      + [Ensure that the android project is not using the Shared Mono Runtime](#ensure-that-the-android-project-is-not-using-the-shared-mono-runtime)
+        + [Ensure that the android project is not using the Shared Mono Runtime](#ensure-that-the-android-project-is-not-using-the-shared-mono-runtime)
         + [Add the app's Branch key to the Strings.xml file](#add-the-apps-branch-key-to-the-stringsxml-file)
+        + [Create the project's Application class](#create-the-projects-application-class)
+        + [Add a BranchActivity.cs file to the .Droid project](#add-a-branchactivitycs-file-to-the-droid-project)
+        + [Initialize Branch and configure Branch session management](#initialize-branch-and-configure-branch-session-management)
+        + [Add app capabilities in the AndroidManifest.xml file](#add-app-capabilities-in-the-androidmanifestxml-file)
+
 
 ___
 
