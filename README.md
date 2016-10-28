@@ -23,7 +23,7 @@ ___
     + [Xamarin Native projects](#xamarin-native-projects)
       + [Integrating the Branch SDK with an iOS Native project](#integrating-the-branch-sdk-with-an-ios-native-project)
         + [Create an Apple device Provisioning Profile for the app](#create-an-apple-device-provisioning-profile-for-the-app)
-        + [Enter the app's settings on the Branch dashboard](#enter-the-app's-settings-on-the-branch-dashboard)
+        + [Enter the app's settings on the Branch dashboard](#enter-the-apps-settings-on-the-branch-dashboard)
         + [Configure the Xamarin project's Info.plist file](#configure-the-xamarin-project's-info.plist-file)
         + [Configure the Xamarin project's Associated Domains entitlement](#configure-the-xamarin-project's-associated-domains-entitlement)
         + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegate.cs-file)
