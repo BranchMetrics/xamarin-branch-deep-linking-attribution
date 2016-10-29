@@ -1210,7 +1210,7 @@ The response will return an array that has been parsed from the following JSON:
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
-5. Version Notes
+## Version Notes
 
 ##### Version 3.0.0
 
@@ -1257,7 +1257,7 @@ To migrate to version 2.x.x:
 - GetReferralCountsForAction
 
 
-5. Troubleshooting
+## Troubleshooting
 
 **Android app fails to build**
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
