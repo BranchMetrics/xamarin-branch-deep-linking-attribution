@@ -680,7 +680,7 @@ namespace TestXamarinFormsApp
 
 1. Open the **Entitlements.plist** file and browse to **Associated Domains** (if this file does not already exist, create it)
 2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link` 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link`  
 
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
