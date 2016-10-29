@@ -672,7 +672,7 @@ namespace TestXamarinFormsApp
 &nbsp;&nbsp;&nbsp;&nbsp;d. Check the **Enable Universal Links** checkbox  
 &nbsp;&nbsp;&nbsp;&nbsp;e. Enter the app's Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)  
 
-**3. Configure the Xamarin project's *Info.plist* file **
+**3. Configure the Xamarin project's _Info.plist_ file **
 
 &nbsp;&nbsp;&nbsp;&nbsp;a. Open the **Info.plist** file and click on the **Advanced** tab  
 &nbsp;&nbsp;&nbsp;&nbsp;b. In the **URL Types** section, click the **Add URL Type** button   
@@ -747,9 +747,9 @@ ___
 
 **1. Ensure that the Android project is not using the Shared Mono Runtime**
 
-&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on the Android project and select: **Options**
-&nbsp;&nbsp;&nbsp;&nbsp;b. Select: **Android Build**
-&nbsp;&nbsp;&nbsp;&nbsp;c. On the **General** tab, un-check: **Use Shared Mono Runtime**
+&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on the Android project and select: **Options**  
+&nbsp;&nbsp;&nbsp;&nbsp;b. Select: **Android Build**  
+&nbsp;&nbsp;&nbsp;&nbsp;c. On the **General** tab, un-check: **Use Shared Mono Runtime**  
 
 **2. Add the app's Branch key to the Strings.xml file**
 
