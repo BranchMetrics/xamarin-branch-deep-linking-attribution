@@ -1260,9 +1260,10 @@ To migrate to version 2.x.x:
 ## 6 - Troubleshooting
 
 #### Android app fails to build
-There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
+The Newtonsoft JSON NuGet package is automatically added to a project when the Branch Xamarin SDK NuGet package is added. There is a known issue with this package that results in linking errors when building a project.
 
-The fix:  
+To resolve this issue with the Newtonsoft JSON NuGet package:
+
 1. Right-click on the project and select Options  
 2. Go to **Android Build** and select the **Linker** tab  
 3. Select: **Release**  
