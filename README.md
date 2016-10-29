@@ -1262,10 +1262,10 @@ To migrate to version 2.x.x:
 #### Android app fails to build
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
 
-The fix:
-1. Right-click on the project and select Options
-2. Go to **Android Build** and select the **Linker** tab
-3. Select: **Release**
-4. Go to the **Ignore assemblies** box
-5. Add: **System.Core**
-6. Rebuild the app
+The fix:  
+1. Right-click on the project and select Options  
+2. Go to **Android Build** and select the **Linker** tab  
+3. Select: **Release**  
+4. Go to the **Ignore assemblies** box  
+5. Add: **System.Core**  
+6. Rebuild the app  
