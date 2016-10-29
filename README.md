@@ -552,13 +552,12 @@ ___
 
 These steps are required for all Forms projects, both iOS and Android.
 
-###### a) Change the C# project's profile to PCL 4.5 - Profile78
+###### 1. Change the C# project's profile to PCL 4.5 - Profile78
+  a. Right-click on the project name and select: **Options**
+  b. Browse the menu to **Build > General**
+  c. Change the **Current Profile** to: **PCL 4.5 - Profile78**
 
-  1. Right-click on the project name and select: **Options**
-  2. Browse the menu to **Build > General**
-  3. Change the **Current Profile** to: **PCL 4.5 - Profile78**
-
-###### Add the Branch SDK with NuGet
+###### 2. Add the Branch SDK with NuGet
 
 The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.
 
