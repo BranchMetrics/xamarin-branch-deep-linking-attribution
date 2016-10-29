@@ -553,9 +553,9 @@ ___
 These steps are required for all Forms projects, both iOS and Android.
 
 **1. Change the C# project's profile to PCL 4.5 - Profile78**  
-  + a. Right-click on the project name and select: **Options**  
-  + b. Browse the menu to **Build > General**  
-  + c. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
+ a. Right-click on the project name and select: **Options**  
+ b. Browse the menu to **Build > General**  
+ c. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
 
 ###### 2. Add the Branch SDK with NuGet
 
