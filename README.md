@@ -159,9 +159,11 @@ ___
 1. Open Xcode and create a new project with the same name as your Xamarin iOS project
 2. On the Xcode project's **General** tab, verify the app's Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
 3. Select the **Capabilities** tab and enable the **Associated Domains** entitlement
-4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestBed-Xamarin* would be:
-  - `applinks:testbed-xamarin.app.link`  
-  - `applinks:testbed-xamarin-alternate.app.link` 
+4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestBed-Xamarin* would be:  
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin-alternate.app.link`  
+
 5. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.
 6. Close Xcode
 
@@ -186,9 +188,11 @@ ___
 ###### **Configure the Xamarin project's *Associated Domains* entitlement**  
 
 1. Open the **Entitlements.plist** file and browse to **Associated Domains**
-2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:
-    - `applinks:testbed-xamarin.app.link` 
-    - `applinks:testbed-xamarin-alternate.app.link`  
+2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link` 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin-alternate.app.link`  
+
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
 
 ##### **Add Branch calls to the *AppDelegate.cs* file**
@@ -659,8 +663,9 @@ namespace TestXamarinFormsApp
 &nbsp;&nbsp;&nbsp;&nbsp;b. On the Xcode project's **General** tab, enter the app's Bundle Identifier and select the appropriate Team (be sure to resolve any errors here)  
 &nbsp;&nbsp;&nbsp;&nbsp;c. Select the **Capabilities** tab and enable the **Associated Domains** entitlement  
 &nbsp;&nbsp;&nbsp;&nbsp;d. Create 'applinks:' entries for the Branch link domain assigned to the app (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestXamarinFormsApp* would be:  
-`applinks:testxamarinformsapp.app.link`  
-`applinks:testxamarinformsapp-alternate.app.link` 
+
+&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link` 
 
 &nbsp;&nbsp;&nbsp;&nbsp;e. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.  
 &nbsp;&nbsp;&nbsp;&nbsp;f. Close Xcode  
@@ -673,22 +678,23 @@ namespace TestXamarinFormsApp
 &nbsp;&nbsp;&nbsp;&nbsp;d. Check the **Enable Universal Links** checkbox  
 &nbsp;&nbsp;&nbsp;&nbsp;e. Enter the app's Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)  
 
-**3. Configure the Xamarin project's _Info.plist_ file **
+**3. Configure the Xamarin project's Info.plist file **
 
 &nbsp;&nbsp;&nbsp;&nbsp;a. Open the **Info.plist** file and click on the **Advanced** tab  
 &nbsp;&nbsp;&nbsp;&nbsp;b. In the **URL Types** section, click the **Add URL Type** button   
-  - **Identifier:** Branch Scheme
-  - **URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}
-  - **Role:** Editor  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
 
 ![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
 
 **4. Configure the Xamarin project's *Associated Domains* entitlement**
 
 &nbsp;&nbsp;&nbsp;&nbsp;a. Open the **Entitlements.plist** file and browse to **Associated Domains** (if this file does not already exist, create it)
-&nbsp;&nbsp;&nbsp;&nbsp;b. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:
-    - `applinks:testxamarinformsapp.app.link` 
-    - `applinks:testxamarinformsapp-alternate.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;b. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link` 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link`  
 
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
 
