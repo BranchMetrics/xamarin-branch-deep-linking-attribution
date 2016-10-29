@@ -655,10 +655,10 @@ namespace TestXamarinFormsApp
 
 **1. Create an Apple device Provisioning Profile for the app**
 
-&nbsp;&nbsp;&nbsp;&nbsp;a. Open Xcode and create a new project with the same name as your Xamarin iOS project
-&nbsp;&nbsp;&nbsp;&nbsp;b. On the Xcode project's **General** tab, enter the app's Bundle Identifier and select the appropriate Team (be sure to resolve any errors here)
-&nbsp;&nbsp;&nbsp;&nbsp;c. Select the **Capabilities** tab and enable the **Associated Domains** entitlement
-&nbsp;&nbsp;&nbsp;&nbsp;d. Create 'applinks:' entries for the Branch link domain assigned to the app (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestXamarinFormsApp* would be:
+&nbsp;&nbsp;&nbsp;&nbsp;a. Open Xcode and create a new project with the same name as your Xamarin iOS project  
+&nbsp;&nbsp;&nbsp;&nbsp;b. On the Xcode project's **General** tab, enter the app's Bundle Identifier and select the appropriate Team (be sure to resolve any errors here)  
+&nbsp;&nbsp;&nbsp;&nbsp;c. Select the **Capabilities** tab and enable the **Associated Domains** entitlement  
+&nbsp;&nbsp;&nbsp;&nbsp;d. Create 'applinks:' entries for the Branch link domain assigned to the app (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestXamarinFormsApp* would be:  
   - `applinks:testxamarinformsapp.app.link`  
   - `applinks:testxamarinformsapp-alternate.app.link` 
 &nbsp;&nbsp;&nbsp;&nbsp;e. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.
@@ -666,11 +666,11 @@ namespace TestXamarinFormsApp
 
 **2. Enter the app's settings on the Branch dashboard**
 
-&nbsp;&nbsp;&nbsp;&nbsp;a. On the [Link Settings](https://dashboard.branch.io/#/settings/link) page, check the **I have an iOS App** checkbox
-&nbsp;&nbsp;&nbsp;&nbsp;b. Enter the app's URI Scheme in the **iOS URI Scheme** field (for an app with the URI Scheme *testxamarinformsapp*, for example, the entry would be: `testxamarinformsapp://`)
-&nbsp;&nbsp;&nbsp;&nbsp;c. Enter the app's Apple Store name in the **Apple Store Search** field (if the app is not yet available on the App Store select **Custom URL** and enter as a placeholder the URL of an appropriate web site - the exact site does not matter)
-&nbsp;&nbsp;&nbsp;&nbsp;d. Check the **Enable Universal Links** checkbox
-&nbsp;&nbsp;&nbsp;&nbsp;e. Enter the app's Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)
+&nbsp;&nbsp;&nbsp;&nbsp;a. On the [Link Settings](https://dashboard.branch.io/#/settings/link) page, check the **I have an iOS App** checkbox  
+&nbsp;&nbsp;&nbsp;&nbsp;b. Enter the app's URI Scheme in the **iOS URI Scheme** field (for an app with the URI Scheme *testxamarinformsapp*, for example, the entry would be: `testxamarinformsapp://`)  
+&nbsp;&nbsp;&nbsp;&nbsp;c. Enter the app's Apple Store name in the **Apple Store Search** field (if the app is not yet available on the App Store select **Custom URL** and enter as a placeholder the URL of an appropriate web site - the exact site does not matter)  
+&nbsp;&nbsp;&nbsp;&nbsp;d. Check the **Enable Universal Links** checkbox  
+&nbsp;&nbsp;&nbsp;&nbsp;e. Enter the app's Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)  
 
 **3. Configure the Xamarin project's *Info.plist* file **
 
