@@ -34,22 +34,8 @@
         + [Add app capabilities in the AndroidManifest.xml file](#add-app-capabilities-in-the-androidmanifestxml-file)
     + [Xamarin Forms solutions](#xamarin-forms-solutions)
       + [Configure the C# project](#configure-the-c-project)
-        + [Change the C# project's profile to pcl-45 - profile78](#change-the-c-projects-profile-to-pcl-45---profile78)
-        + [Add the Branch SDK with NuGet](#add-the-branch-sdk-with-nuget-1)
-        + [Create a class for Branch session handling](#create-a-class-for-branch-session-handling)
-        + [Create a class for handling link data](#create-a-class-for-handling-link-data)
       + [Integrating with an iOS Forms app](#integrating-with-an-ios-forms-app)
-        + [Create an Apple device Provisioning Profile](#create-an-apple-device-provisioning-profile-for-the-app-1)
-        + [Enter the app's settings on the Branch dashboard](#enter-the-apps-settings-on-the-branch-dashboard-1)
-        + [Configure the Xamarin project's info.plist file](#configure-the-xamarin-projects-infoplist-file-1)
-        + [Configure the Xamarin project's Associated Domains Entitlement](#configure-the-xamarin-projects-associated-domains-entitlement-1)
-        + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegatecs-file-1)
       + [Integrating with an Android Frorms app](#integrating-with-an-android-forms-app)
-        + [Ensure that the Android project is not using the Shared Mono runtime](#ensure-that-the-android-project-is-not-using-the-shared-mono-runtime-1)
-        + [Add the app's Branch key to the Strings.xml file](#add-the-apps-branch-key-to-the-stringsxml-file-1)
-        + [Configure the .Droid project's Application class](#configure-the-droid-projects-application-class)
-        + [Initialize Branch](#initialize-branch)
-        + [Add app capabilities in the AndroidManifest.xml file](#add-app-capabilities-in-the-androidmanifestxml-file-1)
 4. [Branch SDK Method Reference](#4---branch-sdk-method-reference)
   + [Retrieve-session (install or open) parameters](#retrieve-session-install-or-open-parameters)
   + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)
@@ -570,10 +556,10 @@ The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet packag
 
 Branch initializes asynchronously, with Branch link parameters being returned following a network call to Branch. If initialization is successful, the InitSessionComplete method will be invoked. If initialization is unsuccessful, the SessionRequestError method will be invoked. Deep link routing logic should be located in the InitSessionComplete method.
 
-&nbsp;&nbsp;&nbsp;&nbsp;1. Right-click on the C# project and select **Add > New File...**  
-&nbsp;&nbsp;&nbsp;&nbsp;2. Select: **General > Empty Class**  
-&nbsp;&nbsp;&nbsp;&nbsp;3. Rename the file: **TestXamarinFormsApp.cs**  
-&nbsp;&nbsp;&nbsp;&nbsp;4. Enter the following code (replacing 'TestXamarinFormsApp' with the actual name of the app):  
+&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on the C# project and select **Add > New File...**  
+&nbsp;&nbsp;&nbsp;&nbsp;b. Select: **General > Empty Class**  
+&nbsp;&nbsp;&nbsp;&nbsp;c. Rename the file: **TestXamarinFormsApp.cs**  
+&nbsp;&nbsp;&nbsp;&nbsp;d. Enter the following code (replacing 'TestXamarinFormsApp' with the actual name of the app):  
 
 ```csharp
 using BranchXamarinSDK;
@@ -696,7 +682,7 @@ namespace TestXamarinFormsApp
 
 ![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
 
-**Configure the Xamarin project's *Associated Domains* entitlement**
+**4. Configure the Xamarin project's *Associated Domains* entitlement**
 
 &nbsp;&nbsp;&nbsp;&nbsp;a. Open the **Entitlements.plist** file and browse to **Associated Domains** (if this file does not already exist, create it)
 &nbsp;&nbsp;&nbsp;&nbsp;b. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:
@@ -705,7 +691,7 @@ namespace TestXamarinFormsApp
 
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
 
-**Add Branch calls to the *AppDelegate.cs* file**
+**5. Add Branch calls to the *AppDelegate.cs* file**
 
 To ensure that the Branch SDK initializes when the app starts and can retrieve link parameters whenever the app becomes active, Branch initialization occurs within the `FinishedLaunching` method of the AppDelegate.cs file. Branch calls are also required in the OpenUrl, ContinueUserActivity, and ReceiveRemoteNotification methods to ensure that Branch link information is handled properly whenever the app becomes active. The **AppDelegate.cs** file should look like this:
 
@@ -759,13 +745,13 @@ ___
 
 ##### Integrating with an Android Forms app
 
-###### Ensure that the Android project is not using the Shared Mono Runtime
+**1. Ensure that the Android project is not using the Shared Mono Runtime**
 
 &nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on the Android project and select: **Options**
 &nbsp;&nbsp;&nbsp;&nbsp;b. Select: **Android Build**
 &nbsp;&nbsp;&nbsp;&nbsp;c. On the **General** tab, un-check: **Use Shared Mono Runtime**
 
-###### Add the app's Branch key to the Strings.xml file
+**2. Add the app's Branch key to the Strings.xml file**
 
 Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
 
@@ -777,7 +763,7 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 </resources>
 ```
 
-##### Configure the .Droid project's *Application* class
+**3. Configure the .Droid project's *Application* class**
 
 - Set the Branch SDK's initialization parameters  
 - Override the `OnCreate()` method to call `BranchAndroid.GetAutoInstance`
@@ -818,7 +804,7 @@ namespace BranchXamarinTestbed.Droid
 | io.branch.sdk.TestMode | Setting this parameter to *true* enables Debug Mode, which causes simple uninstall/reinstalls of the app to trigger *install* events. Be sure to disable this before deploying to production. Note that enabling Debug Mode on Android also forces the app to use the Branch *Test* key if this key has been added to the project. Apps running with a *Test* key will be unable to receive data from Branch links created with the *Live* key.
 | io.branch.sdk.BranchKey | The app's Branch key. Both a *Live* key and a *Test* key can be added to the Strings.xml file. When *Test* Mode is enabled the app will automatically use the *Test* key, if one has been specified.
 
-##### Initialize Branch
+**4. Initialize Branch**
 
 Branch must be initilialized in the OnCreate method of either the Application class or the first Activity launched by the app. The OnNewIntent method must be added to retrieve the latest link identifier when the app becomes active due to a Branch link click.
 
@@ -871,7 +857,7 @@ namespace BranchXamarinTestbed.Droid
 }
 ```
 
-##### Add app capabilities in the **AndroidManifest.xml** file
+**5. Add app capabilities in the *AndroidManifest.xml* file*
 
 In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
 
