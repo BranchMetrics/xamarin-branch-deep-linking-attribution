@@ -124,24 +124,24 @@ ___
 
 ### Add the Branch SDK to a Xamarin Solution
 
-#### Add the Branch SDK with NuGet
+#### **1. Add the Branch SDK with NuGet**
 
 The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.
 
 To add the Branch NuGet package to a project:
 
-1. Right-click on each project and select `Add` > `Add NuGet Packages`
-2. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project
-3. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project
+&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on each project and select `Add` > `Add NuGet Packages`
+&nbsp;&nbsp;&nbsp;&nbsp;b. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project
+&nbsp;&nbsp;&nbsp;&nbsp;c. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project
 
-#### Adding the Branch SDK without NuGet
+#### **2. Adding the Branch SDK without NuGet**
 
 If, instead of using NuGet, you would rather build and reference the Branch assemblies directly:
 
-1. Clone this repository to the local machine: `https://github.com/BranchMetrics/xamarin-branch-deep-linking.git`
-2. Add the `Branch-Xamarin-SDK` project to the solution and reference it from the Android, iOS and Forms (if applicable) projects
-3. Add the `Branch-Xamarin-SDK.Droid` project to the solution and reference it from the Android project, if any
-4. Add the `Branch-Xamarin-SDK.iOS` project and reference it from the iOS project, if any
+&nbsp;&nbsp;&nbsp;&nbsp;a. Clone this repository to the local machine: `https://github.com/BranchMetrics/xamarin-branch-deep-linking.git`
+&nbsp;&nbsp;&nbsp;&nbsp;b. Add the `Branch-Xamarin-SDK` project to the solution and reference it from the Android, iOS and Forms (if applicable) projects
+&nbsp;&nbsp;&nbsp;&nbsp;c. Add the `Branch-Xamarin-SDK.Droid` project to the solution and reference it from the Android project, if any
+&nbsp;&nbsp;&nbsp;&nbsp;d. Add the `Branch-Xamarin-SDK.iOS` project and reference it from the iOS project, if any
 
 ___
 
@@ -160,10 +160,8 @@ ___
 2. On the Xcode project's **General** tab, verify the app's Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
 3. Select the **Capabilities** tab and enable the **Associated Domains** entitlement
 4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestBed-Xamarin* would be:  
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin-alternate.app.link`  
-
 5. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.
 6. Close Xcode
 
@@ -189,7 +187,6 @@ ___
 
 1. Open the **Entitlements.plist** file and browse to **Associated Domains**
 2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link` 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin-alternate.app.link`  
 
@@ -663,10 +660,8 @@ namespace TestXamarinFormsApp
 &nbsp;&nbsp;&nbsp;&nbsp;b. On the Xcode project's **General** tab, enter the app's Bundle Identifier and select the appropriate Team (be sure to resolve any errors here)  
 &nbsp;&nbsp;&nbsp;&nbsp;c. Select the **Capabilities** tab and enable the **Associated Domains** entitlement  
 &nbsp;&nbsp;&nbsp;&nbsp;d. Create 'applinks:' entries for the Branch link domain assigned to the app (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestXamarinFormsApp* would be:  
-
 &nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link`  
 &nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link` 
-
 &nbsp;&nbsp;&nbsp;&nbsp;e. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.  
 &nbsp;&nbsp;&nbsp;&nbsp;f. Close Xcode  
 
@@ -692,7 +687,6 @@ namespace TestXamarinFormsApp
 
 &nbsp;&nbsp;&nbsp;&nbsp;a. Open the **Entitlements.plist** file and browse to **Associated Domains** (if this file does not already exist, create it)
 &nbsp;&nbsp;&nbsp;&nbsp;b. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link` 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link`  
 
