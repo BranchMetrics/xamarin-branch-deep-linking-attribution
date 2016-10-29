@@ -58,8 +58,8 @@ ___
   + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)
   + [Persistent identities](#persistent-identities)
   + [Logout](#logout)
-  + [Register Custom Events](#register-custom-events)
-  + [Generate Tracked Deep Linking URLs pass data across install and open](#generate-tracked-deep-linking-urls-pass-data-across-install-and-open)
+  + [Register custom events](#register-custom-events)
+  + [Generating Branch links](#generating-branch-links)
   + [Shortened links](#shortened-links)
       + [](#new-feature-branchuniversalobject)
       + [](#what-is-the-branch-universal-object)
@@ -967,18 +967,12 @@ Some example events you might want to track:
 
 ____
 
-## Generate Tracked, Deep Linking URLs (pass data across install and open)
+## Generate Branch links
 
-### Shortened links
-
-There are a bunch of options for creating these links. You can tag them for analytics in the dashboard, or you can even pass data to the new installs or opens that come from the link click. How awesome is that? You need to pass a callback for when you link is prepared (which should return very quickly, ~ 50 ms to process).
-
-For more details on how to create links, see the [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md)
-
+Branch links can be created in-app (as well as in many other ways - see: [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md). When they are, and setIdentity has been called to associate a User ID with the current user session, Branch links will be associated with that User ID.
 
 ```csharp
-// associate data with a link
-// you can access this data from any instance that installs or opens the app from this link (amazing...)
+// you can access this data from any instance that installs or opens the app from this link
 
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
@@ -1031,35 +1025,12 @@ You have the ability to control the direct deep linking of each link by insertin
 | "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in the app from a Branch link (has been cookied and deep linked by Branch)
 
 
-## New feature: BranchUniversalObject
-### What is the Branch Universal Object?
+## Branch Universal Objects and Link Properties
+### Overview
 
+The Branch Universal Object is a data object representing a piece of content that is referenced by a Branch link. Together with a set of Link Properties (marketing metadata such as Campaign and Channel as well as Branch-behavior related parameters such as $eepview_path), can be combined to generate a Branch link.
 
-Our previous method of creating links was a single call `GetShortUrl`, where you passed in all of the metadata and link properties in order to get a deep link back. We’re adding just one more step in between that we believe makes a lot more sense.
-
-```
-Dictionary<string, object> parameters = new Dictionary<string, object>();
-parameters.Add("name", "test name");
-parameters.Add("message", "hello there with short url");
-parameters.Add("$og_title", "this is a title");
-parameters.Add("$og_description", "this is a description");
-parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
-
-List<string> tags = new List<string>();
-tags.Add("tag1");
-tags.Add("tag2");
-
-Branch.GetInstance().GetShortUrl (callback,
-		                          Constants.URL_TYPE_UNLIMITED,
-		                          parameters,
-		                          "test_channel",
-		                          "testt_stage",
-		                          tags,
-		                          "testt_feature");
-
-```
-
-#### Here’s the new mechanism using the Branch Universal Object:
+### Creating a link
 ```
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
@@ -1078,23 +1049,21 @@ linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 Branch.GetInstance().GetShortURL (callback,
 		                          universalObject,
 		                          linkProperties);
-
 ```
-As you can see, it’s a bit more code but a lot more structured. What’s really cool about this is that once you’ve created the Universal Object, you can then do a bunch of neat things like:
 
-######1. Initialize Branch
+### Initialize Branch
 
 ```
 InitSession (IBranchBUOSessionInterface callback)
 ```
 
-######2. Register a view on the content (for a new product coming soon)
+### Register a view of the content
 
 ```
 RegisterView (BranchUniversalObject universalObject)
 ```
 
-######3. Create a share sheet that lets the user share across all channels
+### Create a share sheet that lets the user share across all channels
 
 ```
 ShareLink (IBranchLinkShareInterface callback,
@@ -1105,7 +1074,7 @@ ShareLink (IBranchLinkShareInterface callback,
 
 ____
 
-## Referral system rewarding functionality
+## Referral rewards
 
 In a standard referral system, you have 2 parties: the original user and the invitee. Our system is flexible enough to handle rewards for all users. Here are a couple example scenarios:
 
@@ -1119,7 +1088,7 @@ These reward definitions are created on the dashboard, under the 'Reward Rules' 
 
 Warning: For a referral program, you should not use unique awards for custom events and redeem pre-identify call. This can allow users to cheat the system.
 
-### Get reward balance
+### Check a reward balance
 
 Reward balances change randomly on the backend when certain actions are taken (defined by the rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
@@ -1152,7 +1121,7 @@ branch.LoadRewards(this);
 #endregion
 ```
 
-### Redeem all or some of the reward balance (store state)
+### Redeem all or some of the reward balance
 
 We will store how many of the rewards have been deployed so that you don't have to track it on the end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
 
@@ -1238,93 +1207,20 @@ The response will return an array that has been parsed from the following JSON:
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
-____
-
-## New feature: BranchUniversalObject
-### What is the Branch Universal Object?
-
-
-Our previous method of creating links was a single call `GetShortUrl`, where you passed in all of the metadata and link properties in order to get a deep link back. We’re adding just one more step in between that we believe makes a lot more sense.
-
-```
-Dictionary<string, object> parameters = new Dictionary<string, object>();
-parameters.Add("name", "test name");
-parameters.Add("message", "hello there with short url");
-parameters.Add("$og_title", "this is a title");
-parameters.Add("$og_description", "this is a description");
-parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
-
-List<string> tags = new List<string>();
-tags.Add("tag1");
-tags.Add("tag2");
-
-Branch.GetInstance().GetShortUrl (callback,
-		                          Constants.URL_TYPE_UNLIMITED,
-		                          parameters,
-		                          "test_channel",
-		                          "test_stage",
-		                          tags,
-		                          "test_feature");
-
-```
-
-#### Here’s the new mechanism using the Branch Universal Object:
-
-```
-BranchUniversalObject universalObject = new BranchUniversalObject();
-universalObject.canonicalIdentifier = "id12345";
-universalObject.title = "id12345 title";
-universalObject.contentDescription = "My awesome piece of content!";
-universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-universalObject.metadata.Add("foo", "bar");
-
-BranchLinkProperties linkProperties = new BranchLinkProperties();
-linkProperties.tags.Add("tag1");
-linkProperties.tags.Add("tag2");
-linkProperties.feature = "sharing";
-linkProperties.channel = "facebook";
-linkProperties.controlParams.Add("$desktop_url", "http://example.com");
-
-Branch.GetInstance().GetShortURL (callback,
-		                          universalObject,
-		                          linkProperties);
-
-```
-As you can see, it’s a bit more code but a lot more structured. What’s really cool about this is that once you’ve created the Universal Object, you can then do a bunch of neat things like:
-
-###### 1. Initialize Branch
-
-```
-InitSession (IBranchBUOSessionInterface callback)
-```
-
-###### 2. Register a view on the content (for a new product coming soon)
-
-```
-RegisterView (BranchUniversalObject universalObject)
-```
-
-###### 3. Create a share sheet that lets the user share across all channels
-
-```
-ShareLink (IBranchLinkShareInterface callback,
-		   BranchUniversalObject universalObject,
-		   BranchLinkProperties linkProperties,
-		   string message)
-```
 
 ## Note: Migration from version 2.x.x to 3.x.x
 
-Migrating to version 3.x.x from 2.x.x requires that the following method be used:
+Starting with version 3.0 the method of creating links:
 
+```csharp
+GetShortUrl(IBranchUrlInterface callback, Dictionary<String, dynamic> ...)
+```
+has been deprecated in favor of creating links with BranchUniversalObjects and Link Properties:
+```csharp
 * GetShortUrl(IBranchUrlInterface callback, BranchUniversalObject universalObject, BranchLinkProperties linkProperties);
+```
 
-instead of methods:
-
-* GetShortUrl(IBranchUrlInterface callback, Dictionary<String, dynamic> ...)
-* GetShortUrl(IBranchUrlInterface callback, Dictionary<String, dynamic> ...)
-
-
+There are no other notable user-impacting changes.
 
 ## Note: Migration from version 1.x.x to 2.x.x
 
@@ -1362,6 +1258,13 @@ To migrate to version 2.x.x:
 
 ## Troubleshooting: Ensure Newtonsoft built properly
 
+**Android app fails to build**
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
 
-Right-click on the project and select Options. Go to “Android Build” and select the “Linker” tab. Make sure the Release build configuration is selected. In the “Ignore assemblies” box, add “System.Core”. Rebuild the app. It should now run successfully.
+The fix:
+1. Right-click on the project and select Options
+2. Go to **Android Build** and select the **Linker** tab
+3. Select: **Release**
+4. Go to the **Ignore assemblies** box
+5. Add: **System.Core**
+6. Rebuild the app
