@@ -560,22 +560,20 @@ These steps are required for all Forms projects, both iOS and Android.
 
 **2. Add the Branch SDK with NuGet**
 
-The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.
+The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.  
 
-To add the Branch NuGet package to a project:
+&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on each project and select **Add > Add NuGet Packages**  
+&nbsp;&nbsp;&nbsp;&nbsp;b. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project  
+&nbsp;&nbsp;&nbsp;&nbsp;c. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project  
 
-&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on each project and select `Add` > `Add NuGet Packages`
-&nbsp;&nbsp;&nbsp;&nbsp;b. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project
-&nbsp;&nbsp;&nbsp;&nbsp;c. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project
-
-###### Create a class for Branch session handling
+**3. Create a class for Branch session handling**
 
 Branch initializes asynchronously, with Branch link parameters being returned following a network call to Branch. If initialization is successful, the InitSessionComplete method will be invoked. If initialization is unsuccessful, the SessionRequestError method will be invoked. Deep link routing logic should be located in the InitSessionComplete method.
 
-1. Right-click on the C# project and select **Add > New File...**
-2. Select: **General > Empty Class**
-3. Rename the file: **TestXamarinFormsApp.cs**
-4. Enter the following code (replace 'TestXamarinFormsApp' with the actual name of the app):
+&nbsp;&nbsp;&nbsp;&nbsp;1. Right-click on the C# project and select **Add > New File...**  
+&nbsp;&nbsp;&nbsp;&nbsp;2. Select: **General > Empty Class**  
+&nbsp;&nbsp;&nbsp;&nbsp;3. Rename the file: **TestXamarinFormsApp.cs**  
+&nbsp;&nbsp;&nbsp;&nbsp;4. Enter the following code (replacing 'TestXamarinFormsApp' with the actual name of the app):  
 
 ```csharp
 using BranchXamarinSDK;
@@ -620,14 +618,14 @@ namespace TestXamarinFormsApp
 }
 ```
 
-###### Create a class for handling link data
+**Create a class for handling link data**
 
 Branch stores link data in an object referred to as the **Branch Universal Object**, or **BUO**.
 
-1. Right-click on the C# project and select **Add > New File...**
-2. Select: **General > Empty Class**
-3. Rename the file: **TestXamarinFormsAppBUO.cs**
-4. Enter the following code (replace 'TestXamarinFormsApp' with the actual name of the app):
+&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on the C# project and select **Add > New File...**  
+&nbsp;&nbsp;&nbsp;&nbsp;b. Select: **General > Empty Class**  
+&nbsp;&nbsp;&nbsp;&nbsp;c. Rename the file: **TestXamarinFormsAppBUO.cs**  
+&nbsp;&nbsp;&nbsp;&nbsp;d. Enter the following code (replace 'TestXamarinFormsApp' with the actual name of the app):
 
 ```csharp
 using BranchXamarinSDK;
