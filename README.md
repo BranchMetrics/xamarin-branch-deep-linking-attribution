@@ -119,22 +119,22 @@ ___
 
 #### **Add the Branch SDK with NuGet**
 
-The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.
+The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.  
 
-To add the Branch NuGet package to a project:
+To add the Branch NuGet package to a project:  
 
-&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on each project and select `Add` > `Add NuGet Packages`
-&nbsp;&nbsp;&nbsp;&nbsp;b. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project
-&nbsp;&nbsp;&nbsp;&nbsp;c. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project
+1. Right-click on each project and select `Add` > `Add NuGet Packages`  
+2. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project  
+3. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project  
 
 #### **Add the Branch SDK without NuGet**
 
 If, instead of using NuGet, you would rather build and reference the Branch assemblies directly:
 
-&nbsp;&nbsp;&nbsp;&nbsp;a. Clone this repository to the local machine: `https://github.com/BranchMetrics/xamarin-branch-deep-linking.git`
-&nbsp;&nbsp;&nbsp;&nbsp;b. Add the `Branch-Xamarin-SDK` project to the solution and reference it from the Android, iOS and Forms (if applicable) projects
-&nbsp;&nbsp;&nbsp;&nbsp;c. Add the `Branch-Xamarin-SDK.Droid` project to the solution and reference it from the Android project, if any
-&nbsp;&nbsp;&nbsp;&nbsp;d. Add the `Branch-Xamarin-SDK.iOS` project and reference it from the iOS project, if any
+1. Clone this repository to the local machine: `https://github.com/BranchMetrics/xamarin-branch-deep-linking.git`
+2. Add the `Branch-Xamarin-SDK` project to the solution and reference it from the Android, iOS and Forms (if applicable) projects
+3. Add the `Branch-Xamarin-SDK.Droid` project to the solution and reference it from the Android project, if any
+4. Add the `Branch-Xamarin-SDK.iOS` project and reference it from the iOS project, if any
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 1. Open the **Entitlements.plist** file and browse to **Associated Domains**
 2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link` 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin-alternate.app.link`  
 
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
