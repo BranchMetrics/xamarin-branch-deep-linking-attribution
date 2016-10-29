@@ -1,7 +1,4 @@
-# Branch Xamarin SDK
-
-Branch's deep linking SDK for Xamarin
-___
+# Branch deep linking SDK for Xamarin
 
 ## Table of Contents
 
