@@ -20,7 +20,7 @@ ___
     + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
     + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
   + [Integrating the Branch SDK with a Xamarin Project](#integrating-the-branch-sdk-with-a-xamarin-project)
-    + [Xamarin Native projects](#xamarin-native-projects)
+    + [Xamarin Native solutions](#xamarin-native-solutions)
       + [Integrating the Branch SDK with an iOS Native project](#integrating-the-branch-sdk-with-an-ios-native-project)
         + [Create an Apple device Provisioning Profile for the app](#create-an-apple-device-provisioning-profile-for-the-app)
         + [Enter the app's settings on the Branch dashboard](#enter-the-apps-settings-on-the-branch-dashboard)
@@ -35,46 +35,43 @@ ___
         + [Add a BranchActivity.cs file to the .Droid project](#add-a-branchactivitycs-file-to-the-droid-project)
         + [Initialize Branch and configure Branch session management](#initialize-branch-and-configure-branch-session-management)
         + [Add app capabilities in the AndroidManifest.xml file](#add-app-capabilities-in-the-androidmanifestxml-file)
-
-+ [](#xamarin-forms-projects)
-+ [](#configure-the-c-project)
-+ [](#change-the-c-projects-profile-to-pcl-45---profile78)
-+ [](#add-the-branch-sdk-with-nuget-1)
-+ [](#create-a-class-for-branch-session-handling)
-+ [](#create-a-class-for-handling-link-data)
-+ [](#integrating-with-an-ios-forms-app)
-+ [](#create-an-apple-device-provisioning-profile-for-the-app-1)
-+ [](#enter-the-apps-settings-on-the-branch-dashboard-1)
-+ [](#configure-the-xamarin-projects-infoplist-file-1)
-+ [](#configure-the-xamarin-projects-associated-domains-entitlement-1)
-+ [](#add-branch-calls-to-the-appdelegatecs-file-1)
-+ [](#integrating-with-an-android-forms-app)
-+ [](#ensure-that-the-android-project-is-not-using-the-shared-mono-runtime-1)
-(#add-the-apps-branch-key-to-the-stringsxml-file-1)
-(#configure-the-droid-projects-application-class)
-(#initialize-branch)
-(#add-app-capabilities-in-the-androidmanifestxml-file-1)
-(#branch-sdk-method-reference)
-(#retrieve-session-install-or-open-parameters)
-(#retrieve-install-install-only-parameters)
-(#persistent-identities)
-(#logout)
-(#register-custom-events)
-(#generate-tracked-deep-linking-urls-pass-data-across-install-and-open)
-(#shortened-links)
-(#new-feature-branchuniversalobject)
-
-(#what-is-the-branch-universal-object)
-(#referral-system-rewarding-functionality)
-(#get-reward-balance)
-(#redeem-all-or-some-of-the-reward-balance-store-state)
-(#get-credit-history)
-
-(#new-feature-branchuniversalobject-1)
-(#what-is-the-branch-universal-object-1)
-(#note-migration-from-version-2xx-to-3xx)
-(#note-migration-from-version-1xx-to-2xx)
-(#troubleshooting-ensure-newtonsoft-built-properly
+    + [Xamarin Forms solutions](#xamarin-forms-solutions)
+      + [Configure the C# project](#configure-the-c-project)
+        + [Change the C# project's profile to pcl-45 - profile78](#change-the-c-projects-profile-to-pcl-45---profile78)
+        + [Add the Branch SDK with NuGet](#add-the-branch-sdk-with-nuget-1)
+        + [Create a class for Branch session handling](#create-a-class-for-branch-session-handling)
+        + [Create a class for handling link data](#create-a-class-for-handling-link-data)
+      + [Integrating with an iOS Forms app](#integrating-with-an-ios-forms-app)
+        + [Create an Apple device Provisioning Profile](#create-an-apple-device-provisioning-profile-for-the-app-1)
+        + [Enter the app's settings on the Branch dashboard](#enter-the-apps-settings-on-the-branch-dashboard-1)
+        + [Configure the Xamarin project's info.plist file](#configure-the-xamarin-projects-infoplist-file-1)
+        + [Configure the Xamarin project's Associated Domains Entitlement](#configure-the-xamarin-projects-associated-domains-entitlement-1)
+        + [Add Branch calls to the AppDelegate.cs file](#add-branch-calls-to-the-appdelegatecs-file-1)
+      + [Integrating with an Android Frorms app](#integrating-with-an-android-forms-app)
+        + [Ensure that the Android project is not using the Shared Mono runtime](#ensure-that-the-android-project-is-not-using-the-shared-mono-runtime-1)
+        + [Add the app's Branch key to the Strings.xml file](#add-the-apps-branch-key-to-the-stringsxml-file-1)
+        + [Configure the .Droid project's Application class](#configure-the-droid-projects-application-class)
+        + [Initialize Branch](#initialize-branch)
+        + [Add app capabilities in the AndroidManifest.xml file](#add-app-capabilities-in-the-androidmanifestxml-file-1)
+4. [Branch SDK Method Reference](#branch-sdk-method-reference)
+  + [Retrieve-session (install or open) parameters](#retrieve-session-install-or-open-parameters)
+  + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)
+  + [Persistent identities](#persistent-identities)
+  + [Logout](#logout)
+  + [Register Custom Events](#register-custom-events)
+  + [Generate Tracked Deep Linking URLs pass data across install and open](#generate-tracked-deep-linking-urls-pass-data-across-install-and-open)
+  + [Shortened links](#shortened-links)
+      + [](#new-feature-branchuniversalobject)
+      + [](#what-is-the-branch-universal-object)
+      + [](#referral-system-rewarding-functionality)
+      + [](#get-reward-balance)
+      + [](#redeem-all-or-some-of-the-reward-balance-store-state)
+      + [](#get-credit-history)
+      + [](#new-feature-branchuniversalobject-1)
+      + [](#what-is-the-branch-universal-object-1)
+      + [](#note-migration-from-version-2xx-to-3xx)
+      + [](#note-migration-from-version-1xx-to-2xx)
+      + [](#troubleshooting-ensure-newtonsoft-built-properly
 
 ___
 
@@ -167,7 +164,7 @@ ___
 The steps for integrating the Branch SDK with a project differ depending on whether or not the project is creating a Xamarin Forms application and on which mobile platform the project is intended, iOS or Android. Instructions for each of the four scenarios are provided below.
 ___
 
-#### Xamarin Native projects
+#### Xamarin Native solutions
 
 ##### Integrating the Branch SDK with an iOS Native project
 
@@ -549,7 +546,7 @@ namespace TestAndroidApp.Droid
 
 ___
 
-#### Xamarin Forms projects
+#### Xamarin Forms solutions
 
 ##### Configure the C# project
 
