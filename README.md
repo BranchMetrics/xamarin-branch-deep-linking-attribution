@@ -1,6 +1,6 @@
 # Branch deep linking SDK for Xamarin
 
-## Table of Contents
+## Technical Documentation
 
 1. [**Introduction**](#1---introduction)
   + [SDK Details](#sdk-details)
