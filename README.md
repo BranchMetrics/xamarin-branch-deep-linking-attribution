@@ -60,18 +60,21 @@ ___
   + [Logout](#logout)
   + [Register custom events](#register-custom-events)
   + [Generating Branch links](#generating-branch-links)
-  + [Shortened links](#shortened-links)
-      + [](#new-feature-branchuniversalobject)
-      + [](#what-is-the-branch-universal-object)
-      + [](#referral-system-rewarding-functionality)
-      + [](#get-reward-balance)
-      + [](#redeem-all-or-some-of-the-reward-balance-store-state)
-      + [](#get-credit-history)
-      + [](#new-feature-branchuniversalobject-1)
-      + [](#what-is-the-branch-universal-object-1)
-      + [](#note-migration-from-version-2xx-to-3xx)
-      + [](#note-migration-from-version-1xx-to-2xx)
-      + [](#troubleshooting-ensure-newtonsoft-built-properly
+  + [Branch Universal Objects and Link Properties](#branch-universal-oObjects-and-link-properties)
+    + [Overview](#overview)
+    + [Creating a link](#creating-a-link)
+    + [Initialize Branch](#initialize-branch)
+    + [Register a view of the content](#register-a-view-of-the-content)
+    + [Share a link using a share sheet](#share-a-link-using-a-share-sheet)
+  + [Referral rewards](#referral-rewards)
+    + [Check a reward balance](#check-a-reward-balance)
+    + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)
+    + [Get credit history](#get-credit-history)
+    
+  + [](#note-migration-from-version-2xx-to-3xx)
+  + [](#note-migration-from-version-1xx-to-2xx)
+  + [](#troubleshooting-ensure-newtonsoft-built-properly
+5. [Troubleshooting](#troubleshooting)
 
 ___
 
@@ -967,7 +970,7 @@ Some example events you might want to track:
 
 ____
 
-## Generate Branch links
+## Generating Branch links
 
 Branch links can be created in-app (as well as in many other ways - see: [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md). When they are, and setIdentity has been called to associate a User ID with the current user session, Branch links will be associated with that User ID.
 
@@ -1063,7 +1066,7 @@ InitSession (IBranchBUOSessionInterface callback)
 RegisterView (BranchUniversalObject universalObject)
 ```
 
-### Create a share sheet that lets the user share across all channels
+### Share a link using a share sheet
 
 ```
 ShareLink (IBranchLinkShareInterface callback,
@@ -1207,9 +1210,11 @@ The response will return an array that has been parsed from the following JSON:
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
+5. Version Notes
 
-## Note: Migration from version 2.x.x to 3.x.x
+##### Version 3.0.0
 
+**Changed methods**
 Starting with version 3.0 the method of creating links:
 
 ```csharp
@@ -1222,41 +1227,37 @@ has been deprecated in favor of creating links with BranchUniversalObjects and L
 
 There are no other notable user-impacting changes.
 
-## Note: Migration from version 1.x.x to 2.x.x
+##### Version 2.0.0
 
-New version of Branch SDK based on our native libraries that we built for iOS and Android.
-We changed Xamarin API in accordance with our native API.
+This version of the Branch SDK is a wrapper around our native iOS and Android libraries. Some Xamarin methods that had method names that differed from native SDK method names have been updated.
 
 To migrate to version 2.x.x:
 
-1. delete old nuget package
-2. install new Xamarin SDK nuget package
-3. change initialisation of Branch
-4. delete word "Async" in called Branch methods
-5. change the code in accordance with changed and deleted list (see below)
+1. Delete the old nuget package
+2. Install the new Xamarin SDK nuget package
 
-##### Changed Interfaces
-1. IBranchRewardsInterface
-2. IBranchUrlInterface
+**Changed Interfaces**
+- IBranchRewardsInterface
+- IBranchUrlInterface
 
-##### Changed methods
-1. We add two methods GetShortUrl instead of GetShortUrlAsync, you need to change list of parameters in the old GetShortUrlAsync and delete "Async"
+**Changed methods**
+- GetShortUrlAsync -> GetShortUrl
 
-##### Deleted Interfaces
-1. IBranchProperties
-2. IBranchActionsInterface
-3. IBranchGetDeviceInformation
-4. IBranchReferralInterface
+**Deleted Interfaces**
+- IBranchProperties
+- IBranchActionsInterface
+- IBranchGetDeviceInformation
+- IBranchReferralInterface
 
-##### Deleted methods
-1. LoadReferralActionCountsAsync
-2. GetReferralCodeAsync
-3. ValidateReferralCodeAsync
-4. ApplyReferralCodeAsync
-5. GetReferralCountsForAction
+**Deleted methods**
+- LoadReferralActionCountsAsync
+- GetReferralCodeAsync
+- ValidateReferralCodeAsync
+- ApplyReferralCodeAsync
+- GetReferralCountsForAction
 
 
-## Troubleshooting: Ensure Newtonsoft built properly
+5. Troubleshooting
 
 **Android app fails to build**
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
