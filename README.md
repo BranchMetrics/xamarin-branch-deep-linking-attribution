@@ -5,17 +5,17 @@ ___
 
 ## Table of Contents
 
-1. [**Introduction**](#1-introduction)
+1. [**Introduction**](#1---introduction)
   + [SDK Details](#sdk-details)
   + [Resources](#resources)
   + [Branch-integrated Xamarin Demo Apps](#branch-integrated-xamarin-demo-apps)
 
-2. [**Overview of Branch links and Branch keys**](#2-overview-of-branch-links-and-branch-keys)
+2. [**Overview of Branch links and Branch keys**](#2---overview-of-branch-links-and-branch-keys)
   + [Format of Branch links](#format-of-branch-links)
   + [Branch keys](#branch-keys)
   + [Creating a Branch link domain and Branch key for an app](#creating-a-branch-link-domain-and-branch-key-for-an-app)
 
-3. [**Configuring a Xamarin app for deep linking**](#3-configuring-a-xamarin-app-for-deep-linking)
+3. [**Configuring a Xamarin app for deep linking**](#3---configuring-a-xamarin-app-for-deep-linking)
   + [Adding the Branch SDK to a Xamarin Solution](#adding-the-branch-sdk-to-a-xamarin-solution)
     + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
     + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
@@ -53,7 +53,7 @@ ___
         + [Configure the .Droid project's Application class](#configure-the-droid-projects-application-class)
         + [Initialize Branch](#initialize-branch)
         + [Add app capabilities in the AndroidManifest.xml file](#add-app-capabilities-in-the-androidmanifestxml-file-1)
-4. [Branch SDK Method Reference](#4-branch-sdk-method-reference)
+4. [Branch SDK Method Reference](#4---branch-sdk-method-reference)
   + [Retrieve-session (install or open) parameters](#retrieve-session-install-or-open-parameters)
   + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)
   + [Persistent identities](#persistent-identities)
@@ -70,10 +70,10 @@ ___
     + [Check a reward balance](#check-a-reward-balance)
     + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)
     + [Get credit history](#get-credit-history)
-5. [Version Notes](#5-version-notes)
+5. [Version Notes](#5---version-notes)
   + [Version 3](#version-3)
   + [Version 2](#version-2)
-6. [Troubleshooting](#6-troubleshooting)
+6. [Troubleshooting](#6---troubleshooting)
   + [Android app fails to build](#android-app-fails-to-build)
 
 ___
