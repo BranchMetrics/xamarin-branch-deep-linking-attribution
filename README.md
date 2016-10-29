@@ -17,7 +17,7 @@
     + [Add the Branch SDK with NuGet](#add-the-branch-sdk-with-nuget)
     + [Add the Branch SDK without NuGet](#add-the-branch-sdk-without-nuget)
     
-  + [Integrating the Branch SDK with a Xamarin solution](#integrating-the-branch-sdk-with-a-xamarin-solution)
+  + [Integrating the Branch SDK](#integrating-the-branch-sdk)
     + [Xamarin Native solutions](#xamarin-native-solutions)
       + [Integrating the Branch SDK with an iOS Native project](#integrating-the-branch-sdk-with-an-ios-native-project)
       + [Integrating the Branch SDK with an Android Native project](#integrating-the-branch-sdk-with-an-android-native-project)
@@ -138,7 +138,7 @@ If, instead of using NuGet, you would rather build and reference the Branch asse
 
 ___
 
-### Integrating the Branch SDK with a Xamarin Solution
+### Integrating the Branch SDK
 
 The steps for integrating the Branch SDK with a project differ depending on whether or not the project is creating a Xamarin Forms application and on which mobile platform the project is intended, iOS or Android. Instructions for each of the four scenarios are provided below.
 ___
