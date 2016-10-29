@@ -5,17 +5,17 @@ ___
 
 ## Table of Contents
 
-1. [**Introduction**](#introduction)
+1. [**Introduction**](#1-introduction)
   + [SDK Details](#sdk-details)
   + [Resources](#resources)
   + [Branch-integrated Xamarin Demo Apps](#branch-integrated-xamarin-demo-apps)
 
-2. [**Overview of Branch links and Branch keys**](#overview-of-branch-links-and-branch-keys)
+2. [**Overview of Branch links and Branch keys**](#2-overview-of-branch-links-and-branch-keys)
   + [Format of Branch links](#format-of-branch-links)
   + [Branch keys](#branch-keys)
   + [Creating a Branch link domain and Branch key for an app](#creating-a-branch-link-domain-and-branch-key-for-an-app)
-  
-3. [**Configuring Xamarin apps for deep linking**](#configuring-xamarin-apps-for-deep-linking)
+
+3. [**Configuring a Xamarin app for deep linking**](#3-configuring-a-xamarin-app-for-deep-linking)
   + [Adding the Branch SDK to a Xamarin Solution](#adding-the-branch-sdk-to-a-xamarin-solution)
     + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
     + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
@@ -53,7 +53,7 @@ ___
         + [Configure the .Droid project's Application class](#configure-the-droid-projects-application-class)
         + [Initialize Branch](#initialize-branch)
         + [Add app capabilities in the AndroidManifest.xml file](#add-app-capabilities-in-the-androidmanifestxml-file-1)
-4. [Branch SDK Method Reference](#branch-sdk-method-reference)
+4. [Branch SDK Method Reference](#4-branch-sdk-method-reference)
   + [Retrieve-session (install or open) parameters](#retrieve-session-install-or-open-parameters)
   + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)
   + [Persistent identities](#persistent-identities)
@@ -70,15 +70,15 @@ ___
     + [Check a reward balance](#check-a-reward-balance)
     + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)
     + [Get credit history](#get-credit-history)
-5. [Version Notes](#version-notes)
+5. [Version Notes](#5-version-notes)
   + [Version 3](#version-3)
   + [Version 2](#version-2)
-6. [Troubleshooting](#troubleshooting)
+6. [Troubleshooting](#6-troubleshooting)
   + [Android app fails to build](#android-app-fails-to-build)
 
 ___
 
-## Introduction
+## 1 - Introduction
 
 ### SDK Details
 
@@ -137,7 +137,7 @@ The Branch key can be found on the [General Settings](https://dashboard.branch.i
 
 ___
 
-## Configure a Xamarin apps for deep linking
+## 2 - Configuring a Xamarin app for deep linking
 
 ### Add the Branch SDK to a Xamarin Solution
 
@@ -890,7 +890,7 @@ Additional reading on the Android manifest
 
 ____
 
-## Branch SDK Method Reference
+## 4 - Branch SDK Method Reference
 
 ### Retrieve session (install or open) parameters
 
@@ -970,7 +970,7 @@ Some example events you might want to track:
 
 ____
 
-## Generating Branch links
+### Generating Branch links
 
 Branch links can be created in-app (as well as in many other ways - see: [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md). When they are, and setIdentity has been called to associate a User ID with the current user session, Branch links will be associated with that User ID.
 
@@ -1028,12 +1028,12 @@ You have the ability to control the direct deep linking of each link by insertin
 | "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in the app from a Branch link (has been cookied and deep linked by Branch)
 
 
-## Branch Universal Objects and Link Properties
-### Overview
+### Branch Universal Objects and Link Properties
+#### Overview
 
 The Branch Universal Object is a data object representing a piece of content that is referenced by a Branch link. Together with a set of Link Properties (marketing metadata such as Campaign and Channel as well as Branch-behavior related parameters such as $eepview_path), can be combined to generate a Branch link.
 
-### Creating a link
+#### Creating a link
 ```
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
@@ -1054,19 +1054,19 @@ Branch.GetInstance().GetShortURL (callback,
 		                          linkProperties);
 ```
 
-### Initialize Branch
+#### Initialize Branch
 
 ```
 InitSession (IBranchBUOSessionInterface callback)
 ```
 
-### Register a view of the content
+#### Register a view of the content
 
 ```
 RegisterView (BranchUniversalObject universalObject)
 ```
 
-### Share a link using a share sheet
+#### Share a link using a share sheet
 
 ```
 ShareLink (IBranchLinkShareInterface callback,
@@ -1077,7 +1077,7 @@ ShareLink (IBranchLinkShareInterface callback,
 
 ____
 
-## Referral rewards
+### Referral rewards
 
 In a standard referral system, you have 2 parties: the original user and the invitee. Our system is flexible enough to handle rewards for all users. Here are a couple example scenarios:
 
@@ -1091,7 +1091,7 @@ These reward definitions are created on the dashboard, under the 'Reward Rules' 
 
 Warning: For a referral program, you should not use unique awards for custom events and redeem pre-identify call. This can allow users to cheat the system.
 
-### Check a reward balance
+#### Check a reward balance
 
 Reward balances change randomly on the backend when certain actions are taken (defined by the rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
@@ -1124,7 +1124,7 @@ branch.LoadRewards(this);
 #endregion
 ```
 
-### Redeem all or some of the reward balance
+#### Redeem all or some of the reward balance
 
 We will store how many of the rewards have been deployed so that you don't have to track it on the end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
 
@@ -1158,7 +1158,7 @@ branch.RedeemRewards(this, amount, bucket);
 
 ```
 
-### Get credit history
+#### Get credit history
 
 This call will retrieve the entire history of credits and redemptions from the individual user.  It also implements the IBranchRewardsInterface(see above). To use this call, implement like so:
 
@@ -1210,7 +1210,7 @@ The response will return an array that has been parsed from the following JSON:
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
-## Version Notes
+## 5 - Version Notes
 
 ##### Version 3
 
@@ -1257,7 +1257,7 @@ To migrate to version 2.x.x:
 - GetReferralCountsForAction
 
 
-## Troubleshooting
+## 6- Troubleshooting
 
 #### Android app fails to build
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
