@@ -548,15 +548,15 @@ ___
 
 #### Xamarin Forms solutions
 
-##### Configure the C# project
+##### **Configure the C# project**
 
 These steps are required for all Forms projects, both iOS and Android.
 
-**A - Change the C# project's profile to PCL 4.5 - Profile78**
+**1. Change the C# project's profile to PCL 4.5 - Profile78**
 
- 1. Right-click on the project name and select: **Options**  
- 2. Browse the menu to **Build > General**  
- 3. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
+ &nbspa. Right-click on the project name and select: **Options**  
+ &nbspb. Browse the menu to **Build > General**  
+ &nbspc. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
 
 ###### 2. Add the Branch SDK with NuGet
 
