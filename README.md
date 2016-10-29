@@ -554,19 +554,19 @@ These steps are required for all Forms projects, both iOS and Android.
 
 **1. Change the C# project's profile to PCL 4.5 - Profile78**
 
-&nbsp;&nbsp;a. Right-click on the project name and select: **Options**  
-&nbsp;&nbsp;b. Browse the menu to **Build > General**  
-&nbsp;&nbsp;c. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
+&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on the project name and select: **Options**  
+&nbsp;&nbsp;&nbsp;&nbsp;b. Browse the menu to **Build > General**  
+&nbsp;&nbsp;&nbsp;&nbsp;c. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
 
-###### 2. Add the Branch SDK with NuGet
+**2. Add the Branch SDK with NuGet**
 
 The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.
 
 To add the Branch NuGet package to a project:
 
-1. Right-click on each project and select `Add` > `Add NuGet Packages`
-2. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project
-3. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project
+&nbsp;&nbsp;&nbsp;&nbsp;a. Right-click on each project and select `Add` > `Add NuGet Packages`
+&nbsp;&nbsp;&nbsp;&nbsp;b. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project
+&nbsp;&nbsp;&nbsp;&nbsp;c. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project
 
 ###### Create a class for Branch session handling
 
