@@ -150,11 +150,11 @@ ___
 The steps for integrating the Branch SDK with a project differ depending on whether or not the project is creating a Xamarin Forms application and on which mobile platform the project is intended, iOS or Android. Instructions for each of the four scenarios are provided below.
 ___
 
-#### Xamarin Native solutions
+#### Xamarin Native solutions  
 
-##### Integrating the Branch SDK with an iOS Native project
+##### **Integrating the Branch SDK with an iOS Native project**  
 
-###### Create an Apple device Provisioning Profile for the app
+###### **Create an Apple device Provisioning Profile for the app**  
 
 1. Open Xcode and create a new project with the same name as your Xamarin iOS project
 2. On the Xcode project's **General** tab, verify the app's Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
@@ -165,7 +165,7 @@ ___
 5. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.
 6. Close Xcode
 
-###### Enter the app's settings on the Branch dashboard
+###### **Enter the app's settings on the Branch dashboard**  
 
 1. On the [Link Settings](https://dashboard.branch.io/#/settings/link) page, check the **I have an iOS App** checkbox
 2. Enter the app's URI Scheme in the **iOS URI Scheme** field (for an app with the URI Scheme *testbed-xamarin*, for example, the entry would be: `testbed-xamarin://`)
@@ -173,7 +173,7 @@ ___
 4. Check the **Enable Universal Links** checkbox
 5. Enter the app's Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)
 
-###### Configure the Xamarin project's **Info.plist** file 
+###### **Configure the Xamarin project's *Info.plist* file**  
 
 1. Open the **Info.plist** file and click on the **Advanced** tab  
 2. In the **URL Types** section, click the **Add URL Type** button   
@@ -183,7 +183,7 @@ ___
 
 ![iOS URI Scheme](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
 
-###### Configure the Xamarin project's **Associated Domains** entitlement
+###### **Configure the Xamarin project's *Associated Domains* entitlement**  
 
 1. Open the **Entitlements.plist** file and browse to **Associated Domains**
 2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:
@@ -191,7 +191,7 @@ ___
     - `applinks:testbed-xamarin-alternate.app.link`  
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
 
-##### Add Branch calls to the **AppDelegate.cs** file
+##### **Add Branch calls to the *AppDelegate.cs* file**
 
 Branch initialization occurs within the `FinishedLaunching` method of the **AppDelegate.cs** file. Branch calls are also required in the `OpenUrl`, `ContinueUserActivity`, and `ReceiveRemoteNotification` methods to ensure that Branch link information is handled properly whenever the app becomes active.
 
@@ -265,7 +265,7 @@ namespace TestiOSApp.iOS
 }
 ```
 
-###### Update the project's Signing Identity and Provisioning Profile 
+###### **Update the project's Signing Identity and Provisioning Profile*  
 
 1. Right-click on the iOS project and select **Options**
 2. Select **iOS Bundle Signing** 
@@ -273,15 +273,15 @@ namespace TestiOSApp.iOS
 
 ___
 
-##### Integrating the Branch SDK with an Android Native project
+##### **Integrating the Branch SDK with an Android Native project**
 
-###### Ensure that the Android project is not using the Shared Mono Runtime
+###### **Ensure that the Android project is not using the Shared Mono Runtime**
 
 1. Right-click on the Android project and select: **Options**
 2. Select: **Android Build**
 3. On the **General** tab, un-check: **Use Shared Mono Runtime**
 
-##### Add app capabilities in the **AndroidManifest.xml** file
+##### **Add app capabilities in the *AndroidManifest.xml* file**
 
 In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
 
@@ -293,7 +293,7 @@ Additional reading on the Android manifest
 - [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
 - [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
 
-###### Add the app's Branch key to the Strings.xml file
+###### **Add the app's Branch key to the Strings.xml file**
 
 Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
 
@@ -305,7 +305,7 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 </resources>
 ```
 
-##### Create the project's *Application* class
+##### **Create the project's *Application* class**
 
 Create an Application.cs file
 
@@ -346,7 +346,7 @@ namespace TestAndroidApp.Droid
 | io.branch.sdk.TestMode | Setting this parameter to *true* enables Debug Mode, which causes simple uninstall/reinstalls of the app to trigger *install* events. Be sure to disable this before deploying to production. Note that enabling Debug Mode on Android also forces the app to use the Branch *Test* key if this key has been added to the project. Apps running with a *Test* key will be unable to receive data from Branch links created with the *Live* key.
 | io.branch.sdk.BranchKey | The app's Branch key. Both a *Live* key and a *Test* key can be added to the Strings.xml file. When *Test* Mode is enabled the app will automatically use the *Test* key, if one has been specified.
 
-##### Create an activity to handle Branch events: **BranchActivity**
+##### **Create an activity to handle Branch events: _BranchActivity_**
 
 1. Right-click on the .Droid project and select **Add > New File...**
 2. Select: **Android > Activity**
@@ -402,7 +402,7 @@ namespace TestAndroidApp.Droid
 }
 ```
 
-##### Create an activity to handle Branch errors: **BranchErrorActivity**
+##### **Create an activity to handle Branch errors: _BranchErrorActivity_**
 
 1. Right-click on the .Droid project and select **Add > New File...**
 2. Select: **Android > Activity**
@@ -451,7 +451,7 @@ namespace TestAndroidApp.Droid
 }
 ```
 
-##### Initialize Branch and configure Branch session management
+##### **Initialize Branch and configure Branch session management**
 
 Branch must be initilialized in the OnCreate method of either the Application class or the first Activity launched by the app. The OnNewIntent method must be added to retrieve the latest link identifier when the app becomes active due to a Branch link click.
 
@@ -651,7 +651,7 @@ namespace TestXamarinFormsApp
 ```
 
 
-##### Integrating with an iOS Forms app
+##### **Integrating with an iOS Forms app**
 
 **1. Create an Apple device Provisioning Profile for the app**
 
@@ -743,7 +743,7 @@ namespace TestXamarinFormsApp.iOS
 
 ___
 
-##### Integrating with an Android Forms app
+##### **Integrating with an Android Forms app**
 
 **1. Ensure that the Android project is not using the Shared Mono Runtime**
 
@@ -1193,7 +1193,7 @@ The response will return an array that has been parsed from the following JSON:
 
 ## 5 - Version Notes
 
-##### Version 3
+#### Version 3
 
 **Changed methods**
 Starting with version 3.0 the method of creating links:
@@ -1208,7 +1208,7 @@ has been deprecated in favor of creating links with BranchUniversalObjects and L
 
 There are no other notable user-impacting changes.
 
-##### Version 2
+#### Version 2
 
 This version of the Branch SDK is a wrapper around our native iOS and Android libraries. Some Xamarin methods that had method names that differed from native SDK method names have been updated.
 
