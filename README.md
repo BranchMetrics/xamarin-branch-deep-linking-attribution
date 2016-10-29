@@ -71,10 +71,10 @@ ___
     + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)
     + [Get credit history](#get-credit-history)
 5. [Version Notes](#version-notes)
-  + [Version 3](version-3)
-  + [Version 2](version-2)
+  + [Version 3](#version-3)
+  + [Version 2](#version-2)
 6. [Troubleshooting](#troubleshooting)
-  + [Android app fails to build](Android app fails to build)
+  + [Android app fails to build](#android-app-fails-to-build)
 
 ___
 
