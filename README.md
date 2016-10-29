@@ -604,7 +604,7 @@ namespace TestXamarinFormsApp
 }
 ```
 
-**Create a class for handling link data**
+**4. Create a class for handling link data**
 
 Branch stores link data in an object referred to as the **Branch Universal Object**, or **BUO**.
 
