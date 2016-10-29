@@ -1257,7 +1257,7 @@ To migrate to version 2.x.x:
 - GetReferralCountsForAction
 
 
-## 6- Troubleshooting
+## 6 - Troubleshooting
 
 #### Android app fails to build
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
