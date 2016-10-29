@@ -70,11 +70,11 @@ ___
     + [Check a reward balance](#check-a-reward-balance)
     + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)
     + [Get credit history](#get-credit-history)
-    
-  + [](#note-migration-from-version-2xx-to-3xx)
-  + [](#note-migration-from-version-1xx-to-2xx)
-  + [](#troubleshooting-ensure-newtonsoft-built-properly
-5. [Troubleshooting](#troubleshooting)
+5. [Version Notes](#version-notes)
+  + [Version 3](version-3)
+  + [Version 2](version-2)
+6. [Troubleshooting](#troubleshooting)
+  + [Android app fails to build](Android app fails to build)
 
 ___
 
@@ -1212,7 +1212,7 @@ The response will return an array that has been parsed from the following JSON:
 
 ## Version Notes
 
-##### Version 3.0.0
+##### Version 3
 
 **Changed methods**
 Starting with version 3.0 the method of creating links:
@@ -1227,7 +1227,7 @@ has been deprecated in favor of creating links with BranchUniversalObjects and L
 
 There are no other notable user-impacting changes.
 
-##### Version 2.0.0
+##### Version 2
 
 This version of the Branch SDK is a wrapper around our native iOS and Android libraries. Some Xamarin methods that had method names that differed from native SDK method names have been updated.
 
@@ -1259,7 +1259,7 @@ To migrate to version 2.x.x:
 
 ## Troubleshooting
 
-**Android app fails to build**
+#### Android app fails to build
 There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
 
 The fix:
