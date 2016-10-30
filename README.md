@@ -696,7 +696,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using BranchXamarinSDK;
-using BranchXamarinTestbed;
+using TestXamarinFormsApp;
 
 namespace TestXamarinFormsApp.iOS
 {
@@ -709,11 +709,11 @@ namespace TestXamarinFormsApp.iOS
 
 			BranchIOS.Debug = true;
 
-			AppBUO appBUO = new AppBUO();
-			BranchIOS.Init("key_live_liAnF8k7gZUEZv76Rt9a4bffAzlC5zVW", launchOptions, appBUO);
+			TestXamarinFormsAppBUO appBUO = new TestXamarinFormsAppBUO();
+			BranchIOS.Init("key_live_liAnF8k7gZUEZv76Rt9a4bffAzlC5zVW", options, appBUO);
 			LoadApplication(appBUO);
 
-			return base.FinishedLaunching(application, launchOptions);
+			return base.FinishedLaunching(app, options);
 		}
 
 		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
