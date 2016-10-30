@@ -807,7 +807,7 @@ namespace TestXamarinFormsApp.Droid
 
 Branch must be initilialized in the OnCreate method of either the Application class or the first Activity launched by the app. The OnNewIntent method must be added to retrieve the latest link identifier when the app becomes active due to a Branch link click.
 
-In the code example below, from the sample Xamarin Native project included in the Branch SDK's **Branch-Xamarin-Testbed.Droid** folder, the following Branch initialization and session management steps have been added to MainActivity.cs:
+In the code example below the following Branch initialization and session management steps have been added to MainActivity.cs:
 
 - Register an Activity to respond to the app's URI Scheme
 - Ensure the Activity is launched in `singleTask` mode
