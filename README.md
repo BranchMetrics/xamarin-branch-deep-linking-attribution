@@ -786,12 +786,15 @@ using BranchXamarinSDK;
 
 namespace TestXamarinFormsApp.Droid
 {
+
+	[Application (AllowBackup = true, Icon = "@drawable/icon", Label = "@string/app_name")]
+	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
 	[MetaData("io.branch.sdk.TestMode", Value = "true")]
 	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
 
-	public class TestXamarinFormsApp : Application
+	public class App : Application
 	{
-		public TestXamarinFormsApp(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+		public App(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
 		{
 		}
 
@@ -834,10 +837,9 @@ using Android.OS;
 using BranchXamarinSDK;
 using TestXamarinFormsApp;
 
-
 namespace TestXamarinFormsApp.Droid
 {
-	[Activity(Label = "XamarinFormsTemplateApp.Droid", LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	[Activity(Label = "TestXamarinFormsApp.Droid", LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 
 	[IntentFilter(new[] { "android.intent.action.VIEW" },
 		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
@@ -848,23 +850,21 @@ namespace TestXamarinFormsApp.Droid
 		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
 		DataScheme = "https",
 		DataHost = "testxamarinformsapp.app.link")]
-
-
+	
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
 	{
-		protected override void OnCreate(Bundle bundle)
+		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			TabLayoutResource = Resource.Layout.Tabbar;
 			ToolbarResource = Resource.Layout.Toolbar;
 
-			base.OnCreate(bundle);
+			base.OnCreate(savedInstanceState);
 
-			global::Xamarin.Forms.Forms.Init(this, bundle);
+			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-			TestXamarinFormsAppBUO buo = new TestXamarinFormsAppBUO();
-			BranchAndroid.Init(this, GetString(Resource.String.branch_key), buo);
-
-			LoadApplication(buo);
+			TestXamarinFormsAppBUO linkData = new TestXamarinFormsAppBUO();
+			BranchAndroid.Init(this, GetString(Resource.String.branch_key), linkData);
+			LoadApplication(linkData);
 		}
 
 		protected override void OnNewIntent(Intent intent)
