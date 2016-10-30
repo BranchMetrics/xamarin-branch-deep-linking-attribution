@@ -298,11 +298,17 @@ Additional reading on the Android manifest
 
 Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
 
+1. In the Android project, browse to **Resources/values**
+2. Right-click on the **values** folder and select: **Add > New File...**
+3. Select: **XML > Empty XML File**
+4. Name the file: **Strings**
+5. Enter the following values:
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">TestAndroidApp</string>
-	<string name="branch_key">key_live_howbsM2XwBp7V5DNfw0refdartp0njwG</string>
+	<string name="app_name">TestXamarinFormsApp</string>
+	<string name="branch_key">key_live_liAnF8k7gZUEZv76Rt9a4bffAzlC5zVW</string>
 </resources>
 ```
 
@@ -746,7 +752,9 @@ ___
 
 **II. Add the app's Branch key to the Strings.xml file**
 
-Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
+Create a **Resources/values/Strings.xml** file that can be accessed by the app's Application class for the Android project and add the Branch key to this file.
+
+1. Right-click
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -759,7 +767,7 @@ Add the Branch key to the Android project's **Resources/values/Strings.xml** fil
 **III. Configure the .Droid project's Application class**
 
 - Set the Branch SDK's initialization parameters  
-- Override the `OnCreate()` method to call `BranchAndroid.GetAutoInstance`
+- Override the `OnCreate()` method to call `BranchAndroid.GetAutoInstance`  
 
 In the sample Xamarin Forms project included in the Branch SDK's **Branch-Xamarin-Testbed.Droid** folder this is is the TestBedApplication.cs file:
 
@@ -770,17 +778,15 @@ using Android.Content;
 using Android.Runtime;
 using BranchXamarinSDK;
 
-namespace BranchXamarinTestbed.Droid
+namespace TestXamarinFormsApp.Droid
 {
-	[Application (AllowBackup = true, Icon = "@mipmap/icon", Label = "@string/app_name")]
-	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
 	[MetaData("io.branch.sdk.TestMode", Value = "true")]
 	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
 
-	public class TestBedApplication: Application
+	public class TestXamarinFormsApp : Application
 	{
-		public TestBedApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
-    	{
+		public TestXamarinFormsApp(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+		{
 		}
 
 		public override void OnCreate()
@@ -815,35 +821,36 @@ using Android.Content.PM;
 using Android.Widget;
 using Android.OS;
 using BranchXamarinSDK;
-using BranchXamarinTestbed;
+using TestXamarinFormsApp;
 
-namespace BranchXamarinTestbed.Droid
+namespace TestXamarinFormsApp.Droid
 {
-	[Activity (Label = "io.branch.testbed-xamarinforms", MainLauncher = true, Icon = "@mipmap/icon", LaunchMode = LaunchMode.SingleTask)]
+	[Activity(Label = "io.branch.testbed-xamarinforms", MainLauncher = true, Icon = "@drawable/icon", LaunchMode = LaunchMode.SingleTask)]
 
-	[IntentFilter (new[]{"android.intent.action.VIEW"},
-		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
-		DataScheme="testbed-xamarinforms",
-		DataHost="open")]
+	[IntentFilter(new[] { "android.intent.action.VIEW" },
+		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+		DataScheme = "TestXamarinFormsApp",
+		DataHost = "open")]
 
 	[IntentFilter(new[] { "android.intent.action.VIEW" },
 		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
 		DataScheme = "https",
-		DataHost = "testbed-xamarinforms.app.link")]
+		DataHost = "TestXamarinFormsApp.app.link")]
 
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
-		protected override void OnCreate (Bundle savedInstanceState)
+		protected override void OnCreate(Bundle savedInstanceState)
 		{
-			base.OnCreate (savedInstanceState);
-			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
+			base.OnCreate(savedInstanceState);
+			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-			AppBUO appBUO = new AppBUO ();
-			BranchAndroid.Init (this, GetString(Resource.String.branch_key), appBUO);
-			LoadApplication (appBUO);
+			TestXamarinFormsAppBUO buo = new TestXamarinFormsAppBUO();
+			BranchAndroid.Init(this, GetString(Resource.String.branch_key), buo);
+			LoadApplication(buo);
 		}
 
-		protected override void OnNewIntent(Intent intent) {
+		protected override void OnNewIntent(Intent intent)
+		{
 			this.Intent = intent;
 		}
 	}
