@@ -14,8 +14,8 @@
 
 3. [**Configuring a Xamarin app for deep linking**](#3---configuring-a-xamarin-app-for-deep-linking)
   + [Adding the Branch SDK to a Xamarin Solution](#adding-the-branch-sdk-to-a-xamarin-solution)
-    + [Add the Branch SDK with NuGet](#add-the-branch-sdk-with-nuget)
-    + [Add the Branch SDK without NuGet](#add-the-branch-sdk-without-nuget)
+    + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
+    + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
     
   + [Integrating the Branch SDK](#integrating-the-branch-sdk)
     + [Xamarin Native solutions](#xamarin-native-solutions)
@@ -23,7 +23,7 @@
       + [Integrating the Branch SDK with an Android Native project](#integrating-the-branch-sdk-with-an-android-native-project)
       
     + [Xamarin Forms solutions](#xamarin-forms-solutions)
-      + [Configure the C# project](#configure-the-c-project)
+      + [Configuring the C# project](#configuring-the-c-project)
       + [Integrating with an iOS Forms app](#integrating-with-an-ios-forms-app)
       + [Integrating with an Android Frorms app](#integrating-with-an-android-forms-app)
       
@@ -115,9 +115,9 @@ ___
 
 ## 2 - Configuring a Xamarin app for deep linking
 
-### Add the Branch SDK to a Xamarin Solution
+### Adding the Branch SDK to a Xamarin Solution
 
-#### **Add the Branch SDK with NuGet**
+#### **Adding the Branch SDK with NuGet**
 
 The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.  
 
@@ -127,7 +127,7 @@ To add the Branch NuGet package to a project:
 2. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project  
 3. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project  
 
-#### **Add the Branch SDK without NuGet**
+#### **Adding the Branch SDK without NuGet**
 
 If, instead of using NuGet, you would rather build and reference the Branch assemblies directly:
 
