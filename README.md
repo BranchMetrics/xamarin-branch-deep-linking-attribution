@@ -530,7 +530,7 @@ ___
 
 #### Xamarin Forms solutions
 
-##### **Configure the C# project**
+##### **Configuring the C# project**
 
 These steps are required for all Forms projects, both iOS and Android.
 
