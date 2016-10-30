@@ -172,8 +172,8 @@ ___
 2. Enter the app's **Bundle Identifier** from the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) in the **Bundle Identifier** field. **IMPORTANT:** this field will automatically be populated with an all-lowercase value by Xamarin. The value is in fact case sensitive and must match the value in the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) precisely.  
 3. Click on the **Advanced** tab   
 4. In the **URL Types** section, click the **Add URL Type** button   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
 
 ![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
