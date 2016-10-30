@@ -409,7 +409,7 @@ namespace TestAndroidApp.Droid
 }
 ```
 
-**VI. Create an activity to handle Branch errors: _BranchErrorActivity_**
+**VI. Create an activity to handle Branch errors: BranchErrorActivity**
 
 1. Right-click on the .Droid project and select **Add > New File...**
 2. Select: **Android > Activity**
@@ -815,37 +815,49 @@ In the code example below the following Branch initialization and session manage
 - Override the OnNewIntent method
 
 ```csharp
+using System;
+
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Runtime;
+using Android.Views;
 using Android.Widget;
 using Android.OS;
+
 using BranchXamarinSDK;
 using TestXamarinFormsApp;
 
+
 namespace TestXamarinFormsApp.Droid
 {
-	[Activity(Label = "io.branch.testbed-xamarinforms", MainLauncher = true, Icon = "@drawable/icon", LaunchMode = LaunchMode.SingleTask)]
+	[Activity(Label = "XamarinFormsTemplateApp.Droid", LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 
 	[IntentFilter(new[] { "android.intent.action.VIEW" },
 		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
-		DataScheme = "TestXamarinFormsApp",
+		DataScheme = "testxamarinformsapp",
 		DataHost = "open")]
 
 	[IntentFilter(new[] { "android.intent.action.VIEW" },
 		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
 		DataScheme = "https",
-		DataHost = "TestXamarinFormsApp.app.link")]
+		DataHost = "testxamarinformsapp.app.link")]
 
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+
+	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
 	{
-		protected override void OnCreate(Bundle savedInstanceState)
+		protected override void OnCreate(Bundle bundle)
 		{
-			base.OnCreate(savedInstanceState);
-			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+			TabLayoutResource = Resource.Layout.Tabbar;
+			ToolbarResource = Resource.Layout.Toolbar;
+
+			base.OnCreate(bundle);
+
+			global::Xamarin.Forms.Forms.Init(this, bundle);
 
 			TestXamarinFormsAppBUO buo = new TestXamarinFormsAppBUO();
 			BranchAndroid.Init(this, GetString(Resource.String.branch_key), buo);
+
 			LoadApplication(buo);
 		}
 
@@ -855,6 +867,7 @@ namespace TestXamarinFormsApp.Droid
 		}
 	}
 }
+
 ```
 
 **V. Add app capabilities in the AndroidManifest.xml file*
