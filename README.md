@@ -565,34 +565,28 @@ using Xamarin.Forms;
 
 namespace TestXamarinFormsApp
 {
-	public class App : Application, IBranchSessionInterface
+	public class TestXamarinFormsApp : Application, IBranchSessionInterface
 	{
-		private TestPage testPage;
 
-		public App ()
+		public TestXamarinFormsApp()
 		{
-			var navPage = new NavigationPage ();
-			testPage = new TestPage ();
-			navPage.PushAsync (testPage);
+			var navPage = new NavigationPage();
 
 			MainPage = navPage;
 		}
-			
+
 		#region IBranchSessionInterface implementation
 
-		public void InitSessionComplete (Dictionary<string, object> data)
+		public void InitSessionComplete(Dictionary<string, object> data)
 		{
-			testPage.InitSessionComplete (data);
 		}
 
-		public void CloseSessionComplete ()
+		public void CloseSessionComplete()
 		{
-			testPage.CloseSessionComplete ();
 		}
 
-		public void SessionRequestError (BranchError error)
+		public void SessionRequestError(BranchError error)
 		{
-			testPage.SessionRequestError (error);
 		}
 
 		#endregion
@@ -617,28 +611,24 @@ using Xamarin.Forms;
 
 namespace TestXamarinFormsApp
 {
-	public class AppBUO : Application, IBranchBUOSessionInterface
+	public class TestXamarinFormsAppBUO : Application, IBranchBUOSessionInterface
 	{
-		private TestPageBUO testPage;
 
-		public AppBUO ()
+		public TestXamarinFormsAppBUO()
 		{
-			var navPage = new NavigationPage ();
-			testPage = new TestPageBUO ();
-			navPage.PushAsync (testPage);
+			var navPage = new NavigationPage();
 
 			MainPage = navPage;
 		}
-			
+
 		#region IBranchBUOSessionInterface implementation
 
-		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp) {
-			testPage.InitSessionComplete (buo, blp);
-		}
-						
-		public void SessionRequestError (BranchError error)
+		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
 		{
-			testPage.SessionRequestError (error);
+		}
+
+		public void SessionRequestError(BranchError error)
+		{
 		}
 
 		#endregion
