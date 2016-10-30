@@ -764,10 +764,18 @@ Create a **Resources/values/Strings.xml** file that can be accessed by the app's
 
 **III. Configure the .Droid project's Application class**
 
+Within the .Droid project's Application class:
+
 - Set the Branch SDK's initialization parameters  
 - Override the `OnCreate()` method to call `BranchAndroid.GetAutoInstance`  
 
-In the sample Xamarin Forms project included in the Branch SDK's **Branch-Xamarin-Testbed.Droid** folder this is is the TestBedApplication.cs file:
+If an Appplication class does not already exist for the project, create one:
+
+1. Right-click on the .Droid project and select: **Add > New File...**
+3. Select: **General > Empty Class**
+4. Name the file: _{app name}_ ('TestXamarinFormsApp', for example)
+
+The file should have the following contents:
 
 ```csharp
 using System;
@@ -865,7 +873,6 @@ namespace TestXamarinFormsApp.Droid
 		}
 	}
 }
-
 ```
 
 **V. Add app capabilities in the AndroidManifest.xml file*
@@ -1262,6 +1269,8 @@ Adding required NuGet packages to the C# project may fail if the project has not
 #### Android app fails to build with linking errors
 
 The Newtonsoft JSON NuGet package is automatically added to a project when the Branch Xamarin SDK NuGet package is added. There is a known issue with this package that results in linking errors when building a project.
+
+error XA0009: Error while loading assembly: /Users/david/Projects/TestXamarinFormsApp/Droid/obj/Debug/android/assets/mscorlib.dll
 
 To resolve this issue with the Newtonsoft JSON NuGet package:
 
