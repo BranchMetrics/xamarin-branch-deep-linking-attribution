@@ -1238,7 +1238,16 @@ To migrate to version 2.x.x:
 
 ## 6 - Troubleshooting
 
-#### Android app fails to build
+#### Unable to add Branch-required NuGet packages to the C# project
+
+Adding required NuGet packages to the C# project may fail if the project has not been configured to use **PCL 4.5 - Profile78**
+
+1. Right-click on the project name and select: **Options**  
+2. Browse the menu to **Build > General**  
+3. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
+
+#### Android app fails to build with linking errors
+
 The Newtonsoft JSON NuGet package is automatically added to a project when the Branch Xamarin SDK NuGet package is added. There is a known issue with this package that results in linking errors when building a project.
 
 To resolve this issue with the Newtonsoft JSON NuGet package:
@@ -1249,3 +1258,14 @@ To resolve this issue with the Newtonsoft JSON NuGet package:
 4. Go to the **Ignore assemblies** box  
 5. Add: **System.Core**  
 6. Rebuild the app  
+
+#### Deploying iOS app to device fails with Provisioning Profile erros after changing entitlements
+
+Xamarin automatically populates the **Bundle Identifier** field in the **Info.plist** file with an all-lowercase value derived from the app's name. This value is in fact case sensitive and must match the value in the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) precisely. The default Xamarin configuration may work when there are no entitlements configured and then suddenly begin failing after entitlements have been added.
+
+This issue can be resolved by ensuring that the **Bundle Identifier** in the **Info.plist** matches the **Bundle Identifier** shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle).
+
+1. Open the **Info.plist** file
+2. Enter the app's **Bundle Identifier** from the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) in the **Bundle Identifier** field
+
+
