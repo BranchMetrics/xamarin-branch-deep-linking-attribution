@@ -150,7 +150,7 @@ ___
 **I. Create an Apple device Provisioning Profile for the app**  
 
 1. Open Xcode and create a new project with the same name as your Xamarin iOS project
-2. On the Xcode project's **General** tab, verify the app's Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
+2. On the Xcode project's **General** tab, verify the app's case-sensitive Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
 3. Select the **Capabilities** tab and enable the **Associated Domains** entitlement
 4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestBed-Xamarin* would be:  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link`  
@@ -164,17 +164,19 @@ ___
 2. Enter the app's URI Scheme in the **iOS URI Scheme** field (for an app with the URI Scheme *testbed-xamarin*, for example, the entry would be: `testbed-xamarin://`)
 3. Enter the app's Apple Store name in the **Apple Store Search** field (if the app is not yet available on the App Store select **Custom URL** and enter as a placeholder the URL of an appropriate web site - the exact site does not matter)
 4. Check the **Enable Universal Links** checkbox
-5. Enter the app's Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)
+5. Enter the app's case-sensitive Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)
 
 **III. Configure the Xamarin project's Info.plist file**  
 
-1. Open the **Info.plist** file and click on the **Advanced** tab  
-2. In the **URL Types** section, click the **Add URL Type** button   
-  - **Identifier:** Branch Scheme
-  - **URL Schemes:** {the app's URI Scheme - 'appname', for example}
-  - **Role:** Editor  
+1. Open the **Info.plist** file
+2. Enter the app's **Bundle Identifier** from the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) in the **Bundle Identifier** field. **IMPORTANT:** this field will automatically be populated with an all-lowercase value by Xamarin. The value is in fact case sensitive and must match the value in the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) precisely.  
+3. Click on the **Advanced** tab   
+4. In the **URL Types** section, click the **Add URL Type** button   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
 
-![iOS URI Scheme](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
+![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
 
 **IV. Configure the Xamarin project's Associated Domains entitlement**  
 
@@ -668,8 +670,10 @@ namespace TestXamarinFormsApp
 
 **III. Configure the Xamarin project's Info.plist file**
 
-1. Open the **Info.plist** file and click on the **Advanced** tab  
-2. In the **URL Types** section, click the **Add URL Type** button   
+1. Open the **Info.plist** file
+2. Enter the app's **Bundle Identifier** from the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) in the **Bundle Identifier** field. **IMPORTANT:** this field will automatically be populated with an all-lowercase value by Xamarin. The value is in fact case sensitive and must match the value in the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) precisely.  
+3. Click on the **Advanced** tab   
+4. In the **URL Types** section, click the **Add URL Type** button   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
