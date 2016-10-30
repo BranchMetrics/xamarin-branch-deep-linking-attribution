@@ -50,7 +50,12 @@
   + [Version 2](#version-2)  
 
 6. [Troubleshooting](#6---troubleshooting)  
-  + [Android app fails to build](#android-app-fails-to-build)  
+  + [Android app fails to build](#Unable-to-add-branch-required-NuGet-packages-to-the-c-project)  
+  + [Android app fails to build with linking errors](#android-app-fails-to-build-with-linking-errors)  
+  + [Deploying iOS app to device fails with Provisioning Profile erros after changing entitlements](#deploying-ios-app-to-device-fails-with-provisioning-profile-erros-after-changing-entitlements)  
+      
+
+#### Deploying iOS app to device fails with Provisioning Profile erros after changing entitlements
 
 ___
 
