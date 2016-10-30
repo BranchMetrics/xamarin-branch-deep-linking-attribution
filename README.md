@@ -298,12 +298,6 @@ Additional reading on the Android manifest
 
 Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
 
-1. In the Android project, browse to **Resources/values**
-2. Right-click on the **values** folder and select: **Add > New File...**
-3. Select: **XML > Empty XML File**
-4. Name the file: **Strings**
-5. Enter the following values:
-
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -754,13 +748,17 @@ ___
 
 Create a **Resources/values/Strings.xml** file that can be accessed by the app's Application class for the Android project and add the Branch key to this file.
 
-1. Right-click
+1. In the Android project, browse to **Resources/values**
+2. Right-click on the **values** folder and select: **Add > New File...**
+3. Select: **XML > Empty XML File**
+4. Name the file: **Strings**
+5. Enter the following values:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">TestXamarinFormsApp</string>
-	<string name="branch_key">key_Live_bmEetSmsaI8OS6fCiyS5VmjhDqnfXBxP</string>
+	<string name="branch_key">key_live_liAnF8k7gZUEZv76Rt9a4bffAzlC5zVW</string>
 </resources>
 ```
 
