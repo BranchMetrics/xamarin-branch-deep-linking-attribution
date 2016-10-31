@@ -908,7 +908,7 @@ Be sure to let Apple know that you are using the IDFA when submitting apps to th
 - **Attribute this app installation to a previously served advertisement**  
 - **Attribute an action taken within this app to a previously served advertisement**  
 
-![Apple Advertising Identifier](/images/idfa.png)
+![Apple Advertising Identifier](/docs/images/idfa.png)
 
 ____
 
