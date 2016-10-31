@@ -740,7 +740,19 @@ ___
 2. Select: **Android Build**  
 3. On the **General** tab, un-check: **Use Shared Mono Runtime**  
 
-**II. Add the app's Branch key to the Strings.xml file**
+**II. Add app capabilities in the AndroidManifest.xml file**
+
+In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
+
+- *AccessNetworkState*
+- *Internet*
+
+Additional reading on the Android manifest
+
+- [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
+- [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
+
+**III. Add the app's Branch key to the Strings.xml file**
 
 Create a **Resources/values/Strings.xml** file that can be accessed by the app's Application class for the Android project and add the Branch key to this file.
 
@@ -758,7 +770,7 @@ Create a **Resources/values/Strings.xml** file that can be accessed by the app's
 </resources>
 ```
 
-**III. Configure the .Droid project's Application class**
+**IV. Configure the .Droid project's Application class**
 
 Within the .Droid project's Application class:
 
@@ -808,7 +820,7 @@ namespace TestXamarinFormsApp.Droid
 | io.branch.sdk.TestMode | Setting this parameter to *true* enables Debug Mode, which causes simple uninstall/reinstalls of the app to trigger *install* events. Be sure to disable this before deploying to production. Note that enabling Debug Mode on Android also forces the app to use the Branch *Test* key if this key has been added to the project. Apps running with a *Test* key will be unable to receive data from Branch links created with the *Live* key.
 | io.branch.sdk.BranchKey | The app's Branch key. Both a *Live* key and a *Test* key can be added to the Strings.xml file. When *Test* Mode is enabled the app will automatically use the *Test* key, if one has been specified.
 
-**IV. Initialize Branch**
+**V. Initialize Branch**
 
 Branch must be initilialized in the OnCreate method of either the Application class or the first Activity launched by the app. The OnNewIntent method must be added to retrieve the latest link identifier when the app becomes active due to a Branch link click.
 
@@ -867,18 +879,6 @@ namespace TestXamarinFormsApp.Droid
 	}
 }
 ```
-
-**V. Add app capabilities in the AndroidManifest.xml file**
-
-In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
-
-- *AccessNetworkState*
-- *Internet*
-
-Additional reading on the Android manifest
-
-- [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
-- [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
 
 ____
 
