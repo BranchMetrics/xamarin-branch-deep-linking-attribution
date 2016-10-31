@@ -210,7 +210,6 @@ namespace TestiOSApp.iOS
 	[Register("AppDelegate")]
 	public class AppDelegate : UIApplicationDelegate, IBranchBUOSessionInterface
 	{
-	
 		public override UIWindow Window
 		{
 			get;
@@ -219,28 +218,34 @@ namespace TestiOSApp.iOS
 
 		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
 		{
-			BranchIOS.Debug = true; // Set to 'false' before releasing to production
+			// Debug mode - set to 'false' before releasing to production
+			BranchIOS.Debug = true; 
 			BranchIOS.Init("key_live_cgEguO4UiDJSL4HIyTu85dkkDAdz38ER", launchOptions, this);
 
 			return true;
 		}
 
+		// Called when the app is opened via URI scheme
 		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
 		{
 			return BranchIOS.getInstance().OpenUrl(url);
 		}
 
+		// Called when the app is opened from a Universal Link
 		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
 					  UIApplicationRestorationHandler completionHandler)
 		{
 			return BranchIOS.getInstance().ContinueUserActivity(userActivity);
 		}
 
+		// Called when the app receives a push notification
 		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
 		{
 			BranchIOS.getInstance().HandlePushNotification(userInfo);
 		}
-
+		
+		// Called when the Branch initialization is completed
+		// Put deep-linking logic in this method
 		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
 		{
 			NSObject[] keys = {
@@ -255,7 +260,8 @@ namespace TestiOSApp.iOS
 
 			NSDictionary nsData = NSDictionary.FromObjectsAndKeys(values, keys);
 		}
-
+		
+		// Called when there is an error initializing Branch
 		public void SessionRequestError(BranchError error)
 		{
 			Console.WriteLine("Branch error: " + error.ErrorCode);
@@ -703,6 +709,7 @@ namespace TestXamarinFormsApp.iOS
 		{
 			global::Xamarin.Forms.Forms.Init();
 
+			// Debug mode - set to 'false' before releasing to production
 			BranchIOS.Debug = true;
 
 			TestXamarinFormsAppBUO appBUO = new TestXamarinFormsAppBUO();
@@ -712,16 +719,19 @@ namespace TestXamarinFormsApp.iOS
 			return base.FinishedLaunching(app, options);
 		}
 
+		// Called when the app is opened via URI scheme
 		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
 		{
 			return BranchIOS.getInstance().OpenUrl(url);
 		}
 
+		// Called when the app is opened from a Universal Link 
 		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
 		{
 			return BranchIOS.getInstance().ContinueUserActivity(userActivity);
 		}
 
+		// Called when the app receives a push notification
 		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
 		{
 			BranchIOS.getInstance().HandlePushNotification(userInfo);
@@ -882,7 +892,24 @@ namespace TestXamarinFormsApp.Droid
 
 ____
 
-## 4 - Branch SDK Method Reference
+## 4 - Submitting iOS Apps to the App Store
+
+Branch uses the Apple Advertising Identifier, or _IDFA_, to identify users across our entire partner network, greatly increasing the accuracy of matching. Read more about matching accuracy on the [Matching Platform](https://dev.branch.io/getting-started/matching-accuracy/overview/) page.  
+
+### Notifying Apple of IDFA usage
+
+Be sure to let Apple know that you are using the IDFA when submitting apps to the App Store after integrating the Branch SDK.  
+
+1. Answer **Yes** when presented with the question: **Does this app use the Advertising Identifier (IDFA)?**  
+2. Check the following two boxes:  
+- **Attribute this app installation to a previously served advertisement**  
+- **Attribute an action taken within this app to a previously served advertisement**  
+
+![Apple Advertising Identifier](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/idfa.png)
+
+____
+
+## 5 - Branch SDK Method Reference
 
 ### Retrieve session (install or open) parameters
 
@@ -1202,7 +1229,7 @@ The response will return an array that has been parsed from the following JSON:
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
-## 5 - Version Notes
+## 6 - Version Notes
 
 #### Version 3
 
@@ -1249,7 +1276,7 @@ To migrate to version 2.x.x:
 - GetReferralCountsForAction
 
 
-## 6 - Troubleshooting
+## 7 - Troubleshooting
 
 #### Unable to add Branch-required NuGet packages to the C# project
 
