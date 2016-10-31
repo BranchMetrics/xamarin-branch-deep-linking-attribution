@@ -866,7 +866,7 @@ namespace TestXamarinFormsApp.Droid
 }
 ```
 
-**V. Add app capabilities in the AndroidManifest.xml file*
+**V. Add app capabilities in the AndroidManifest.xml file**
 
 In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
 
