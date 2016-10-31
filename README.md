@@ -193,7 +193,7 @@ ___
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp.app.link`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp-alternate.app.link`  
 
-![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
+![Associated Domains](/docs/images/branch_ios_domains.png)
 
 **V. Add Branch calls to the AppDelegate.cs file**
 
@@ -678,7 +678,7 @@ namespace TestXamarinFormsApp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
 
-![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
+![IOS Uri](/docs/images/branch_ios_uri.png)
 
 **IV. Configure the Xamarin project's Associated Domains entitlement**
 
@@ -687,7 +687,7 @@ namespace TestXamarinFormsApp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link`  
 
-![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
+![Associated Domains](/docs/images/branch_ios_domains.png)
 
 **V. Add Branch calls to the AppDelegate.cs file**
 
