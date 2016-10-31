@@ -26,8 +26,11 @@
       + [Configuring the C# project](#configuring-the-c-project)
       + [Integrating with an iOS Forms app](#integrating-with-an-ios-forms-app)
       + [Integrating with an Android Frorms app](#integrating-with-an-android-forms-app)
-      
-4. [**Branch SDK Method Reference**](#4---branch-sdk-method-reference)  
+
+4. [**Submitting iOS Apps to the App Store**](#4---submitting-ios-apps-to-the-app-store)  
+  + [Notifying Apple of IDFA usage](#notifying-apple-of-idfa-usage)  
+
+5. [**Branch SDK Method Reference**](#4---branch-sdk-method-reference)  
   + [Retrieve-session (install or open) parameters](#retrieve-session-install-or-open-parameters)  
   + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)  
   + [Persistent identities](#persistent-identities)  
@@ -45,11 +48,11 @@
     + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)  
     + [Get credit history](#get-credit-history)  
 
-5. [**Version Notes**](#5---version-notes)  
+6. [**Version Notes**](#5---version-notes)  
   + [Version 3](#version-3)  
   + [Version 2](#version-2)  
 
-6. [**Troubleshooting**](#6---troubleshooting)  
+7. [**Troubleshooting**](#6---troubleshooting)  
   + [Android app fails to build](#Unable-to-add-branch-required-NuGet-packages-to-the-c-project)  
   + [Android app fails to build with linking errors](#android-app-fails-to-build-with-linking-errors)  
   + [Deploying iOS app to device fails with Provisioning Profile erros after changing entitlements](#deploying-ios-app-to-device-fails-with-provisioning-profile-erros-after-changing-entitlements)  
@@ -905,7 +908,7 @@ Be sure to let Apple know that you are using the IDFA when submitting apps to th
 - **Attribute this app installation to a previously served advertisement**  
 - **Attribute an action taken within this app to a previously served advertisement**  
 
-![Apple Advertising Identifier](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/idfa.png)
+![Apple Advertising Identifier](/images/idfa.png)
 
 ____
 
