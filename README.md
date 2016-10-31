@@ -266,7 +266,7 @@ namespace TestiOSApp.iOS
 }
 ```
 
-**VI. Update the project's Signing Identity and Provisioning Profile*  
+**VI. Update the project's Signing Identity and Provisioning Profile**  
 
 1. Right-click on the iOS project and select **Options**
 2. Select **iOS Bundle Signing** 
