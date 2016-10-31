@@ -575,9 +575,6 @@ namespace TestXamarinFormsApp
 
 		public TestXamarinFormsApp()
 		{
-			var navPage = new NavigationPage();
-
-			MainPage = navPage;
 		}
 
 		#region IBranchSessionInterface implementation
@@ -621,9 +618,6 @@ namespace TestXamarinFormsApp
 
 		public TestXamarinFormsAppBUO()
 		{
-			var navPage = new NavigationPage();
-
-			MainPage = navPage;
 		}
 
 		#region IBranchBUOSessionInterface implementation
@@ -851,13 +845,10 @@ namespace TestXamarinFormsApp.Droid
 		DataScheme = "https",
 		DataHost = "testxamarinformsapp.app.link")]
 	
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
-			TabLayoutResource = Resource.Layout.Tabbar;
-			ToolbarResource = Resource.Layout.Toolbar;
-
 			base.OnCreate(savedInstanceState);
 
 			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
