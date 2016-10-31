@@ -1212,7 +1212,7 @@ GetShortUrl(IBranchUrlInterface callback, Dictionary<String, dynamic> ...)
 ```
 has been deprecated in favor of creating links with BranchUniversalObjects and Link Properties:
 ```csharp
-* GetShortUrl(IBranchUrlInterface callback, BranchUniversalObject universalObject, BranchLinkProperties linkProperties);
+GetShortUrl(IBranchUrlInterface callback, BranchUniversalObject universalObject, BranchLinkProperties linkProperties);
 ```
 
 There are no other notable user-impacting changes.
