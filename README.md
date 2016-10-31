@@ -157,9 +157,9 @@ ___
 1. Open Xcode and create a new project with the same name as your Xamarin iOS project
 2. On the Xcode project's **General** tab, verify the app's case-sensitive Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
 3. Select the **Capabilities** tab and enable the **Associated Domains** entitlement
-4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestBed-Xamarin* would be:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link`  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin-alternate.app.link`  
+4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for an app with the default link domain 'testiosapp.app.link' would be:  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp-alternate.app.link`  
 5. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.
 6. Close Xcode
 
@@ -178,7 +178,7 @@ ___
 3. Click on the **Advanced** tab   
 4. In the **URL Types** section, click the **Add URL Type** button   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testiosapp', for example}  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
 
 ![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
@@ -187,8 +187,8 @@ ___
 
 1. Open the **Entitlements.plist** file and browse to **Associated Domains**
 2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin.app.link`  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testbed-xamarin-alternate.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp-alternate.app.link`  
 
 ![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
 
@@ -282,7 +282,7 @@ ___
 2. Select: **Android Build**
 3. On the **General** tab, un-check: **Use Shared Mono Runtime**
 
-**II. Add app capabilities in the *AndroidManifest.xml* file**
+**II. Add app capabilities in the app's Manifest file**
 
 In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
 
@@ -324,6 +324,8 @@ using BranchXamarinSDK;
 
 namespace TestAndroidApp.Droid
 {
+	[Application(AllowBackup = true, Icon = "@mipmap/icon", Label = "@string/app_name")]
+	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
 	[MetaData("io.branch.sdk.TestMode", Value = "true")]
 	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
 
