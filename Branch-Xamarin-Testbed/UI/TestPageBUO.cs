@@ -23,7 +23,6 @@ namespace BranchXamarinTestbed
 		readonly Button LoginButton;
 		readonly Button LogoutButton;
 		readonly Button ShareLinkButton;
-		readonly Picker TypePicker;
 		readonly Picker FeaturePicker;
 		readonly Entry ChannelEntry;
 		readonly Entry StageEntry;
@@ -37,10 +36,7 @@ namespace BranchXamarinTestbed
 		readonly Entry CreditBucketEntry;
 		readonly StackLayout HistoryStack;
 
-		int urlType = 0;
 		string feature = "";
-
-		String UriString = "";
 		bool IsLoggedIn = false;
 
 		Color entryTextColor = Color.Black;
@@ -71,7 +67,7 @@ namespace BranchXamarinTestbed
 			var FLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
-				Text = "First Params:"
+				Text = "Universal Object:"
 			};
 
 			FirstLabel = new Label {
@@ -82,7 +78,7 @@ namespace BranchXamarinTestbed
 			var LLabel = new Label {
 				TextColor = Color.Blue,
 				FontSize = 24,
-				Text = "Latest Params"
+				Text = "Link Properties:"
 			};
 
 			LatestLabel = new Label {
@@ -134,20 +130,6 @@ namespace BranchXamarinTestbed
 				TextColor = entryTextColor,
 				Placeholder = "Enter params"
 			};
-
-			var utLabel = new Label {
-				TextColor = Color.Blue,
-				FontSize = 24,
-				Text = "URL Type"
-			};
-
-			TypePicker = new Picker {
-				Title = "Unlimited",
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				SelectedIndex = 0,
-				Items = { "Unlimited", "Single Use" }
-			};
-			TypePicker.SelectedIndexChanged += TypeSelected;
 
 			var ufLabel = new Label {
 				TextColor = Color.Blue,
@@ -313,8 +295,6 @@ namespace BranchXamarinTestbed
 					TagsEntry,
 					upLabel,
 					ParamsEntry,
-					utLabel,
-					TypePicker,
 					ufLabel,
 					FeaturePicker,
 					getUrlButton,
@@ -402,6 +382,10 @@ namespace BranchXamarinTestbed
 			universalObject.title = "id12345 title";
 			universalObject.contentDescription = "My awesome piece of content!";
 			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+			universalObject.keywords = new List<string>();
+			universalObject.keywords.Add("key01");
+			universalObject.keywords.Add("key02");
+			universalObject.keywords.Add("key03");
 
 			var paramStr = ParamsEntry.Text;
 			if (!String.IsNullOrWhiteSpace (paramStr)) {
@@ -420,6 +404,10 @@ namespace BranchXamarinTestbed
 			linkProperties.channel = ChannelEntry.Text;
 			linkProperties.stage = StageEntry.Text;
 			linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+			linkProperties.tags = new List<string>();
+			linkProperties.tags.Add("tag01");
+			linkProperties.tags.Add("tag02");
+			linkProperties.tags.Add("tag03");
 
 			var tags = TagsEntry.Text;
 			if (!String.IsNullOrWhiteSpace (tags)) {
@@ -435,7 +423,7 @@ namespace BranchXamarinTestbed
 		void ShareLinkClicked(object sender, EventArgs e) {
 			if (universalObject != null) {
 
-				Branch.GetInstance ().ShareLink (this, universalObject, linkProperties, "hello there with short url");
+				Branch.GetInstance ().ShareLink (this, universalObject, linkProperties, "");
 			}
 		}
 			
@@ -510,20 +498,6 @@ namespace BranchXamarinTestbed
 			Branch.GetInstance ().GetCreditHistory (this, bucket);
 		}
 
-		void TypeSelected(object sender, EventArgs args) {
-			switch (TypePicker.SelectedIndex) {
-			case 0:
-				urlType = Constants.URL_TYPE_UNLIMITED;
-				break;
-			case 1:
-				urlType = Constants.URL_TYPE_SINGLE_USE;
-				break;
-			default:
-				urlType = Constants.URL_TYPE_UNLIMITED;
-				break;
-			}
-		}
-
 		void FeatureSelected(object sender, EventArgs args) {
 			switch (FeaturePicker.SelectedIndex) {
 			case 1:
@@ -594,7 +568,6 @@ namespace BranchXamarinTestbed
 		{
 			StatusLabel.Text = "ReceivedUrl";
 			UriLabel.Text = uri;
-			UriString = uri;
 			ShareLinkButton.IsEnabled = true;
 		}
 
@@ -628,10 +601,10 @@ namespace BranchXamarinTestbed
 			StatusLabel.Text = "InitBUOSessionComplete";
 
 			var first = buo.ToDictionary();
-			FirstLabel.Text = (first != null) ? prettyJSON (first) : "";
+			FirstLabel.Text = (first != null) ? buo.ToJsonString() : "";
 
 			var latest = blp.ToDictionary();
-			LatestLabel.Text = (latest != null) ? prettyJSON (latest) : "";
+			LatestLabel.Text = (latest != null) ? blp.ToJsonString() : "";
 		}
 
 		public void SessionRequestError (BranchError error)

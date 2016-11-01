@@ -10,12 +10,14 @@ namespace BranchXamarinSDK
 		public IBranchSessionInterface callback { get; set; }
 		public IBranchBUOSessionInterface callbackBUO { get; set; }
 
-		public BranchAndroidLifeCycleHandler(IBranchSessionInterface callback = null) {
+		public BranchAndroidLifeCycleHandler(IBranchSessionInterface callback = null)
+		{
 			this.callback = callback;
 			this.callbackBUO = null;
 		}
 
-		public BranchAndroidLifeCycleHandler(IBranchBUOSessionInterface callback = null) {
+		public BranchAndroidLifeCycleHandler(IBranchBUOSessionInterface callback = null)
+		{
 			this.callback = null;
 			this.callbackBUO = callback;
 		}
@@ -34,7 +36,7 @@ namespace BranchXamarinSDK
 
 		public void OnActivityStopped(Activity activity)
 		{
-			DecreaseActivityCounter (activity);
+			DecreaseActivityCounter();
 		}
 
 		private void IncreaseActivityCounter(Activity activity)
@@ -51,15 +53,10 @@ namespace BranchXamarinSDK
 			activeCounter++;
 		}
 
-		private void DecreaseActivityCounter(Activity activity)
+		private void DecreaseActivityCounter()
 		{
 			if (activeCounter > 0) {
 				activeCounter--;
-
-				if (activeCounter == 0)
-				{
-					BranchAndroid.getInstance ().CloseSession ();
-				}
 			}
 		}
 	}

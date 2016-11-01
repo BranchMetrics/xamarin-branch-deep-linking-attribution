@@ -9,12 +9,43 @@ namespace BranchXamarinSDK.iOS
 	{
 		public static Dictionary<string, object> ToDictionary(NSDictionary data) {
 			Dictionary<string, object> dict = new Dictionary<string, object> ();
+			string strKey = "";
 
 			if (data != null) {
 				foreach (NSObject obj in data.Keys) {
 
-					NSString key = new NSString( obj.ToString () );
-					dict.Add (key, data.ValueForKey (key));
+					if (obj != null) {
+						strKey = obj.ToString();
+
+						if (strKey.Equals("metadata") || strKey.Equals("control_params")) {
+
+							Dictionary<string, object> dictTemp = new Dictionary<string, object>();
+							NSDictionary nsDict = data.ValueForKey((NSString)strKey) as NSDictionary;
+
+							if (nsDict != null) {
+								foreach (var keyObj in nsDict) {
+									dictTemp.Add(keyObj.Key.ToString(), keyObj.Value.ToString());
+								}
+							}
+
+							dict.Add(strKey, dictTemp);
+						}
+						else if (strKey.Equals("$keywords") || strKey.Equals("~tags")) {
+							
+							List<object> listTemp = new List<object>();
+							NSArray array = data.ValueForKey((NSString)strKey) as NSArray;
+
+							if (array != null) {
+								for (uint i = 0; i < array.Count; ++i) {
+									listTemp.Add(array.GetItem<NSObject>(i) as object);
+								}
+							}
+							dict.Add(strKey, listTemp);
+						}
+						else {
+							dict.Add(strKey, data.ValueForKey((NSString)strKey));
+						}
+					}
 				}
 			}
 
@@ -51,7 +82,7 @@ namespace BranchXamarinSDK.iOS
 				NSObject.FromObject(universalObject.Metadata != null ? universalObject.Metadata : "" as object)
 			};
 
-			NSDictionary dict = NSDictionary.FromObjectsAndKeys (keys, values);
+			NSDictionary dict = NSDictionary.FromObjectsAndKeys (values, keys);
 
 //			NSDictionary dict = new NSDictionary (
 //				"$canonical_identifier", universalObject.CanonicalIdentifier ? universalObject.CanonicalIdentifier : "",
@@ -94,7 +125,7 @@ namespace BranchXamarinSDK.iOS
 				NSObject.FromObject(linkProperties.ControlParams != null ? linkProperties.ControlParams : "" as object)
 			};
 
-			NSDictionary dict = NSDictionary.FromObjectsAndKeys (keys, values);
+			NSDictionary dict = NSDictionary.FromObjectsAndKeys (values, keys);
 
 //			NSDictionary dict = new NSDictionary (
 //				"~tags", linkProperties.Tags ? linkProperties.Tags : "",
@@ -120,7 +151,7 @@ namespace BranchXamarinSDK.iOS
 
 				foreach (string key in data.Keys) {
 					keys [i] = new NSString (key);
-					values [i] = NSObject.FromObject (data[key]);
+					values[i] = NSObject.FromObject(data[key]);
 					++i;
 				}
 
@@ -133,23 +164,27 @@ namespace BranchXamarinSDK.iOS
 			return dict;
 		}
 
-		public static NSObject[] ToNSObjectArray (ICollection<string> data) {
-			NSObject[] array = null;
+		public static NSArray ToNSObjectArray (ICollection<string> data) {
+			NSArray res = null;
 
 			if (data != null) {
+				NSObject[] items = null;
 				int index = 0;
-				array = new NSObject[data.Count];
+				items = new NSObject[data.Count];
 
-				foreach (string str in data) {
-					array [index] = NSObject.FromObject (str as object);
+				foreach (string str in data)
+				{
+					items[index] = NSObject.FromObject(str as object);
 					++index;
 				}
+
+				res = NSArray.FromObjects(items);
 			}
 			else {
-				array = new NSObject[]{};
+				res = new NSArray();
 			}
 
-			return array;
+			return res;
 		}
 
 		public static List<CreditHistoryEntry> ToCreditHistoryArray(NSObject[] data) {
@@ -162,10 +197,13 @@ namespace BranchXamarinSDK.iOS
 				NSString jsonString = null;
 
 				foreach (NSObject obj in data) {
-					jsonData = NSJsonSerialization.Serialize (obj, NSJsonWritingOptions.PrettyPrinted, out error);
-					jsonString = new NSString (jsonData, NSStringEncoding.UTF8);
 
-					list.Add (JsonConvert.DeserializeObject<CreditHistoryEntry> ((string)jsonString));
+					if (obj != null) {
+						jsonData = NSJsonSerialization.Serialize (obj, NSJsonWritingOptions.PrettyPrinted, out error);
+						jsonString = new NSString (jsonData, NSStringEncoding.UTF8);
+
+						list.Add (JsonConvert.DeserializeObject<CreditHistoryEntry> ((string)jsonString));
+					}
 				}
 			}
 

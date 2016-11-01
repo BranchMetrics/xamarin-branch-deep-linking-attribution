@@ -11,7 +11,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
-	<string>8.0</string>
+	<string>9.3</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
@@ -30,6 +30,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
@@ -55,6 +56,6 @@
 		</dict>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>io.branch.branch_xamarin_testbed_ios</string>
+	<string>io.branch.TestBed-XamarinForms</string>
 </dict>
 </plist>

@@ -1,348 +1,933 @@
-# Branch Metrics Xamarin SDK Reference
+# Branch deep linking SDK for Xamarin
 
-## IMPORTANT: Upgrading to V 2.1
+## Technical Documentation
 
-On 3/27, we revamped this module to be a thin wrapper around our native iOS/Android SDKs. This fixed a ton of bugs and added additional functionality, but will require you to change the interfaces. Please see this section at the bottom for a [full migration guide](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK#note-mirgation-from-version-1xx-to-2xx).
+1. [**Introduction**](#1---introduction)
+  + [SDK Details](#sdk-details)
+  + [Resources](#resources)
+  + [Branch-integrated Xamarin Demo Apps](#branch-integrated-xamarin-demo-apps)
 
+2. [**Overview of Branch links and Branch keys**](#2---overview-of-branch-links-and-branch-keys)
+  + [Format of Branch links](#format-of-branch-links)
+  + [Branch keys](#branch-keys)
+  + [Creating a Branch link domain and Branch key for an app](#creating-a-branch-link-domain-and-branch-key-for-an-app)
 
-If you don't have time to do so, just use a reference to version 1.2.1, which we're storing in [locked branch called 'locked-v.1.2.1'](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/tree/locked-v.1.2.1).
+3. [**Configuring a Xamarin app for deep linking**](#3---configuring-a-xamarin-app-for-deep-linking)
+  + [Adding the Branch SDK to a Xamarin Solution](#adding-the-branch-sdk-to-a-xamarin-solution)
+    + [Adding the Branch SDK with NuGet](#adding-the-branch-sdk-with-nuget)
+    + [Adding the Branch SDK without NuGet](#adding-the-branch-sdk-without-nuget)
+    
+  + [Integrating the Branch SDK](#integrating-the-branch-sdk)
+    + [Xamarin Native solutions](#xamarin-native-solutions)
+      + [Integrating the Branch SDK with an iOS Native project](#integrating-the-branch-sdk-with-an-ios-native-project)
+      + [Integrating the Branch SDK with an Android Native project](#integrating-the-branch-sdk-with-an-android-native-project)
+      
+    + [Xamarin Forms solutions](#xamarin-forms-solutions)
+      + [Configuring the C# project](#configuring-the-c-project)
+      + [Integrating with an iOS Forms app](#integrating-with-an-ios-forms-app)
+      + [Integrating with an Android Frorms app](#integrating-with-an-android-forms-app)
 
-## Get the Demo App
+4. [**Submitting iOS Apps to the App Store**](#4---submitting-ios-apps-to-the-app-store)  
+  + [Notifying Apple of IDFA usage](#notifying-apple-of-idfa-usage)  
 
-There's a full demo app embedded in this repository. It should serve as an example integration and help guide you in resolving any bugs you encounter. If you think you've got a bug, please first check that it's present in the demo app before writing in. You can find [the source here](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/testbed).
+5. [**Branch SDK Method Reference**](#4---branch-sdk-method-reference)  
+  + [Retrieve-session (install or open) parameters](#retrieve-session-install-or-open-parameters)  
+  + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)  
+  + [Persistent identities](#persistent-identities)  
+  + [Logout](#logout)  
+  + [Register custom events](#register-custom-events)  
+  + [Generating Branch links](#generating-branch-links)  
+  + [Branch Universal Objects and Link Properties](#branch-universal-oObjects-and-link-properties)  
+    + [Overview](#overview)  
+    + [Creating a link](#creating-a-link)  
+    + [Initialize Branch](#initialize-branch)  
+    + [Register a view of the content](#register-a-view-of-the-content)  
+    + [Share a link using a share sheet](#share-a-link-using-a-share-sheet)  
+  + [Referral rewards](#referral-rewards)  
+    + [Check a reward balance](#check-a-reward-balance)  
+    + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)  
+    + [Get credit history](#get-credit-history)  
 
-## Additional Resources
-- [Integration guide](https://dev.branch.io/recipes/add_the_sdk/cordova/) *Start Here*
-- [Changelog](https://github.com/BranchMetrics/Cordova-Ionic-PhoneGap-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
-- [Testing](https://dev.branch.io/recipes/testing_your_integration/cordova/)
-- [Support portal, FAQ](http://support.branch.io)
+6. [**Version Notes**](#5---version-notes)  
+  + [Version 3](#version-3)  
+  + [Version 2](#version-2)  
 
-## Installation
+7. [**Troubleshooting**](#6---troubleshooting)  
+  + [Android app fails to build](#Unable-to-add-branch-required-NuGet-packages-to-the-c-project)  
+  + [Android app fails to build with linking errors](#android-app-fails-to-build-with-linking-errors)  
+  + [Deploying iOS app to device fails with Provisioning Profile erros after changing entitlements](#deploying-ios-app-to-device-fails-with-provisioning-profile-erros-after-changing-entitlements)  
+      
 
-**The compiled iOS SDK footprint is 180kb**
-
-**The compiled Android SDK footprint is 187kb**
+#### Deploying iOS app to device fails with Provisioning Profile erros after changing entitlements
 
 ___
 
-### Nuget
+## 1 - Introduction
 
+### SDK Details
 
-The Branch Xamarin SDK is now available as a [NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK).  You will need to add the package to your Android, iOS and Forms (if applicable) projects.  
+Current version: **3.0**  
+iOS SDK compiled footprint: **180kb**  
+Android SDK compiled footprint: **187kb**  
 
-1. Right click on each project and select `Add` -> `Add NuGet Package` or double click on the Packages folder to bring up the NuGet package dialog in Xamarin Studio.  
-2. Find the _Branch Xamarin Linking SDK_ and select it.  This will add the required assemblies to your projects.  You need to do this for each project that will use Branch calls.  This includes the Android and iOS projects even if this is a Forms based app _since an initialization call needs to be added to each of the platform specific projects._
+### Resources
+- This document - *Start Here*
+- [Branch Integration Engineering Portal](http://support.branch.io)
+- [Changelog](ChangeLog.md)
+- [Testing](https://dev.branch.io/getting-started/integration-Testing/guide/xamarin/)
 
-### Source
+### Branch-integrated Xamarin Demo Apps
 
-If you would rather build and reference the assemblies directly:
+There are four fully-functional demo apps included in this repository: a Xamarin Native and Xamarin Forms apps for both iOS and Android platforms. Use these apps as reference models for integrating the Branch SDK.
 
-1. Clone this repository to your local machine  
-2. Add the BranchXamarinSDK project to your solution and reference it from your Android, iOS and Forms (if applicable) project.  
-3. Add the BranchXamarinSDK.Droid project to your solution and reference it from your Android project, if any.
-4. Add the BranchXamarinSDK.iOS project and reference it from you iOS project, if any.
+**Testbed-Xamarin (Native apps)**
+
+- [iOS](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Examples/droid_example)  
+- [Android](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Examples/ios_example)  
+
+**Testbed-XamarinForms (Forms apps)**
+
+- [iOS](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Branch-Xamarin-Testbed.iOS)  
+- [Android](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Branch-Xamarin-Testbed.Droid)  
+
+Should you run into issues with the SDK, please check that they are present in the appropriate demo app before submitting any issue as a bug.
 
 ___
 
-## Register your app
+## Overview of Branch links and Branch keys 
 
-You can sign up for your own Branch Key at [https://dashboard.branch.io](https://dashboard.branch.io)
+### Format of Branch links
+
+Branch links consist of an app-specific base domain (*testbed-xamarin.app.link*, for example) followed by an alphanumeric suffix. This suffix, referred to as the *alias*, can be either randomly generated (*FCIWxFeBGx*, for example) or manually-defined (*testlink*, for example). The app-specific base domain used to create the links is termed the *Branch link domain*.
+
+A Branch-integrated app called TestBed-Xamarin and assigned the dafult Branch link domain *testbed-xamarin.app.link* has the following Branch links:
+
+- https://testbed-xamarin.app.link/FCIWxFeBGx
+- https://testbed-xamarin.app.link/testlink
+
+Note that when using the 'app.link' default link domain there is a second, alternate, form of the link domain that comes into play when displaying Branch Deepviews - the *alternate link domain*. This *alternate link domain* sees the domain's '.app.link' string replaced by '-alternate.app.link'. If you are using a default app.link link domain, both the regular and alternate domains will be needed when configuring a project to support deep linking.
+
+### Branch keys
+
+Branch keys consist of a prefix (**key_live_** or **key_test_**) followed by a string of 32 aphanumeric characters (*key_live_kdzhBMBYt5Pi4g4DVRfQbdkbqDlm5rIv*, for example). Branch keys are used to associate apps with Branch links. An app's Branch key is required to initialize the Branch SDK. Data associated with Branch links can only be read by apps that  use the same Branch key.
+
+Note that the **Live** and **Test** apps on the Branch dashboard are completely separate; each has its own Branch key. Even when **Live** and **Test** sections of the dashboard have been configured identically and links from both are able to open up a particular app, the app will only receive link data for which it has the matching Branch key.
+
+### Creating a Branch link domain and Branch key for an app
+
+Register the app on the Branch dashboard, here: [https://dashboard.branch.io](https://dashboard.branch.io)
+
+The Branch key can be found on the [General Settings](https://dashboard.branch.io/settings) page. The app's Branch link domain  will be listed at the very bottom of the [Link Settings](https://dashboard.branch.io/link) page.
 
 ___
 
-## Configure your app for deep linking
+## 2 - Configuring a Xamarin app for deep linking
 
-### Android: Configure your project
+### Adding the Branch SDK to a Xamarin Solution
 
-In your project's `manifest` file, you can register your app to respond to direct deep links (`yourapp://` in a mobile browser) by adding the second intent filter block. Also, make sure to change `yourapp` to a unique string that represents your app name.
+#### **Adding the Branch SDK with NuGet**
 
-Make sure that this activity is launched as a `singleTask`. This is important to handle proper deep linking from other apps like Facebook.
+The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.  
 
+To add the Branch NuGet package to a project:  
+
+1. Right-click on each project and select `Add` > `Add NuGet Packages`  
+2. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project  
+3. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project  
+
+#### **Adding the Branch SDK without NuGet**
+
+If, instead of using NuGet, you would rather build and reference the Branch assemblies directly:
+
+1. Clone this repository to the local machine: `https://github.com/BranchMetrics/xamarin-branch-deep-linking.git`
+2. Add the `Branch-Xamarin-SDK` project to the solution and reference it from the Android, iOS and Forms (if applicable) projects
+3. Add the `Branch-Xamarin-SDK.Droid` project to the solution and reference it from the Android project, if any
+4. Add the `Branch-Xamarin-SDK.iOS` project and reference it from the iOS project, if any
+
+___
+
+### Integrating the Branch SDK
+
+The steps for integrating the Branch SDK with a project differ depending on whether or not the project is creating a Xamarin Forms application and on which mobile platform the project is intended, iOS or Android. Instructions for each of the four scenarios are provided below.
+___
+
+#### Xamarin Native solutions  
+
+##### **Integrating the Branch SDK with an iOS Native project**  
+
+**I. Create an Apple device Provisioning Profile for the app**  
+
+1. Open Xcode and create a new project with the same name as your Xamarin iOS project
+2. On the Xcode project's **General** tab, verify the app's case-sensitive Bundle Identifier is correct and select the appropriate Team (be sure to resolve any errors here)
+3. Select the **Capabilities** tab and enable the **Associated Domains** entitlement
+4. Create 'applinks:' entries for the Branch link domain and the alternate link domain (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for an app with the default link domain 'testiosapp.app.link' would be:  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp-alternate.app.link`  
+5. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.
+6. Close Xcode
+
+**II. Enter the app's settings on the Branch dashboard**  
+
+1. On the [Link Settings](https://dashboard.branch.io/#/settings/link) page, check the **I have an iOS App** checkbox
+2. Enter the app's URI Scheme in the **iOS URI Scheme** field (for an app with the URI Scheme *testbed-xamarin*, for example, the entry would be: `testbed-xamarin://`)
+3. Enter the app's Apple Store name in the **Apple Store Search** field (if the app is not yet available on the App Store select **Custom URL** and enter as a placeholder the URL of an appropriate web site - the exact site does not matter)
+4. Check the **Enable Universal Links** checkbox
+5. Enter the app's case-sensitive Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)
+
+**III. Configure the Xamarin project's Info.plist file**  
+
+1. Open the **Info.plist** file
+2. Enter the app's **Bundle Identifier** from the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) in the **Bundle Identifier** field. **IMPORTANT:** this field will automatically be populated with an all-lowercase value by Xamarin. The value is in fact case sensitive and must match the value in the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) precisely.  
+3. Click on the **Advanced** tab   
+4. In the **URL Types** section, click the **Add URL Type** button   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testiosapp', for example}  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
+
+![IOS Uri](/docs/images/branch_ios_uri.png)
+
+**IV. Configure the Xamarin project's Associated Domains entitlement**  
+
+1. Open the **Entitlements.plist** file and browse to **Associated Domains**
+2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testiosapp-alternate.app.link`  
+
+![Associated Domains](/docs/images/branch_ios_domains.png)
+
+**V. Add Branch calls to the AppDelegate.cs file**
+
+Branch initialization occurs within the `FinishedLaunching` method of the **AppDelegate.cs** file. Branch calls are also required in the `OpenUrl`, `ContinueUserActivity`, and `ReceiveRemoteNotification` methods to ensure that Branch link information is handled properly whenever the app becomes active.
+
+Whenever the app becomes active, the Branch SDK will reach out to the Branch back end to retrieve any available link parameters. If the app became active due to a click on a Branch link, the link data will be returned in the `InitSessionComplete method`. This is where any deep link routing logic should reside. Any error in retrieving Branch link data from the back end will returned in the `SessionRequestError` method.
+
+```csharp
+using Foundation;
+using UIKit;
+using BranchXamarinSDK;
+using BranchXamarinSDK.iOS;
+using System;
+
+namespace TestiOSApp.iOS
+{
+	[Register("AppDelegate")]
+	public class AppDelegate : UIApplicationDelegate, IBranchBUOSessionInterface
+	{
+		public override UIWindow Window
+		{
+			get;
+			set;
+		}
+
+		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+		{
+			// Debug mode - set to 'false' before releasing to production
+			BranchIOS.Debug = true; 
+			BranchIOS.Init("key_live_cgEguO4UiDJSL4HIyTu85dkkDAdz38ER", launchOptions, this);
+
+			return true;
+		}
+
+		// Called when the app is opened via URI scheme
+		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+		{
+			return BranchIOS.getInstance().OpenUrl(url);
+		}
+
+		// Called when the app is opened from a Universal Link
+		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
+					  UIApplicationRestorationHandler completionHandler)
+		{
+			return BranchIOS.getInstance().ContinueUserActivity(userActivity);
+		}
+
+		// Called when the app receives a push notification
+		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+		{
+			BranchIOS.getInstance().HandlePushNotification(userInfo);
+		}
+		
+		// Called when the Branch initialization is completed
+		// Put deep-linking logic in this method
+		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
+		{
+			NSObject[] keys = {
+				NSObject.FromObject("+is_first_session")
+			};
+
+			NSObject[] values = { NSObject.FromObject(0) };
+			if (buo.metadata.ContainsKey("+is_first_session"))
+			{
+				values[0] = NSObject.FromObject(buo.metadata["+is_first_session"]);
+			}
+
+			NSDictionary nsData = NSDictionary.FromObjectsAndKeys(values, keys);
+		}
+		
+		// Called when there is an error initializing Branch
+		public void SessionRequestError(BranchError error)
+		{
+			Console.WriteLine("Branch error: " + error.ErrorCode);
+			Console.WriteLine(error.ErrorMessage);
+		}
+
+	}
+}
 ```
-[Activity (Label = "Your app label", MainLauncher = true, Icon = "@mipmap/icon",
-		LaunchMode = LaunchMode.SingleTask)]
 
-[IntentFilter (new[]{"android.intent.action.VIEW"},
-		Categories=new[]{"android.intent.category.DEFAULT", 
-		"android.intent.category.BROWSABLE"},
-		DataScheme="yourapp",
-		DataHost="open")]
-```
+**VI. Update the project's Signing Identity and Provisioning Profile**  
 
+1. Right-click on the iOS project and select **Options**
+2. Select **iOS Bundle Signing** 
+3. Set the **Signing Identity** and **Provisioning Profile values** to the values used when deploying the Provisioning Profile to the device above
 
-Make sure that your project has permissions:
+___
 
-- AccessNetworkState
-- Internet
+##### **Integrating the Branch SDK with an Android Native project**
 
-To understand how to work with android manifest, read Xamarin documentation:
+**I. Ensure that the Android project is not using the Shared Mono Runtime**
 
-- [Working with android manifest](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
+1. Right-click on the Android project and select: **Options**
+2. Select: **Android Build**
+3. On the **General** tab, un-check: **Use Shared Mono Runtime**
+
+**II. Add app capabilities in the app's Manifest file**
+
+In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
+
+- *AccessNetworkState*
+- *Internet*
+
+Additional reading on the Android manifest
+
+- [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
 - [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
 
+**III. Add the app's Branch key to the Strings.xml file**
 
-### iOS: Configure your project
+Add the Branch key to the Android project's **Resources/values/Strings.xml** file. This file contains values that can be accessed by the app's Application class.
 
-In your project's `YourProject-Info.plist` file:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">TestXamarinFormsApp</string>
+	<string name="branch_key">key_live_liAnF8k7gZUEZv76Rt9a4bffAzlC5zVW</string>
+</resources>
+```
 
-1. In https://dashboard.branch.io/#/settings/link, tick `I have an iOS App` checkbox and enter your URI Scheme (e.g.: `yourapp://`) into the text box.
+**IV. Create the project's *Application* class**
 
-2. You can register your app to respond to direct deep links (`yourapp://` in a mobile browser) by adding `CFBundleURLTypes` block. Also, make sure to change `yourapp` to a unique string that represents your app name. 
+Create an Application.cs file
 
-![IOS Uri](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_uri.png)
+1. Right-click on the .Droid project and select **Add > New File...**
+2. Select: **General > Empty File**
+3. Name the file: **Application.cs**
+4. Enter the following code (replace 'TestAndroidApp' with the actual name of the app):
 
+```csharp
+using System;
+using Android.App;
+using Android.Content;
+using Android.Runtime;
+using BranchXamarinSDK;
 
-### iOS: Enable Universal Links
+namespace TestAndroidApp.Droid
+{
+	[Application(AllowBackup = true, Icon = "@mipmap/icon", Label = "@string/app_name")]
+	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
+	[MetaData("io.branch.sdk.TestMode", Value = "true")]
+	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
 
-In iOS 9.2, Apple dropped support for URI scheme redirects. You must enable Universal Links if you want Branch-generated links to work in your iOS app. To do this:
+	public class TestAndroidApp : Application
+	{
+		public TestAndroidApp(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+		{
+		}
 
-1. enable `Associated Domains` capability on the Apple Developer portal when you create your app's bundle identifier. 
-2. In https://dashboard.branch.io/#/settings/link, tick the `Enable Universal Links` checkbox and provide the Bundle Identifier and Apple Team ID in the appropriate boxes. 
-3. Finally, create a new file named `Entitlements.plist` in the root directory of your project. Enable `associated-domains` and add `applinks:bnc.lt`. You may add more entitlement keys if you have any.
+		public override void OnCreate()
+		{
+			base.OnCreate();
+			BranchAndroid.GetAutoInstance(this.ApplicationContext);
+		}
+	}
+}
+```
 
-![Associated Domains](https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK/raw/master/docs/images/branch_ios_domains.png)
+| Key | Value
+| --- | ---
+| io.branch.sdk.TestMode | Setting this parameter to *true* enables Debug Mode, which causes simple uninstall/reinstalls of the app to trigger *install* events. Be sure to disable this before deploying to production. Note that enabling Debug Mode on Android also forces the app to use the Branch *Test* key if this key has been added to the project. Apps running with a *Test* key will be unable to receive data from Branch links created with the *Live* key.
+| io.branch.sdk.BranchKey | The app's Branch key. Both a *Live* key and a *Test* key can be added to the Strings.xml file. When *Test* Mode is enabled the app will automatically use the *Test* key, if one has been specified.
+
+**V. Create an activity to handle Branch events: BranchActivity**
+
+1. Right-click on the .Droid project and select **Add > New File...**
+2. Select: **Android > Activity**
+3. Rename the file: **BranchActivity.cs**
+4. Enter the following code (replace 'TestAndroidApp' with the actual name of the app):
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Newtonsoft.Json;
+using BranchXamarinSDK;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace TestAndroidApp.Droid
+{
+	[Activity(Label = "BranchActivity")]
+	public class BranchActivity : Activity
+
+	{
+		private string logString = "";
+
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+
+			LogMessage("Branch initialization completed: ");
+
+			Dictionary<string, object> data = JsonConvert.DeserializeObject<Dictionary<string, object>>(Intent.GetStringExtra("BranchData"));
+			foreach (var key in data.Keys)
+			{
+				LogMessage(key + " : " + data[key].ToString());
+			}
+		}
+
+		#region Utils
+
+		void LogMessage(string message)
+		{
+			Console.WriteLine(message);
+			logString += DateTime.Now.ToLongTimeString() + "> " + message + "\n";
+		}
+
+		#endregion
+	}
+}
+```
+
+**VI. Create an activity to handle Branch errors: BranchErrorActivity**
+
+1. Right-click on the .Droid project and select **Add > New File...**
+2. Select: **Android > Activity**
+3. Rename the file: **BranchErrorActivity.cs**
+4. Enter the following code (replace 'TestAndroidApp' with the actual name of the app):
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace TestAndroidApp.Droid
+{
+	[Activity(Label = "BranchErrorActivity")]
+	public class BranchErrorActivity : Activity
+	{
+		private string logString = "";
+
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+
+			LogMessage("Branch initialization failed");
+			LogMessage("Error code: " + Intent.Extras.GetInt("ErrorCode").ToString());
+			LogMessage(Intent.Extras.GetString("ErrorMessage"));
+		}
+
+		#region Utils
+
+		void LogMessage(string message)
+		{
+			Console.WriteLine(message);
+			logString += DateTime.Now.ToLongTimeString() + "> " + message + "\n";
+		}
+
+		#endregion
+	}
+}
+```
+
+**VII. Initialize Branch and configure Branch session management**
+
+Branch must be initilialized in the OnCreate method of either the Application class or the first Activity launched by the app. The OnNewIntent method must be added to retrieve the latest link identifier when the app becomes active due to a Branch link click.
+
+Branch initializes asynchronously, with Branch link parameters being returned following a network call to Branch. If initialization is successful, the InitSessionComplete method will be invoked. If initialization is unsuccessful, the SessionRequestError method will be invoked. Deep link routing logic should be located in the InitSessionComplete method.
+
+In the code example below the following Branch initialization and session management steps have been added to MainActivity.cs:
+
+- An Activity to respond to the app's URI Scheme
+- An Activity is launched in `singleTask` mode
+- Override the OnCreate method and initialize the Branch SDK
+- Override the OnNewIntent method
+- Add an InitSessionComplete method for processing Branch link information (this is where deep link routing code should be located)
+- Add a SessionRequestError method to handle situations where Branch fails to initialize
+
+```csharp
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using BranchXamarinSDK;
+using System;
+using System.Collections.Generic;
+using Android.Content;
+using Newtonsoft.Json;
+
+namespace TestAndroidApp.Droid
+{
+	[Activity(Label = "TestAndroidApp", MainLauncher = true, Icon = "@mipmap/icon", LaunchMode = Android.Content.PM.LaunchMode.SingleTask)]
+
+	[IntentFilter(new[] { "android.intent.action.VIEW" },
+	Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+	DataScheme = "testandroidapp",
+	DataHost = "open")]
+
+	[IntentFilter(new[] { "android.intent.action.VIEW" },
+	Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+	DataScheme = "https",
+	DataHost = "testandroidapp.app.link")]
+
+	public class MainActivity : Activity, IBranchSessionInterface
+	{
+
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+
+			BranchAndroid.Init(this, Resources.GetString(Resource.String.branch_key), this);
+		}
+
+		// Ensure we get the updated link identifier when the app becomes active
+		// due to a Branch link click after having been in the background
+		protected override void OnNewIntent(Intent intent)
+		{
+			this.Intent = intent;
+		}
+
+		public void InitSessionComplete(Dictionary<string, object> data)
+		{
+			var intent = new Intent(this, typeof(BranchActivity));
+			intent.PutExtra("BranchData", JsonConvert.SerializeObject(data));
+
+			StartActivity(intent);
+		}
+
+		public void SessionRequestError(BranchError error)
+		{
+			Console.WriteLine("Branch session initialization error: " + error.ErrorCode);
+			Console.WriteLine(error.ErrorMessage);
+
+			var intent = new Intent(this, typeof(BranchErrorActivity));
+			intent.PutExtra("ErrorCode", error.ErrorCode);
+			intent.PutExtra("ErrorMessage", error.ErrorMessage);
+
+			StartActivity(intent);
+		}
+	}
+}
+```
 
 ___
 
-## Initialize Branch on Xamarin
+#### Xamarin Forms solutions
 
-To Initialize Branch you need to use your own Branch key [https://dashboard.branch.io](https://dashboard.branch.io)
+##### **Configuring the C# project**
 
-Before starting, it's important to understand that we require a generic Xamarin initialization in addition to the Android and iOS initialization. To make matters worse, it's different depending on whether you're using Xamarin Forms or not. Please click one of the following to be linked to the appropriate init path to follow:
+These steps are required for all Forms projects, both iOS and Android.
 
-1. [Click here](https://github.com/BranchMetrics/Branch-Xamarin-SDK#xamarin-forms-setup) if you're using **Xamarin Forms**
-2. [Click here](https://github.com/BranchMetrics/Branch-Xamarin-SDK#non-forms-xamarin-setup) if you're **not using Xamarin Forms**
+**I. Change the C# project's profile to PCL 4.5 - Profile78**
 
-_____
+1. Right-click on the project name and select: **Options**  
+2. Browse the menu to **Build > General**  
+3. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
 
-### Xamarin Forms Setup
+**II. Add the Branch SDK with NuGet**
 
-The SDK needs to be initialized at startup in each platform.  The code below shows how to do the platform specific initialization.  Note that this example shows a Xamarin Forms app.  The same Branch<platform>.Init calls need to be made whether Forms is used or not.
+The Branch Xamarin SDK is available as a NuGet package. The [Branch NuGet package](https://www.nuget.org/packages/Branch-Xamarin-Linking-SDK) must be added to each of the Xamarin projects that will use Branch methods.  
 
+1. Right-click on each project and select **Add > Add NuGet Packages**  
+2. If not already present, find the _Microsoft BCL Build Components_ package version 1.0.21 and add it to the project  
+3. Find the _Branch Xamarin SDK_ package version 3.0 and add it to the project  
 
-#### Android with Forms
+**III. Create a class for Branch session handling**
 
-For Android add the call to the onCreate of either your Application class or the first Activity you start. Note also the addition of OnNewIntent.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link.
+Branch initializes asynchronously, with Branch link parameters being returned following a network call to Branch. If initialization is successful, the InitSessionComplete method will be invoked. If initialization is unsuccessful, the SessionRequestError method will be invoked. Deep link routing logic should be located in the InitSessionComplete method.
 
-```csharp
-public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
-{
-	protected override void OnCreate (Bundle savedInstanceState)
-	{
-		base.OnCreate (savedInstanceState);
-
-		global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
-
-		App app = new App ();
-
-		// Enable debug mode.
-		BranchAndroid.Debug = true;
-		BranchAndroid.Init (this, "Your Branch key here", app);
-
-		LoadApplication (app);
-	}
-	
-	// Ensure we get the updated link identifier when the app is opened from the
-	// background with a new link.
-	protected override void OnNewIntent(Intent intent) {
-		this.Intent = intent;
-	}
-}
-```
-Note that the first argument is the Branch key found in your app from the Branch dashboard. The second argument allows the Branch SDK to recognize if the application was launched from a content URI. The third argument allows to reconize if the application launched from Android App Links and from Push Notification.
-
-
-#### iOS with Forms
-
-For iOS add the code to your AppDelegate. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests.  Note also the addition of the `OpenUrl` method.  This is needed to get the latest link identifier when the app is opened from the background by following a deep link. Add method `ContinueUserActivity` to support Universal Links.
+1. Right-click on the C# project and select **Add > New File...**  
+2. Select: **General > Empty Class**  
+3. Rename the file: **TestXamarinFormsApp.cs**  
+4. Enter the following code (replacing 'TestXamarinFormsApp' with the actual name of the app):  
 
 ```csharp
-[Register ("AppDelegate")]
-public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+using BranchXamarinSDK;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Xamarin.Forms;
+
+namespace TestXamarinFormsApp
 {
-	private App app = null;
-
-	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
+	public class TestXamarinFormsApp : Application, IBranchSessionInterface
 	{
-		global::Xamarin.Forms.Forms.Init ();
 
-		App app = new App ();
+		public TestXamarinFormsApp()
+		{
+		}
 
-		// Enable debug mode. 
-		BranchIOS.Debug = true;
-		BranchIOS.Init ("Your Branch key here", launchOptions, app);
+		#region IBranchSessionInterface implementation
 
-		LoadApplication (app);
+		public void InitSessionComplete(Dictionary<string, object> data)
+		{
+		}
 
-		return base.FinishedLaunching (uiApplication, launchOptions);
-	}
+		public void CloseSessionComplete()
+		{
+		}
 
-	// For direct deep linking
-	public override bool OpenUrl(UIApplication application,
-		NSUrl url,
-		string sourceApplication,
-		NSObject annotation)
-	{
-		return BranchIOS.getInstance ().OpenUrl (url);
-	}
+		public void SessionRequestError(BranchError error)
+		{
+		}
 
-	// For Universal Links
-	public override bool ContinueUserActivity (UIApplication application,
-		NSUserActivity userActivity,
-		UIApplicationRestorationHandler completionHandler)
-	{
-		return BranchIOS.getInstance ().ContinueUserActivity (userActivity);
-	}
-	
-	// For Push Nitifications
-	public override void ReceivedRemoteNotification (UIApplication application,
-		NSDictionary userInfo)
-	{
-		BranchIOS.getInstance ().HandlePushNotification (userInfo);
+		#endregion
 	}
 }
 ```
 
-#### Callbacks with deep link data in Forms
+**IV. Create a class for handling link data**
 
-The following code implements the callbacks for the Branch Session Interface. Think of these callbacks as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow. This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
+Branch stores link data in an object referred to as the **Branch Universal Object**, or **BUO**.
+
+1. Right-click on the C# project and select **Add > New File...**  
+2. Select: **General > Empty Class**  
+3. Rename the file: **TestXamarinFormsAppBUO.cs**  
+4. Enter the following code (replace 'TestXamarinFormsApp' with the actual name of the app):
 
 ```csharp
-public class App : Application, IBranchSessionInterface
+using BranchXamarinSDK;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Xamarin.Forms;
+
+namespace TestXamarinFormsApp
+{
+	public class TestXamarinFormsAppBUO : Application, IBranchBUOSessionInterface
+	{
+
+		public TestXamarinFormsAppBUO()
+		{
+		}
+
+		#region IBranchBUOSessionInterface implementation
+
+		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp)
+		{
+		}
+
+		public void SessionRequestError(BranchError error)
+		{
+		}
+
+		#endregion
+	}
+}
+```
+
+
+##### **Integrating with an iOS Forms app**
+
+**I. Create an Apple device Provisioning Profile for the app**
+
+1. Open Xcode and create a new project with the same name as your Xamarin iOS project  
+2. On the Xcode project's **General** tab, enter the app's Bundle Identifier and select the appropriate Team (be sure to resolve any errors here)  
+3. Select the **Capabilities** tab and enable the **Associated Domains** entitlement  
+4. Create 'applinks:' entries for the Branch link domain assigned to the app (the link domain can be found at the bottom of the Branch dashboard's [Link Settings](https://dashboard.branch.io/#/settings/link) page). For example, the entries for the app *TestXamarinFormsApp* would be:  
+&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link`  
+5. Use Xcode to run this newly-created app on an iOS device. This will create and install a Provisioning Profile with the proper entitlements on that device.  
+6. Close Xcode  
+
+**II. Enter the app's settings on the Branch dashboard**
+
+1. On the [Link Settings](https://dashboard.branch.io/#/settings/link) page, check the **I have an iOS App** checkbox  
+2. Enter the app's URI Scheme in the **iOS URI Scheme** field (for an app with the URI Scheme *testxamarinformsapp*, for example, the entry would be: `testxamarinformsapp://`)  
+3. Enter the app's Apple Store name in the **Apple Store Search** field (if the app is not yet available on the App Store select **Custom URL** and enter as a placeholder the URL of an appropriate web site - the exact site does not matter)  
+4. Check the **Enable Universal Links** checkbox  
+5. Enter the app's Bundle Identifier and Apple App Prefix as shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle)  
+
+**III. Configure the Xamarin project's Info.plist file**
+
+1. Open the **Info.plist** file
+2. Enter the app's **Bundle Identifier** from the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) in the **Bundle Identifier** field. **IMPORTANT:** this field will automatically be populated with an all-lowercase value by Xamarin. The value is in fact case sensitive and must match the value in the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) precisely.  
+3. Click on the **Advanced** tab   
+4. In the **URL Types** section, click the **Add URL Type** button   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Identifier:** Branch Scheme  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**URL Schemes:** {the app's URI Scheme - 'testxamarinformsapp', for example}  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Role:** Editor  
+
+![IOS Uri](/docs/images/branch_ios_forms_uri.png)
+
+**IV. Configure the Xamarin project's Associated Domains entitlement**
+
+1. Open the **Entitlements.plist** file and browse to **Associated Domains** (if this file does not already exist, create it)
+2. Create entries for both the app's link domain and its alternate link domain. The entries for the TestBed-Xamarin app would be:  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp.app.link`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`applinks:testxamarinformsapp-alternate.app.link`  
+
+![Associated Domains](/docs/images/branch_ios_forms_domains.png)
+
+**V. Add Branch calls to the AppDelegate.cs file**
+
+To ensure that the Branch SDK initializes when the app starts and can retrieve link parameters whenever the app becomes active, Branch initialization occurs within the `FinishedLaunching` method of the AppDelegate.cs file. Branch calls are also required in the OpenUrl, ContinueUserActivity, and ReceiveRemoteNotification methods to ensure that Branch link information is handled properly whenever the app becomes active. The **AppDelegate.cs** file should look like this:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Foundation;
+using UIKit;
+using BranchXamarinSDK;
+using TestXamarinFormsApp;
+
+namespace TestXamarinFormsApp.iOS
+{
+	[Register("AppDelegate")]
+	public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+	{
+		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+		{
+			global::Xamarin.Forms.Forms.Init();
+
+			// Debug mode - set to 'false' before releasing to production
+			BranchIOS.Debug = true;
+
+			TestXamarinFormsAppBUO appBUO = new TestXamarinFormsAppBUO();
+			BranchIOS.Init("key_live_liAnF8k7gZUEZv76Rt9a4bffAzlC5zVW", options, appBUO);
+			LoadApplication(appBUO);
+
+			return base.FinishedLaunching(app, options);
+		}
+
+		// Called when the app is opened via URI scheme
+		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+		{
+			return BranchIOS.getInstance().OpenUrl(url);
+		}
+
+		// Called when the app is opened from a Universal Link 
+		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+		{
+			return BranchIOS.getInstance().ContinueUserActivity(userActivity);
+		}
+
+		// Called when the app receives a push notification
+		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+		{
+			BranchIOS.getInstance().HandlePushNotification(userInfo);
+		}
+	}
+}
+```
+
+___
+
+##### **Integrating with an Android Forms app**
+
+**I. Ensure that the Android project is not using the Shared Mono Runtime**
+
+1. Right-click on the Android project and select: **Options**  
+2. Select: **Android Build**  
+3. On the **General** tab, un-check: **Use Shared Mono Runtime**  
+
+**II. Add app capabilities in the AndroidManifest.xml file**
+
+In the *Required permissions* section of **AndroidManifest.xml**, configure the following permissions:
+
+- *AccessNetworkState*
+- *Internet*
+
+Additional reading on the Android manifest
+
+- [Working with android manifest.xml](https://developer.xamarin.com/guides/android/advanced_topics/working_with_androidmanifest.xml/)
+- [Add permissions to android manifest](https://developer.xamarin.com/recipes/android/general/projects/add_permissions_to_android_manifest/)
+
+**III. Add the app's Branch key to the Strings.xml file**
+
+Create a **Resources/values/Strings.xml** file that can be accessed by the app's Application class for the Android project and add the Branch key to this file.
+
+1. In the Android project, browse to **Resources/values**
+2. Right-click on the **values** folder and select: **Add > New File...**
+3. Select: **XML > Empty XML File**
+4. Name the file: **Strings**
+5. Enter the following values:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">TestXamarinFormsApp</string>
+	<string name="branch_key">key_live_liAnF8k7gZUEZv76Rt9a4bffAzlC5zVW</string>
+</resources>
+```
+
+**IV. Configure the .Droid project's Application class**
+
+Within the .Droid project's Application class:
+
+- Set the Branch SDK's initialization parameters  
+- Override the `OnCreate()` method to call `BranchAndroid.GetAutoInstance`  
+
+If an Appplication class does not already exist for the project, create one:
+
+1. Right-click on the .Droid project and select: **Add > New File...**
+3. Select: **General > Empty Class**
+4. Name the file: _{app name}_ ('TestXamarinFormsApp', for example)
+
+The file should have the following contents:
+
+```csharp
+using System;
+using Android.App;
+using Android.Content;
+using Android.Runtime;
+using BranchXamarinSDK;
+
+namespace TestXamarinFormsApp.Droid
 {
 
-	#region IBranchSessionInterface implementation
+	[Application (AllowBackup = true, Icon = "@drawable/icon", Label = "@string/app_name")]
+	[MetaData("io.branch.sdk.auto_link_disable", Value = "false")]
+	[MetaData("io.branch.sdk.TestMode", Value = "true")]
+	[MetaData("io.branch.sdk.BranchKey", Value = "@string/branch_key")]
 
-	public void InitSessionComplete (Dictionary<string, object> data)
+	public class App : Application
 	{
-		// Do something with the referring link data...
-	}
+		public App(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+		{
+		}
 
-	public void SessionRequestError (BranchError error)
+		public override void OnCreate()
+		{
+			base.OnCreate();
+			BranchAndroid.GetAutoInstance(this.ApplicationContext);
+		}
+	}
+}
+```
+
+| Key | Value
+| --- | ---
+| io.branch.sdk.TestMode | Setting this parameter to *true* enables Debug Mode, which causes simple uninstall/reinstalls of the app to trigger *install* events. Be sure to disable this before deploying to production. Note that enabling Debug Mode on Android also forces the app to use the Branch *Test* key if this key has been added to the project. Apps running with a *Test* key will be unable to receive data from Branch links created with the *Live* key.
+| io.branch.sdk.BranchKey | The app's Branch key. Both a *Live* key and a *Test* key can be added to the Strings.xml file. When *Test* Mode is enabled the app will automatically use the *Test* key, if one has been specified.
+
+**V. Initialize Branch**
+
+Branch must be initilialized in the OnCreate method of either the Application class or the first Activity launched by the app. The OnNewIntent method must be added to retrieve the latest link identifier when the app becomes active due to a Branch link click.
+
+In the code example below the following Branch initialization and session management steps have been added to MainActivity.cs:
+
+- Register an Activity to respond to the app's URI Scheme
+- Ensure the Activity is launched in `singleTask` mode
+- Override the OnCreate method and initialize the Branch SDK
+- Override the OnNewIntent method
+
+```csharp
+using System;
+
+using Android.App;
+using Android.Content;
+using Android.Content.PM;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Android.OS;
+
+using BranchXamarinSDK;
+using TestXamarinFormsApp;
+
+namespace TestXamarinFormsApp.Droid
+{
+	[Activity(Label = "TestXamarinFormsApp.Droid", LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+
+	[IntentFilter(new[] { "android.intent.action.VIEW" },
+		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+		DataScheme = "testxamarinformsapp",
+		DataHost = "open")]
+
+	[IntentFilter(new[] { "android.intent.action.VIEW" },
+		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+		DataScheme = "https",
+		DataHost = "testxamarinformsapp.app.link")]
+	
+	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
-		// Handle the error case here
-	}
+		protected override void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
 
-	#endregion
+			global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+			TestXamarinFormsAppBUO linkData = new TestXamarinFormsAppBUO();
+			BranchAndroid.Init(this, GetString(Resource.String.branch_key), linkData);
+			LoadApplication(linkData);
+		}
+
+		protected override void OnNewIntent(Intent intent)
+		{
+			this.Intent = intent;
+		}
+	}
 }
 ```
 
 ____
 
-### Non-Forms Xamarin Setup
+## 4 - Submitting iOS Apps to the App Store
 
-The following code will make a request to the Branch servers to initialize a new session, and retrieve any referring link parameters if available. For example, If you created a custom link with your own custom dictionary data, you probably want to know when the user session init finishes, so you can check that data. Think of this callback as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow.
+Branch uses the Apple Advertising Identifier, or _IDFA_, to identify users across our entire partner network, greatly increasing the accuracy of matching. Read more about matching accuracy on the [Matching Platform](https://dev.branch.io/getting-started/matching-accuracy/overview/) page.  
 
-This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
+### Notifying Apple of IDFA usage
 
-#### iOS without Forms
+Be sure to let Apple know that you are using the IDFA when submitting apps to the App Store after integrating the Branch SDK.  
 
-The iOS device specific code can register notification listeners to handle the init and close of sessions when the app is sent to the background or resumed.  The BranchIOS.Init call takes an optional third parameter that will enable this automatic close session behavior if the parameter is set to true.  If your iOS app is not a Forms app, use the following device specific init.
+1. Answer **Yes** when presented with the question: **Does this app use the Advertising Identifier (IDFA)?**  
+2. Check the following two boxes:  
+- **Attribute this app installation to a previously served advertisement**  
+- **Attribute an action taken within this app to a previously served advertisement**  
 
-```csharp
-[Register ("AppDelegate")]
-public class AppDelegate : UIApplicationDelegate, IBranchSessionInterface
-{
-	public override bool FinishedLaunching (UIApplication uiApplication, NSDictionary launchOptions)
-	{
-		// Enable debug mode. 
-		BranchIOS.Debug = true;
-		BranchIOS.Init ("Your Branch key here", launchOptions, this);
-
-		// Do your remaining launch stuff here...
-	}
-	
-	// For direct deep linking
-	public override bool OpenUrl(UIApplication application,
-		NSUrl url,
-		string sourceApplication,
-		NSObject annotation)
-	{
-		return BranchIOS.getInstance ().OpenUrl (url);
-	}
-
-	// For Universal Links
-	public override bool ContinueUserActivity (UIApplication application,
-		NSUserActivity userActivity,
-		UIApplicationRestorationHandler completionHandler)
-	{
-		return BranchIOS.getInstance ().ContinueUserActivity (userActivity);
-	}
-	
-	// For Push Notifications
-	public override void ReceivedRemoteNotification (UIApplication application,
-		NSDictionary userInfo)
-	{
-		BranchIOS.getInstance ().HandlePushNotification (userInfo);
-	}
-
-	#region IBranchSessionInterface implementation
-	
-	public void InitSessionComplete (Dictionary<string, object> data)
-	{
-		// Do something with the referring link data...
-	}s
-
-	public void SessionRequestError (BranchError error)
-	{
-		// Handle the error case here
-	}
-
-	#endregion
-}
-```
-
-#### Android without Forms
-
-For Android add the call to the onCreate of either your Application class or the first Activity you start. This just creates the singleton object on Android with the appropriate Branch key but does not make any server requests
-
-
-```csharp
-public class MainActivity : Activity, IBranchSessionInterface
-{
-	protected override void OnCreate (Bundle savedInstanceState)
-	{
-		base.OnCreate (savedInstanceState);
-
-		// Enable debug mode.
-		BranchAndroid.Debug = true;
-		BranchAndroid.Init (this, "Your Branch key here", this);	}
-
-	// Ensure we get the updated link identifier when the app is opened from the
-	// background with a new link.
-	protected override void OnNewIntent(Intent intent) {
-		this.Intent = intent;
-	}
-
-
-	#region IBranchSessionInterface implementation
-
-	public void InitSessionComplete (Dictionary<string, object> data)
-	{
-		// Do something with the referring link data...
-	}
-
-	public void SessionRequestError (BranchError error)
-	{
-		// Handle the error case here
-	}
-
-	#endregion
-}
-```
+![Apple Advertising Identifier](/docs/images/idfa.png)
 
 ____
 
-## Forms and non-Forms Functions
+## 5 - Branch SDK Method Reference
 
 ### Retrieve session (install or open) parameters
 
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 
 ```csharp
-Branch branch = Branch.GetInstance ();
-Dictionary<string, object> sessionParams = branch.GetLatestReferringParams();
+Dictionary<string, object> sessionParams = Branch.GetInstance().GetLatestReferringParams();
 ```
+or
+
+```csharp
+BranchUniversalObject buo = Branch.GetInstance().GetLastReferringBranchUniversalObject();
+BranchLinkProperties blp = Branch.GetInstance().GetLastReferringBranchLinkProperties();
+```
+
 
 ### Retrieve install (install only) parameters
 
@@ -352,21 +937,27 @@ If you ever want to access the original session params (the parameters passed in
 Branch branch = Branch.GetInstance ();
 Dictionary<string, object> installParams = branch.GetFirstReferringParams();
 ```
+or
+
+```csharp
+BranchUniversalObject buo = Branch.GetInstance().GetFirstReferringBranchUniversalObject();
+BranchLinkProperties blp = Branch.GetInstance().GetFirstReferringBranchLinkProperties();
+```
 
 ### Persistent identities
 
-Often, you might have your own user IDs, or want referral and event data to persist across platforms or uninstall/reinstall. It's helpful if you know your users access your service from different devices. This where we introduce the concept of an 'identity'.
+Often, you might have the own user IDs, or want referral and event data to persist across platforms or uninstall/reinstall. It's helpful if you know the users access the service from different devices. This where we introduce the concept of an 'identity'.
 
 To identify a user, just call:
 
 ```csharp
 Branch branch = Branch.GetInstance (); 
-branch.SetIdentity("your user id", this);  // Where this implements IBranchIdentityInterface
+branch.SetIdentity("the user id", this);  // Where this implements IBranchIdentityInterface
 ```
 
 #### Logout
 
-If you provide a logout function in your app, be sure to clear the user when the logout completes. This will ensure that all the stored parameters get cleared and all events are properly attributed to the right identity.
+If you provide a logout function in the app, be sure to clear the user when the logout completes. This will ensure that all the stored parameters get cleared and all events are properly attributed to the right identity.
 
 **Warning** this call will clear the referral credits and attribution on the device.
 
@@ -379,7 +970,7 @@ branch.Logout(this); // Where this implements IBranchIdentityInterface
 
 ```csharp
 Branch branch = Branch.GetInstance ();
-branch.UserCompletedAction("your_custom_event");
+branch.UserCompletedAction("the_custom_event");
 ```
 
 OR if you want to store some state with the event
@@ -401,49 +992,34 @@ Some example events you might want to track:
 
 ____
 
-## Generate Tracked, Deep Linking URLs (pass data across install and open)
+### Generating Branch links
 
-### Shortened links
-
-There are a bunch of options for creating these links. You can tag them for analytics in the dashboard, or you can even pass data to the new installs or opens that come from the link click. How awesome is that? You need to pass a callback for when you link is prepared (which should return very quickly, ~ 50 ms to process).
-
-For more details on how to create links, see the [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md)
+Branch links can be created in-app (as well as in many other ways - see: [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md). When they are, and setIdentity has been called to associate a User ID with the current user session, Branch links will be associated with that User ID.
 
 ```csharp
-// associate data with a link
-// you can access this data from any instance that installs or opens the app from this link (amazing...)
+// you can access this data from any instance that installs or opens the app from this link
 
-var data = new Dictionary<string, object>(); 
-data.Add("user", "Joe");
-data.Add("profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg");
-data.Add("description", "Joe likes long walks on the beach...") 
+BranchUniversalObject universalObject = new BranchUniversalObject();
+universalObject.canonicalIdentifier = "id12345";
+universalObject.title = "id12345 title";
+universalObject.contentDescription = "My awesome piece of content!";
+universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+universalObject.metadata.Add("foo", "bar");
 
-// associate a url with a set of tags, channel, feature, and stage for better analytics.
-// tags: null or example set of tags could be "version1", "trial6", etc
-// channel: null or examples: "facebook", "twitter", "text_message", etc
-// feature: null or examples: Branch.FEATURE_TAG_SHARE, Branch.FEATURE_TAG_REFERRAL, "unlock", etc
-// stage: null or examples: "past_customer", "logged_in", "level_6"
+BranchLinkProperties linkProperties = new BranchLinkProperties();
+linkProperties.tags.Add("tag1");
+linkProperties.tags.Add("tag2");
+linkProperties.feature = "sharing";
+linkProperties.channel = "facebook";
+linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 
-List<String> tags = new List<String>();
-tags.Add("version1");
-tags.Add("trial6");
-
-// Link 'type' can be used for scenarios where you want the link to only deep link the first time. 
-// Use _null_, _LINK_TYPE_UNLIMITED_USE_ or _LINK_TYPE_ONE_TIME_USE_
-
-// Link 'alias' can be used to label the endpoint on the link. For example: http://bnc.lt/AUSTIN28. 
-// Be careful about aliases: these are immutable objects permanently associated with the data and associated paramters you pass into the link. When you create one in the SDK, it's tied to that user identity as well (automatically specified by the Branch internals). If you want to retrieve the same link again, you'll need to call getShortUrl with all of the same parameters from before.
-
-Branch branch = Branch.GetInstance ();
-await branch.GetShortUrlAsync(this, data, "alias","channel","stage", tags, "feature", uriType);
-
-// The error method of the callback will be called if the link generation fails (or if the alias specified is aleady taken.)
+Branch.GetInstance().GetShortURL (callback,
+		                          universalObject,
+		                          linkProperties);
 ```
 
-There are other methods which exclude tags and data if you don't want to pass those. Explore the autocomplete functionality.
-
 **Note**
-You can customize the Facebook OG tags of each URL if you want to dynamically share content by using the following _optional keys in the data dictionary_. Please use this [Facebook tool](https://developers.facebook.com/tools/debug/og/object) to debug your OG tags!
+You can customize the Facebook OG tags of each URL if you want to dynamically share content by using the following _optional keys in the data dictionary_. Please use this [Facebook tool](https://developers.facebook.com/tools/debug/og/object) to debug the OG tags!
 
 | Key | Value
 | --- | ---
@@ -452,7 +1028,7 @@ You can customize the Facebook OG tags of each URL if you want to dynamically sh
 | "$og_image_url" | The URL for the image you'd like to appear for the link in social media
 | "$og_video" | The URL for the video 
 | "$og_url" | The URL you'd like to appear
-| "$og_app_id" | Your OG app ID. Optional and rarely used.
+| "$og_app_id" | the OG app ID. Optional and rarely used.
 
 Also, you do custom redirection by inserting the following _optional keys in the dictionary_:
 
@@ -470,39 +1046,16 @@ You have the ability to control the direct deep linking of each link by insertin
 
 | Key | Value
 | --- | ---
-| "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure. 
-| "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in your app from a Branch link (has been cookied and deep linked by Branch)
+| "$deeplink_path" | The value of the deep link path that you'd like us to append to the URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "theapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure. 
+| "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in the app from a Branch link (has been cookied and deep linked by Branch)
 
 
-## New feature: BranchUniversalObject
-### What is the Branch Universal Object?
+### Branch Universal Objects and Link Properties
+#### Overview
 
+The Branch Universal Object is a data object representing a piece of content that is referenced by a Branch link. Together with a set of Link Properties (marketing metadata such as Campaign and Channel as well as Branch-behavior related parameters such as $eepview_path), can be combined to generate a Branch link.
 
-Our previous method of creating links was a single call `GetShortUrl`, where you passed in all of the metadata and link properties in order to get a deep link back. We’re adding just one more step in between that we believe makes a lot more sense.
-
-```
-Dictionary<string, object> parameters = new Dictionary<string, object>();
-parameters.Add("name", "test name");
-parameters.Add("message", "hello there with short url");
-parameters.Add("$og_title", "this is a title");
-parameters.Add("$og_description", "this is a description");
-parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
-
-List<string> tags = new List<string>();
-tags.Add("tag1");
-tags.Add("tag2");
-
-Branch.GetInstance().GetShortUrl (callback,
-		                          Constants.URL_TYPE_UNLIMITED,
-		                          parameters,
-		                          "test_channel",
-		                          "test_stage",
-		                          tags,
-		                          "test_feature");
-
-```
-
-#### Here’s the new mechanism using the Branch Universal Object:
+#### Creating a link
 ```
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
@@ -521,23 +1074,21 @@ linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 Branch.GetInstance().GetShortURL (callback,
 		                          universalObject,
 		                          linkProperties);
-
 ```
-As you can see, it’s a bit more code but a lot more structured. What’s really cool about this is that once you’ve created the Universal Object, you can then do a bunch of neat things like:
 
-######1. Initialize Branch
+#### Initialize Branch
 
 ```
 InitSession (IBranchBUOSessionInterface callback)
 ```
 
-######2. Register a view on the content (for a new product coming soon)
+#### Register a view of the content
 
 ```
 RegisterView (BranchUniversalObject universalObject)
 ```
 
-######3. Create a share sheet that lets the user share across all channels
+#### Share a link using a share sheet
 
 ```
 ShareLink (IBranchLinkShareInterface callback,
@@ -548,7 +1099,7 @@ ShareLink (IBranchLinkShareInterface callback,
 
 ____
 
-## Referral system rewarding functionality
+### Referral rewards
 
 In a standard referral system, you have 2 parties: the original user and the invitee. Our system is flexible enough to handle rewards for all users. Here are a couple example scenarios:
 
@@ -562,9 +1113,9 @@ These reward definitions are created on the dashboard, under the 'Reward Rules' 
 
 Warning: For a referral program, you should not use unique awards for custom events and redeem pre-identify call. This can allow users to cheat the system.
 
-### Get reward balance
+#### Check a reward balance
 
-Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
+Reward balances change randomly on the backend when certain actions are taken (defined by the rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
 ```csharp
 Branch branch = Branch.GetInstance ();
@@ -595,9 +1146,9 @@ branch.LoadRewards(this);
 #endregion
 ```
 
-### Redeem all or some of the reward balance (store state)
+#### Redeem all or some of the reward balance
 
-We will store how many of the rewards have been deployed so that you don't have to track it on your end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
+We will store how many of the rewards have been deployed so that you don't have to track it on the end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
 
 ```csharp
 Branch branch = Branch.GetInstance ();
@@ -629,7 +1180,7 @@ branch.RedeemRewards(this, amount, bucket);
 
 ```
 
-### Get credit history
+#### Get credit history
 
 This call will retrieve the entire history of credits and redemptions from the individual user.  It also implements the IBranchRewardsInterface(see above). To use this call, implement like so:
 
@@ -681,47 +1232,85 @@ The response will return an array that has been parsed from the following JSON:
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
-____
+## 6 - Version Notes
 
+#### Version 3
 
-## Note: Migration from version 1.x.x to 2.x.x
+**Changed methods**
+Starting with version 3.0 the method of creating links:
 
-New version of Branch SDK based on our native libraries that we built for iOS and Android.
-We changed Xamarin API in accordance with our native API.
+```csharp
+GetShortUrl(IBranchUrlInterface callback, Dictionary<String, dynamic> ...)
+```
+has been deprecated in favor of creating links with BranchUniversalObjects and Link Properties:
+```csharp
+GetShortUrl(IBranchUrlInterface callback, BranchUniversalObject universalObject, BranchLinkProperties linkProperties);
+```
+
+There are no other notable user-impacting changes.
+
+#### Version 2
+
+This version of the Branch SDK is a wrapper around our native iOS and Android libraries. Some Xamarin methods that had method names that differed from native SDK method names have been updated.
 
 To migrate to version 2.x.x:
 
-1. delete old nuget package
-2. install new Xamarin SDK nuget package
-3. change initialisation of Branch
-4. delete word "Async" in called Branch methods
-5. change your code in accordance with changed and deleted list (see below)
+1. Delete the old nuget package
+2. Install the new Xamarin SDK nuget package
 
-##### Changed Interfaces
-1. IBranchRewardsInterface
-2. IBranchUrlInterface
+**Changed Interfaces**
+- IBranchRewardsInterface
+- IBranchUrlInterface
 
-##### Changed methods
-1. We add two methods GetShortUrl instead of GetShortUrlAsync, you need to change list of parameters in your old GetShortUrlAsync and delete "Async"
+**Changed methods**
+- GetShortUrlAsync -> GetShortUrl
 
-##### Deleted Interfaces
-1. IBranchProperties
-2. IBranchActionsInterface
-3. IBranchGetDeviceInformation
-4. IBranchReferralInterface
+**Deleted Interfaces**
+- IBranchProperties
+- IBranchActionsInterface
+- IBranchGetDeviceInformation
+- IBranchReferralInterface
 
-##### Deleted methods
-1. LoadReferralActionCountsAsync
-2. GetReferralCodeAsync
-3. ValidateReferralCodeAsync
-4. ApplyReferralCodeAsync
-5. GetReferralCountsForAction
+**Deleted methods**
+- LoadReferralActionCountsAsync
+- GetReferralCodeAsync
+- ValidateReferralCodeAsync
+- ApplyReferralCodeAsync
+- GetReferralCountsForAction
 
 
-## Troubleshooting: Ensure Newtonsoft built properly
+## 7 - Troubleshooting
 
-There's a problem with the Newtonsoft JSON package that we're using to do JSON processing. (It get’s pulled in as a dependency of the NuGet package.) In a release build, it has a linking problem which leads to an exception we are seeing under certain circumstances. This can be fixed by a change to the options for the Android app. It is only an Android problem.
+#### Unable to add Branch-required NuGet packages to the C# project
 
-Basically, right click on the project and select Options. Go to “Android Build” and select the “Linker” tab. Make sure the Release build configuration is selected. In the “Ignore assemblies” box, add “System.Core”. Rebuild the app. It should now run successfully.
+Adding required NuGet packages to the C# project may fail if the project has not been configured to use **PCL 4.5 - Profile78**
+
+1. Right-click on the project name and select: **Options**  
+2. Browse the menu to **Build > General**  
+3. Change the **Current Profile** to: **PCL 4.5 - Profile78**  
+
+#### Android app fails to build with linking errors
+
+The Newtonsoft JSON NuGet package is automatically added to a project when the Branch Xamarin SDK NuGet package is added. There is a known issue with this package that results in linking errors when building a project.
+
+error XA0009: Error while loading assembly: /Users/david/Projects/TestXamarinFormsApp/Droid/obj/Debug/android/assets/mscorlib.dll
+
+To resolve this issue with the Newtonsoft JSON NuGet package:
+
+1. Right-click on the project and select Options  
+2. Go to **Android Build** and select the **Linker** tab  
+3. Select: **Release**  
+4. Go to the **Ignore assemblies** box  
+5. Add: **System.Core**  
+6. Rebuild the app  
+
+#### Deploying iOS app to device fails with Provisioning Profile erros after changing entitlements
+
+Xamarin automatically populates the **Bundle Identifier** field in the **Info.plist** file with an all-lowercase value derived from the app's name. This value is in fact case sensitive and must match the value in the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) precisely. The default Xamarin configuration may work when there are no entitlements configured and then suddenly begin failing after entitlements have been added.
+
+This issue can be resolved by ensuring that the **Bundle Identifier** in the **Info.plist** matches the **Bundle Identifier** shown on the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle).
+
+1. Open the **Info.plist** file
+2. Enter the app's **Bundle Identifier** from the [Apple Developer Portal](https://developer.apple.com/account/ios/identifier/bundle) in the **Bundle Identifier** field
 
 

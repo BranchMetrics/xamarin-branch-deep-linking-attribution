@@ -8,18 +8,23 @@ using BranchXamarinTestbed;
 
 namespace BranchXamarinTestbed.Droid
 {
-	[Activity (Label = "Branch-Xamarin-Testbed.Droid", MainLauncher = true, Icon = "@mipmap/icon", LaunchMode = LaunchMode.SingleTask)]
+	[Activity (Label = "io.branch.testbed-xamarinforms", MainLauncher = true, Icon = "@mipmap/icon", LaunchMode = LaunchMode.SingleTask)]
 
 	[IntentFilter (new[]{"android.intent.action.VIEW"},
 		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
-		DataScheme="branchtesturi",
+		DataScheme="testbed-xamarinforms",
 		DataHost="open")]
 
-	[IntentFilter (new[]{"android.intent.action.VIEW"},
-		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
-		DataScheme="https",
-		DataHost="bnc.lt",
-		DataPathPrefix="/LOmd")]
+	//[IntentFilter (new[]{"android.intent.action.VIEW"},
+	//	Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
+	//	DataScheme="https",
+	//	DataHost="bnc.lt",
+	//	DataPathPrefix="/LOmd")]
+
+	[IntentFilter(new[] { "android.intent.action.VIEW" },
+		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
+		DataScheme = "https",
+		DataHost = "testbed-xamarinforms.app.link")]
 
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
@@ -28,16 +33,14 @@ namespace BranchXamarinTestbed.Droid
 			base.OnCreate (savedInstanceState);
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			BranchAndroid.Debug = true;
-
-			App app = new App ();
-			BranchAndroid.Init (this, "key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", app);
-			LoadApplication (app);
+			//App app = new App ();
+			//BranchAndroid.Init (this, GetString(Resource.String.branch_key), app);
+			//LoadApplication (app);
 
 			// uncomment to try BranchUniversalObject
-//			AppBUO appBUO = new AppBUO ();
-//			BranchAndroid.Init (this, "Your Branch key here", appBUO);
-//			LoadApplication (appBUO);
+			AppBUO appBUO = new AppBUO ();
+			BranchAndroid.Init (this, GetString(Resource.String.branch_key), appBUO);
+			LoadApplication (appBUO);
 		}
 
 		protected override void OnNewIntent(Intent intent) {

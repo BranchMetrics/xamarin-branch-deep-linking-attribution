@@ -1,0 +1,38 @@
+﻿<Properties StartupConfiguration="{4F92ED5A-D039-4A46-85AC-F617F9B2CCB1}|Default">
+  <MonoDevelop.Ide.ItemProperties.Branch__Testbed__Android PreferredExecutionTarget="Android.00c53f242ea157c4" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Branch_Testbed_Android/TestBedApp.cs">
+    <Files>
+      <File FileName="Branch_Testbed_Android/BranchActivity.cs" Line="1" Column="1" />
+      <File FileName="Branch_Testbed_Android/Resources/values/Strings.xml" Line="1" Column="1" />
+      <File FileName="Branch_Testbed_Android/TestBedApp.cs" Line="1" Column="1" />
+      <File FileName="Branch_Testbed_Android/MainActivity.cs" Line="38" Column="25" />
+      <File FileName="Branch_Testbed_Android/Properties/AndroidManifest.xml" Line="2" Column="148" />
+      <File FileName="Branch_Testbed_Android/Properties/AssemblyInfo.cs" Line="1" Column="1" />
+      <File FileName="Branch_Testbed_Android/Resources/Resource.designer.cs" Line="1" Column="1" />
+      <File FileName="Branch_Testbed_Android/packages.config" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Branch_Testbed_Android" expanded="True">
+            <Node name="Branch_Testbed_Android" expanded="True">
+              <Node name="References" expanded="True">
+                <Node name="From Packages" expanded="True" />
+              </Node>
+              <Node name="Properties" expanded="True" />
+              <Node name="Resources" expanded="True">
+                <Node name="values" expanded="True" />
+              </Node>
+              <Node name="TestBedApp.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

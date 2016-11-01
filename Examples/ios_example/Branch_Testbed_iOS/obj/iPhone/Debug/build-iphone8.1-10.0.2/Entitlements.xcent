@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>get-task-allow</key>
+	<true/>
+	<key>application-identifier</key>
+	<string>R63EM248DP.io.branch.TestBed-Xamarin</string>
+	<key>com.apple.developer.team-identifier</key>
+	<string>R63EM248DP</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:testbed-xamarin.app.link</string>
+		<string>applinks:testbed-xamarin-alternate.app.link</string>
+	</array>
+</dict>
+</plist>

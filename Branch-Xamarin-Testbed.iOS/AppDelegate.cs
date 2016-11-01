@@ -15,14 +15,14 @@ namespace BranchXamarinTestbed.iOS
 			// set Debug mode
 			BranchIOS.Debug = true;
 
-			App app = new App ();
-			BranchIOS.Init ("Your Branch key here", launchOptions, app);
-			LoadApplication (app);
+			//App app = new App ();
+			//BranchIOS.Init ("your Branch key", launchOptions, app);
+			//LoadApplication (app);
 
 			// uncomment to try BranchUniversalObject
-//			AppBUO appBUO = new AppBUO ();
-//			BranchIOS.Init ("Your Branch key here", launchOptions, appBUO);
-//			LoadApplication (appBUO);
+			AppBUO appBUO = new AppBUO ();
+			BranchIOS.Init ("key_live_bmEetSmsaI8OS6fCiyS5VmjhDqnfXBxP", launchOptions, appBUO);
+			LoadApplication (appBUO);
 
 			return base.FinishedLaunching(application, launchOptions);
 		}
