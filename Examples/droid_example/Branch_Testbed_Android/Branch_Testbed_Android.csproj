@@ -53,13 +53,13 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Branch-Xamarin-Lib.Droid">
-      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.0\lib\MonoAndroid\Branch-Xamarin-Lib.Droid.dll</HintPath>
+      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.1\lib\MonoAndroid\Branch-Xamarin-Lib.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Branch-Xamarin-SDK">
-      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.0\lib\MonoAndroid\Branch-Xamarin-SDK.dll</HintPath>
+      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.1\lib\MonoAndroid\Branch-Xamarin-SDK.dll</HintPath>
     </Reference>
     <Reference Include="Branch-Xamarin-SDK.Droid">
-      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.0\lib\MonoAndroid\Branch-Xamarin-SDK.Droid.dll</HintPath>
+      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.1\lib\MonoAndroid\Branch-Xamarin-SDK.Droid.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

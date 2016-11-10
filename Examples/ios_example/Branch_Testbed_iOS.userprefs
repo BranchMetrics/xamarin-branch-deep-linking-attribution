@@ -6,20 +6,9 @@
       <File FileName="Branch_Testbed_iOS/AppDelegate.cs" Line="76" Column="3" />
       <File FileName="Branch_Testbed_iOS/Main.cs" Line="8" Column="34" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Branch_Testbed_iOS" expanded="True">
-            <Node name="Branch_Testbed_iOS" expanded="True">
-              <Node name="Main.cs" selected="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.ItemProperties.Branch__Testbed__iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.5FA3916D-B952-441B-944C-4AA9E6EBB4D5" />
+  <MonoDevelop.Ide.ItemProperties.Branch__Testbed__iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.06EB6E49-EBC4-4479-B953-079E857A6170" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

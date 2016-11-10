@@ -98,13 +98,13 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Branch-Xamarin-Lib.iOS">
-      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.0\lib\Xamarin.iOS10\Branch-Xamarin-Lib.iOS.dll</HintPath>
+      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.1\lib\Xamarin.iOS10\Branch-Xamarin-Lib.iOS.dll</HintPath>
     </Reference>
     <Reference Include="Branch-Xamarin-SDK">
-      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.0\lib\Xamarin.iOS10\Branch-Xamarin-SDK.dll</HintPath>
+      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.1\lib\Xamarin.iOS10\Branch-Xamarin-SDK.dll</HintPath>
     </Reference>
     <Reference Include="Branch-Xamarin-SDK.iOS">
-      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.0\lib\Xamarin.iOS10\Branch-Xamarin-SDK.iOS.dll</HintPath>
+      <HintPath>..\packages\Branch-Xamarin-Linking-SDK.3.0.1\lib\Xamarin.iOS10\Branch-Xamarin-SDK.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
