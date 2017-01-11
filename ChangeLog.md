@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- v3.0.4
+  * Updating iOS native library to version 0.12.24
+  * Updating Android native library to version 2.5.5
+
 - v3.0.3
   * Updating iOS native library to version 0.12.19
   * Updating Android native library to version 2.5.2
