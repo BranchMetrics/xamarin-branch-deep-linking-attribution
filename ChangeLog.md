@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- v3.0.7
+  * Updating Branch to Android version 2.6.0
+  * Adding checking for dictionary in method UserCompletedAction
+
 - v3.0.6
   * Updating Branch to Android version 2.5.9 and iOS version 0.13.5
 
