@@ -236,7 +236,12 @@ namespace BranchXamarinSDK
 		#region Action methods
 
 		public override void UserCompletedAction (String action, Dictionary<string, object> metadata = null) {
-			NativeBranch.UserCompletedAction (action, BranchAndroidUtils.ToJSONObject(metadata));
+			if (metadata != null) {
+				NativeBranch.UserCompletedAction(action, BranchAndroidUtils.ToJSONObject(metadata));
+			}
+			else {
+				NativeBranch.UserCompletedAction(action);
+			}
 		}
 
 		#endregion
