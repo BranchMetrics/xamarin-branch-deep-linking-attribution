@@ -40,6 +40,7 @@ namespace BranchXamarinSDK.Droid
 
 			var dict = new Dictionary<string, object>();
 			dict.Add("$canonical_identifier", data.CanonicalIdentifier == null ? "" : data.CanonicalIdentifier );
+			dict.Add("$canonical_url", data.CanonicalUrl == null ? "" : data.CanonicalUrl );
 			dict.Add("$og_title", data.Title == null ? "" : data.Title );
 			dict.Add("$og_description", data.Description == null ? "" : data.Description);
 			dict.Add("$og_image_url", data.ImageUrl == null ? "" : data.ImageUrl);
@@ -112,7 +113,8 @@ namespace BranchXamarinSDK.Droid
 				resBuo.AddContentMetadata(key, buo.metadata[key]);
 			}
 
-			resBuo.SetCanonicalUrl(buo.canonicalIdentifier);
+			resBuo.SetCanonicalIdentifier(buo.canonicalIdentifier);
+			resBuo.SetCanonicalUrl(buo.canonicalUrl);
 			resBuo.SetTitle(buo.title);
 			resBuo.SetContentDescription(buo.contentDescription);
 			resBuo.SetContentImageUrl(buo.imageUrl);
