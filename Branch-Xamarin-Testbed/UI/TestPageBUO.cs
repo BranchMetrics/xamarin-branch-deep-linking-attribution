@@ -379,6 +379,7 @@ namespace BranchXamarinTestbed
 
 			universalObject = new BranchUniversalObject ();
 			universalObject.canonicalIdentifier = "id12345";
+			universalObject.canonicalUrl = "https://branch.io";
 			universalObject.title = "id12345 title";
 			universalObject.contentDescription = "My awesome piece of content!";
 			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
@@ -386,6 +387,9 @@ namespace BranchXamarinTestbed
 			universalObject.keywords.Add("key01");
 			universalObject.keywords.Add("key02");
 			universalObject.keywords.Add("key03");
+
+			// register a view to add to the index
+			Branch.GetInstance().RegisterView(universalObject);
 
 			var paramStr = ParamsEntry.Text;
 			if (!String.IsNullOrWhiteSpace (paramStr)) {

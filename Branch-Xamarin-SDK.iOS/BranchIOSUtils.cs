@@ -60,6 +60,7 @@ namespace BranchXamarinSDK.iOS
 
 			NSString[] keys = new NSString[] {
 				(NSString)"$canonical_identifier",
+				(NSString)"$canonical_url",
 				(NSString)"$og_title",
 				(NSString)"$og_description",
 				(NSString)"$og_image_url",
@@ -72,6 +73,7 @@ namespace BranchXamarinSDK.iOS
 
 			NSObject[] values = new NSObject[] {
 				NSObject.FromObject(universalObject.CanonicalIdentifier != null ? universalObject.CanonicalIdentifier : "" as object),
+				NSObject.FromObject(universalObject.CanonicalUrl != null ? universalObject.CanonicalUrl : "" as object),
 				NSObject.FromObject(universalObject.Title != null ? universalObject.Title : "" as object),
 				NSObject.FromObject(universalObject.ContentDescription != null ? universalObject.ContentDescription : "" as object),
 				NSObject.FromObject(universalObject.ImageUrl != null ? universalObject.ImageUrl : "" as object),
@@ -86,6 +88,7 @@ namespace BranchXamarinSDK.iOS
 
 //			NSDictionary dict = new NSDictionary (
 //				"$canonical_identifier", universalObject.CanonicalIdentifier ? universalObject.CanonicalIdentifier : "",
+//				"$canonical_url", universalObject.CanonicalUrl ? universalObject.CanonicalUrl : "",
 //				"$og_title", universalObject.Title ? universalObject.Title : "",
 //				"$og_description", universalObject.ContentDescription ? universalObject.ContentDescription : "",
 //				"$og_image_url", universalObject.ImageUrl ? universalObject.ImageUrl : "",
@@ -223,6 +226,7 @@ namespace BranchXamarinSDK.iOS
 
 				res.Keywords = ToNSObjectArray (obj.keywords);
 				res.CanonicalIdentifier = obj.canonicalIdentifier != null ? obj.canonicalIdentifier : "";
+				res.CanonicalUrl = obj.canonicalUrl != null ? obj.canonicalUrl : "";
 				res.Title = obj.title != null ? obj.title : "";
 				res.ContentDescription = obj.contentDescription != null ? obj.contentDescription : "";
 				res.ImageUrl = obj.imageUrl != null ? obj.imageUrl : "";
