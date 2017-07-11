@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- v3.0.10
+  * Updating Branch to Android version 2.10.2
+
 - v3.0.9
   * Updating Branch to Android version 2.8.0 and iOS version 0.15.3
   * Adding canonicalUrl for BranchUniversalObject
