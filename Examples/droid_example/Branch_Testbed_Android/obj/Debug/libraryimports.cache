@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Paths>
-  <ManifestDocuments />
-  <NativeLibraries />
-  <Jars>
-    <Jar>obj/Debug/__library_projects__/Branch-Xamarin-Lib.Droid/library_project_imports/Branch-2.4.5_core.jar</Jar>
-  </Jars>
-</Paths>
