@@ -1,6 +1,9 @@
 Branch Xamarin SDK change log
 
-- v0.3.12
+- v3.0.13
+  * Updating Branch to Android version 2.11.1 and iOS version 0.17.7
+
+- v3.0.12
   * Updating Branch to iOS version 0.17.6
 
 - v3.0.11
