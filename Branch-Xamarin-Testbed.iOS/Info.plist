@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleName</key>
-	<string>Branch-Xamarin-Testbed.iOS</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -56,6 +54,8 @@
 		</dict>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>io.branch.TestBed-XamarinForms</string>
+	<string>com.zoom2games.test</string>
+	<key>CFBundleName</key>
+	<string>Test</string>
 </dict>
 </plist>
