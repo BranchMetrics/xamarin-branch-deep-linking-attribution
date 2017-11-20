@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- v3.0.18
+  * Updating Branch to iOS version 0.20.3
+  * Adding method `SetRequestMetadata(string key, string val)`
+
 - v3.0.17
   * Updating Branch to Android version 2.13.1
 

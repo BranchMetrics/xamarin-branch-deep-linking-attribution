@@ -1244,5 +1244,9 @@ namespace IOSNativeBranch
 		// -(void)executeGenericRequest:(BNCServerRequest *)request;
 		[Export ("executeGenericRequest:")]
 		void ExecuteGenericRequest (BNCServerRequest request);
+
+		//- (void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value;
+		[Export("setRequestMetadataKey:value:")]
+		void SetRequestMetadataKey(string key, string value);
 	}
 }

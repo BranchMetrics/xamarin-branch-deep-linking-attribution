@@ -252,6 +252,13 @@ namespace BranchXamarinSDK
 		/// <param name="universalObject">Universal object.</param>
 		abstract public void ListOnSpotlight(BranchUniversalObject universalObject);
 
+		/// <summary>
+		/// Key-value pairs to be included in the metadata on every request.
+		/// </summary>
+		/// <param name="key">Key.</param>
+		/// <param name="value">Value.</param>
+		abstract public void SetRequestMetadata(string key, string value);
+
 		#endregion
 	}
 }

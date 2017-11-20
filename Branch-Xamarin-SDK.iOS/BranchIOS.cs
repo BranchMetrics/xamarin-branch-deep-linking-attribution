@@ -280,6 +280,13 @@ namespace BranchXamarinSDK
 			BranchIOSUtils.ToNativeUniversalObject(universalObject).ListOnSpotlight();
 		}
 
+		public override void SetRequestMetadata(string key, string value) {
+			if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value)) {
+				NativeBranch.SetRequestMetadataKey(key, value);
+			}
+		}
+
+
 		#endregion
 
 
