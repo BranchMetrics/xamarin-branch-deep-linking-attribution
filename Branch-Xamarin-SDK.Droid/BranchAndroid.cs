@@ -322,6 +322,12 @@ namespace BranchXamarinSDK
 			resBuo.ListOnGoogleSearch(appContext);
 		}
 
+		public override void SetRequestMetadata(string key, string value) {
+			if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value)) {
+				NativeBranch.SetRequestMetadata(key, value);
+			}
+		}
+
 		#endregion
 	}
 }
