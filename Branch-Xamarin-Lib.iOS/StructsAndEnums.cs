@@ -3,39 +3,68 @@ using ObjCRuntime;
 
 namespace IOSNativeBranch
 {
-	[Native]
-	public enum ContentIndexMode : ulong
-	{
-		ContentIndexModePublic = 0,
-		ContentIndexModePrivate = 1
-	}
+    [Native]
+    public enum BNCErrorCode : ulong
+    {
+        InitError = 1000,
+        DuplicateResourceError = 1001,
+        RedeemCreditsError = 1002,
+        BadRequestError = 1003,
+        ServerProblemError = 1004,
+        NilLogError = 1005,
+        VersionError = 1006,
+        NetworkServiceInterfaceError = 1007,
+        InvalidNetworkPublicKeyError = 1008,
+        ContentIdentifierError = 1009,
+        SpotlightNotAvailableError = 1010,
+        SpotlightTitleError = 1011,
+        RedeemZeroCreditsError = 1012,
+        SpotlightIdentifierError = 1013,
+        SpotlightPublicIndexError = 1014,
+        HighestError
+    }
 
-	[Native]
-	public enum BranchLinkType : ulong
-	{
-		UnlimitedUse = 0,
-		OneTimeUse = 1
-	}
+    [Native]
+    public enum BranchLinkType : ulong
+    {
+    	UnlimitedUse = 0,
+    	OneTimeUse = 1
+    }
 
-	[Native]
-	public enum BranchCreditHistoryOrder : ulong
-	{
-		MostRecentFirst,
-		LeastRecentFirst
-	}
+    [Native]
+    public enum BNCLogLevel : ulong
+    {
+    	All = 0,
+    	DebugSDK = All,
+    	BreakPoint,
+    	Debug,
+    	Warning,
+    	Error,
+    	Assert,
+    	Log,
+    	None,
+    	Max
+    }
 
-	[Native]
-	public enum BranchPromoCodeRewardLocation : ulong
-	{
-		ReferredUser = 0,
-		ReferringUser = 2,
-		BothUsers = 3
-	}
+    [Native]
+    public enum BNCViewControllerPresentationOption : ulong
+    {
+    	Show,
+    	Push,
+    	Present
+    }
 
-	[Native]
-	public enum BranchPromoCodeUsageType : ulong
-	{
-		OncePerUser = 1,
-		UnlimitedUses = 0
-	}
+    [Native]
+    public enum BranchContentIndexMode : ulong
+    {
+    	Public,
+    	Private
+    }
+
+    [Native]
+    public enum BranchCreditHistoryOrder : ulong
+    {
+    	MostRecentFirst,
+    	LeastRecentFirst
+    }
 }

@@ -3,120 +3,142 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-public class BranchLinkProperties {
+namespace BranchXamarinSDK
+{
+    public class BranchLinkProperties
+    {
 
-	public List<String> tags;
-	public string feature;
-	public string alias;
-	public string channel;
-	public string stage;
-	public int matchDuration;
-	public Dictionary<String, String> controlParams;
+        public List<String> tags;
+        public string feature;
+        public string alias;
+        public string channel;
+        public string stage;
+        public int matchDuration;
+        public Dictionary<String, String> controlParams;
 
 
-	public BranchLinkProperties() {
-		tags =  new List<String>();
-		feature = "";
-		alias = "";
-		channel = "";
-		stage = "";
-		matchDuration = 0;
-		controlParams = new Dictionary<String, String>();
-	}
+        public BranchLinkProperties()
+        {
+            tags = new List<String>();
+            feature = "";
+            alias = "";
+            channel = "";
+            stage = "";
+            matchDuration = 0;
+            controlParams = new Dictionary<String, String>();
+        }
 
-	public BranchLinkProperties(string json) {
-		tags =  new List<String>();
-		feature = "";
-		alias = "";
-		channel = "";
-		stage = "";
-		matchDuration = 0;
-		controlParams = new Dictionary<String, String>();
+        public BranchLinkProperties(string json)
+        {
+            tags = new List<String>();
+            feature = "";
+            alias = "";
+            channel = "";
+            stage = "";
+            matchDuration = 0;
+            controlParams = new Dictionary<String, String>();
 
-		loadFromJson(json);
-	}
+            loadFromJson(json);
+        }
 
-	public BranchLinkProperties(Dictionary<string, object> data) {
-		tags =  new List<String>();
-		feature = "";
-		alias = "";
-		channel = "";
-		stage = "";
-		matchDuration = 0;
-		controlParams = new Dictionary<String, String>();
-		
-		loadFromDictionary(data);
-	}
+        public BranchLinkProperties(Dictionary<string, object> data)
+        {
+            tags = new List<String>();
+            feature = "";
+            alias = "";
+            channel = "";
+            stage = "";
+            matchDuration = 0;
+            controlParams = new Dictionary<String, String>();
 
-	public void loadFromJson(string json) {
-		if (string.IsNullOrEmpty(json))
-			return;
+            loadFromDictionary(data);
+        }
 
-		var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-		loadFromDictionary(data);
-	}
+        public void loadFromJson(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+                return;
 
-	public void loadFromDictionary(Dictionary<string, object> data) {
-		if (data == null)
-			return;
+            var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            loadFromDictionary(data);
+        }
 
-		if (data.ContainsKey("~tags")) {
-			IList<object> tagsTemp = data["~tags"] as IList<object>;
+        public void loadFromDictionary(Dictionary<string, object> data)
+        {
+            if (data == null)
+                return;
 
-			if (tagsTemp != null)
-			{
-				foreach (object obj in tagsTemp)
-				{
-					tags.Add(obj.ToString());
-				}
-			}
-		}
-		if (data.ContainsKey("~feature")) {
-			feature = data["~feature"].ToString();
-		}
-		if (data.ContainsKey("~alias")) {
-			alias = data["~alias"].ToString();
-		}
-		if (data.ContainsKey("~channel")) {
-			channel = data["~channel"].ToString();
-		}
-		if (data.ContainsKey("~stage")) {
-			stage = data["~stage"].ToString();
-		}
-		if (data.ContainsKey("~duration")) {
-			if (!string.IsNullOrEmpty(data["~duration"].ToString())) {
-				matchDuration = Convert.ToInt32(data["~duration"].ToString());
-			}
-		}
-		if (data.ContainsKey("control_params")) {
-			if (data["control_params"] != null) {
-				IDictionary<string, object> paramsTemp = data["control_params"] as IDictionary<string, object>;
+            if (data.ContainsKey("~tags"))
+            {
+                IList<object> tagsTemp = data["~tags"] as IList<object>;
 
-				if (paramsTemp != null) {
-					foreach(string key in paramsTemp.Keys) {
-						controlParams.Add(key, paramsTemp[key].ToString());
-					}
-				}
-			}
-		}
-	}
+                if (tagsTemp != null)
+                {
+                    foreach (object obj in tagsTemp)
+                    {
+                        tags.Add(obj.ToString());
+                    }
+                }
+            }
+            if (data.ContainsKey("~feature"))
+            {
+                feature = data["~feature"].ToString();
+            }
+            if (data.ContainsKey("~alias"))
+            {
+                alias = data["~alias"].ToString();
+            }
+            if (data.ContainsKey("~channel"))
+            {
+                channel = data["~channel"].ToString();
+            }
+            if (data.ContainsKey("~stage"))
+            {
+                stage = data["~stage"].ToString();
+            }
+            if (data.ContainsKey("~duration"))
+            {
+                if (!string.IsNullOrEmpty(data["~duration"].ToString()))
+                {
+                    matchDuration = Convert.ToInt32(data["~duration"].ToString());
+                }
+            }
+            if (data.ContainsKey("control_params"))
+            {
+                if (data["control_params"] != null)
+                {
+                    IDictionary<string, object> paramsTemp = data["control_params"] as IDictionary<string, object>;
 
-	public Dictionary<string, object> ToDictionary() {
-		var data = new Dictionary<string, object>();
+                    if (paramsTemp != null)
+                    {
+                        foreach (string key in paramsTemp.Keys)
+                        {
+                            controlParams.Add(key, paramsTemp[key].ToString());
+                        }
+                    }
+                }
+            }
+        }
 
-		data.Add("~tags", tags);
-		data.Add("~feature", feature);
-		data.Add("~alias", alias);
-		data.Add("~channel", channel);
-		data.Add("~stage", stage);
-		data.Add("~duration", matchDuration.ToString());
-		data.Add("control_params", controlParams);
+        public Dictionary<string, object> ToDictionary()
+        {
+            var data = new Dictionary<string, object>();
 
-		return data;
-	}
+            data.Add("~tags", tags);
+            data.Add("~feature", feature);
+            data.Add("~alias", alias);
+            data.Add("~channel", channel);
+            data.Add("~stage", stage);
+            data.Add("~duration", matchDuration.ToString());
+            data.Add("control_params", controlParams);
 
-	public string ToJsonString() {
-		var data = ToDictionary ();
-		return JsonConvert.SerializeObject (data);
-	}
+            return data;
+        }
+
+        public string ToJsonString()
+        {
+            var data = ToDictionary();
+            return JsonConvert.SerializeObject(data);
+        }
+    }
 }

@@ -163,7 +163,18 @@ namespace BranchXamarinSDK
 		/// <param name="metadata">The additional state items associated with the action.</param>
 		abstract public void UserCompletedAction (String action, Dictionary<string, object> metadata = null);
 
-		#endregion
+        #endregion
+
+
+        #region Send Evene methods
+
+        /// <summary>
+        /// Send event.
+        /// </summary>
+        /// <param name="branchEvent">Event.</param>
+        abstract public void SendEvent(BranchEvent branchEvent);
+
+        #endregion
 
 
 		#region Credits methods
@@ -233,12 +244,6 @@ namespace BranchXamarinSDK
 		/// </summary>
 		/// <param name="timeout">Number of seconds to before a request is considered timed out.</param>
 		abstract public void SetNetworkTimeout (int timeout);
-
-		/// <summary>
-		/// If you're using a version of the Facebook SDK that prevents application:didFinishLaunchingWithOptions:
-		/// from returning YES/true when a Universal Link is clicked, you should enable this option.
-		/// </summary>
-		abstract public void AccountForFacebookSDKPreventingAppLaunch ();
 
 		/// <summary>
 		/// Registers the view.

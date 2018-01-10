@@ -35,7 +35,8 @@
   + [Retrieve install (install only) parameters](#retrieve-install-install-only-parameters)  
   + [Persistent identities](#persistent-identities)  
   + [Logout](#logout)  
-  + [Register custom events](#register-custom-events)  
+  + [Register custom events](#register-custom-events)
+  + [Tracking User Actions and Events] (#tracking-user-actions-and-events)
   + [Generating Branch links](#generating-branch-links)  
   + [Branch Universal Objects and Link Properties](#branch-universal-oObjects-and-link-properties)  
     + [Overview](#overview)  
@@ -968,6 +969,8 @@ branch.Logout(this); // Where this implements IBranchIdentityInterface
 
 ### Register custom events
 
+**Warning** This functionality is deprecated. Please consider using BranchEvent for tracking user action and events.
+
 ```csharp
 Branch branch = Branch.GetInstance ();
 branch.UserCompletedAction("the_custom_event");
@@ -990,6 +993,43 @@ Some example events you might want to track:
 "finished_level_ten"
 ```
 
+### Tracking User Actions and Events
+
+Use BranchEvent class to track special user actions or application specific events beyond app installs, opens, and sharing. You can track events such as when a user adds an item to an on-line shopping cart, or searches for a keyword etc. BranchEvent provides an interface to add content(s) represented by a BranchUniversalObject in order to associate content(s) with events. You can view analytics for the BranchEvents you fire on the Branch dashboard.  *BranchEventType* enumerate the most commonly tracked events and event parameters that can be used with BranchEvent for the best results. You can always use custom event names and event parameters.
+
+```csharp
+BranchEvent e01 = new BranchEvent (BranchEventType.COMPLETE_REGISTRATION);
+
+e01.SetAffiliation("my_affilation");
+e01.SetCoupon("my_coupon");
+e01.SetCurrency(BranchCurrencyType.USD);
+e01.SetTax(10.0f);
+e01.SetRevenue(100.0f);
+e01.SetShipping(1000.0f);
+e01.SetDescription("my_description");
+e01.SetSearchQuery("my_search_query");
+e01.AddCustomData("custom_data_key01", "custom_data_value01");
+e01.AddContentItem(universalObject);
+
+Branch.GetInstance().SendEvent (e01);
+
+
+BranchEvent e02 = new BranchEvent ("MY_CUSTOM_EVENT");
+
+e02.SetAffiliation("my_affilation");
+e02.SetCoupon("my_coupon");
+e02.SetCurrency(BranchCurrencyType.USD);
+e02.SetTax(10.0f);
+e02.SetRevenue(100.0f);
+e02.SetShipping(1000.0f);
+e02.SetDescription("my_description");
+e02.SetSearchQuery("my_search_query");
+e02.AddCustomData("custom_data_key01", "custom_data_value01");
+e02.AddContentItem(universalObject);
+
+Branch.GetInstance().SendEvent (e02);
+```
+
 ____
 
 ### Generating Branch links
@@ -1004,7 +1044,7 @@ universalObject.canonicalIdentifier = "id12345";
 universalObject.title = "id12345 title";
 universalObject.contentDescription = "My awesome piece of content!";
 universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-universalObject.metadata.Add("foo", "bar");
+universalObject.metadata.AddCustomMetadata("foo", "bar");
 
 BranchLinkProperties linkProperties = new BranchLinkProperties();
 linkProperties.tags.Add("tag1");
@@ -1062,7 +1102,7 @@ universalObject.canonicalIdentifier = "id12345";
 universalObject.title = "id12345 title";
 universalObject.contentDescription = "My awesome piece of content!";
 universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-universalObject.metadata.Add("foo", "bar");
+universalObject.metadata.AddCustomMetadata("foo", "bar");
 
 BranchLinkProperties linkProperties = new BranchLinkProperties();
 linkProperties.tags.Add("tag1");
@@ -1233,6 +1273,17 @@ The response will return an array that has been parsed from the following JSON:
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
 
 ## 6 - Version Notes
+
+#### Version 4
+**Changes in BranchUniversalObject**
+
+1. We added ```BranchUniversalObject.localIndexMode``` parameter
+2. We deleted ```BranchUniversalObject.type``` parameter
+3. We changed type of ```BranchUniversalObject.metadata``` from ```Dictionary<string, string>``` to ```BranchContentMetadata```
+
+**Changes in SDK**
+
+1. We added ```BranchEvent``` for Tracking User Actions and Events
 
 #### Version 3
 

@@ -1,4 +1,10 @@
 Branch Xamarin SDK change log
+- v4.0.0
+  * Updating Branch to Android version 2.14.4 and iOS version 0.22.4
+  * Updating BranchUniversalObject
+  * Adding new class for metadata (BranchContentMetadata)
+  * Adding API for sending branch events
+  * Updating Readme
 
 - v3.0.18
   * Updating Branch to iOS version 0.20.3

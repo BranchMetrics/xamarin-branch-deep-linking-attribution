@@ -64,8 +64,8 @@ namespace BranchXamarinSDK.iOS
 				(NSString)"$og_title",
 				(NSString)"$og_description",
 				(NSString)"$og_image_url",
-				(NSString)"$content_type",
 				(NSString)"$publicly_indexable",
+                (NSString)"$locally_indexable",
 				(NSString)"$keywords",
 				(NSString)"$exp_date",
 				(NSString)"metadata"
@@ -77,27 +77,14 @@ namespace BranchXamarinSDK.iOS
 				NSObject.FromObject(universalObject.Title != null ? universalObject.Title : "" as object),
 				NSObject.FromObject(universalObject.ContentDescription != null ? universalObject.ContentDescription : "" as object),
 				NSObject.FromObject(universalObject.ImageUrl != null ? universalObject.ImageUrl : "" as object),
-				NSObject.FromObject(universalObject.Type != null ? universalObject.Type: "" as object),
-				NSObject.FromObject(((int)universalObject.ContentIndexMode).ToString() as object),
-				NSObject.FromObject(universalObject.Keywords != null ? universalObject.Keywords : "" as object),
-				NSObject.FromObject(universalObject.ExpirationDate != null ? ((DateTime)universalObject.ExpirationDate).Millisecond.ToString () : "" as object),
-				NSObject.FromObject(universalObject.Metadata != null ? universalObject.Metadata : "" as object)
+                NSObject.FromObject((universalObject.PubliclyIndex ? "0" : "1") as object),
+                NSObject.FromObject((universalObject.LocallyIndex ? "0" : "1") as object),
+                NSObject.FromObject(universalObject.Keywords != null ? NSArray.FromStrings(universalObject.Keywords) : "" as object),
+                NSObject.FromObject(universalObject.ExpirationDate != null ? (universalObject.ExpirationDate.SecondsSinceReferenceDate * 1000).ToString() : "" as object),
+                NSObject.FromObject(universalObject.ContentMetadata != null ? universalObject.ContentMetadata.Dictionary() : "" as object)
 			};
 
 			NSDictionary dict = NSDictionary.FromObjectsAndKeys (values, keys);
-
-//			NSDictionary dict = new NSDictionary (
-//				"$canonical_identifier", universalObject.CanonicalIdentifier ? universalObject.CanonicalIdentifier : "",
-//				"$canonical_url", universalObject.CanonicalUrl ? universalObject.CanonicalUrl : "",
-//				"$og_title", universalObject.Title ? universalObject.Title : "",
-//				"$og_description", universalObject.ContentDescription ? universalObject.ContentDescription : "",
-//				"$og_image_url", universalObject.ImageUrl ? universalObject.ImageUrl : "",
-//				"$content_type", universalObject.Type ? universalObject.Type: "",
-//				"$publicly_indexable", universalObject.ContentIndexMode.ToString(),
-//				"$keywords", universalObject.Keywords ? universalObject.Keywords : "",
-//				"$exp_date", universalObject.ExpirationDate ? ((DateTime)universalObject.ExpirationDate).Millisecond.ToString () : "",
-//				"metadata", universalObject.Metadata ? universalObject.Metadata : ""
-//			);
 
 			return ToDictionary (dict);
 		}
@@ -129,16 +116,6 @@ namespace BranchXamarinSDK.iOS
 			};
 
 			NSDictionary dict = NSDictionary.FromObjectsAndKeys (values, keys);
-
-//			NSDictionary dict = new NSDictionary (
-//				"~tags", linkProperties.Tags ? linkProperties.Tags : "",
-//				"~feature", linkProperties.Feature ? linkProperties.Feature : "",
-//				"~alias", linkProperties.Alias ? linkProperties.Alias : "",
-//				"~channel", linkProperties.Channel ? linkProperties.Channel : "",
-//				"~stage", linkProperties.Stage ? linkProperties.Stage : "",
-//				"~duration", linkProperties.MatchDuration ? linkProperties.MatchDuration.ToString () : "",
-//				"control_params", linkProperties.ControlParams ? linkProperties.ControlParams : ""
-//			);
 
 			return ToDictionary (dict);
 		}
@@ -218,24 +195,92 @@ namespace BranchXamarinSDK.iOS
 
 			if (obj != null) {
 
-				if (obj.metadata != null) {
-					foreach (String key in obj.metadata.Keys) {
-						res.AddMetadataKey (key, obj.metadata [key]);
-					}
-				}
-
-				res.Keywords = ToNSObjectArray (obj.keywords);
+                res.Keywords = obj.keywords.ToArray();
 				res.CanonicalIdentifier = obj.canonicalIdentifier != null ? obj.canonicalIdentifier : "";
 				res.CanonicalUrl = obj.canonicalUrl != null ? obj.canonicalUrl : "";
 				res.Title = obj.title != null ? obj.title : "";
 				res.ContentDescription = obj.contentDescription != null ? obj.contentDescription : "";
 				res.ImageUrl = obj.imageUrl != null ? obj.imageUrl : "";
-				res.Type = obj.type != null ? obj.type : "";
-				res.ContentIndexMode = (IOSNativeBranch.ContentIndexMode)obj.contentIndexMode;
+                res.PubliclyIndex = obj.contentIndexMode == 0;
+                res.LocallyIndex = obj.localIndexMode == 0;
 
 				if (obj.expirationDate.HasValue) {
-					res.ExpirationDate = (NSDate)obj.expirationDate.Value;
+                    DateTime reference = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(2001, 1, 1, 0, 0, 0));
+                    res.ExpirationDate = NSDate.FromTimeIntervalSinceReferenceDate((obj.expirationDate.Value - reference).TotalSeconds);
 				}
+
+                if (obj.metadata != null) {
+                    foreach(string key in obj.metadata.Metadata.Keys) {
+                        if (key.Equals("$content_schema")) {
+                            res.ContentMetadata.ContentSchema = obj.metadata.Metadata["$content_schema"].ToString();
+                        }
+                        if (key.Equals("$quantity")) {
+                            res.ContentMetadata.Quantity = Convert.ToDouble(obj.metadata.Metadata["$quantity"].ToString());
+                        }
+                        if (key.Equals("$price")) {
+                            res.ContentMetadata.Price = new NSDecimalNumber(obj.metadata.Metadata["$price"].ToString());
+                        }
+                        if (key.Equals("$currency")) {
+                            res.ContentMetadata.Currency = obj.metadata.Metadata["$currency"].ToString();
+                        }
+                        if (key.Equals("$sku")) {
+                            res.ContentMetadata.Sku = obj.metadata.Metadata["$sku"].ToString();
+                        }
+                        if (key.Equals("$product_name")) {
+                            res.ContentMetadata.ProductName = obj.metadata.Metadata["$product_name"].ToString();
+                        }
+                        if (key.Equals("$product_brand")) {
+                            res.ContentMetadata.ProductBrand = obj.metadata.Metadata["$product_brand"].ToString();
+                        }
+                        if (key.Equals("$product_category")) {
+                            res.ContentMetadata.ProductCategory = obj.metadata.Metadata["$product_category"].ToString();
+                        }
+                        if (key.Equals("$condition")) {
+                            res.ContentMetadata.Condition = obj.metadata.Metadata["$condition"].ToString();
+                        }
+                        if (key.Equals("$product_variant")) {
+                            res.ContentMetadata.ProductVariant = obj.metadata.Metadata["$product_variant"].ToString();
+                        }
+                        if (key.Equals("$rating_average")) {
+                            res.ContentMetadata.RatingAverage = Convert.ToDouble(obj.metadata.Metadata["$rating_average"].ToString());
+                        }
+                        if (key.Equals("$rating_count")) {
+                            res.ContentMetadata.RatingCount = new nint(Convert.ToInt32(obj.metadata.Metadata["$rating_count"].ToString()));
+                        }
+                        if (key.Equals("$rating_max")) {
+                            res.ContentMetadata.RatingMax = Convert.ToDouble(obj.metadata.Metadata["$rating_max"].ToString());
+                        }
+                        if (key.Equals("$address_street")) {
+                            res.ContentMetadata.AddressStreet = obj.metadata.Metadata["$address_street"].ToString();
+                        }
+                        if (key.Equals("$address_city")) {
+                            res.ContentMetadata.AddressCity = obj.metadata.Metadata["$address_city"].ToString();
+                        }
+                        if (key.Equals("$address_region")) {
+                            res.ContentMetadata.AddressRegion = obj.metadata.Metadata["$address_region"].ToString();
+                        }
+                        if (key.Equals("$address_country")) {
+                            res.ContentMetadata.AddressCountry = obj.metadata.Metadata["$address_country"].ToString();
+                        }
+                        if (key.Equals("$address_postal_code")) {
+                            res.ContentMetadata.AddressPostalCode = obj.metadata.Metadata["$address_postal_code"].ToString();
+                        }
+                        if (key.Equals("$latitude")) {
+                            res.ContentMetadata.Latitude = Convert.ToDouble(obj.metadata.Metadata["$latitude"].ToString());
+                        }
+                        if (key.Equals("$longitude")) {
+                            res.ContentMetadata.Longitude = Convert.ToDouble(obj.metadata.Metadata["$longitude"].ToString());
+                        }
+                    }
+
+                    foreach (string val in obj.metadata.GetImageCaptions()) {
+                        res.ContentMetadata.ImageCaptions.Add((NSString)val);
+                    }
+
+                    foreach (string key in obj.metadata.GetCustomMetadata().Keys) {
+                        res.ContentMetadata.CustomMetadata.Add((NSString)key, (NSString)obj.metadata.GetCustomMetadata()[key]);
+                    }
+                }
 			}
 
 			return res;
@@ -262,5 +307,67 @@ namespace BranchXamarinSDK.iOS
 
 			return res;
 		}
+
+        public static void SendEvent(BranchEvent e) {
+            Dictionary<string, object> eventDict = e.ToDictionary();
+
+            if (eventDict == null) {
+                return;
+            }
+
+            IOSNativeBranch.BranchEvent branchEvent = null;
+    
+            if (eventDict.ContainsKey("event_name")) {
+                branchEvent = new IOSNativeBranch.BranchEvent(eventDict["event_name"].ToString());
+            }
+            else {
+                return;
+            }
+    
+            if (eventDict.ContainsKey("transaction_id")) {
+                branchEvent.TransactionID = eventDict ["transaction_id"].ToString();
+            }
+            if (eventDict.ContainsKey("affiliation")) {
+                branchEvent.Affiliation = eventDict ["affiliation"].ToString();
+            }
+            if (eventDict.ContainsKey("coupon")) {
+                branchEvent.Coupon = eventDict ["coupon"].ToString();
+            }
+            if (eventDict.ContainsKey("currency")) {
+                branchEvent.Currency = eventDict ["currency"].ToString();
+            }
+            if (eventDict.ContainsKey("tax")) {
+                branchEvent.Tax = new NSDecimalNumber(eventDict["tax"].ToString());
+            }
+            if (eventDict.ContainsKey("revenue")) {
+                branchEvent.Revenue = new NSDecimalNumber(eventDict["revenue"].ToString());
+            }
+            if (eventDict.ContainsKey("description")) {
+                branchEvent.EventDescription = eventDict ["description"].ToString();
+            }
+            if (eventDict.ContainsKey("shipping")) {
+                branchEvent.Shipping = new NSDecimalNumber(eventDict["shipping"].ToString());
+            }
+            if (eventDict.ContainsKey("search_query")) {
+                branchEvent.SearchQuery = eventDict ["search_query"].ToString();
+            }
+            if (eventDict.ContainsKey("custom_data")) {
+                Dictionary<string, string> dict = eventDict[@"custom_data"] as Dictionary<string, string>;
+
+                foreach(string key in dict.Keys) {
+                    branchEvent.CustomData.Add(new NSString(key), new NSString(dict[key]));
+                }
+            }
+
+            if (eventDict.ContainsKey("content_items")) {
+                List<string> array = eventDict["content_items"] as List<string>;
+
+                foreach (string buoJson in array) {
+                    branchEvent.ContentItems.Add(ToNativeUniversalObject(new BranchUniversalObject(buoJson)));
+                }
+            }
+                
+            branchEvent.LogEvent();
+        }
 	}
 }
