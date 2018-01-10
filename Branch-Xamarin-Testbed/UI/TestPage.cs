@@ -378,11 +378,34 @@ namespace BranchXamarinTestbed
 
 		void GetUrlClicked(object sender, EventArgs e) {
 			universalObject = new BranchUniversalObject();
-			universalObject.canonicalIdentifier = "id12345";
-			universalObject.canonicalUrl = "https://branch.io";
-			universalObject.title = "id12345 title";
-			universalObject.contentDescription = "My awesome piece of content!";
-			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+            universalObject.canonicalIdentifier = "id12345";
+            universalObject.canonicalUrl = "https://branch.io";
+            universalObject.title = "id12345 title";
+            universalObject.contentDescription = "My awesome piece of content!";
+            universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+            universalObject.contentIndexMode = 0;
+            universalObject.localIndexMode = 0;
+            universalObject.expirationDate = new DateTime(2020, 12, 30);
+            universalObject.keywords.Add("keyword01");
+            universalObject.keywords.Add("keyword02");
+
+            universalObject.metadata.contentSchema = BranchContentSchema.COMMERCE_BUSINESS;
+            universalObject.metadata.quantity = 100f;
+            universalObject.metadata.price = 1000f;
+            universalObject.metadata.currencyType = BranchCurrencyType.USD;
+            universalObject.metadata.sku = "my_sku";
+            universalObject.metadata.productName = "my_product_name";
+            universalObject.metadata.productBrand = "my_product_brand";
+            universalObject.metadata.productCategory = BranchProductCategory.BUSINESS_AND_INDUSTRIAL;
+            universalObject.metadata.condition = BranchCondition.EXCELLENT;
+            universalObject.metadata.productVariant = "my_product_variant";
+
+            universalObject.metadata.setAddress("my_street", "my_city", "my_region", "my_comuntry", "my_postal_code");
+            universalObject.metadata.setLocation(40.0f, 40.0f);
+            universalObject.metadata.setRating(4.0f, 5.0f, 10);
+
+            universalObject.metadata.AddImageCaption("https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
+            universalObject.metadata.AddCustomMetadata("foo", "bar");
 
 			// register a view to add to the index
 			Branch.GetInstance().RegisterView(universalObject);
@@ -396,7 +419,7 @@ namespace BranchXamarinTestbed
 				{
 					String key = "param" + count;
 
-					universalObject.metadata.Add(key, str.Trim());
+                    universalObject.metadata.AddCustomMetadata(key, str.Trim());
 					count++;
 				}
 			}
@@ -418,6 +441,21 @@ namespace BranchXamarinTestbed
 			}
 
 			Branch.GetInstance().GetShortURL(this, universalObject, linkProperties);
+
+
+            BranchEvent branchEvent = new BranchEvent("MY_CUSTOM_EVENT");
+            branchEvent.SetAffiliation("my_affilation");
+            branchEvent.SetCoupon("my_coupon");
+            branchEvent.SetCurrency(BranchCurrencyType.USD);
+            branchEvent.SetTax(10.0f);
+            branchEvent.SetRevenue(100.0f);
+            branchEvent.SetShipping(1000.0f);
+            branchEvent.SetDescription("my_description");
+            branchEvent.SetSearchQuery("my_search_query");
+            branchEvent.AddCustomData("custom_data_key01", "custom_data_value01");
+            branchEvent.AddContentItem(universalObject);
+
+            Branch.GetInstance().SendEvent(branchEvent);
 		}
 
 		void SendEmailClicked(object sender, EventArgs e) {

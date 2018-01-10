@@ -47,6 +47,7 @@ namespace BranchXamarinSDK
 
 		public static void GetAutoInstance(Context appContext) {
 			AndroidNativeBranch.GetAutoInstance(appContext);
+            //AndroidNativeBranch.DisableInstantDeepLinking(true);
 		}
 
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
@@ -247,6 +248,15 @@ namespace BranchXamarinSDK
 		#endregion
 
 
+        #region Send Evene methods
+
+        public override void SendEvent(BranchEvent branchEvent) {
+            BranchAndroidUtils.SendEvent(branchEvent, appContext);
+        }
+
+        #endregion
+
+
 		#region Credits methods
 
 		public override void LoadRewards (IBranchRewardsInterface callback) {
@@ -308,13 +318,9 @@ namespace BranchXamarinSDK
 			NativeBranch.SetNetworkTimeout (timeout);
 		}
 
-		public override void AccountForFacebookSDKPreventingAppLaunch () {
-			// We don't have this method in Android version
-		}
-
 		public override void RegisterView (BranchUniversalObject universalObject) {
 			IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
-			resBuo.RegisterView ();
+            NativeBranch.RegisterView(resBuo, null);
 		}
 
 		public override void ListOnSpotlight(BranchUniversalObject universalObject) {

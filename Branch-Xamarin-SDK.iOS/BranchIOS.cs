@@ -207,6 +207,15 @@ namespace BranchXamarinSDK
 		#endregion
 
 
+        #region Send Evene methods
+
+        public override void SendEvent(BranchEvent branchEvent) {
+            BranchIOSUtils.SendEvent(branchEvent);
+        }
+
+        #endregion
+
+
 		#region Credits methods
 
 		public override void LoadRewards (IBranchRewardsInterface callback) {
@@ -244,7 +253,7 @@ namespace BranchXamarinSDK
 		}
 
 		public override int GetCredits () {
-			return (int)NativeBranch.GetCredits();
+            return (int)NativeBranch.Credits();
 		}
 
 		public override int GetCreditsForBucket (string bucket) {
@@ -268,12 +277,10 @@ namespace BranchXamarinSDK
 			NativeBranch.SetNetworkTimeout (timeout);
 		}
 
-		public override void AccountForFacebookSDKPreventingAppLaunch () {
-			NativeBranch.AccountForFacebookSDKPreventingAppLaunch ();
-		}
-
 		public override void RegisterView (BranchUniversalObject universalObject) {
-			BranchIOSUtils.ToNativeUniversalObject (universalObject).RegisterView();
+            BranchEvent e = new BranchEvent(BranchEventType.VIEW_ITEM);
+            e.AddContentItem(universalObject);
+            SendEvent(e);
 		}
 
 		public override void ListOnSpotlight(BranchUniversalObject universalObject) {
@@ -282,7 +289,7 @@ namespace BranchXamarinSDK
 
 		public override void SetRequestMetadata(string key, string value) {
 			if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value)) {
-				NativeBranch.SetRequestMetadataKey(key, value);
+                NativeBranch.SetRequestMetadataKey(key, value);
 			}
 		}
 
