@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- 4.0.1
+  * Updating Branch to Android version 2.15.0 and iOS version 0.22.5
+
 - v4.0.0
   * Updating Branch to Android version 2.14.4 and iOS version 0.22.4
   * Updating BranchUniversalObject
