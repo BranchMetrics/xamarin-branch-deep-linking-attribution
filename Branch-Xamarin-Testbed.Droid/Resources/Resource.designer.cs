@@ -26,6 +26,7 @@ namespace BranchXamarinTestbed.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::BranchXamarinSDK.Droid.Resource.String.library_name = global::BranchXamarinTestbed.Droid.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::BranchXamarinTestbed.Droid.Resource.Attribute.actionBarSize;
 		}
 		
@@ -2998,8 +2999,8 @@ namespace BranchXamarinTestbed.Droid
 			// aapt resource value: 0x7f090021
 			public const int abc_toolbar_collapse_description = 2131296289;
 			
-			// aapt resource value: 0x7f090026
-			public const int app_name = 2131296294;
+			// aapt resource value: 0x7f090027
+			public const int app_name = 2131296295;
 			
 			// aapt resource value: 0x7f090023
 			public const int appbar_scrolling_view_behavior = 2131296291;
@@ -3007,11 +3008,14 @@ namespace BranchXamarinTestbed.Droid
 			// aapt resource value: 0x7f090024
 			public const int bottom_sheet_behavior = 2131296292;
 			
-			// aapt resource value: 0x7f090027
-			public const int branch_key = 2131296295;
+			// aapt resource value: 0x7f090028
+			public const int branch_key = 2131296296;
 			
 			// aapt resource value: 0x7f090025
 			public const int character_counter_pattern = 2131296293;
+			
+			// aapt resource value: 0x7f090026
+			public const int library_name = 2131296294;
 			
 			// aapt resource value: 0x7f090000
 			public const int mr_button_content_description = 2131296256;
