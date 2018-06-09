@@ -334,6 +334,10 @@ namespace BranchXamarinSDK
 			}
 		}
 
+		public override void setTrackingDisabled(bool value) {
+			NativeBranch.DisableTracking(value);
+		}
+
 		#endregion
 	}
 }

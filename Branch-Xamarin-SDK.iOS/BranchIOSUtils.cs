@@ -106,7 +106,7 @@ namespace BranchXamarinSDK.iOS
 			};
 
 			NSObject[] values = new NSObject[] {
-				NSObject.FromObject(linkProperties.Tags != null ? linkProperties.Tags : "" as object),
+                NSObject.FromObject(linkProperties.Tags != null ? NSArray.FromNSObjects(linkProperties.Tags) : null as object),
 				NSObject.FromObject(linkProperties.Feature != null ? linkProperties.Feature : "" as object),
 				NSObject.FromObject(linkProperties.Alias != null ? linkProperties.Alias : "" as object),
 				NSObject.FromObject(linkProperties.Channel != null ? linkProperties.Channel : "" as object),
@@ -144,11 +144,10 @@ namespace BranchXamarinSDK.iOS
 			return dict;
 		}
 
-		public static NSArray ToNSObjectArray (ICollection<string> data) {
-			NSArray res = null;
+		public static NSObject[] ToNSObjectArray (ICollection<string> data) {
+			NSObject[] items = null;
 
 			if (data != null) {
-				NSObject[] items = null;
 				int index = 0;
 				items = new NSObject[data.Count];
 
@@ -157,14 +156,9 @@ namespace BranchXamarinSDK.iOS
 					items[index] = NSObject.FromObject(str as object);
 					++index;
 				}
-
-				res = NSArray.FromObjects(items);
-			}
-			else {
-				res = new NSArray();
 			}
 
-			return res;
+			return items;
 		}
 
 		public static List<CreditHistoryEntry> ToCreditHistoryArray(NSObject[] data) {

@@ -42,10 +42,7 @@
     <Reference Include="Mono.Android" />
     <Reference Include="System.Net.Http" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Branch-Xamarin-Lib.Droid">
-      <HintPath>..\Branch-Xamarin-Lib.Droid\bin\Release\Branch-Xamarin-Lib.Droid.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -69,18 +66,18 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <ItemGroup>
-    <ProjectReference Include="..\Branch-Xamarin-Lib.Droid\Branch-Xamarin-Lib.Droid.csproj">
-      <Project>{9FD07E8E-AD56-4836-8BD2-490EC68F93E8}</Project>
-      <Name>Branch-Xamarin-Lib.Droid</Name>
-    </ProjectReference>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Branch-Xamarin-SDK\Branch-Xamarin-SDK.csproj">
       <Project>{75851B44-995D-499D-9A54-904700FD8730}</Project>
       <Name>Branch-Xamarin-SDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Branch-Xamarin-Lib.Droid\Branch-Xamarin-Lib.Droid.csproj">
+      <Project>{9FD07E8E-AD56-4836-8BD2-490EC68F93E8}</Project>
+      <Name>Branch-Xamarin-Lib.Droid</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>
