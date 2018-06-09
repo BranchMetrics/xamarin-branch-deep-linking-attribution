@@ -40,6 +40,10 @@ namespace BranchXamarinTestbed.Droid
 			// uncomment to try BranchUniversalObject
 			AppBUO appBUO = new AppBUO ();
 			BranchAndroid.Init (this, GetString(Resource.String.branch_key), appBUO);
+
+            // isable tracking of user data
+			BranchAndroid.getInstance().setTrackingDisabled(true);
+
 			LoadApplication (appBUO);
 		}
 

@@ -22,6 +22,10 @@ namespace BranchXamarinTestbed.iOS
 			// uncomment to try BranchUniversalObject
 			AppBUO appBUO = new AppBUO ();
             BranchIOS.Init ("key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f", launchOptions, appBUO);
+
+			// disable tracking of user data
+			//BranchIOS.getInstance().setTrackingDisabled(true);
+
 			LoadApplication (appBUO);
 
 			return base.FinishedLaunching(application, launchOptions);

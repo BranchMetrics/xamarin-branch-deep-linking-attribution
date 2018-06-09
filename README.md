@@ -47,7 +47,8 @@
   + [Referral rewards](#referral-rewards)  
     + [Check a reward balance](#check-a-reward-balance)  
     + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)  
-    + [Get credit history](#get-credit-history)  
+    + [Get credit history](#get-credit-history)
+    + [Disable/Enable of tracking of analytics for the user](#disable-enable- tracking-of-analytics-for-the-user)
 
 6. [**Version Notes**](#5---version-notes)  
   + [Version 3](#version-3)  
@@ -1271,6 +1272,17 @@ The response will return an array that has been parsed from the following JSON:
 1. _1_ - A reward that was added manually
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
+
+### Disable/Enable of tracking of analytics for the user
+
+If you need to comply with a user's request to not be tracked, utilize this field to prevent Branch from sending network requests. By calling the below function, this will persist at the SDK level.
+
+You can choose to call this throughout the lifecycle of the app. Once called, network requests will not be sent from the SDKs. Link generation will continue to work, but will not contain identifying information about the user. In addition, deep linking will continue to work, but will not track analytics for the user.
+
+```
+Branch branch = Branch.GetInstance ();
+branch.setTrackingDisabled(false);
+```
 
 ## 6 - Version Notes
 

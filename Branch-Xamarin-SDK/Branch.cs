@@ -264,6 +264,13 @@ namespace BranchXamarinSDK
 		/// <param name="value">Value.</param>
 		abstract public void SetRequestMetadata(string key, string value);
 
+		/// <summary>
+		/// Disable/enable tracking of analytics for the user.
+        /// </summary>
+		/// <param name="value">Value.</param>
+		abstract public void setTrackingDisabled(bool value);
+
+
 		#endregion
 	}
 }
