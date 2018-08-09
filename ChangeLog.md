@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- 4.0.6
+  * Updating Branch to Android version 2.19.0 and iOS version 0.25.2
+
 - 4.0.5
   * Updating Branch to Android version 2.18.1
   * Adding method for disable/enable of tracking of analytics for the user
