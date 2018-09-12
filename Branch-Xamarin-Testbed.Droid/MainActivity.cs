@@ -26,7 +26,7 @@ namespace BranchXamarinTestbed.Droid
 		DataScheme = "https",
 		DataHost = "fa36.app.link")]
 
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
