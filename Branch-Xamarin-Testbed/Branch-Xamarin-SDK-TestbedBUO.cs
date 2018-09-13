@@ -23,7 +23,7 @@ namespace BranchXamarinTestbed
 		public void InitSessionComplete(BranchUniversalObject buo, BranchLinkProperties blp) {
 			testPage.InitSessionComplete (buo, blp);
 		}
-						
+		
 		public void SessionRequestError (BranchError error)
 		{
 			testPage.SessionRequestError (error);
