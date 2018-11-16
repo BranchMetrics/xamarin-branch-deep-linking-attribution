@@ -1,5 +1,11 @@
 Branch Xamarin SDK change log
 
+- 5.0.1
+  * Updating Branch to Android version 3.0.1 and iOS version 0.25.8
+  * Changing the api.branch.io endpoint to api2.branch.io
+  * Android Min SDK version is now 16.
+  * "+clicked_branch_link" property in BranchUniversalObject is the same now on Android and iOS ("true"/"false")
+
 - 4.0.8
   * Updating Branch to Android version 2.19.5 and iOS version 0.25.6
 
