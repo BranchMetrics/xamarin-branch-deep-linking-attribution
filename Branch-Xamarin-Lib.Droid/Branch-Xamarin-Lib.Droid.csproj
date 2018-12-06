@@ -10,7 +10,6 @@
     <RootNamespace>BranchXamarinLib.Droid</RootNamespace>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>Branch-Xamarin-Lib.Droid</AssemblyName>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidTlsProvider></AndroidTlsProvider>

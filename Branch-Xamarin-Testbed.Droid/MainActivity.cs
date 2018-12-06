@@ -24,7 +24,7 @@ namespace BranchXamarinTestbed.Droid
 	[IntentFilter(new[] { "android.intent.action.VIEW" },
 		Categories = new[] { "android.intent.category.DEFAULT", "android.intent.category.BROWSABLE" },
 		DataScheme = "https",
-		DataHost = "fa36.app.link")]
+		DataHost = "0wpb.app.link")]
 
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{

@@ -27,12 +27,18 @@ namespace BranchXamarinSDK
 			get { return IOSNativeBranch.Branch.GetInstance(branchKey); }
 		}
 
-		#endregion
+        #endregion
 
+        #region Helpers declaration
 
-		#region Initialization
+        private static bool delayInitToCheckForSearchAds = false;
+        private static bool setAppleSearchAdsDebugMode = false;
 
-		private NSDictionary launchOptions = null;
+        #endregion
+
+        #region Initialization
+
+        private NSDictionary launchOptions = null;
 
 		public static void Init(String branchKey, NSDictionary launchOptions, IBranchSessionInterface callback) {
 			if (instance != null) {
@@ -57,7 +63,15 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 				
-			instance.InitSession (callback);
+            if (setAppleSearchAdsDebugMode) {
+                instance.NativeBranch.SetAppleSearchAdsDebugMode();
+            }
+
+            if (delayInitToCheckForSearchAds) {
+                instance.NativeBranch.DelayInitToCheckForSearchAds();
+            }
+
+            instance.InitSession (callback);
 		}
 
 		public static void Init(String branchKey, NSDictionary launchOptions, IBranchBUOSessionInterface callback) {
@@ -83,7 +97,15 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 
-			instance.InitSession (callback);
+            if (setAppleSearchAdsDebugMode) {
+                instance.NativeBranch.SetAppleSearchAdsDebugMode();
+            }
+
+            if (delayInitToCheckForSearchAds) {
+                instance.NativeBranch.DelayInitToCheckForSearchAds();
+            }
+
+            instance.InitSession (callback);
 		}
 
 		protected override void SetDebug() {
@@ -260,12 +282,20 @@ namespace BranchXamarinSDK
 			return (int)NativeBranch.GetCreditsForBucket(bucket);
 		}
 
-		#endregion
+        #endregion
 
 
-		#region Configuration methods
+        #region Configuration methods
 
-		public override void SetRetryInterval (int retryInterval) {
+        public static void DelayInitToCheckForSearchAds() {
+            delayInitToCheckForSearchAds = true;
+        }
+
+        public static void SetAppleSearchAdsDebugMode() {
+            setAppleSearchAdsDebugMode = true;
+        }
+
+        public override void SetRetryInterval (int retryInterval) {
 			NativeBranch.SetRetryInterval (retryInterval);
 		}
 
