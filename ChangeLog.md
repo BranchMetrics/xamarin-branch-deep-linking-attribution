@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- 5.0.3
+  * Updating Branch to Android version 3.0.3 and iOS version 0.25.10
+
 - 5.0.2
   * Adding method SetAppleSearchAdsDebugMode (for ios only)
   * Adding method DelayInitToCheckForSearchAds (for ios only)
