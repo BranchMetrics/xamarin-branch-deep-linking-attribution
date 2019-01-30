@@ -26,8 +26,8 @@ namespace BranchXamarinTestbed.iOS
             //BranchIOS.DelayInitToCheckForSearchAds();
             BranchIOS.Init ("key_live_mglVaBqjIsSpREdbUa6DLahhABarUg0a", launchOptions, appBUO);
 
-			// disable tracking of user data
-			//BranchIOS.getInstance().setTrackingDisabled(true);
+            // disable tracking of user data
+            //BranchIOS.getInstance().SetTrackingDisabled(true);
 
 			LoadApplication (appBUO);
 
