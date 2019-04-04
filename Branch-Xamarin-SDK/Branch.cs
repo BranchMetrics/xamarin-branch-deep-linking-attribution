@@ -268,7 +268,7 @@ namespace BranchXamarinSDK
 		/// Disable/enable tracking of analytics for the user.
         /// </summary>
 		/// <param name="value">Value.</param>
-		abstract public void setTrackingDisabled(bool value);
+		abstract public void SetTrackingDisabled(bool value);
 
 
 		#endregion
