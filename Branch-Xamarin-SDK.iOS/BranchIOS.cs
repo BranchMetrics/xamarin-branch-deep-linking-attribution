@@ -323,7 +323,7 @@ namespace BranchXamarinSDK
 			}
 		}
 
-		public override void setTrackingDisabled(bool value) {
+		public override void SetTrackingDisabled(bool value) {
 			IOSNativeBranch.Branch.TrackingDisabled = value;
         }
 

@@ -42,7 +42,7 @@ namespace BranchXamarinTestbed.Droid
 			BranchAndroid.Init (this, GetString(Resource.String.branch_key), appBUO);
 
             // enable tracking of user data
-            BranchAndroid.getInstance().setTrackingDisabled(false);
+            BranchAndroid.getInstance().SetTrackingDisabled(false);
 
 			LoadApplication (appBUO);
 		}

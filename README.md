@@ -36,9 +36,9 @@
   + [Persistent identities](#persistent-identities)  
   + [Logout](#logout)  
   + [Register custom events](#register-custom-events)
-  + [Tracking User Actions and Events] (#tracking-user-actions-and-events)
+  + [Tracking User Actions and Events](#tracking-user-actions-and-events)
   + [Generating Branch links](#generating-branch-links)  
-  + [Branch Universal Objects and Link Properties](#branch-universal-oObjects-and-link-properties)  
+  + [Branch Universal Objects and Link Properties](#branch-universal-objects-and-link-properties)  
     + [Overview](#overview)  
     + [Creating a link](#creating-a-link)  
     + [Initialize Branch](#initialize-branch)  
@@ -48,7 +48,7 @@
     + [Check a reward balance](#check-a-reward-balance)  
     + [Redeem all or some ofthe reward balance](#redeem-all-or-some-of-the-reward-balance)  
     + [Get credit history](#get-credit-history)
-    + [Disable/Enable of tracking of analytics for the user](#disable-enable- tracking-of-analytics-for-the-user)
+    + [Disable/Enable of tracking of analytics for the user](#disableenable-of-tracking-of-analytics-for-the-user)
 
 6. [**Version Notes**](#5---version-notes)  
   + [Version 3](#version-3)  
@@ -84,8 +84,8 @@ There are four fully-functional demo apps included in this repository: a Xamarin
 
 **Testbed-Xamarin (Native apps)**
 
-- [iOS](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Examples/droid_example)  
-- [Android](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Examples/ios_example)  
+- [iOS](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Examples/ios_example)  
+- [Android](https://github.com/BranchMetrics/xamarin-branch-deep-linking/tree/master/Examples/droid_example)  
 
 **Testbed-XamarinForms (Forms apps)**
 
