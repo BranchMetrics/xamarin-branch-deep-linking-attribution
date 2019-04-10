@@ -58,35 +58,38 @@ namespace BranchXamarinSDK.iOS
 				return new Dictionary<string, object> ();
 			}
 
-			NSString[] keys = new NSString[] {
-				(NSString)"$canonical_identifier",
-				(NSString)"$canonical_url",
-				(NSString)"$og_title",
-				(NSString)"$og_description",
-				(NSString)"$og_image_url",
-				(NSString)"$publicly_indexable",
-                (NSString)"$locally_indexable",
-				(NSString)"$keywords",
-				(NSString)"$exp_date",
-				(NSString)"metadata"
-			};
+            var keywordsList = new List<object>();
+            if (universalObject.Keywords != null) {
+                foreach (string obj in universalObject.Keywords) {
+                    keywordsList.Add(obj);
+                }
+            }
 
-			NSObject[] values = new NSObject[] {
-				NSObject.FromObject(universalObject.CanonicalIdentifier != null ? universalObject.CanonicalIdentifier : "" as object),
-				NSObject.FromObject(universalObject.CanonicalUrl != null ? universalObject.CanonicalUrl : "" as object),
-				NSObject.FromObject(universalObject.Title != null ? universalObject.Title : "" as object),
-				NSObject.FromObject(universalObject.ContentDescription != null ? universalObject.ContentDescription : "" as object),
-				NSObject.FromObject(universalObject.ImageUrl != null ? universalObject.ImageUrl : "" as object),
-                NSObject.FromObject((universalObject.PubliclyIndex ? "0" : "1") as object),
-                NSObject.FromObject((universalObject.LocallyIndex ? "0" : "1") as object),
-                NSObject.FromObject(universalObject.Keywords != null ? NSArray.FromStrings(universalObject.Keywords) : "" as object),
-                NSObject.FromObject(universalObject.ExpirationDate != null ? (universalObject.ExpirationDate.SecondsSinceReferenceDate * 1000).ToString() : "" as object),
-                NSObject.FromObject(universalObject.ContentMetadata != null ? universalObject.ContentMetadata.Dictionary() : "" as object)
-			};
+            NSError error = null;
+            NSData jsonData = NSJsonSerialization.Serialize(universalObject.ContentMetadata.Dictionary(), 0, out error);
 
-			NSDictionary dict = NSDictionary.FromObjectsAndKeys (values, keys);
+            string jsonStr = jsonData.ToString();
+            Dictionary<string, object> metadataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonStr);
 
-			return ToDictionary (dict);
+            var dict = new Dictionary<string, object>();
+            dict.Add("$canonical_identifier", universalObject.CanonicalIdentifier != null ? universalObject.CanonicalIdentifier : "");
+            dict.Add("$canonical_url", universalObject.CanonicalUrl != null ? universalObject.CanonicalUrl : "");
+            dict.Add("$og_title", universalObject.Title != null ? universalObject.Title : "");
+            dict.Add("$og_description", universalObject.ContentDescription != null ? universalObject.ContentDescription : "");
+            dict.Add("$og_image_url", universalObject.ImageUrl != null ? universalObject.ImageUrl : "");
+            dict.Add("$publicly_indexable", universalObject.PubliclyIndex ? "0" : "1");
+            dict.Add("$locally_indexable", universalObject.LocallyIndex ? "0" : "1");
+            dict.Add("$exp_date", universalObject.ExpirationDate != null ? (universalObject.ExpirationDate.SecondsSinceReferenceDate * 1000).ToString() : "");
+
+            if (keywordsList != null) {
+                dict.Add("$keywords", keywordsList);
+            }
+
+            if (metadataDict != null) {
+                dict.Add("metadata", metadataDict);
+            }
+
+            return dict;
 		}
 
 		public static Dictionary<string, object> ToDictionary(IOSNativeBranch.BranchLinkProperties linkProperties) {

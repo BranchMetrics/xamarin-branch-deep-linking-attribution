@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- 5.0.5
+  * Fixing #98 Extracting data embedded via HTTP API
+  * Fixing #97 Purchase events not tracking on iOS with X.Forms
+
 - 5.0.4
   * Updating Branch to iOS version 0.25.11
 
