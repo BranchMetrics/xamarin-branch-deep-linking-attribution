@@ -67,7 +67,9 @@ namespace BranchXamarinSDK
             contentIndexMode = 0;
             localIndexMode = 0;
             keywords = new List<string>();
-            expirationDate = null;
+
+            //NOTE: fix for https://github.com/BranchMetrics/xamarin-branch-deep-linking/issues/97
+            expirationDate = new DateTime(2200, 12, 30);
         }
 
         public void loadFromJson(string json)
@@ -83,6 +85,10 @@ namespace BranchXamarinSDK
         {
             if (data == null)
                 return;
+
+            //NOTE: fix for https://github.com/BranchMetrics/xamarin-branch-deep-linking/issues/97
+            expirationDate = new DateTime(2200, 12, 30);
+
             if (data.ContainsKey("$canonical_identifier") && data["$canonical_identifier"] != null)
             {
                 canonicalIdentifier = data["$canonical_identifier"].ToString();
