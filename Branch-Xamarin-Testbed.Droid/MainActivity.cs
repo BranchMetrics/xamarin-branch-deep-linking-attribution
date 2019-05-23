@@ -33,22 +33,41 @@ namespace BranchXamarinTestbed.Droid
 			base.OnCreate (savedInstanceState);
 			global::Xamarin.Forms.Forms.Init (this, savedInstanceState);
 
-			//App app = new App ();
-			//BranchAndroid.Init (this, GetString(Resource.String.branch_key), app);
-			//LoadApplication (app);
+            var notificationManager = GetSystemService(Context.NotificationService) as
+                 NotificationManager;
 
-			// uncomment to try BranchUniversalObject
-			AppBUO appBUO = new AppBUO ();
+            //App app = new App ();
+            //BranchAndroid.Init (this, GetString(Resource.String.branch_key), app);
+            //LoadApplication (app);
+
+            // uncomment to try BranchUniversalObject
+            AppBUO appBUO = new AppBUO ();
 			BranchAndroid.Init (this, GetString(Resource.String.branch_key), appBUO);
 
             // enable tracking of user data
             BranchAndroid.getInstance().SetTrackingDisabled(false);
 
 			LoadApplication (appBUO);
-		}
+
+
+            Intent intent = new Intent(this, typeof(MainActivity));
+            //intent.SetData(Android.Net.Uri.Parse("https://0wpb.app.link/HXPE6ULICS"));
+            intent.PutExtra("branch", "https://0wpb.app.link/HXPE6ULICS");
+            intent.PutExtra("branch_force_new_session", true);
+            PendingIntent resultPendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.UpdateCurrent);
+
+
+            var notification = new Notification(Resource.Drawable.ic_mr_button_connected_00_dark, "Hello");
+            notification.SetLatestEventInfo(this, "Test", "Test", resultPendingIntent);
+
+            notificationManager.Notify(1, notification);
+        }
 
 		protected override void OnNewIntent(Intent intent) {
-			this.Intent = intent;
+            this.Intent = intent;
+
+            string str = intent.DataString;
+            str += "";
 		}
 	}
 }
