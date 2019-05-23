@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- 5.0.6
+  * Updating Branch to Android version 3.2.0 and iOS version 0.27.0
+  * Fixing empty callback for Androi push notifications
+
 - 5.0.5
   * Fixing #98 Extracting data embedded via HTTP API
   * Fixing #97 Purchase events not tracking on iOS with X.Forms
