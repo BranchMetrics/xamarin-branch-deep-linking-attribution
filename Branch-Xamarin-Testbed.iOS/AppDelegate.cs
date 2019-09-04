@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using UIKit;
 using BranchXamarinSDK;
+using iAd;
 using BranchXamarinTestbed;
 
 namespace BranchXamarinTestbed.iOS
@@ -12,6 +13,9 @@ namespace BranchXamarinTestbed.iOS
 		{
 			global::Xamarin.Forms.Forms.Init ();
 
+            iAd.ADBannerView aDBannerView = new ADBannerView();
+
+            BranchIOS.DelayInitToCheckForSearchAds();
 			// set Debug mode
 			BranchIOS.Debug = true;
 
