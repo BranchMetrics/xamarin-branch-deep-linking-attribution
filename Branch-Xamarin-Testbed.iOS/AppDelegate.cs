@@ -26,7 +26,6 @@ namespace BranchXamarinTestbed.iOS
 			// uncomment to try BranchUniversalObject
 			AppBUO appBUO = new AppBUO ();
 
-            //BranchIOS.SetAppleSearchAdsDebugMode();
             //BranchIOS.DelayInitToCheckForSearchAds();
             BranchIOS.Init ("key_live_mglVaBqjIsSpREdbUa6DLahhABarUg0a", launchOptions, appBUO);
 

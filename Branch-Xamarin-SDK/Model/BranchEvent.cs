@@ -23,6 +23,11 @@ namespace BranchXamarinSDK
             AddData("event_name", branchEventType.ToString());
         }
 
+        // Set the alias
+        public void SetAlias(string alias) {
+            AddData("customer_event_alias", alias);
+        }
+
         // Set the transaction id associated with this event if there in any
         public void SetTransactionID(string transactionID)
         {

@@ -1,5 +1,10 @@
 Branch Xamarin SDK change log
 
+- 5.0.8
+  * Updating Branch to IOS version 0.28.1
+  * Adding method `SetAlias(string alias)` in `BranchEvent` class
+  * Deleting method `setAppleSearchAdsDebugMode()`
+
 - 5.0.7
   * Updating Branch to Android version 4.0.0
 
