@@ -32,7 +32,6 @@ namespace BranchXamarinSDK
         #region Helpers declaration
 
         private static bool delayInitToCheckForSearchAds = false;
-        private static bool setAppleSearchAdsDebugMode = false;
 
         #endregion
 
@@ -63,10 +62,6 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 				
-            if (setAppleSearchAdsDebugMode) {
-                instance.NativeBranch.SetAppleSearchAdsDebugMode();
-            }
-
             if (delayInitToCheckForSearchAds) {
                 instance.NativeBranch.DelayInitToCheckForSearchAds();
             }
@@ -96,10 +91,6 @@ namespace BranchXamarinSDK
 			if (Debug || Runtime.Arch == Arch.SIMULATOR) {
 				instance.SetDebug ();
 			}
-
-            if (setAppleSearchAdsDebugMode) {
-                instance.NativeBranch.SetAppleSearchAdsDebugMode();
-            }
 
             if (delayInitToCheckForSearchAds) {
                 instance.NativeBranch.DelayInitToCheckForSearchAds();
@@ -289,10 +280,6 @@ namespace BranchXamarinSDK
 
         public static void DelayInitToCheckForSearchAds() {
             delayInitToCheckForSearchAds = true;
-        }
-
-        public static void SetAppleSearchAdsDebugMode() {
-            setAppleSearchAdsDebugMode = true;
         }
 
         public override void SetRetryInterval (int retryInterval) {

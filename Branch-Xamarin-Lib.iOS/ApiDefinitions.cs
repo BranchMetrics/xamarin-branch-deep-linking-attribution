@@ -2859,43 +2859,6 @@ namespace IOSNativeBranch {
 		NSObject WeakDelegate { get; set; }
 	}
 
-	// @interface BranchView : NSObject
-	[BaseType(typeof(NSObject))]
-	interface BranchView {
-		// @property (nonatomic, strong) NSString * branchViewID;
-		[Export("branchViewID", ArgumentSemantic.Strong)]
-		string BranchViewID { get; set; }
-
-		// @property (nonatomic, strong) NSString * branchViewAction;
-		[Export("branchViewAction", ArgumentSemantic.Strong)]
-		string BranchViewAction { get; set; }
-
-		// @property (nonatomic) NSInteger numOfUse;
-		[Export("numOfUse")]
-		nint NumOfUse { get; set; }
-
-		// @property (nonatomic, strong) NSString * webUrl;
-		[Export("webUrl", ArgumentSemantic.Strong)]
-		string WebUrl { get; set; }
-
-		// @property (nonatomic, strong) NSString * webHtml;
-		[Export("webHtml", ArgumentSemantic.Strong)]
-		string WebHtml { get; set; }
-
-		// -(id)initWithBranchView:(NSDictionary *)branchViewDict andActionName:(NSString *)actionName;
-		[Export("initWithBranchView:andActionName:")]
-		IntPtr Constructor(NSDictionary branchViewDict, string actionName);
-
-		// -(BOOL)isAvailable;
-		[Export("isAvailable")]
-		//[Verify (MethodToProperty)]
-		bool IsAvailable { get; }
-
-		// -(void)updateUsageCount;
-		[Export("updateUsageCount")]
-		void UpdateUsageCount();
-	}
-
 	// @protocol BranchViewControllerDelegate <NSObject>
 	[Protocol, Model]
 	[BaseType(typeof(NSObject))]
@@ -2919,24 +2882,6 @@ namespace IOSNativeBranch {
 		[Abstract]
 		[Export("branchViewErrorCode:message:actionName:withID:")]
 		void BranchViewErrorCode(nint errorCode, string errorMsg, string actionName, string branchViewID);
-	}
-
-	// @interface BranchViewHandler : NSObject
-	[BaseType(typeof(NSObject))]
-	interface BranchViewHandler {
-		// @property (assign, nonatomic) id<BranchViewControllerDelegate> branchViewCallback;
-		[Export("branchViewCallback", ArgumentSemantic.Assign)]
-		BranchViewControllerDelegate BranchViewCallback { get; set; }
-
-		// +(BranchViewHandler *)getInstance;
-		[Static]
-		[Export("getInstance")]
-		//[Verify (MethodToProperty)]
-		BranchViewHandler Instance { get; }
-
-		// -(BOOL)showBranchView:(NSString *)actionName withBranchViewDictionary:(NSDictionary *)branchViewDict andWithDelegate:(id)callback;
-		[Export("showBranchView:withBranchViewDictionary:andWithDelegate:")]
-		bool ShowBranchView(string actionName, NSDictionary branchViewDict, NSObject callback);
 	}
 
 	// @interface Branch (UIViewController)
@@ -3285,10 +3230,6 @@ namespace IOSNativeBranch {
 		// -(void)delayInitToCheckForSearchAds;
 		[Export("delayInitToCheckForSearchAds")]
 		void DelayInitToCheckForSearchAds();
-
-		// -(void)setAppleSearchAdsDebugMode;
-		[Export("setAppleSearchAdsDebugMode")]
-		void SetAppleSearchAdsDebugMode();
 
 		// -(void)setRetryInterval:(NSTimeInterval)retryInterval;
 		[Export("setRetryInterval:")]
