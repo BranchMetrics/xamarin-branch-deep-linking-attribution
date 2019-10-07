@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- 5.0.9
+  * Updating Branch to Android version 4.1.0 and iOS version 0.29.1
+
 - 5.0.8
   * Updating Branch to IOS version 0.28.1
   * Adding method `SetAlias(string alias)` in `BranchEvent` class
