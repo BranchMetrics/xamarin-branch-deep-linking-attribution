@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- 6.0.0
+  * Updating Branch to Android version 4.2.0 and iOS version 0.30.1
+  * Moving Xamarin SDK from PCL to .net standard 1.2
+
 - 5.0.9
   * Updating Branch to Android version 4.1.0 and iOS version 0.29.1
 

@@ -54,8 +54,8 @@ namespace Branch_Testbed_iOS
 			};
 
 			NSObject[] values = {NSObject.FromObject(0)};
-			if (buo.metadata.ContainsKey("+is_first_session")) {
-				values[0] = NSObject.FromObject(buo.metadata["+is_first_session"]);
+			if (buo.metadata.Metadata.ContainsKey("+is_first_session")) {
+				values[0] = NSObject.FromObject(buo.metadata.Metadata["+is_first_session"]);
 			}
 
 			NSDictionary nsData = NSDictionary.FromObjectsAndKeys(values, keys);

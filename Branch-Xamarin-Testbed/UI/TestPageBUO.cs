@@ -39,7 +39,7 @@ namespace BranchXamarinTestbed
 		string feature = "";
 		bool IsLoggedIn = false;
 
-		Color entryTextColor = Color.Black;
+		Color entryTextColor = Color.Gray;
 
 		BranchUniversalObject universalObject = null;
 		BranchLinkProperties linkProperties = null;
@@ -48,10 +48,6 @@ namespace BranchXamarinTestbed
 		{
 			BackgroundColor = Color.FromHex ("C0C0C0");
 			NavigationPage.SetHasNavigationBar (this, false);
-
-			if (Device.OS == TargetPlatform.Android) {
-				entryTextColor = Color.White;
-			}
 
 			var SLabel = new Label {
 				TextColor = Color.Blue,
@@ -266,7 +262,7 @@ namespace BranchXamarinTestbed
 				}
 			};
 			var frame1 = new Frame {
-				OutlineColor = Color.Black,
+                BorderColor = Color.Black,
 				Padding = new Thickness (5, 5, 5, 5),
 				Content = stack1
 			};
@@ -280,7 +276,7 @@ namespace BranchXamarinTestbed
 				}
 			};
 			var frame2 = new Frame {
-				OutlineColor = Color.Black,
+                BorderColor = Color.Black,
 				Padding = new Thickness (5, 5, 5, 5),
 				Content = stack2
 			};
@@ -303,7 +299,7 @@ namespace BranchXamarinTestbed
 				}
 			};
 			var frame3 = new Frame {
-				OutlineColor = Color.Black,
+                BorderColor = Color.Black,
 				Padding = new Thickness (5, 5, 5, 5),
 				Content = stack3
 			};
@@ -318,7 +314,7 @@ namespace BranchXamarinTestbed
 			};
 
 			var frame5 = new Frame {
-				OutlineColor = Color.Black,
+                BorderColor = Color.Black,
 				Padding = new Thickness (5, 5, 5, 5),
 				Content = stack5
 			};
@@ -331,7 +327,7 @@ namespace BranchXamarinTestbed
 				}
 			};
 			var frame6 = new Frame {
-				OutlineColor = Color.Black,
+                BorderColor = Color.Black,
 				Padding = new Thickness (5, 5, 5, 5),
 				Content = stack6
 			};
@@ -348,7 +344,7 @@ namespace BranchXamarinTestbed
 				}
 			};
 			var frame8 = new Frame {
-				OutlineColor = Color.Black,
+                BorderColor = Color.Black,
 				Padding = new Thickness (5, 5, 5, 5),
 				Content = stack8
 			};

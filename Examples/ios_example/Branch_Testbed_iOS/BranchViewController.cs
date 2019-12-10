@@ -82,7 +82,7 @@ namespace Branch_Testbed_iOS
 				universalObject.title = "id12345 title";
 				universalObject.contentDescription = "My awesome piece of content!";
 				universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-				universalObject.metadata.Add("foo", "bar");
+				universalObject.metadata.Metadata.Add("foo", "bar");
 
 				linkProperties = new BranchLinkProperties();
 				linkProperties.tags.Add("tag1");
@@ -148,7 +148,7 @@ namespace Branch_Testbed_iOS
 					universalObject.title = "id12345 title";
 					universalObject.contentDescription = "My awesome piece of content!";
 					universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-					universalObject.metadata.Add("foo", "bar");
+					universalObject.metadata.Metadata.Add("foo", "bar");
 				}
 
 				if (linkProperties == null)
@@ -203,7 +203,7 @@ namespace Branch_Testbed_iOS
 		{
 			if (universalObject != null)
 			{
-				universalObject.metadata.Add("deeplink_text", "This link was generated for Spotlight registration");
+				universalObject.metadata.Metadata.Add("deeplink_text", "This link was generated for Spotlight registration");
 				BranchIOS.GetInstance().ListOnSpotlight(universalObject);
 			}
 		}

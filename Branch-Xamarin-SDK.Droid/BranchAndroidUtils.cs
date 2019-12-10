@@ -32,13 +32,6 @@ namespace BranchXamarinSDK.Droid
 				}
 			}
 
-			var metadataDict = new Dictionary<string, object>();
-			if (data.Metadata != null) {
-				foreach(string key in data.Metadata.Keys) {
-					metadataDict.Add(key, data.Metadata[key]);
-				}
-			}
-
 			var dict = new Dictionary<string, object>();
 			dict.Add("$canonical_identifier", data.CanonicalIdentifier == null ? "" : data.CanonicalIdentifier );
 			dict.Add("$canonical_url", data.CanonicalUrl == null ? "" : data.CanonicalUrl );

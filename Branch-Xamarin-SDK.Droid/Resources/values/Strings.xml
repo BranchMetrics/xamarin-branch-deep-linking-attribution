@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<string name="library_name">Branch-Xamarin-SDK.Droid</string>
+    <string name="app_name">Branch_Xamarin_SDK.Droid</string>
 </resources>
