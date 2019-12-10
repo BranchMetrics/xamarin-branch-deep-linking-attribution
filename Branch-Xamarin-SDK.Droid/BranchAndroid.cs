@@ -48,7 +48,7 @@ namespace BranchXamarinSDK
 		public static void GetAutoInstance(Context appContext) {
 			AndroidNativeBranch.GetAutoInstance(appContext);
             //AndroidNativeBranch.DisableInstantDeepLinking(true);
-		}
+        }
 
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
 
@@ -81,8 +81,10 @@ namespace BranchXamarinSDK
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
-			getInstance().InitSession(callback);
-		}
+
+            // we call IniSession in BranchAndroidLifeCycleHandler.OnActivityStarted
+            //getInstance().InitSession(callback);
+        }
 
 		public static void Init(Application app, String branchKey, IBranchBUOSessionInterface callback) {
 
@@ -105,12 +107,15 @@ namespace BranchXamarinSDK
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
-			getInstance().InitSession(callback);
+
+            // we call IniSession in BranchAndroidLifeCycleHandler.OnActivityStarted
+            //getInstance().InitSession(callback);
 		}
 
 
 		protected override void SetDebug() {
-			NativeBranch.SetDebug ();
+            AndroidNativeBranch.EnableDebugMode();
+            //NativeBranch.SetDebug ();
 		}
 
 		#endregion
@@ -123,16 +128,18 @@ namespace BranchXamarinSDK
 			BranchSessionListener obj = new BranchSessionListener (callback);
 			callbacksList.Add (obj as Object);
 
-			NativeBranch.InitSession (obj);
-		}
+            //NativeBranch.InitSession (obj);
+            NativeBranch.ReInitSession(CurrActivity, obj);
+        }
 
 		public override void InitSession (IBranchBUOSessionInterface callback) {
 			base.InitSession (callback);
 			BranchBUOSessionListener obj = new BranchBUOSessionListener (callback);
 			callbacksList.Add (obj as Object);
 
-			NativeBranch.InitSession (obj);
-		}
+            //NativeBranch.InitSession (obj);
+            NativeBranch.ReInitSession(CurrActivity, obj);
+        }
 
 		public override Dictionary<String, object> GetLastReferringParams () {
 			return BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams);

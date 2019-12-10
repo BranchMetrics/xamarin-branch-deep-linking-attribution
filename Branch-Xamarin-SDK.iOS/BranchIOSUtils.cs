@@ -202,7 +202,7 @@ namespace BranchXamarinSDK.iOS
                 res.LocallyIndex = obj.localIndexMode == 0;
 
 				if (obj.expirationDate.HasValue) {
-                    DateTime reference = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(2001, 1, 1, 0, 0, 0));
+                    DateTime reference = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2001, 1, 1, 0, 0, 0), TimeZoneInfo.Local);
                     res.ExpirationDate = NSDate.FromTimeIntervalSinceReferenceDate((obj.expirationDate.Value - reference).TotalSeconds);
 				}
 
