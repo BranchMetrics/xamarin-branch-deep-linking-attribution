@@ -46,7 +46,7 @@ namespace BranchXamarinSDK
 		public Activity CurrActivity { get; set; }
 
 		public static void GetAutoInstance(Context appContext) {
-			AndroidNativeBranch.GetAutoInstance(appContext);
+            AndroidNativeBranch.GetAutoInstance(appContext);
             //AndroidNativeBranch.DisableInstantDeepLinking(true);
         }
 
