@@ -7,7 +7,7 @@
     <ProjectGuid>{7057987E-4B0F-4D43-BEEB-65C13A57AAD0}</ProjectGuid>
     <TemplateGuid>{b6f3ff35-79b2-4f25-a2fc-60a7cf61013b}</TemplateGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>NativeLibrary</RootNamespace>
+    <RootNamespace>Branch-Xamarin-Lib.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>Branch-Xamarin-Lib.iOS</AssemblyName>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -23,7 +23,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -49,7 +48,8 @@
   <ItemGroup>
     <NativeReference Include="Branch.a">
       <Kind>Static</Kind>
-      <SmartLink>False</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <Frameworks>SystemConfiguration</Frameworks>
     </NativeReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />

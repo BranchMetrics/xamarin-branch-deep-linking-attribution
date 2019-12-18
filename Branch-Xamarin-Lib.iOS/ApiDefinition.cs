@@ -1,6 +1,6 @@
 using System;
-//using Branch;
 using Foundation;
+using CoreSpotlight;
 using ObjCRuntime;
 using UIKit;
 
@@ -26,7 +26,8 @@ namespace IOSNativeBranch {
 
 	// @interface BNCServerResponse : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BNCServerResponse {
+	interface BNCServerResponse
+	{
 		// @property (nonatomic, strong) NSNumber * statusCode;
 		[Export("statusCode", ArgumentSemantic.Strong)]
 		NSNumber StatusCode { get; set; }
@@ -38,7 +39,8 @@ namespace IOSNativeBranch {
 
 	// @interface BNCPreferenceHelper : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BNCPreferenceHelper {
+	interface BNCPreferenceHelper
+	{
 		// @property (nonatomic, strong) NSString * lastRunBranchKey;
 		[Export("lastRunBranchKey", ArgumentSemantic.Strong)]
 		string LastRunBranchKey { get; set; }
@@ -95,10 +97,6 @@ namespace IOSNativeBranch {
 		[Export("isDebug")]
 		bool IsDebug { get; set; }
 
-		// @property (assign, nonatomic) BOOL shouldWaitForInit;
-		[Export("shouldWaitForInit")]
-		bool ShouldWaitForInit { get; set; }
-
 		// @property (assign, nonatomic) BOOL checkedFacebookAppLinks;
 		[Export("checkedFacebookAppLinks")]
 		bool CheckedFacebookAppLinks { get; set; }
@@ -127,10 +125,6 @@ namespace IOSNativeBranch {
 		[Export("savedAnalyticsData", ArgumentSemantic.Strong)]
 		NSMutableDictionary SavedAnalyticsData { get; set; }
 
-		// @property (assign, nonatomic) NSInteger installRequestDelay;
-		[Export("installRequestDelay")]
-		nint InstallRequestDelay { get; set; }
-
 		// @property (nonatomic, strong) NSDictionary * appleSearchAdDetails;
 		[Export("appleSearchAdDetails", ArgumentSemantic.Strong)]
 		NSDictionary AppleSearchAdDetails { get; set; }
@@ -155,6 +149,10 @@ namespace IOSNativeBranch {
 		[Export("branchAPIURL", ArgumentSemantic.Strong)]
 		string BranchAPIURL { get; set; }
 
+		// @property (readwrite, nonatomic, strong) NSString * branchBlacklistURL;
+		[Export("branchBlacklistURL", ArgumentSemantic.Strong)]
+		string BranchBlacklistURL { get; set; }
+
 		// @property (assign, atomic) BOOL limitFacebookTracking;
 		[Export("limitFacebookTracking")]
 		bool LimitFacebookTracking { get; set; }
@@ -162,6 +160,10 @@ namespace IOSNativeBranch {
 		// @property (atomic, strong) NSDate * previousAppBuildDate;
 		[Export("previousAppBuildDate", ArgumentSemantic.Strong)]
 		NSDate PreviousAppBuildDate { get; set; }
+
+		// @property (readwrite, nonatomic, strong) NSURL * faceBookAppLink;
+		[Export("faceBookAppLink", ArgumentSemantic.Strong)]
+		NSUrl FaceBookAppLink { get; set; }
 
 		// @property (atomic, strong) NSArray<NSString *> * URLBlackList;
 		[Export("URLBlackList", ArgumentSemantic.Strong)]
@@ -186,12 +188,12 @@ namespace IOSNativeBranch {
 		// +(BNCPreferenceHelper *)preferenceHelper;
 		[Static]
 		[Export("preferenceHelper")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		BNCPreferenceHelper PreferenceHelper { get; }
 
 		// -(NSString *)getAPIBaseURL;
 		[Export("getAPIBaseURL")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		string APIBaseURL { get; }
 
 		// -(NSString *)getAPIURL:(NSString *)endpoint;
@@ -212,7 +214,7 @@ namespace IOSNativeBranch {
 
 		// -(id)getBranchUniversalLinkDomains;
 		[Export("getBranchUniversalLinkDomains")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		NSObject BranchUniversalLinkDomains { get; }
 
 		// -(void)setCreditCount:(NSInteger)count;
@@ -229,33 +231,25 @@ namespace IOSNativeBranch {
 
 		// -(NSDictionary *)getCreditDictionary;
 		[Export("getCreditDictionary")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		NSDictionary CreditDictionary { get; }
 
 		// -(NSInteger)getCreditCount;
 		[Export("getCreditCount")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		nint CreditCount { get; }
 
 		// -(NSInteger)getCreditCountForBucket:(NSString *)bucket;
 		[Export("getCreditCountForBucket:")]
 		nint GetCreditCountForBucket(string bucket);
 
-		// -(void)updateBranchViewCount:(NSString *)branchViewID;
-		[Export("updateBranchViewCount:")]
-		void UpdateBranchViewCount(string branchViewID);
-
-		// -(NSInteger)getBranchViewCount:(NSString *)branchViewID;
-		[Export("getBranchViewCount:")]
-		nint GetBranchViewCount(string branchViewID);
-
 		// -(void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value;
 		[Export("setRequestMetadataKey:value:")]
-		void SetRequestMetadataKey(string key, string value);
+		void SetRequestMetadataKey(string key, NSObject value);
 
 		// -(NSMutableDictionary *)requestMetadataDictionary;
 		[Export("requestMetadataDictionary")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		NSMutableDictionary RequestMetadataDictionary { get; }
 
 		// -(void)addInstrumentationDictionaryKey:(NSString *)key value:(NSString *)value;
@@ -264,7 +258,7 @@ namespace IOSNativeBranch {
 
 		// -(NSMutableDictionary *)instrumentationDictionary;
 		[Export("instrumentationDictionary")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		NSMutableDictionary InstrumentationDictionary { get; }
 
 		// -(void)clearInstrumentationDictionary;
@@ -281,12 +275,12 @@ namespace IOSNativeBranch {
 
 		// -(NSMutableDictionary *)getBranchAnalyticsData;
 		[Export("getBranchAnalyticsData")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		NSMutableDictionary BranchAnalyticsData { get; }
 
 		// -(NSDictionary *)getContentAnalyticsManifest;
 		[Export("getContentAnalyticsManifest")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		NSDictionary ContentAnalyticsManifest { get; }
 
 		// -(void)saveContentAnalyticsManifest:(NSDictionary *)cdManifest;
@@ -300,12 +294,27 @@ namespace IOSNativeBranch {
 		// -(void)synchronize;
 		[Export("synchronize")]
 		void Synchronize();
+
+		// +(void)clearAll;
+		[Static]
+		[Export("clearAll")]
+		void ClearAll();
 	}
 
 	// @protocol BNCNetworkOperationProtocol <NSObject>
-	[Protocol, Model]
+	/*
+	  Check whether adding [Model] to this declaration is appropriate.
+	  [Model] is used to generate a C# class that implements this protocol,
+	  and might be useful for protocols that consumers are supposed to implement,
+	  since consumers can subclass the generated class instead of implementing
+	  the generated interface. If consumers are not supposed to implement this
+	  protocol, then [Model] is redundant and will generate code that will never
+	  be used.
+	*/
+	[Protocol]
 	[BaseType(typeof(NSObject))]
-	interface BNCNetworkOperationProtocol {
+	interface BNCNetworkOperationProtocol
+	{
 		// @required @property (readonly, copy) NSURLRequest * request;
 		[Abstract]
 		[Export("request", ArgumentSemantic.Copy)]
@@ -352,13 +361,23 @@ namespace IOSNativeBranch {
 	}
 
 	// @protocol BNCNetworkServiceProtocol <NSObject>
-	[Protocol, Model]
+	/*
+	  Check whether adding [Model] to this declaration is appropriate.
+	  [Model] is used to generate a C# class that implements this protocol,
+	  and might be useful for protocols that consumers are supposed to implement,
+	  since consumers can subclass the generated class instead of implementing
+	  the generated interface. If consumers are not supposed to implement this
+	  protocol, then [Model] is redundant and will generate code that will never
+	  be used.
+	*/
+	[Protocol]
 	[BaseType(typeof(NSObject))]
-	interface BNCNetworkServiceProtocol {
+	interface BNCNetworkServiceProtocol
+	{
 		// @required +(id<BNCNetworkServiceProtocol>)new;
 		[Static, Abstract]
 		[Export("new")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		BNCNetworkServiceProtocol New { get; }
 
 		// @optional -(void)cancelAllOperations;
@@ -377,58 +396,59 @@ namespace IOSNativeBranch {
 
 		// @optional -(NSError *)pinSessionToPublicSecKeyRefs:(NSArray *)publicKeys;
 		[Export("pinSessionToPublicSecKeyRefs:")]
-		//[Verify (StronglyTypedNSArray)]
+		//[Verify(StronglyTypedNSArray)]
 		NSError PinSessionToPublicSecKeyRefs(NSObject[] publicKeys);
 	}
 
-	//// typedef void (^BNCServerCallback)(BNCServerResponse *, NSError *);
-	//delegate void BNCServerCallback (BNCServerResponse arg0, NSError arg1);
+	// typedef void (^BNCServerCallback)(BNCServerResponse *, NSError *);
+	delegate void BNCServerCallback(BNCServerResponse arg0, NSError arg1);
 
-	//// @interface BNCServerInterface : NSObject
-	//[BaseType (typeof(NSObject))]
-	//interface BNCServerInterface
-	//{
-	//	// -(void)getRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key callback:(BNCServerCallback)callback;
-	//	[Export ("getRequest:url:key:callback:")]
-	//	void GetRequest (NSDictionary @params, string url, string key, BNCServerCallback callback);
+	// @interface BNCServerInterface : NSObject
+	[BaseType(typeof(NSObject))]
+	interface BNCServerInterface
+	{
+		// -(void)getRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key callback:(BNCServerCallback)callback;
+		[Export("getRequest:url:key:callback:")]
+		void GetRequest(NSDictionary @params, string url, string key, BNCServerCallback callback);
 
-	//	// -(BNCServerResponse *)postRequestSynchronous:(NSDictionary *)post url:(NSString *)url key:(NSString *)key;
-	//	[Export ("postRequestSynchronous:url:key:")]
-	//	BNCServerResponse PostRequestSynchronous (NSDictionary post, string url, string key);
+		// -(BNCServerResponse *)postRequestSynchronous:(NSDictionary *)post url:(NSString *)url key:(NSString *)key;
+		[Export("postRequestSynchronous:url:key:")]
+		BNCServerResponse PostRequestSynchronous(NSDictionary post, string url, string key);
 
-	//	// -(void)postRequest:(NSDictionary *)post url:(NSString *)url key:(NSString *)key callback:(BNCServerCallback)callback;
-	//	[Export ("postRequest:url:key:callback:")]
-	//	void PostRequest (NSDictionary post, string url, string key, BNCServerCallback callback);
+		// -(void)postRequest:(NSDictionary *)post url:(NSString *)url key:(NSString *)key callback:(BNCServerCallback)callback;
+		[Export("postRequest:url:key:callback:")]
+		void PostRequest(NSDictionary post, string url, string key, BNCServerCallback callback);
 
-	//	// -(void)genericHTTPRequest:(NSURLRequest *)request retryNumber:(NSInteger)retryNumber callback:(BNCServerCallback)callback retryHandler:(NSURLRequest *(^)(NSInteger))retryHandler;
-	//	[Export ("genericHTTPRequest:retryNumber:callback:retryHandler:")]
-	//	void GenericHTTPRequest (NSUrlRequest request, nint retryNumber, BNCServerCallback callback, Func<nint, NSURLRequest> retryHandler);
+		//// -(void)genericHTTPRequest:(NSURLRequest *)request retryNumber:(NSInteger)retryNumber callback:(BNCServerCallback)callback retryHandler:(NSURLRequest *(^)(NSInteger))retryHandler;
+		//[Export("genericHTTPRequest:retryNumber:callback:retryHandler:")]
+		//void GenericHTTPRequest(NSUrlRequest request, nint retryNumber, BNCServerCallback callback, Func<nint, NSURLRequest> retryHandler);
 
-	//	// @property (nonatomic, strong) BNCPreferenceHelper * preferenceHelper;
-	//	[Export ("preferenceHelper", ArgumentSemantic.Strong)]
-	//	BNCPreferenceHelper PreferenceHelper { get; set; }
-	//}
+		// @property (nonatomic, strong) BNCPreferenceHelper * preferenceHelper;
+		[Export("preferenceHelper", ArgumentSemantic.Strong)]
+		BNCPreferenceHelper PreferenceHelper { get; set; }
+	}
 
-	// //@interface BNCServerRequest : NSObject <NSCoding>
-	//[BaseType (typeof(NSObject))]
-	//interface BNCServerRequest : INSCoding
-	//{
-	//	// -(void)makeRequest:(BNCServerInterface *)serverInterface key:(NSString *)key callback:(BNCServerCallback)callback;
-	//	[Export ("makeRequest:key:callback:")]
-	//	void MakeRequest (BNCServerInterface serverInterface, string key, BNCServerCallback callback);
+	// @interface BNCServerRequest : NSObject <NSSecureCoding>
+	[BaseType(typeof(NSObject))]
+	interface BNCServerRequest : INSSecureCoding
+	{
+		// -(void)makeRequest:(BNCServerInterface *)serverInterface key:(NSString *)key callback:(BNCServerCallback)callback;
+		[Export("makeRequest:key:callback:")]
+		void MakeRequest(BNCServerInterface serverInterface, string key, BNCServerCallback callback);
 
-	//	// -(void)processResponse:(BNCServerResponse *)response error:(NSError *)error;
-	//	[Export ("processResponse:error:")]
-	//	void ProcessResponse (BNCServerResponse response, NSError error);
+		// -(void)processResponse:(BNCServerResponse *)response error:(NSError *)error;
+		[Export("processResponse:error:")]
+		void ProcessResponse(BNCServerResponse response, NSError error);
 
-	//	// -(void)safeSetValue:(NSObject *)value forKey:(NSString *)key onDict:(NSMutableDictionary *)dict;
-	//	[Export ("safeSetValue:forKey:onDict:")]
-	//	void SafeSetValue (NSObject value, string key, NSMutableDictionary dict);
-	//}
+		// -(void)safeSetValue:(NSObject *)value forKey:(NSString *)key onDict:(NSMutableDictionary *)dict;
+		[Export("safeSetValue:forKey:onDict:")]
+		void SafeSetValue(NSObject value, string key, NSMutableDictionary dict);
+	}
 
 	//[Static]
-	//[Verify (ConstantsInterfaceAssociation)]
-	partial interface Constants {
+	//[Verify(ConstantsInterfaceAssociation)]
+	partial interface Constants
+	{
 		// extern BNCProductCategory _Nonnull BNCProductCategoryAnimalSupplies;
 		[Field("BNCProductCategoryAnimalSupplies", "__Internal")]
 		NSString BNCProductCategoryAnimalSupplies { get; }
@@ -1228,7 +1248,8 @@ namespace IOSNativeBranch {
 
 	// @interface BNCProduct : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BNCProduct {
+	interface BNCProduct
+	{
 		// @property (nonatomic, strong) NSString * _Nullable sku;
 		[NullAllowed, Export("sku", ArgumentSemantic.Strong)]
 		string Sku { get; set; }
@@ -1260,7 +1281,8 @@ namespace IOSNativeBranch {
 
 	// @interface BNCCommerceEvent : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BNCCommerceEvent {
+	interface BNCCommerceEvent
+	{
 		// @property (nonatomic, strong) NSDecimalNumber * _Nullable revenue;
 		[NullAllowed, Export("revenue", ArgumentSemantic.Strong)]
 		NSDecimalNumber Revenue { get; set; }
@@ -1294,18 +1316,19 @@ namespace IOSNativeBranch {
 		BNCProduct[] Products { get; set; }
 	}
 
-	//// @interface BranchCommerceEventRequest : BNCServerRequest <NSCoding>
-	//[BaseType (typeof(BNCServerRequest))]
-	//interface BranchCommerceEventRequest : INSCoding
-	//{
-	//	// -(instancetype _Nonnull)initWithCommerceEvent:(BNCCommerceEvent * _Nonnull)commerceEvent metadata:(NSDictionary * _Nullable)dictionary completion:(void (^ _Nullable)(NSDictionary * _Nullable, NSError * _Nullable))callBack;
-	//	[Export ("initWithCommerceEvent:metadata:completion:")]
-	//	IntPtr Constructor (BNCCommerceEvent commerceEvent, [NullAllowed] NSDictionary dictionary, [NullAllowed] Action<NSDictionary, NSError> callBack);
-	//}
+	// @interface BranchCommerceEventRequest : BNCServerRequest <NSSecureCoding>
+	[BaseType(typeof(BNCServerRequest))]
+	interface BranchCommerceEventRequest : INSSecureCoding
+	{
+		// -(instancetype _Nonnull)initWithCommerceEvent:(BNCCommerceEvent * _Nonnull)commerceEvent metadata:(NSDictionary * _Nullable)dictionary completion:(void (^ _Nullable)(NSDictionary * _Nullable, NSError * _Nullable))callBack;
+		[Export("initWithCommerceEvent:metadata:completion:")]
+		IntPtr Constructor(BNCCommerceEvent commerceEvent, [NullAllowed] NSDictionary dictionary, [NullAllowed] Action<NSDictionary, NSError> callBack);
+	}
 
 	//[Static]
-	//[Verify (ConstantsInterfaceAssociation)]
-	partial interface Constants {
+	//[Verify(ConstantsInterfaceAssociation)]
+	partial interface Constants
+	{
 		// extern NSString *const _Nonnull BNC_SDK_VERSION;
 		[Field("BNC_SDK_VERSION", "__Internal")]
 		NSString BNC_SDK_VERSION { get; }
@@ -1314,9 +1337,9 @@ namespace IOSNativeBranch {
 		[Field("BNC_API_BASE_URL", "__Internal")]
 		NSString BNC_API_BASE_URL { get; }
 
-		//// extern const BOOL BNC_API_PINNED;
-		//[Field("BNC_API_PINNED", "__Internal")]
-		//bool BNC_API_PINNED { get; }
+		// extern const BOOL BNC_API_PINNED;
+		[Field("BNC_API_PINNED", "__Internal")]
+		bool BNC_API_PINNED { get; }
 
 		// extern NSString *const _Nonnull BNC_API_VERSION;
 		[Field("BNC_API_VERSION", "__Internal")]
@@ -1325,16 +1348,20 @@ namespace IOSNativeBranch {
 		// extern NSString *const _Nonnull BNC_LINK_URL;
 		[Field("BNC_LINK_URL", "__Internal")]
 		NSString BNC_LINK_URL { get; }
-
-		// extern NSString *const _Nonnull BNCErrorDomain;
-		[Field("BNCErrorDomain", "__Internal")]
-		NSString BNCErrorDomain { get; }
 	}
 
 	// @interface Branch (NSError)
-	[Category]
+	//[Category]
 	[BaseType(typeof(NSError))]
-	interface NSError_Branch {
+    [Protocol]
+	interface NSError_Branch
+	{
+		// +(NSString * _Nonnull)bncErrorDomain;
+		[Static]
+		[Export("bncErrorDomain")]
+		//[Verify(MethodToProperty)]
+		string BncErrorDomain { get; }
+
 		// +(NSError * _Nonnull)branchErrorWithCode:(BNCErrorCode)errorCode;
 		[Static]
 		[Export("branchErrorWithCode:")]
@@ -1351,16 +1378,17 @@ namespace IOSNativeBranch {
 		NSError BranchErrorWithCode(BNCErrorCode errorCode, [NullAllowed] string message);
 	}
 
-	// @interface BNCLinkData : NSObject
+	// @interface BNCLinkData : NSObject <NSSecureCoding>
 	[BaseType(typeof(NSObject))]
-	interface BNCLinkData {
+	interface BNCLinkData : INSSecureCoding
+	{
 		// @property (nonatomic, strong) NSMutableDictionary * data;
 		[Export("data", ArgumentSemantic.Strong)]
 		NSMutableDictionary Data { get; set; }
 
 		// -(void)setupTags:(NSArray *)tags;
 		[Export("setupTags:")]
-		//[Verify (StronglyTypedNSArray)]
+		//[Verify(StronglyTypedNSArray)]
 		void SetupTags(NSObject[] tags);
 
 		// -(void)setupAlias:(NSString *)alias;
@@ -1402,7 +1430,8 @@ namespace IOSNativeBranch {
 
 	// @interface BNCLinkCache : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BNCLinkCache {
+	interface BNCLinkCache
+	{
 		// -(void)setObject:(NSString *)anObject forKey:(BNCLinkData *)aKey;
 		[Export("setObject:forKey:")]
 		void SetObject(string anObject, BNCLinkData aKey);
@@ -1416,97 +1445,98 @@ namespace IOSNativeBranch {
 		void Clear();
 	}
 
-	//// @interface BNCServerRequestQueue : NSObject
-	//[BaseType (typeof(NSObject))]
-	//interface BNCServerRequestQueue
-	//{
-	//	// -(void)enqueue:(BNCServerRequest *)request;
-	//	[Export ("enqueue:")]
-	//	void Enqueue (BNCServerRequest request);
+	// @interface BNCServerRequestQueue : NSObject
+	[BaseType(typeof(NSObject))]
+	interface BNCServerRequestQueue
+	{
+		// -(void)enqueue:(BNCServerRequest *)request;
+		[Export("enqueue:")]
+		void Enqueue(BNCServerRequest request);
 
-	//	// -(BNCServerRequest *)dequeue;
-	//	[Export ("dequeue")]
-	//	[Verify (MethodToProperty)]
-	//	BNCServerRequest Dequeue { get; }
+		// -(BNCServerRequest *)dequeue;
+		[Export("dequeue")]
+		//[Verify(MethodToProperty)]
+		BNCServerRequest Dequeue { get; }
 
-	//	// -(BNCServerRequest *)peek;
-	//	[Export ("peek")]
-	//	[Verify (MethodToProperty)]
-	//	BNCServerRequest Peek { get; }
+		// -(BNCServerRequest *)peek;
+		[Export("peek")]
+		//[Verify(MethodToProperty)]
+		BNCServerRequest Peek { get; }
 
-	//	// -(BNCServerRequest *)peekAt:(NSUInteger)index;
-	//	[Export ("peekAt:")]
-	//	BNCServerRequest PeekAt (nuint index);
+		// -(BNCServerRequest *)peekAt:(NSUInteger)index;
+		[Export("peekAt:")]
+		BNCServerRequest PeekAt(nuint index);
 
-	//	// -(void)insert:(BNCServerRequest *)request at:(NSUInteger)index;
-	//	[Export ("insert:at:")]
-	//	void Insert (BNCServerRequest request, nuint index);
+		// -(void)insert:(BNCServerRequest *)request at:(NSUInteger)index;
+		[Export("insert:at:")]
+		void Insert(BNCServerRequest request, nuint index);
 
-	//	// -(BNCServerRequest *)removeAt:(NSUInteger)index;
-	//	[Export ("removeAt:")]
-	//	BNCServerRequest RemoveAt (nuint index);
+		// -(BNCServerRequest *)removeAt:(NSUInteger)index;
+		[Export("removeAt:")]
+		BNCServerRequest RemoveAt(nuint index);
 
-	//	// -(void)remove:(BNCServerRequest *)request;
-	//	[Export ("remove:")]
-	//	void Remove (BNCServerRequest request);
+		// -(void)remove:(BNCServerRequest *)request;
+		[Export("remove:")]
+		void Remove(BNCServerRequest request);
 
-	//	// -(void)persistEventually;
-	//	[Export ("persistEventually")]
-	//	void PersistEventually ();
+		// -(void)persistEventually;
+		[Export("persistEventually")]
+		void PersistEventually();
 
-	//	// -(void)persistImmediately;
-	//	[Export ("persistImmediately")]
-	//	void PersistImmediately ();
+		// -(void)persistImmediately;
+		[Export("persistImmediately")]
+		void PersistImmediately();
 
-	//	// -(void)clearQueue;
-	//	[Export ("clearQueue")]
-	//	void ClearQueue ();
+		// -(void)clearQueue;
+		[Export("clearQueue")]
+		void ClearQueue();
 
-	//	// -(BOOL)containsInstallOrOpen;
-	//	[Export ("containsInstallOrOpen")]
-	//	[Verify (MethodToProperty)]
-	//	bool ContainsInstallOrOpen { get; }
+		// -(BOOL)containsInstallOrOpen;
+		[Export("containsInstallOrOpen")]
+		//[Verify(MethodToProperty)]
+		bool ContainsInstallOrOpen { get; }
 
-	//	// -(BOOL)removeInstallOrOpen;
-	//	[Export ("removeInstallOrOpen")]
-	//	[Verify (MethodToProperty)]
-	//	bool RemoveInstallOrOpen { get; }
+		// -(BOOL)removeInstallOrOpen;
+		[Export("removeInstallOrOpen")]
+		//[Verify(MethodToProperty)]
+		bool RemoveInstallOrOpen { get; }
 
-	//	// -(BOOL)containsClose;
-	//	[Export ("containsClose")]
-	//	[Verify (MethodToProperty)]
-	//	bool ContainsClose { get; }
+		// -(BOOL)containsClose;
+		[Export("containsClose")]
+		//[Verify(MethodToProperty)]
+		bool ContainsClose { get; }
 
-	//	// -(BranchOpenRequest *)moveInstallOrOpenToFront:(NSInteger)networkCount;
-	//	[Export ("moveInstallOrOpenToFront:")]
-	//	BranchOpenRequest MoveInstallOrOpenToFront (nint networkCount);
+		//// -(BranchOpenRequest *)moveInstallOrOpenToFront:(NSInteger)networkCount;
+		//[Export("moveInstallOrOpenToFront:")]
+		//BranchOpenRequest MoveInstallOrOpenToFront(nint networkCount);
 
-	//	// +(id)getInstance;
-	//	[Static]
-	//	[Export ("getInstance")]
-	//	[Verify (MethodToProperty)]
-	//	NSObject Instance { get; }
+		// +(id)getInstance;
+		[Static]
+		[Export("getInstance")]
+		//[Verify(MethodToProperty)]
+		NSObject Instance { get; }
 
-	//	// @property (readonly, assign, atomic) NSInteger queueDepth;
-	//	[Export ("queueDepth")]
-	//	nint QueueDepth { get; }
+		// @property (readonly, assign, atomic) NSInteger queueDepth;
+		[Export("queueDepth")]
+		nint QueueDepth { get; }
 
-	//	// @property (readonly, assign, atomic) BOOL isDirty;
-	//	[Export ("isDirty")]
-	//	bool IsDirty { get; }
-	//}
+		// @property (readonly, assign, atomic) BOOL isDirty;
+		[Export("isDirty")]
+		bool IsDirty { get; }
+	}
 
 	// @protocol BranchActivityItemProviderDelegate <NSObject>
-	[Protocol, Model]
+	[Protocol, Model(AutoGeneratedName = true)]
 	[BaseType(typeof(NSObject))]
-	interface BranchActivityItemProviderDelegate {
+	interface BranchActivityItemProviderDelegate
+	{
 		// @optional -(NSDictionary *)activityItemParamsForChannel:(NSString *)channel;
 		[Export("activityItemParamsForChannel:")]
 		NSDictionary ActivityItemParamsForChannel(string channel);
 
 		// @optional -(NSArray *)activityItemTagsForChannel:(NSString *)channel;
 		[Export("activityItemTagsForChannel:")]
-		//[Verify (StronglyTypedNSArray)]
+		//[Verify(StronglyTypedNSArray)]
 		NSObject[] ActivityItemTagsForChannel(string channel);
 
 		// @optional -(NSString *)activityItemFeatureForChannel:(NSString *)channel;
@@ -1532,15 +1562,16 @@ namespace IOSNativeBranch {
 
 	// @interface BranchActivityItemProvider : UIActivityItemProvider
 	[BaseType(typeof(UIActivityItemProvider))]
-	interface BranchActivityItemProvider {
+	interface BranchActivityItemProvider
+	{
 		// -(id)initWithParams:(NSDictionary *)params andTags:(NSArray *)tags andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias __attribute__((deprecated("Use the delegate method instead")));
 		[Export("initWithParams:andTags:andFeature:andStage:andAlias:")]
-		//[Verify (StronglyTypedNSArray)]
+		//[Verify(StronglyTypedNSArray)]
 		IntPtr Constructor(NSDictionary @params, NSObject[] tags, string feature, string stage, string alias);
 
 		// -(id)initWithParams:(NSDictionary *)params tags:(NSArray *)tags feature:(NSString *)feature stage:(NSString *)stage campaign:(NSString *)campaign alias:(NSString *)alias delegate:(id<BranchActivityItemProviderDelegate>)delegate;
 		[Export("initWithParams:tags:feature:stage:campaign:alias:delegate:")]
-		//[Verify (StronglyTypedNSArray)]
+		//[Verify(StronglyTypedNSArray)]
 		IntPtr Constructor(NSDictionary @params, NSObject[] tags, string feature, string stage, string campaign, string alias, BranchActivityItemProviderDelegate @delegate);
 
 		// +(NSString *)humanReadableChannelWithActivityType:(NSString *)activityString;
@@ -1550,8 +1581,9 @@ namespace IOSNativeBranch {
 	}
 
 	//[Static]
-	//[Verify (ConstantsInterfaceAssociation)]
-	partial interface Constants {
+	//[Verify(ConstantsInterfaceAssociation)]
+	partial interface Constants
+	{
 		// extern NSString *const BRANCH_REQUEST_KEY_BRANCH_IDENTITY;
 		[Field("BRANCH_REQUEST_KEY_BRANCH_IDENTITY", "__Internal")]
 		NSString BRANCH_REQUEST_KEY_BRANCH_IDENTITY { get; }
@@ -1764,6 +1796,14 @@ namespace IOSNativeBranch {
 		[Field("BRANCH_REQUEST_KEY_INSTRUMENTATION", "__Internal")]
 		NSString BRANCH_REQUEST_KEY_INSTRUMENTATION { get; }
 
+		// extern NSString *const BRANCH_REQUEST_KEY_APPLE_RECEIPT;
+		[Field("BRANCH_REQUEST_KEY_APPLE_RECEIPT", "__Internal")]
+		NSString BRANCH_REQUEST_KEY_APPLE_RECEIPT { get; }
+
+		// extern NSString *const BRANCH_REQUEST_KEY_APPLE_TESTFLIGHT;
+		[Field("BRANCH_REQUEST_KEY_APPLE_TESTFLIGHT", "__Internal")]
+		NSString BRANCH_REQUEST_KEY_APPLE_TESTFLIGHT { get; }
+
 		// extern NSString *const BRANCH_REQUEST_ENDPOINT_SET_IDENTITY;
 		[Field("BRANCH_REQUEST_ENDPOINT_SET_IDENTITY", "__Internal")]
 		NSString BRANCH_REQUEST_ENDPOINT_SET_IDENTITY { get; }
@@ -1811,6 +1851,14 @@ namespace IOSNativeBranch {
 		// extern NSString *const BRANCH_REQUEST_ENDPOINT_REGISTER_VIEW;
 		[Field("BRANCH_REQUEST_ENDPOINT_REGISTER_VIEW", "__Internal")]
 		NSString BRANCH_REQUEST_ENDPOINT_REGISTER_VIEW { get; }
+
+		// extern NSString *const BRANCH_REQUEST_ENDPOINT_CPID;
+		[Field("BRANCH_REQUEST_ENDPOINT_CPID", "__Internal")]
+		NSString BRANCH_REQUEST_ENDPOINT_CPID { get; }
+
+		// extern NSString *const BRANCH_REQUEST_ENDPOINT_LATD;
+		[Field("BRANCH_REQUEST_ENDPOINT_LATD", "__Internal")]
+		NSString BRANCH_REQUEST_ENDPOINT_LATD { get; }
 
 		// extern NSString *const BRANCH_RESPONSE_KEY_BRANCH_IDENTITY;
 		[Field("BRANCH_RESPONSE_KEY_BRANCH_IDENTITY", "__Internal")]
@@ -2045,27 +2093,63 @@ namespace IOSNativeBranch {
 		NSString BRANCH_CRASHLYTICS_LOW_MEMORY_KEY { get; }
 	}
 
+	// @interface BranchCSSearchableItemAttributeSet : CSSearchableItemAttributeSet
+	[BaseType(typeof(CSSearchableItemAttributeSet))]
+	interface BranchCSSearchableItemAttributeSet
+	{
+		// -(id)initWithContentType:(NSString *)type;
+		[Export("initWithContentType:")]
+		IntPtr Constructor(string type);
+
+		// -(void)indexWithCallback:(void (^)(NSString *, NSString *, NSError *))callback;
+		[Export("indexWithCallback:")]
+		void IndexWithCallback(Action<NSString, NSString, NSError> callback);
+
+		// @property (nonatomic, strong) NSDictionary * params;
+		[Export("params", ArgumentSemantic.Strong)]
+		NSDictionary Params { get; set; }
+
+		// @property (nonatomic, strong) NSSet * keywords;
+		[Export("keywords", ArgumentSemantic.Strong)]
+		NSSet Keywords { get; set; }
+
+		// @property (nonatomic) BOOL publiclyIndexable;
+		[Export("publiclyIndexable")]
+		bool PubliclyIndexable { get; set; }
+	}
+
 	//// @protocol BranchDeepLinkingControllerCompletionDelegate <NSObject>
-	//[Protocol, Model]
+	//[Protocol, Model(AutoGeneratedName = true)]
 	//[BaseType(typeof(NSObject))]
-	//interface BranchDeepLinkingControllerCompletionDelegate {
+	//interface BranchDeepLinkingControllerCompletionDelegate
+	//{
 	//	// @required -(void)deepLinkingControllerCompleted __attribute__((deprecated("This API is deprecated. Instead, use deepLinkingControllerCompletedFrom: viewController")));
-	//	//[Abstract]
+	//	[Abstract]
 	//	[Export("deepLinkingControllerCompleted")]
 	//	void DeepLinkingControllerCompleted();
 
 	//	// @required -(void)deepLinkingControllerCompletedFrom:(UIViewController *)viewController;
-	//	//[Abstract]
+	//	[Abstract]
 	//	[Export("deepLinkingControllerCompletedFrom:")]
 	//	void DeepLinkingControllerCompletedFrom(UIViewController viewController);
 	//}
 
 	//// @protocol BranchDeepLinkingController <NSObject>
-	//[Protocol, Model]
+	///*
+	//  Check whether adding [Model] to this declaration is appropriate.
+	//  [Model] is used to generate a C# class that implements this protocol,
+	//  and might be useful for protocols that consumers are supposed to implement,
+	//  since consumers can subclass the generated class instead of implementing
+	//  the generated interface. If consumers are not supposed to implement this
+	//  protocol, then [Model] is redundant and will generate code that will never
+	//  be used.
+	//*/
+	//[Protocol]
 	//[BaseType(typeof(NSObject))]
-	//interface BranchDeepLinkingController {
+	//interface BranchDeepLinkingController
+	//{
 	//	// @required -(void)configureControlWithData:(NSDictionary *)data;
-	//	//[Abstract]
+	//	[Abstract]
 	//	[Export("configureControlWithData:")]
 	//	void ConfigureControlWithData(NSDictionary data);
 
@@ -2073,14 +2157,15 @@ namespace IOSNativeBranch {
 	//	BranchDeepLinkingControllerCompletionDelegate DeepLinkingCompletionDelegate { get; set; }
 
 	//	// @required @property (nonatomic, weak) id<BranchDeepLinkingControllerCompletionDelegate> deepLinkingCompletionDelegate;
-	//	//[Abstract]
+	//	[Abstract]
 	//	[NullAllowed, Export("deepLinkingCompletionDelegate", ArgumentSemantic.Weak)]
 	//	NSObject WeakDeepLinkingCompletionDelegate { get; set; }
 	//}
 
 	//[Static]
-	//[Verify (ConstantsInterfaceAssociation)]
-	partial interface Constants {
+	//[Verify(ConstantsInterfaceAssociation)]
+	partial interface Constants
+	{
 		// extern BranchContentSchema _Nonnull BranchContentSchemaCommerceAuction;
 		[Field("BranchContentSchemaCommerceAuction", "__Internal")]
 		NSString BranchContentSchemaCommerceAuction { get; }
@@ -2212,7 +2297,8 @@ namespace IOSNativeBranch {
 
 	// @interface BranchContentMetadata : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BranchContentMetadata {
+	interface BranchContentMetadata
+	{
 		// @property (nonatomic, strong) BranchContentSchema _Nullable contentSchema;
 		[NullAllowed, Export("contentSchema", ArgumentSemantic.Strong)]
 		string ContentSchema { get; set; }
@@ -2307,26 +2393,27 @@ namespace IOSNativeBranch {
 
 		// -(NSDictionary * _Nonnull)dictionary;
 		[Export("dictionary")]
-		//[Verify (MethodToProperty)]
-		//NSDictionary Dictionary { get; }
-		NSDictionary Dictionary();
+		//[Verify(MethodToProperty)]
+        //NSDictionary Dictionary { get; }
+        NSDictionary Dictionary();
 
-		// +(BranchContentMetadata * _Nonnull)contentMetadataWithDictionary:(NSDictionary * _Nullable)dictionary;
-		[Static]
+        // +(BranchContentMetadata * _Nonnull)contentMetadataWithDictionary:(NSDictionary * _Nullable)dictionary;
+        [Static]
 		[Export("contentMetadataWithDictionary:")]
 		BranchContentMetadata ContentMetadataWithDictionary([NullAllowed] NSDictionary dictionary);
 	}
 
 	// @interface BranchUniversalObject : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BranchUniversalObject {
+	interface BranchUniversalObject
+	{
 		// -(instancetype _Nonnull)initWithCanonicalIdentifier:(NSString * _Nonnull)canonicalIdentifier;
 		[Export("initWithCanonicalIdentifier:")]
 		IntPtr Constructor(string canonicalIdentifier);
 
 		//// -(instancetype _Nonnull)initWithTitle:(NSString * _Nonnull)title;
-		//[Export ("initWithTitle:")]
-		//IntPtr Constructor (string title);
+		//[Export("initWithTitle:")]
+		//IntPtr Constructor(string title);
 
 		// @property (nonatomic, strong) NSString * _Nullable canonicalIdentifier;
 		[NullAllowed, Export("canonicalIdentifier", ArgumentSemantic.Strong)]
@@ -2436,7 +2523,7 @@ namespace IOSNativeBranch {
 
 		// -(NSString * _Nullable)getLongUrlWithChannel:(NSString * _Nullable)channel andTags:(NSArray * _Nullable)tags andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias;
 		[Export("getLongUrlWithChannel:andTags:andFeature:andStage:andAlias:")]
-		//[Verify (StronglyTypedNSArray)]
+		//[Verify(StronglyTypedNSArray)]
 		[return: NullAllowed]
 		string GetLongUrlWithChannel([NullAllowed] string channel, [NullAllowed] NSObject[] tags, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias);
 
@@ -2495,24 +2582,25 @@ namespace IOSNativeBranch {
 
 		// -(NSMutableDictionary * _Nonnull)dictionary;
 		[Export("dictionary")]
-		//[Verify (MethodToProperty)]
-		//NSMutableDictionary Dictionary { get; }
-		NSMutableDictionary Dictionary();
+		//[Verify(MethodToProperty)]
+        //NSMutableDictionary Dictionary { get; }
+        NSMutableDictionary Dictionary();
 
-		// +(BranchUniversalObject * _Nonnull)objectWithDictionary:(NSDictionary * _Null_unspecified)dictionary;
-		[Static]
+        // +(BranchUniversalObject * _Nonnull)objectWithDictionary:(NSDictionary * _Null_unspecified)dictionary;
+        [Static]
 		[Export("objectWithDictionary:")]
 		BranchUniversalObject ObjectWithDictionary(NSDictionary dictionary);
 
 		//// -(NSString * _Nonnull)description;
 		//[Export("description")]
-		////[Verify (MethodToProperty)]
+		////[Verify(MethodToProperty)]
 		//string Description { get; }
 	}
 
 	//[Static]
-	//[Verify (ConstantsInterfaceAssociation)]
-	partial interface Constants {
+	//[Verify(ConstantsInterfaceAssociation)]
+	partial interface Constants
+	{
 		// extern BranchStandardEvent _Nonnull BranchStandardEventAddToCart;
 		[Field("BranchStandardEventAddToCart", "__Internal")]
 		NSString BranchStandardEventAddToCart { get; }
@@ -2540,6 +2628,22 @@ namespace IOSNativeBranch {
 		// extern BranchStandardEvent _Nonnull BranchStandardEventSpendCredits;
 		[Field("BranchStandardEventSpendCredits", "__Internal")]
 		NSString BranchStandardEventSpendCredits { get; }
+
+		// extern BranchStandardEvent _Nonnull BranchStandardEventSubscribe;
+		[Field("BranchStandardEventSubscribe", "__Internal")]
+		NSString BranchStandardEventSubscribe { get; }
+
+		// extern BranchStandardEvent _Nonnull BranchStandardEventStartTrial;
+		[Field("BranchStandardEventStartTrial", "__Internal")]
+		NSString BranchStandardEventStartTrial { get; }
+
+		// extern BranchStandardEvent _Nonnull BranchStandardEventClickAd;
+		[Field("BranchStandardEventClickAd", "__Internal")]
+		NSString BranchStandardEventClickAd { get; }
+
+		// extern BranchStandardEvent _Nonnull BranchStandardEventViewAd;
+		[Field("BranchStandardEventViewAd", "__Internal")]
+		NSString BranchStandardEventViewAd { get; }
 
 		// extern BranchStandardEvent _Nonnull BranchStandardEventSearch;
 		[Field("BranchStandardEventSearch", "__Internal")]
@@ -2576,12 +2680,25 @@ namespace IOSNativeBranch {
 		// extern BranchStandardEvent _Nonnull BranchStandardEventUnlockAchievement;
 		[Field("BranchStandardEventUnlockAchievement", "__Internal")]
 		NSString BranchStandardEventUnlockAchievement { get; }
+
+		// extern BranchStandardEvent _Nonnull BranchStandardEventInvite;
+		[Field("BranchStandardEventInvite", "__Internal")]
+		NSString BranchStandardEventInvite { get; }
+
+		// extern BranchStandardEvent _Nonnull BranchStandardEventLogin;
+		[Field("BranchStandardEventLogin", "__Internal")]
+		NSString BranchStandardEventLogin { get; }
+
+		// extern BranchStandardEvent _Nonnull BranchStandardEventReserve;
+		[Field("BranchStandardEventReserve", "__Internal")]
+		NSString BranchStandardEventReserve { get; }
 	}
 
 	// @interface BranchEvent : NSObject
 	[BaseType(typeof(NSObject))]
 	[DisableDefaultCtor]
-	interface BranchEvent {
+	interface BranchEvent
+	{
 		// -(instancetype _Nonnull)initWithName:(NSString * _Nonnull)name __attribute__((objc_designated_initializer));
 		[Export("initWithName:")]
 		[DesignatedInitializer]
@@ -2606,6 +2723,10 @@ namespace IOSNativeBranch {
 		[Static]
 		[Export("customEventWithName:contentItem:")]
 		BranchEvent CustomEventWithName(string name, BranchUniversalObject contentItem);
+
+		// @property (nonatomic, strong) NSString * _Nullable alias;
+		[NullAllowed, Export("alias", ArgumentSemantic.Strong)]
+		string Alias { get; set; }
 
 		// @property (nonatomic, strong) NSString * _Nullable transactionID;
 		[NullAllowed, Export("transactionID", ArgumentSemantic.Strong)]
@@ -2643,57 +2764,65 @@ namespace IOSNativeBranch {
 		[NullAllowed, Export("searchQuery", ArgumentSemantic.Strong)]
 		string SearchQuery { get; set; }
 
-		// @property (copy, nonatomic) NSMutableArray<BranchUniversalObject *> * _Nonnull contentItems;
+		// @property (assign, nonatomic) BranchEventAdType adType;
+		[Export("adType", ArgumentSemantic.Assign)]
+		BranchEventAdType AdType { get; set; }
+
+		// @property (copy, nonatomic) NSArray<BranchUniversalObject *> * _Nonnull contentItems;
 		[Export("contentItems", ArgumentSemantic.Copy)]
-		NSMutableArray<NSObject> ContentItems { get; set; }
+        //BranchUniversalObject[] ContentItems { get; set; }
+        NSMutableArray<NSObject> ContentItems { get; set; }
 
-		// @property (copy, nonatomic) NSMutableDictionary<NSString *,NSString *> * _Nonnull customData;
-		[Export("customData", ArgumentSemantic.Copy)]
-		NSMutableDictionary<NSString, NSString> CustomData { get; set; }
+        // @property (copy, nonatomic) NSDictionary<NSString *,NSString *> * _Nonnull customData;
+        [Export("customData", ArgumentSemantic.Copy)]
+        //NSDictionary<NSString, NSString> CustomData { get; set; }
+        NSMutableDictionary<NSString, NSString> CustomData { get; set; }
 
-		// -(void)logEvent;
-		[Export("logEvent")]
+        // -(void)logEvent;
+        [Export("logEvent")]
 		void LogEvent();
 
-		// -(NSDictionary * _Nonnull)dictionary;
-		[Export("dictionary")]
-		//[Verify (MethodToProperty)]
-		NSDictionary Dictionary { get; }
+        // -(NSDictionary * _Nonnull)dictionary;
+        [Export("dictionary")]
+        //[Verify(MethodToProperty)]
+        //NSDictionary Dictionary { get; }
+        NSDictionary Dictionary();
 
-		//// -(NSString * _Nonnull)description;
-		//[Export("description")]
-		////[Verify (MethodToProperty)]
-		//string Description { get; }
+        //// -(NSString * _Nonnull)description;
+        //[Export("description")]
+        //[Verify(MethodToProperty)]
+        //string Description { get; }
+    }
+
+	// @interface BranchEventRequest : BNCServerRequest <NSSecureCoding>
+	[BaseType(typeof(BNCServerRequest))]
+	interface BranchEventRequest : INSSecureCoding
+	{
+		// -(instancetype _Nonnull)initWithServerURL:(NSURL * _Nonnull)serverURL eventDictionary:(NSDictionary * _Nullable)eventDictionary completion:(void (^ _Nullable)(NSDictionary * _Nullable, NSError * _Nullable))completion;
+		[Export("initWithServerURL:eventDictionary:completion:")]
+		IntPtr Constructor(NSUrl serverURL, [NullAllowed] NSDictionary eventDictionary, [NullAllowed] Action<NSDictionary, NSError> completion);
+
+		// @property (strong) NSDictionary * _Nullable eventDictionary;
+		[NullAllowed, Export("eventDictionary", ArgumentSemantic.Strong)]
+		NSDictionary EventDictionary { get; set; }
+
+		// @property (strong) NSURL * _Nullable serverURL;
+		[NullAllowed, Export("serverURL", ArgumentSemantic.Strong)]
+		NSUrl ServerURL { get; set; }
+
+		// @property (copy) void (^ _Nullable)(NSDictionary * _Nullable, NSError * _Nullable) completion;
+		[NullAllowed, Export("completion", ArgumentSemantic.Copy)]
+		Action<NSDictionary, NSError> Completion { get; set; }
 	}
-
-	//// @interface BranchEventRequest : BNCServerRequest <NSCoding>
-	//[BaseType (typeof(BNCServerRequest))]
-	//interface BranchEventRequest : INSCoding
-	//{
-	//	// -(instancetype _Nonnull)initWithServerURL:(NSURL * _Nonnull)serverURL eventDictionary:(NSDictionary * _Nullable)eventDictionary completion:(void (^ _Nullable)(NSDictionary * _Nullable, NSError * _Nullable))completion;
-	//	[Export ("initWithServerURL:eventDictionary:completion:")]
-	//	IntPtr Constructor (NSUrl serverURL, [NullAllowed] NSDictionary eventDictionary, [NullAllowed] Action<NSDictionary, NSError> completion);
-
-	//	// @property (strong) NSDictionary * _Nullable eventDictionary;
-	//	[NullAllowed, Export ("eventDictionary", ArgumentSemantic.Strong)]
-	//	NSDictionary EventDictionary { get; set; }
-
-	//	// @property (strong) NSURL * _Nullable serverURL;
-	//	[NullAllowed, Export ("serverURL", ArgumentSemantic.Strong)]
-	//	NSUrl ServerURL { get; set; }
-
-	//	// @property (copy) void (^ _Nullable)(NSDictionary * _Nullable, NSError * _Nullable) completion;
-	//	[NullAllowed, Export ("completion", ArgumentSemantic.Copy)]
-	//	Action<NSDictionary, NSError> Completion { get; set; }
-	//}
 
 	// @interface BranchLinkProperties : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BranchLinkProperties {
+	interface BranchLinkProperties
+	{
 		// @property (nonatomic, strong) NSArray * tags;
 		[Export("tags", ArgumentSemantic.Strong)]
-		//[Verify (StronglyTypedNSArray)]
-        NSObject[] Tags { get; set; }
+		//[Verify(StronglyTypedNSArray)]
+		NSObject[] Tags { get; set; }
 
 		// @property (nonatomic, strong) NSString * feature;
 		[Export("feature", ArgumentSemantic.Strong)]
@@ -2734,14 +2863,15 @@ namespace IOSNativeBranch {
 
 		//// -(NSString *)description;
 		//[Export("description")]
-		////[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		//string Description { get; }
 	}
 
 	// @protocol BranchDelegate <NSObject>
-	[Protocol, Model]
+	[Protocol, Model(AutoGeneratedName = true)]
 	[BaseType(typeof(NSObject))]
-	interface BranchDelegate {
+	interface BranchDelegate
+	{
 		// @optional -(void)branch:(Branch * _Nonnull)branch willStartSessionWithURL:(NSURL * _Nullable)url;
 		[Export("branch:willStartSessionWithURL:")]
 		void WillStartSessionWithURL(Branch branch, [NullAllowed] NSUrl url);
@@ -2756,8 +2886,9 @@ namespace IOSNativeBranch {
 	}
 
 	//[Static]
-	//[Verify (ConstantsInterfaceAssociation)]
-	partial interface Constants {
+	//[Verify(ConstantsInterfaceAssociation)]
+	partial interface Constants
+	{
 		// extern NSString *const _Nonnull BranchWillStartSessionNotification;
 		[Field("BranchWillStartSessionNotification", "__Internal")]
 		NSString BranchWillStartSessionNotification { get; }
@@ -2784,9 +2915,10 @@ namespace IOSNativeBranch {
 	}
 
 	// @protocol BranchShareLinkDelegate <NSObject>
-	[Protocol, Model]
+	[Protocol, Model(AutoGeneratedName = true)]
 	[BaseType(typeof(NSObject))]
-	interface BranchShareLinkDelegate {
+	interface BranchShareLinkDelegate
+	{
 		// @optional -(void)branchShareLinkWillShare:(BranchShareLink * _Nonnull)shareLink;
 		[Export("branchShareLinkWillShare:")]
 		void BranchShareLinkWillShare(BranchShareLink shareLink);
@@ -2799,7 +2931,8 @@ namespace IOSNativeBranch {
 	// @interface BranchShareLink : NSObject
 	[BaseType(typeof(NSObject))]
 	[DisableDefaultCtor]
-	interface BranchShareLink {
+	interface BranchShareLink
+	{
 		// -(instancetype _Nonnull)initWithUniversalObject:(BranchUniversalObject * _Nonnull)universalObject linkProperties:(BranchLinkProperties * _Nonnull)linkProperties __attribute__((objc_designated_initializer));
 		[Export("initWithUniversalObject:linkProperties:")]
 		[DesignatedInitializer]
@@ -2807,7 +2940,7 @@ namespace IOSNativeBranch {
 
 		// -(NSArray<UIActivityItemProvider *> * _Nonnull)activityItems;
 		[Export("activityItems")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		UIActivityItemProvider[] ActivityItems { get; }
 
 		// -(void)presentActivityViewControllerFromViewController:(UIViewController * _Nullable)viewController anchor:(id _Nullable)anchorViewOrButtonItem;
@@ -2859,344 +2992,414 @@ namespace IOSNativeBranch {
 		NSObject WeakDelegate { get; set; }
 	}
 
-	// @protocol BranchViewControllerDelegate <NSObject>
-	[Protocol, Model]
+	// @interface BranchProbabilisticCrossPlatformID : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BranchViewControllerDelegate {
-		// @required -(void)branchViewVisible:(NSString *)actionName withID:(NSString *)branchViewID;
-		[Abstract]
-		[Export("branchViewVisible:withID:")]
-		void BranchViewVisible(string actionName, string branchViewID);
+	interface BranchProbabilisticCrossPlatformID
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull crossPlatformID;
+		[Export("crossPlatformID")]
+		string CrossPlatformID { get; }
 
-		// @required -(void)branchViewAccepted:(NSString *)actionName withID:(NSString *)branchViewID;
-		[Abstract]
-		[Export("branchViewAccepted:withID:")]
-		void BranchViewAccepted(string actionName, string branchViewID);
+		// @property (readonly, copy, nonatomic) NSNumber * _Nonnull score;
+		[Export("score", ArgumentSemantic.Copy)]
+		NSNumber Score { get; }
 
-		// @required -(void)branchViewCancelled:(NSString *)actionName withID:(NSString *)branchViewID;
-		[Abstract]
-		[Export("branchViewCancelled:withID:")]
-		void BranchViewCancelled(string actionName, string branchViewID);
+		// +(BranchProbabilisticCrossPlatformID * _Nullable)buildFromJSON:(NSDictionary * _Nonnull)json;
+		[Static]
+		[Export("buildFromJSON:")]
+		[return: NullAllowed]
+		BranchProbabilisticCrossPlatformID BuildFromJSON(NSDictionary json);
+	}
 
-		// @required -(void)branchViewErrorCode:(NSInteger)errorCode message:(NSString *)errorMsg actionName:(NSString *)actionName withID:(NSString *)branchViewID;
-		[Abstract]
-		[Export("branchViewErrorCode:message:actionName:withID:")]
-		void BranchViewErrorCode(nint errorCode, string errorMsg, string actionName, string branchViewID);
+	// @interface BranchCrossPlatformID : NSObject
+	[BaseType(typeof(NSObject))]
+	interface BranchCrossPlatformID
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull crossPlatformID;
+		[Export("crossPlatformID")]
+		string CrossPlatformID { get; }
+
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull developerID;
+		[Export("developerID")]
+		string DeveloperID { get; }
+
+		// @property (readonly, nonatomic, strong) NSArray<NSString *> * _Nonnull pastCrossPlatformIDs;
+		[Export("pastCrossPlatformIDs", ArgumentSemantic.Strong)]
+		string[] PastCrossPlatformIDs { get; }
+
+		// @property (readonly, nonatomic, strong) NSArray<BranchProbabilisticCrossPlatformID *> * _Nonnull probabiliticCrossPlatformIDs;
+		[Export("probabiliticCrossPlatformIDs", ArgumentSemantic.Strong)]
+		BranchProbabilisticCrossPlatformID[] ProbabiliticCrossPlatformIDs { get; }
+
+		// +(BranchCrossPlatformID * _Nullable)buildFromJSON:(NSDictionary * _Nonnull)json;
+		[Static]
+		[Export("buildFromJSON:")]
+		[return: NullAllowed]
+		BranchCrossPlatformID BuildFromJSON(NSDictionary json);
+
+		// +(void)requestCrossPlatformIdData:(BNCServerInterface * _Nonnull)serverInterface key:(NSString * _Nonnull)key completion:(void (^ _Nonnull)(BranchCrossPlatformID * _Nullable))completion;
+		[Static]
+		[Export("requestCrossPlatformIdData:key:completion:")]
+		void RequestCrossPlatformIdData(BNCServerInterface serverInterface, string key, Action<BranchCrossPlatformID> completion);
+	}
+
+	// @interface BranchLastAttributedTouchData : NSObject
+	[BaseType(typeof(NSObject))]
+	interface BranchLastAttributedTouchData
+	{
+		// @property (readonly, nonatomic, strong) NSDictionary * _Nonnull lastAttributedTouchJSON;
+		[Export("lastAttributedTouchJSON", ArgumentSemantic.Strong)]
+		NSDictionary LastAttributedTouchJSON { get; }
+
+		// @property (readonly, copy, nonatomic) NSNumber * _Nonnull attributionWindow;
+		[Export("attributionWindow", ArgumentSemantic.Copy)]
+		NSNumber AttributionWindow { get; }
+
+		// +(BranchLastAttributedTouchData * _Nullable)buildFromJSON:(NSDictionary * _Nonnull)json;
+		[Static]
+		[Export("buildFromJSON:")]
+		[return: NullAllowed]
+		BranchLastAttributedTouchData BuildFromJSON(NSDictionary json);
+
+		// +(void)requestLastTouchAttributedData:(BNCServerInterface * _Nonnull)serverInterface key:(NSString * _Nonnull)key attributionWindow:(NSInteger)window completion:(void (^ _Nonnull)(BranchLastAttributedTouchData * _Nonnull))completion;
+		[Static]
+		[Export("requestLastTouchAttributedData:key:attributionWindow:completion:")]
+		void RequestLastTouchAttributedData(BNCServerInterface serverInterface, string key, nint window, Action<BranchLastAttributedTouchData> completion);
 	}
 
 	// @interface Branch (UIViewController)
 	[Category]
 	[BaseType(typeof(UIViewController))]
-	interface UIViewController_Branch {
+	interface UIViewController_Branch
+	{
 		// +(UIWindow * _Nullable)bnc_currentWindow;
 		[Static]
 		[NullAllowed, Export("bnc_currentWindow")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		UIWindow Bnc_currentWindow { get; }
 
 		// +(UIViewController * _Nullable)bnc_currentViewController;
 		[Static]
 		[NullAllowed, Export("bnc_currentViewController")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		UIViewController Bnc_currentViewController { get; }
+
+		//// -(UIViewController * _Nonnull)bnc_currentViewController;
+		//[Export("bnc_currentViewController")]
+		////[Verify(MethodToProperty)]
+		//UIViewController Bnc_currentViewController { get; }
 	}
 
-	[Static]
-	//[Verify (ConstantsInterfaceAssociation)]
-	partial interface Constants {
-		// extern NSString *const BRANCH_FEATURE_TAG_SHARE;
+	//[Static]
+	//[Verify(ConstantsInterfaceAssociation)]
+	partial interface Constants
+	{
+		// extern NSString *const _Nonnull BRANCH_FEATURE_TAG_SHARE;
 		[Field("BRANCH_FEATURE_TAG_SHARE", "__Internal")]
 		NSString BRANCH_FEATURE_TAG_SHARE { get; }
 
-		// extern NSString *const BRANCH_FEATURE_TAG_REFERRAL;
+		// extern NSString *const _Nonnull BRANCH_FEATURE_TAG_REFERRAL;
 		[Field("BRANCH_FEATURE_TAG_REFERRAL", "__Internal")]
 		NSString BRANCH_FEATURE_TAG_REFERRAL { get; }
 
-		// extern NSString *const BRANCH_FEATURE_TAG_INVITE;
+		// extern NSString *const _Nonnull BRANCH_FEATURE_TAG_INVITE;
 		[Field("BRANCH_FEATURE_TAG_INVITE", "__Internal")]
 		NSString BRANCH_FEATURE_TAG_INVITE { get; }
 
-		// extern NSString *const BRANCH_FEATURE_TAG_DEAL;
+		// extern NSString *const _Nonnull BRANCH_FEATURE_TAG_DEAL;
 		[Field("BRANCH_FEATURE_TAG_DEAL", "__Internal")]
 		NSString BRANCH_FEATURE_TAG_DEAL { get; }
 
-		// extern NSString *const BRANCH_FEATURE_TAG_GIFT;
+		// extern NSString *const _Nonnull BRANCH_FEATURE_TAG_GIFT;
 		[Field("BRANCH_FEATURE_TAG_GIFT", "__Internal")]
 		NSString BRANCH_FEATURE_TAG_GIFT { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_CHANNEL;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_CHANNEL;
 		[Field("BRANCH_INIT_KEY_CHANNEL", "__Internal")]
 		NSString BRANCH_INIT_KEY_CHANNEL { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_FEATURE;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_FEATURE;
 		[Field("BRANCH_INIT_KEY_FEATURE", "__Internal")]
 		NSString BRANCH_INIT_KEY_FEATURE { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_TAGS;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_TAGS;
 		[Field("BRANCH_INIT_KEY_TAGS", "__Internal")]
 		NSString BRANCH_INIT_KEY_TAGS { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_CAMPAIGN;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_CAMPAIGN;
 		[Field("BRANCH_INIT_KEY_CAMPAIGN", "__Internal")]
 		NSString BRANCH_INIT_KEY_CAMPAIGN { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_STAGE;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_STAGE;
 		[Field("BRANCH_INIT_KEY_STAGE", "__Internal")]
 		NSString BRANCH_INIT_KEY_STAGE { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_CREATION_SOURCE;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_CREATION_SOURCE;
 		[Field("BRANCH_INIT_KEY_CREATION_SOURCE", "__Internal")]
 		NSString BRANCH_INIT_KEY_CREATION_SOURCE { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_REFERRER;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_REFERRER;
 		[Field("BRANCH_INIT_KEY_REFERRER", "__Internal")]
 		NSString BRANCH_INIT_KEY_REFERRER { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_PHONE_NUMBER;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_PHONE_NUMBER;
 		[Field("BRANCH_INIT_KEY_PHONE_NUMBER", "__Internal")]
 		NSString BRANCH_INIT_KEY_PHONE_NUMBER { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_IS_FIRST_SESSION;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_IS_FIRST_SESSION;
 		[Field("BRANCH_INIT_KEY_IS_FIRST_SESSION", "__Internal")]
 		NSString BRANCH_INIT_KEY_IS_FIRST_SESSION { get; }
 
-		// extern NSString *const BRANCH_INIT_KEY_CLICKED_BRANCH_LINK;
+		// extern NSString *const _Nonnull BRANCH_INIT_KEY_CLICKED_BRANCH_LINK;
 		[Field("BRANCH_INIT_KEY_CLICKED_BRANCH_LINK", "__Internal")]
 		NSString BRANCH_INIT_KEY_CLICKED_BRANCH_LINK { get; }
 
-		// extern NSString *const BNCCanonicalIdList;
+		// extern NSString *const _Nonnull BNCCanonicalIdList;
 		[Field("BNCCanonicalIdList", "__Internal")]
 		NSString BNCCanonicalIdList { get; }
 
-		// extern NSString *const BNCPurchaseAmount;
+		// extern NSString *const _Nonnull BNCPurchaseAmount;
 		[Field("BNCPurchaseAmount", "__Internal")]
 		NSString BNCPurchaseAmount { get; }
 
-		// extern NSString *const BNCPurchaseCurrency;
+		// extern NSString *const _Nonnull BNCPurchaseCurrency;
 		[Field("BNCPurchaseCurrency", "__Internal")]
 		NSString BNCPurchaseCurrency { get; }
 
-		//// extern NSString *const BNCCanonicalIdList;
-		//[Field ("BNCCanonicalIdList", "__Internal")]
+		//// extern NSString *const _Nonnull BNCCanonicalIdList;
+		//[Field("BNCCanonicalIdList", "__Internal")]
 		//NSString BNCCanonicalIdList { get; }
 
-		// extern NSString *const BNCRegisterViewEvent;
+		// extern NSString *const _Nonnull BNCRegisterViewEvent;
 		[Field("BNCRegisterViewEvent", "__Internal")]
 		NSString BNCRegisterViewEvent { get; }
 
-		// extern NSString *const BNCAddToWishlistEvent;
+		// extern NSString *const _Nonnull BNCAddToWishlistEvent;
 		[Field("BNCAddToWishlistEvent", "__Internal")]
 		NSString BNCAddToWishlistEvent { get; }
 
-		// extern NSString *const BNCAddToCartEvent;
+		// extern NSString *const _Nonnull BNCAddToCartEvent;
 		[Field("BNCAddToCartEvent", "__Internal")]
 		NSString BNCAddToCartEvent { get; }
 
-		// extern NSString *const BNCPurchaseInitiatedEvent;
+		// extern NSString *const _Nonnull BNCPurchaseInitiatedEvent;
 		[Field("BNCPurchaseInitiatedEvent", "__Internal")]
 		NSString BNCPurchaseInitiatedEvent { get; }
 
-		// extern NSString *const BNCPurchasedEvent;
+		// extern NSString *const _Nonnull BNCPurchasedEvent;
 		[Field("BNCPurchasedEvent", "__Internal")]
 		NSString BNCPurchasedEvent { get; }
 
-		// extern NSString *const BNCShareInitiatedEvent;
+		// extern NSString *const _Nonnull BNCShareInitiatedEvent;
 		[Field("BNCShareInitiatedEvent", "__Internal")]
 		NSString BNCShareInitiatedEvent { get; }
 
-		// extern NSString *const BNCShareCompletedEvent;
+		// extern NSString *const _Nonnull BNCShareCompletedEvent;
 		[Field("BNCShareCompletedEvent", "__Internal")]
 		NSString BNCShareCompletedEvent { get; }
 
-		// extern NSString *const BNCSpotlightFeature;
+		// extern NSString *const _Nonnull BNCSpotlightFeature;
 		[Field("BNCSpotlightFeature", "__Internal")]
 		NSString BNCSpotlightFeature { get; }
 	}
 
 	// @interface BranchLink : NSObject
 	[BaseType(typeof(NSObject))]
-	interface BranchLink {
-		// @property (nonatomic, strong) BranchUniversalObject * universalObject;
-		[Export("universalObject", ArgumentSemantic.Strong)]
+	interface BranchLink
+	{
+		// @property (nonatomic, strong) BranchUniversalObject * _Nullable universalObject;
+		[NullAllowed, Export("universalObject", ArgumentSemantic.Strong)]
 		BranchUniversalObject UniversalObject { get; set; }
 
-		// @property (nonatomic, strong) BranchLinkProperties * linkProperties;
-		[Export("linkProperties", ArgumentSemantic.Strong)]
+		// @property (nonatomic, strong) BranchLinkProperties * _Nullable linkProperties;
+		[NullAllowed, Export("linkProperties", ArgumentSemantic.Strong)]
 		BranchLinkProperties LinkProperties { get; set; }
 
-		// +(BranchLink *)linkWithUniversalObject:(BranchUniversalObject *)universalObject properties:(BranchLinkProperties *)linkProperties;
+		// +(BranchLink * _Nullable)linkWithUniversalObject:(BranchUniversalObject * _Nullable)universalObject properties:(BranchLinkProperties * _Nullable)linkProperties;
 		[Static]
 		[Export("linkWithUniversalObject:properties:")]
-		BranchLink LinkWithUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties);
+		[return: NullAllowed]
+		BranchLink LinkWithUniversalObject([NullAllowed] BranchUniversalObject universalObject, [NullAllowed] BranchLinkProperties linkProperties);
 	}
 
 	// @interface Branch : NSObject
 	[BaseType(typeof(NSObject))]
-	interface Branch {
-		// +(Branch *)getTestInstance __attribute__((deprecated("Use `Branch.useTestBranchKey = YES;` instead.")));
+	interface Branch
+	{
+		// +(Branch * _Nonnull)getTestInstance __attribute__((deprecated("Use `Branch.useTestBranchKey = YES;` instead.")));
 		[Static]
 		[Export("getTestInstance")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		Branch TestInstance { get; }
 
-		// +(Branch *)getInstance;
+		// +(Branch * _Nonnull)getInstance;
 		[Static]
 		[Export("getInstance")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		Branch Instance { get; }
 
-		// +(Branch *)getInstance:(NSString *)branchKey;
+		// +(Branch * _Nonnull)getInstance:(NSString * _Nonnull)branchKey;
 		[Static]
 		[Export("getInstance:")]
 		Branch GetInstance(string branchKey);
 
-		// +(Class)networkServiceClass;
-		// +(void)setNetworkServiceClass:(Class)networkServiceClass;
+		// +(Class _Nonnull)networkServiceClass;
+		// +(void)setNetworkServiceClass:(Class _Nonnull)networkServiceClass;
 		[Static]
 		[Export("networkServiceClass")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		Class NetworkServiceClass { get; set; }
 
 		// +(BOOL)useTestBranchKey;
 		// +(void)setUseTestBranchKey:(BOOL)useTestKey;
 		[Static]
 		[Export("useTestBranchKey")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		bool UseTestBranchKey { get; set; }
 
-		// +(NSString *)branchKey;
-		// +(void)setBranchKey:(NSString *)branchKey;
+		// +(void)setBranchKey:(NSString * _Nonnull)branchKey error:(NSError * _Nullable * _Nullable)error;
 		[Static]
-		[Export("branchKey")]
-		//[Verify (MethodToProperty)]
+		[Export("setBranchKey:error:")]
+		void SetBranchKey(string branchKey, [NullAllowed] out NSError error);
+
+		// +(NSString * _Nullable)branchKey;
+		// +(void)setBranchKey:(NSString * _Nonnull)branchKey;
+		[Static]
+		[NullAllowed, Export("branchKey")]
+		//[Verify(MethodToProperty)]
 		string BranchKey { get; set; }
 
 		// +(BOOL)branchKeyIsSet;
 		[Static]
 		[Export("branchKeyIsSet")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		bool BranchKeyIsSet { get; }
 
 		// +(BOOL)enableFingerprintIDInCrashlyticsReports;
 		// +(void)setEnableFingerprintIDInCrashlyticsReports:(BOOL)enabled;
 		[Static]
 		[Export("enableFingerprintIDInCrashlyticsReports")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		bool EnableFingerprintIDInCrashlyticsReports { get; set; }
 
 		[Wrap("WeakDelegate")]
+		[NullAllowed]
 		BranchDelegate Delegate { get; set; }
 
-		// @property (weak) NSObject<BranchDelegate> * delegate;
+		// @property (weak) NSObject<BranchDelegate> * _Nullable delegate;
 		[NullAllowed, Export("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
-		// +(BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params;
+		// +(BranchActivityItemProvider * _Nonnull)getBranchActivityItemWithParams:(NSDictionary * _Nonnull)params;
 		[Static]
 		[Export("getBranchActivityItemWithParams:")]
 		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params);
 
-		// +(BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature;
+		// +(BranchActivityItemProvider * _Nonnull)getBranchActivityItemWithParams:(NSDictionary * _Nonnull)params feature:(NSString * _Nullable)feature;
 		[Static]
 		[Export("getBranchActivityItemWithParams:feature:")]
-		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, string feature);
+		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, [NullAllowed] string feature);
 
-		// +(BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage;
+		// +(BranchActivityItemProvider * _Nonnull)getBranchActivityItemWithParams:(NSDictionary * _Nonnull)params feature:(NSString * _Nullable)feature stage:(NSString * _Nullable)stage;
 		[Static]
 		[Export("getBranchActivityItemWithParams:feature:stage:")]
-		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, string feature, string stage);
+		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage);
 
-		// +(BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage tags:(NSArray *)tags;
+		// +(BranchActivityItemProvider * _Nonnull)getBranchActivityItemWithParams:(NSDictionary * _Nonnull)params feature:(NSString * _Nullable)feature stage:(NSString * _Nullable)stage tags:(NSArray * _Nullable)tags;
 		[Static]
 		[Export("getBranchActivityItemWithParams:feature:stage:tags:")]
-		//[Verify (StronglyTypedNSArray)]
-		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, string feature, string stage, NSObject[] tags);
+		//[Verify(StronglyTypedNSArray)]
+		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] NSObject[] tags);
 
-		// +(BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage tags:(NSArray *)tags alias:(NSString *)alias;
+		// +(BranchActivityItemProvider * _Nonnull)getBranchActivityItemWithParams:(NSDictionary * _Nonnull)params feature:(NSString * _Nullable)feature stage:(NSString * _Nullable)stage tags:(NSArray * _Nullable)tags alias:(NSString * _Nullable)alias;
 		[Static]
 		[Export("getBranchActivityItemWithParams:feature:stage:tags:alias:")]
-		//[Verify (StronglyTypedNSArray)]
-		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, string feature, string stage, NSObject[] tags, string alias);
+		//[Verify(StronglyTypedNSArray)]
+		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] NSObject[] tags, [NullAllowed] string alias);
 
-		// +(BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage campaign:(NSString *)campaign tags:(NSArray *)tags alias:(NSString *)alias;
+		// +(BranchActivityItemProvider * _Nonnull)getBranchActivityItemWithParams:(NSDictionary * _Nonnull)params feature:(NSString * _Nullable)feature stage:(NSString * _Nullable)stage campaign:(NSString * _Nullable)campaign tags:(NSArray * _Nullable)tags alias:(NSString * _Nullable)alias;
 		[Static]
 		[Export("getBranchActivityItemWithParams:feature:stage:campaign:tags:alias:")]
-		//[Verify (StronglyTypedNSArray)]
-		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, string feature, string stage, string campaign, NSObject[] tags, string alias);
+		//[Verify(StronglyTypedNSArray)]
+		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string campaign, [NullAllowed] NSObject[] tags, [NullAllowed] string alias);
 
-		// +(BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage tags:(NSArray *)tags alias:(NSString *)alias delegate:(id<BranchActivityItemProviderDelegate>)delegate;
+		// +(BranchActivityItemProvider * _Nonnull)getBranchActivityItemWithParams:(NSDictionary * _Nonnull)params feature:(NSString * _Nullable)feature stage:(NSString * _Nullable)stage tags:(NSArray * _Nullable)tags alias:(NSString * _Nullable)alias delegate:(id<BranchActivityItemProviderDelegate> _Nullable)delegate;
 		[Static]
 		[Export("getBranchActivityItemWithParams:feature:stage:tags:alias:delegate:")]
-		//[Verify (StronglyTypedNSArray)]
-		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, string feature, string stage, NSObject[] tags, string alias, BranchActivityItemProviderDelegate @delegate);
+		//[Verify(StronglyTypedNSArray)]
+		BranchActivityItemProvider GetBranchActivityItemWithParams(NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] NSObject[] tags, [NullAllowed] string alias, [NullAllowed] BranchActivityItemProviderDelegate @delegate);
 
-		// -(void)initSessionWithLaunchOptions:(NSDictionary *)options;
+		// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options;
 		[Export("initSessionWithLaunchOptions:")]
-		void InitSessionWithLaunchOptions(NSDictionary options);
+		void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options);
 
-		// -(void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable;
+		// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options isReferrable:(BOOL)isReferrable;
 		[Export("initSessionWithLaunchOptions:isReferrable:")]
-		void InitSessionWithLaunchOptions(NSDictionary options, bool isReferrable);
+		void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, bool isReferrable);
 
-		// -(void)initSessionWithLaunchOptions:(NSDictionary *)options andRegisterDeepLinkHandler:(callbackWithParams)callback;
+		// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options andRegisterDeepLinkHandler:(callbackWithParams _Nullable)callback;
 		[Export("initSessionWithLaunchOptions:andRegisterDeepLinkHandler:")]
-		void InitSessionWithLaunchOptions(NSDictionary options, callbackWithParams callback);
+		void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, [NullAllowed] callbackWithParams callback);
 
-		// -(void)initSessionWithLaunchOptions:(NSDictionary *)options andRegisterDeepLinkHandlerUsingBranchUniversalObject:(callbackWithBranchUniversalObject)callback;
+		// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options andRegisterDeepLinkHandlerUsingBranchUniversalObject:(callbackWithBranchUniversalObject _Nullable)callback;
 		[Export("initSessionWithLaunchOptions:andRegisterDeepLinkHandlerUsingBranchUniversalObject:")]
-		void InitSessionWithLaunchOptions(NSDictionary options, callbackWithBranchUniversalObject callback);
+		void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, [NullAllowed] callbackWithBranchUniversalObject callback);
 
-		//// -(void)initSessionWithLaunchOptions:(NSDictionary *)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController;
-		//[Export ("initSessionWithLaunchOptions:automaticallyDisplayDeepLinkController:")]
-		//void InitSessionWithLaunchOptions (NSDictionary options, bool automaticallyDisplayController);
+		//// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController;
+		//[Export("initSessionWithLaunchOptions:automaticallyDisplayDeepLinkController:")]
+		//void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, bool automaticallyDisplayController);
 
-		//// -(void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable andRegisterDeepLinkHandler:(callbackWithParams)callback;
-		//[Export ("initSessionWithLaunchOptions:isReferrable:andRegisterDeepLinkHandler:")]
-		//void InitSessionWithLaunchOptions (NSDictionary options, bool isReferrable, callbackWithParams callback);
+		//// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options isReferrable:(BOOL)isReferrable andRegisterDeepLinkHandler:(callbackWithParams _Nullable)callback;
+		//[Export("initSessionWithLaunchOptions:isReferrable:andRegisterDeepLinkHandler:")]
+		//void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, bool isReferrable, [NullAllowed] callbackWithParams callback);
 
-		//// -(void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController;
-		//[Export ("initSessionWithLaunchOptions:isReferrable:automaticallyDisplayDeepLinkController:")]
-		//void InitSessionWithLaunchOptions (NSDictionary options, bool isReferrable, bool automaticallyDisplayController);
+		//// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options isReferrable:(BOOL)isReferrable automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController;
+		//[Export("initSessionWithLaunchOptions:isReferrable:automaticallyDisplayDeepLinkController:")]
+		//void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, bool isReferrable, bool automaticallyDisplayController);
 
-		//// -(void)initSessionWithLaunchOptions:(NSDictionary *)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController deepLinkHandler:(callbackWithParams)callback;
-		//[Export ("initSessionWithLaunchOptions:automaticallyDisplayDeepLinkController:deepLinkHandler:")]
-		//void InitSessionWithLaunchOptions (NSDictionary options, bool automaticallyDisplayController, callbackWithParams callback);
+		//// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController deepLinkHandler:(callbackWithParams _Nullable)callback;
+		//[Export("initSessionWithLaunchOptions:automaticallyDisplayDeepLinkController:deepLinkHandler:")]
+		//void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, bool automaticallyDisplayController, [NullAllowed] callbackWithParams callback);
 
-		// -(void)initSessionWithLaunchOptions:(NSDictionary *)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController isReferrable:(BOOL)isReferrable deepLinkHandler:(callbackWithParams)callback;
+		// -(void)initSessionWithLaunchOptions:(NSDictionary * _Nullable)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController isReferrable:(BOOL)isReferrable deepLinkHandler:(callbackWithParams _Nullable)callback;
 		[Export("initSessionWithLaunchOptions:automaticallyDisplayDeepLinkController:isReferrable:deepLinkHandler:")]
-		void InitSessionWithLaunchOptions(NSDictionary options, bool automaticallyDisplayController, bool isReferrable, callbackWithParams callback);
+		void InitSessionWithLaunchOptions([NullAllowed] NSDictionary options, bool automaticallyDisplayController, bool isReferrable, [NullAllowed] callbackWithParams callback);
 
-		// -(BOOL)handleDeepLink:(NSURL *)url;
+		// -(BOOL)handleDeepLink:(NSURL * _Nullable)url;
 		[Export("handleDeepLink:")]
-		bool HandleDeepLink(NSUrl url);
+		bool HandleDeepLink([NullAllowed] NSUrl url);
 
-		// -(BOOL)handleDeepLinkWithNewSession:(NSURL *)url;
+		// -(BOOL)handleDeepLinkWithNewSession:(NSURL * _Nullable)url;
 		[Export("handleDeepLinkWithNewSession:")]
-		bool HandleDeepLinkWithNewSession(NSUrl url);
+		bool HandleDeepLinkWithNewSession([NullAllowed] NSUrl url);
 
-		// -(BOOL)continueUserActivity:(NSUserActivity *)userActivity;
+		// -(BOOL)continueUserActivity:(NSUserActivity * _Nullable)userActivity;
 		[Export("continueUserActivity:")]
-		bool ContinueUserActivity(NSUserActivity userActivity);
+		bool ContinueUserActivity([NullAllowed] NSUserActivity userActivity);
 
-		// -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
+		// -(BOOL)application:(UIApplication * _Nullable)application openURL:(NSURL * _Nullable)url sourceApplication:(NSString * _Nullable)sourceApplication annotation:(id _Nullable)annotation;
 		[Export("application:openURL:sourceApplication:annotation:")]
-		bool Application(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation);
+		bool Application([NullAllowed] UIApplication application, [NullAllowed] NSUrl url, [NullAllowed] string sourceApplication, [NullAllowed] NSObject annotation);
 
-		// -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options;
+		// -(BOOL)application:(UIApplication * _Nullable)application openURL:(NSURL * _Nullable)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> * _Nullable)options;
 		[Export("application:openURL:options:")]
-		bool Application(UIApplication application, NSUrl url, NSDictionary<NSString, NSObject> options);
+		bool Application([NullAllowed] UIApplication application, [NullAllowed] NSUrl url, [NullAllowed] NSDictionary<NSString, NSObject> options);
 
-		// -(void)handlePushNotification:(NSDictionary *)userInfo;
+		//// -(void)dispatchToIsolationQueue:(dispatch_block_t _Nonnull)initBlock;
+		//[Export("dispatchToIsolationQueue:")]
+		//void DispatchToIsolationQueue(dispatch_block_t initBlock);
+
+		// -(void)handlePushNotification:(NSDictionary * _Nullable)userInfo;
 		[Export("handlePushNotification:")]
-		void HandlePushNotification(NSDictionary userInfo);
+		void HandlePushNotification([NullAllowed] NSDictionary userInfo);
 
-		//// -(void)registerDeepLinkController:(UIViewController<BranchDeepLinkingController> *)controller forKey:(NSString *)key __attribute__((deprecated("This API is deprecated. Please use registerDeepLinkController: forKey: withOption:")));
+		//// -(void)registerDeepLinkController:(UIViewController<BranchDeepLinkingController> * _Nullable)controller forKey:(NSString * _Nullable)key __attribute__((deprecated("This API is deprecated. Please use registerDeepLinkController: forKey: withOption:")));
 		//[Export("registerDeepLinkController:forKey:")]
-		//void RegisterDeepLinkController(BranchDeepLinkingController controller, string key);
+		//void RegisterDeepLinkController([NullAllowed] BranchDeepLinkingController controller, [NullAllowed] string key);
 
-		//// -(void)registerDeepLinkController:(UIViewController<BranchDeepLinkingController> *)controller forKey:(NSString *)key withPresentation:(BNCViewControllerPresentationOption)option;
+		//// -(void)registerDeepLinkController:(UIViewController<BranchDeepLinkingController> * _Nullable)controller forKey:(NSString * _Nullable)key withPresentation:(BNCViewControllerPresentationOption)option;
 		//[Export("registerDeepLinkController:forKey:withPresentation:")]
-		//void RegisterDeepLinkController(BranchDeepLinkingController controller, string key, BNCViewControllerPresentationOption option);
+		//void RegisterDeepLinkController([NullAllowed] BranchDeepLinkingController controller, [NullAllowed] string key, BNCViewControllerPresentationOption option);
 
 		// -(void)setDebug;
 		[Export("setDebug")]
@@ -3206,30 +3409,38 @@ namespace IOSNativeBranch {
 		[Export("validateSDKIntegration")]
 		void ValidateSDKIntegration();
 
-		// -(void)setDeepLinkDebugMode:(NSDictionary *)debugParams;
+		// -(void)setDeepLinkDebugMode:(NSDictionary * _Nullable)debugParams;
 		[Export("setDeepLinkDebugMode:")]
-		void SetDeepLinkDebugMode(NSDictionary debugParams);
+		void SetDeepLinkDebugMode([NullAllowed] NSDictionary debugParams);
 
-		// -(void)addWhiteListedScheme:(NSString *)scheme;
+		// -(void)addWhiteListedScheme:(NSString * _Nullable)scheme;
 		[Export("addWhiteListedScheme:")]
-		void AddWhiteListedScheme(string scheme);
+		void AddWhiteListedScheme([NullAllowed] string scheme);
 
-		// -(void)setWhiteListedSchemes:(NSArray *)schemes;
+		// -(void)setWhiteListedSchemes:(NSArray * _Nullable)schemes;
 		[Export("setWhiteListedSchemes:")]
-		//[Verify (StronglyTypedNSArray)]
-		void SetWhiteListedSchemes(NSObject[] schemes);
+		//[Verify(StronglyTypedNSArray)]
+		void SetWhiteListedSchemes([NullAllowed] NSObject[] schemes);
 
-		// @property (copy) NSArray<NSString *> * blackListURLRegex;
-		[Export("blackListURLRegex", ArgumentSemantic.Copy)]
+		// @property (copy) NSArray<NSString *> * _Nullable blackListURLRegex;
+		[NullAllowed, Export("blackListURLRegex", ArgumentSemantic.Copy)]
 		string[] BlackListURLRegex { get; set; }
 
-		// -(void)registerFacebookDeepLinkingClass:(id)FBSDKAppLinkUtility;
+		// -(void)registerFacebookDeepLinkingClass:(id _Nonnull)FBSDKAppLinkUtility;
 		[Export("registerFacebookDeepLinkingClass:")]
 		void RegisterFacebookDeepLinkingClass(NSObject FBSDKAppLinkUtility);
 
 		// -(void)delayInitToCheckForSearchAds;
 		[Export("delayInitToCheckForSearchAds")]
 		void DelayInitToCheckForSearchAds();
+
+		// -(void)useLongerWaitForAppleSearchAds;
+		[Export("useLongerWaitForAppleSearchAds")]
+		void UseLongerWaitForAppleSearchAds();
+
+		// -(void)ignoreAppleSearchAdsTestData;
+		[Export("ignoreAppleSearchAdsTestData")]
+		void IgnoreAppleSearchAdsTestData();
 
 		// -(void)setRetryInterval:(NSTimeInterval)retryInterval;
 		[Export("setRetryInterval:")]
@@ -3243,7 +3454,7 @@ namespace IOSNativeBranch {
 		[Export("setNetworkTimeout:")]
 		void SetNetworkTimeout(double timeout);
 
-		// -(void)disableCookieBasedMatching;
+		// -(void)disableCookieBasedMatching __attribute__((deprecated("Feature removed.  Did not work on iOS 11+")));
 		[Export("disableCookieBasedMatching")]
 		void DisableCookieBasedMatching();
 
@@ -3255,27 +3466,32 @@ namespace IOSNativeBranch {
 		[Export("suppressWarningLogs")]
 		void SuppressWarningLogs();
 
-		// -(void)setRequestMetadataKey:(NSString *)key value:(id)value;
-		[Export("setRequestMetadataKey:value:")]
-		void SetRequestMetadataKey(string key, string value);
+		// -(void)registerPluginName:(NSString * _Nonnull)name version:(NSString * _Nonnull)version;
+		[Export("registerPluginName:version:")]
+		void RegisterPluginName(string name, string version);
 
-		// -(void)enableDelayedInit;
+		// -(void)setRequestMetadataKey:(NSString * _Nonnull)key value:(id _Nullable)value;
+		[Export("setRequestMetadataKey:value:")]
+		void SetRequestMetadataKey(string key, [NullAllowed] string value);
+
+		// -(void)enableDelayedInit __attribute__((deprecated("No longer valid with new init process")));
 		[Export("enableDelayedInit")]
 		void EnableDelayedInit();
 
-		// -(void)disableDelayedInit;
+		// -(void)disableDelayedInit __attribute__((deprecated("No longer valid with new init process")));
 		[Export("disableDelayedInit")]
 		void DisableDelayedInit();
 
-		// -(NSURL *)getUrlForOnboardingWithRedirectUrl:(NSString *)redirectUrl;
+		// -(NSURL * _Nullable)getUrlForOnboardingWithRedirectUrl:(NSString * _Nullable)redirectUrl __attribute__((deprecated("Feature removed.  Did not work on iOS 11+")));
 		[Export("getUrlForOnboardingWithRedirectUrl:")]
-		NSUrl GetUrlForOnboardingWithRedirectUrl(string redirectUrl);
+		[return: NullAllowed]
+		NSUrl GetUrlForOnboardingWithRedirectUrl([NullAllowed] string redirectUrl);
 
-		// -(void)resumeInit;
+		// -(void)resumeInit __attribute__((deprecated("Feature removed.  Did not work on iOS 11+")));
 		[Export("resumeInit")]
 		void ResumeInit();
 
-		// -(void)setInstallRequestDelay:(NSInteger)installRequestDelay;
+		// -(void)setInstallRequestDelay:(NSInteger)installRequestDelay __attribute__((deprecated("No longer valid with new init process")));
 		[Export("setInstallRequestDelay:")]
 		void SetInstallRequestDelay(nint installRequestDelay);
 
@@ -3283,50 +3499,43 @@ namespace IOSNativeBranch {
 		// +(void)setTrackingDisabled:(BOOL)disabled;
 		[Static]
 		[Export("trackingDisabled")]
-		//[Verify (MethodToProperty)]
-		//bool TrackingDisabled { get; set; }
+		//[Verify(MethodToProperty)]
 		bool TrackingDisabled { get; set; }
 
-		// -(BranchUniversalObject *)getFirstReferringBranchUniversalObject;
-		[Export("getFirstReferringBranchUniversalObject")]
-		//[Verify (MethodToProperty)]
-		//BranchUniversalObject FirstReferringBranchUniversalObject { get; }
-		BranchUniversalObject FirstReferringBranchUniversalObject();
+        // -(BranchUniversalObject * _Nullable)getFirstReferringBranchUniversalObject;
+        [Export("getFirstReferringBranchUniversalObject")]
+        //[Verify(MethodToProperty)]
+        BranchUniversalObject FirstReferringBranchUniversalObject();
 
-		// -(BranchLinkProperties *)getFirstReferringBranchLinkProperties;
-		[Export("getFirstReferringBranchLinkProperties")]
-		//[Verify (MethodToProperty)]
-		//BranchLinkProperties FirstReferringBranchLinkProperties { get; }
-		BranchLinkProperties FirstReferringBranchLinkProperties();
+        // -(BranchLinkProperties * _Nullable)getFirstReferringBranchLinkProperties;
+        [Export("getFirstReferringBranchLinkProperties")]
+        //[Verify(MethodToProperty)]
+        BranchLinkProperties FirstReferringBranchLinkProperties();
 
-		// -(NSDictionary *)getFirstReferringParams;
-		[Export("getFirstReferringParams")]
-		//[Verify (MethodToProperty)]
-		//NSDictionary FirstReferringParams { get; }
-		NSDictionary FirstReferringParams();
+        // -(NSDictionary * _Nullable)getFirstReferringParams;
+        [Export("getFirstReferringParams")]
+        //[Verify(MethodToProperty)]
+        NSDictionary FirstReferringParams();
 
-		// -(BranchUniversalObject *)getLatestReferringBranchUniversalObject;
-		[Export("getLatestReferringBranchUniversalObject")]
-		//[Verify (MethodToProperty)]
-		//BranchUniversalObject LatestReferringBranchUniversalObject { get; }
-		BranchUniversalObject LatestReferringBranchUniversalObject();
+        // -(BranchUniversalObject * _Nullable)getLatestReferringBranchUniversalObject;
+        [Export("getLatestReferringBranchUniversalObject")]
+        //[Verify(MethodToProperty)]
+        BranchUniversalObject LatestReferringBranchUniversalObject();
 
-		// -(BranchLinkProperties *)getLatestReferringBranchLinkProperties;
-		[Export("getLatestReferringBranchLinkProperties")]
-		//[Verify (MethodToProperty)]
-		//BranchLinkProperties LatestReferringBranchLinkProperties { get; }
-		BranchLinkProperties LatestReferringBranchLinkProperties();
+        // -(BranchLinkProperties * _Nullable)getLatestReferringBranchLinkProperties;
+        [Export("getLatestReferringBranchLinkProperties")]
+        //[Verify(MethodToProperty)]
+        BranchLinkProperties LatestReferringBranchLinkProperties();
 
-		// -(NSDictionary *)getLatestReferringParams;
-		[Export("getLatestReferringParams")]
-		//[Verify (MethodToProperty)]
-		//NSDictionary LatestReferringParams { get; }
-		NSDictionary LatestReferringParams();
+        // -(NSDictionary * _Nullable)getLatestReferringParams;
+        [Export("getLatestReferringParams")]
+        //[Verify(MethodToProperty)]
+        NSDictionary LatestReferringParams();
 
-		// -(NSDictionary *)getLatestReferringParamsSynchronous;
-		[Export("getLatestReferringParamsSynchronous")]
-		//[Verify (MethodToProperty)]
-		NSDictionary LatestReferringParamsSynchronous { get; }
+        // -(NSDictionary * _Nullable)getLatestReferringParamsSynchronous;
+        [Export("getLatestReferringParamsSynchronous")]
+        //[Verify(MethodToProperty)]
+        NSDictionary LatestReferringParamsSynchronous();
 
 		// -(void)resetUserSession;
 		[Export("resetUserSession")]
@@ -3334,346 +3543,362 @@ namespace IOSNativeBranch {
 
 		// -(BOOL)isUserIdentified;
 		[Export("isUserIdentified")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		bool IsUserIdentified { get; }
 
-		// -(void)setIdentity:(NSString *)userId;
+		// -(void)setIdentity:(NSString * _Nullable)userId;
 		[Export("setIdentity:")]
-		void SetIdentity(string userId);
+		void SetIdentity([NullAllowed] string userId);
 
-		// -(void)setIdentity:(NSString *)userId withCallback:(callbackWithParams)callback;
+		// -(void)setIdentity:(NSString * _Nullable)userId withCallback:(callbackWithParams _Nullable)callback;
 		[Export("setIdentity:withCallback:")]
-		void SetIdentity(string userId, callbackWithParams callback);
+		void SetIdentity([NullAllowed] string userId, [NullAllowed] callbackWithParams callback);
 
 		// -(void)logout;
 		[Export("logout")]
 		void Logout();
 
-		// -(void)logoutWithCallback:(callbackWithStatus)callback;
+		// -(void)logoutWithCallback:(callbackWithStatus _Nullable)callback;
 		[Export("logoutWithCallback:")]
-		void LogoutWithCallback(callbackWithStatus callback);
+		void LogoutWithCallback([NullAllowed] callbackWithStatus callback);
 
-		// -(void)loadRewardsWithCallback:(callbackWithStatus)callback;
+		// -(void)loadRewardsWithCallback:(callbackWithStatus _Nullable)callback;
 		[Export("loadRewardsWithCallback:")]
-		void LoadRewardsWithCallback(callbackWithStatus callback);
+		void LoadRewardsWithCallback([NullAllowed] callbackWithStatus callback);
 
 		// -(void)redeemRewards:(NSInteger)count;
 		[Export("redeemRewards:")]
 		void RedeemRewards(nint count);
 
-		// -(void)redeemRewards:(NSInteger)count callback:(callbackWithStatus)callback;
+		// -(void)redeemRewards:(NSInteger)count callback:(callbackWithStatus _Nullable)callback;
 		[Export("redeemRewards:callback:")]
-		void RedeemRewards(nint count, callbackWithStatus callback);
+		void RedeemRewards(nint count, [NullAllowed] callbackWithStatus callback);
 
-		// -(void)redeemRewards:(NSInteger)count forBucket:(NSString *)bucket;
+		// -(void)redeemRewards:(NSInteger)count forBucket:(NSString * _Nullable)bucket;
 		[Export("redeemRewards:forBucket:")]
-		void RedeemRewards(nint count, string bucket);
+		void RedeemRewards(nint count, [NullAllowed] string bucket);
 
-		// -(void)redeemRewards:(NSInteger)count forBucket:(NSString *)bucket callback:(callbackWithStatus)callback;
+		// -(void)redeemRewards:(NSInteger)count forBucket:(NSString * _Nullable)bucket callback:(callbackWithStatus _Nullable)callback;
 		[Export("redeemRewards:forBucket:callback:")]
-		void RedeemRewards(nint count, string bucket, callbackWithStatus callback);
+		void RedeemRewards(nint count, [NullAllowed] string bucket, [NullAllowed] callbackWithStatus callback);
 
 		// -(NSInteger)getCredits;
 		[Export("getCredits")]
-		//[Verify (MethodToProperty)]
-		//nint Credits { get; }
-		nint Credits();
+        //[Verify(MethodToProperty)]
+        nint Credits();
 
-		// -(NSInteger)getCreditsForBucket:(NSString *)bucket;
-		[Export("getCreditsForBucket:")]
+        // -(NSInteger)getCreditsForBucket:(NSString * _Nonnull)bucket;
+        [Export("getCreditsForBucket:")]
 		nint GetCreditsForBucket(string bucket);
 
-		// -(void)getCreditHistoryWithCallback:(callbackWithList)callback;
+		// -(void)getCreditHistoryWithCallback:(callbackWithList _Nullable)callback;
 		[Export("getCreditHistoryWithCallback:")]
-		void GetCreditHistoryWithCallback(callbackWithList callback);
+		void GetCreditHistoryWithCallback([NullAllowed] callbackWithList callback);
 
-		// -(void)getCreditHistoryForBucket:(NSString *)bucket andCallback:(callbackWithList)callback;
+		// -(void)getCreditHistoryForBucket:(NSString * _Nullable)bucket andCallback:(callbackWithList _Nullable)callback;
 		[Export("getCreditHistoryForBucket:andCallback:")]
-		void GetCreditHistoryForBucket(string bucket, callbackWithList callback);
+		void GetCreditHistoryForBucket([NullAllowed] string bucket, [NullAllowed] callbackWithList callback);
 
-		// -(void)getCreditHistoryAfter:(NSString *)creditTransactionId number:(NSInteger)length order:(BranchCreditHistoryOrder)order andCallback:(callbackWithList)callback;
+		// -(void)getCreditHistoryAfter:(NSString * _Nullable)creditTransactionId number:(NSInteger)length order:(BranchCreditHistoryOrder)order andCallback:(callbackWithList _Nullable)callback;
 		[Export("getCreditHistoryAfter:number:order:andCallback:")]
-		void GetCreditHistoryAfter(string creditTransactionId, nint length, BranchCreditHistoryOrder order, callbackWithList callback);
+		void GetCreditHistoryAfter([NullAllowed] string creditTransactionId, nint length, BranchCreditHistoryOrder order, [NullAllowed] callbackWithList callback);
 
-		// -(void)getCreditHistoryForBucket:(NSString *)bucket after:(NSString *)creditTransactionId number:(NSInteger)length order:(BranchCreditHistoryOrder)order andCallback:(callbackWithList)callback;
+		// -(void)getCreditHistoryForBucket:(NSString * _Nullable)bucket after:(NSString * _Nullable)creditTransactionId number:(NSInteger)length order:(BranchCreditHistoryOrder)order andCallback:(callbackWithList _Nullable)callback;
 		[Export("getCreditHistoryForBucket:after:number:order:andCallback:")]
-		void GetCreditHistoryForBucket(string bucket, string creditTransactionId, nint length, BranchCreditHistoryOrder order, callbackWithList callback);
+		void GetCreditHistoryForBucket([NullAllowed] string bucket, [NullAllowed] string creditTransactionId, nint length, BranchCreditHistoryOrder order, [NullAllowed] callbackWithList callback);
 
-		// -(void)userCompletedAction:(NSString *)action;
+		// -(void)userCompletedAction:(NSString * _Nullable)action;
 		[Export("userCompletedAction:")]
-		void UserCompletedAction(string action);
+		void UserCompletedAction([NullAllowed] string action);
 
-		// -(void)userCompletedAction:(NSString *)action withState:(NSDictionary *)state;
+		// -(void)userCompletedAction:(NSString * _Nullable)action withState:(NSDictionary * _Nullable)state;
 		[Export("userCompletedAction:withState:")]
-		void UserCompletedAction(string action, NSDictionary state);
+		void UserCompletedAction([NullAllowed] string action, [NullAllowed] NSDictionary state);
 
-		// -(void)userCompletedAction:(NSString *)action withState:(NSDictionary *)state withDelegate:(id)branchViewCallback;
+		// -(void)userCompletedAction:(NSString * _Nullable)action withState:(NSDictionary * _Nullable)state withDelegate:(id _Nullable)branchViewCallback __attribute__((deprecated("This API is deprecated. Please use userCompletedAction:action:state instead.")));
 		[Export("userCompletedAction:withState:withDelegate:")]
-		void UserCompletedAction(string action, NSDictionary state, NSObject branchViewCallback);
+		void UserCompletedAction([NullAllowed] string action, [NullAllowed] NSDictionary state, [NullAllowed] NSObject branchViewCallback);
 
-		// -(void)sendCommerceEvent:(BNCCommerceEvent *)commerceEvent metadata:(NSDictionary<NSString *,id> *)metadata withCompletion:(void (^)(NSDictionary *, NSError *))completion;
+		// -(void)sendCommerceEvent:(BNCCommerceEvent * _Nonnull)commerceEvent metadata:(NSDictionary<NSString *,id> * _Nonnull)metadata withCompletion:(void (^ _Nonnull)(NSDictionary * _Nullable, NSError * _Nullable))completion __attribute__((deprecated("Please use BranchEvent to track commerce events.")));
 		[Export("sendCommerceEvent:metadata:withCompletion:")]
 		void SendCommerceEvent(BNCCommerceEvent commerceEvent, NSDictionary<NSString, NSObject> metadata, Action<NSDictionary, NSError> completion);
 
-		// -(NSString *)getShortURL;
+		// -(void)crossPlatformIdDataWithCompletion:(void (^ _Nonnull)(BranchCrossPlatformID * _Nullable))completion;
+		[Export("crossPlatformIdDataWithCompletion:")]
+		void CrossPlatformIdDataWithCompletion(Action<BranchCrossPlatformID> completion);
+
+		// -(void)lastAttributedTouchDataWithAttributionWindow:(NSInteger)window completion:(void (^ _Nonnull)(BranchLastAttributedTouchData * _Nullable))completion;
+		[Export("lastAttributedTouchDataWithAttributionWindow:completion:")]
+		void LastAttributedTouchDataWithAttributionWindow(nint window, Action<BranchLastAttributedTouchData> completion);
+
+		// -(NSString * _Nonnull)getShortURL;
 		[Export("getShortURL")]
-		//[Verify (MethodToProperty)]
+		//[Verify(MethodToProperty)]
 		string ShortURL { get; }
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params;
 		[Export("getShortURLWithParams:")]
-		string GetShortURLWithParams(NSDictionary @params);
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature;
 		[Export("getShortURLWithParams:andChannel:andFeature:")]
-		string GetShortURLWithParams(NSDictionary @params, string channel, string feature);
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:")]
-		string GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage);
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:andAlias:")]
-		string GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage, string alias);
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andType:(BranchLinkType)type;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:andType:")]
-		string GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage, BranchLinkType type);
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, BranchLinkType type);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andMatchDuration:(NSUInteger)duration;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:andMatchDuration:")]
-		string GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage, nuint duration);
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, nuint duration);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andAlias:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, string alias);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias ignoreUAString:(NSString * _Nullable)ignoreUAString;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andAlias:ignoreUAString:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, string alias, string ignoreUAString);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias, [NullAllowed] string ignoreUAString);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andCampaign:(NSString * _Nullable)campaign andAlias:(NSString * _Nullable)alias ignoreUAString:(NSString * _Nullable)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andCampaign:andAlias:ignoreUAString:forceLinkCreation:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, string campaign, string alias, string ignoreUAString, bool forceLinkCreation);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string campaign, [NullAllowed] string alias, [NullAllowed] string ignoreUAString, bool forceLinkCreation);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andType:(BranchLinkType)type;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andType:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, BranchLinkType type);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, BranchLinkType type);
 
-		// -(NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration;
+		// -(NSString * _Nonnull)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andMatchDuration:(NSUInteger)duration;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andMatchDuration:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, nuint duration);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, nuint duration);
 
-		// -(NSString *)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration;
+		// -(NSString * _Nonnull)getShortUrlWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andAlias:(NSString * _Nullable)alias andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andMatchDuration:(NSUInteger)duration;
 		[Export("getShortUrlWithParams:andTags:andAlias:andChannel:andFeature:andStage:andMatchDuration:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortUrlWithParams(NSDictionary @params, NSObject[] tags, string alias, string channel, string feature, string stage, nuint duration);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortUrlWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string alias, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, nuint duration);
 
-		// -(NSString *)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(id)campaign andMatchDuration:(NSUInteger)duration;
+		// -(NSString * _Nonnull)getShortUrlWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andAlias:(NSString * _Nullable)alias andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andCampaign:(id)campaign andMatchDuration:(NSUInteger)duration;
 		[Export("getShortUrlWithParams:andTags:andAlias:andChannel:andFeature:andStage:andCampaign:andMatchDuration:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetShortUrlWithParams(NSDictionary @params, NSObject[] tags, string alias, string channel, string feature, string stage, NSObject campaign, nuint duration);
+		//[Verify(StronglyTypedNSArray)]
+		string GetShortUrlWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string alias, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, NSObject campaign, nuint duration);
 
-		// -(NSString *)getLongURLWithParams:(NSDictionary *)params;
+		// -(NSString * _Nonnull)getLongURLWithParams:(NSDictionary * _Nullable)params;
 		[Export("getLongURLWithParams:")]
-		string GetLongURLWithParams(NSDictionary @params);
+		string GetLongURLWithParams([NullAllowed] NSDictionary @params);
 
-		// -(NSString *)getLongURLWithParams:(NSDictionary *)params andFeature:(NSString *)feature;
+		// -(NSString * _Nonnull)getLongURLWithParams:(NSDictionary * _Nullable)params andFeature:(NSString * _Nullable)feature;
 		[Export("getLongURLWithParams:andFeature:")]
-		string GetLongURLWithParams(NSDictionary @params, string feature);
+		string GetLongURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string feature);
 
-		// -(NSString *)getLongURLWithParams:(NSDictionary *)params andFeature:(NSString *)feature andStage:(NSString *)stage;
+		// -(NSString * _Nonnull)getLongURLWithParams:(NSDictionary * _Nullable)params andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage;
 		[Export("getLongURLWithParams:andFeature:andStage:")]
-		string GetLongURLWithParams(NSDictionary @params, string feature, string stage);
+		string GetLongURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage);
 
-		// -(NSString *)getLongURLWithParams:(NSDictionary *)params andFeature:(NSString *)feature andStage:(NSString *)stage andTags:(NSArray *)tags;
+		// -(NSString * _Nonnull)getLongURLWithParams:(NSDictionary * _Nullable)params andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andTags:(NSArray * _Nullable)tags;
 		[Export("getLongURLWithParams:andFeature:andStage:andTags:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetLongURLWithParams(NSDictionary @params, string feature, string stage, NSObject[] tags);
+		//[Verify(StronglyTypedNSArray)]
+		string GetLongURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] NSObject[] tags);
 
-		// -(NSString *)getLongURLWithParams:(NSDictionary *)params andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias;
+		// -(NSString * _Nonnull)getLongURLWithParams:(NSDictionary * _Nullable)params andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias;
 		[Export("getLongURLWithParams:andFeature:andStage:andAlias:")]
-		string GetLongURLWithParams(NSDictionary @params, string feature, string stage, string alias);
+		string GetLongURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias);
 
-		// -(NSString *)getLongURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andTags:(NSArray *)tags andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias;
+		// -(NSString * _Nonnull)getLongURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andTags:(NSArray * _Nullable)tags andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias;
 		[Export("getLongURLWithParams:andChannel:andTags:andFeature:andStage:andAlias:")]
-		//[Verify (StronglyTypedNSArray)]
-		string GetLongURLWithParams(NSDictionary @params, string channel, NSObject[] tags, string feature, string stage, string alias);
+		//[Verify(StronglyTypedNSArray)]
+		string GetLongURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] NSObject[] tags, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias);
 
-		// -(void)getShortURLWithCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithCallback:")]
-		void GetShortURLWithCallback(callbackWithUrl callback);
+		void GetShortURLWithCallback([NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andCallback:")]
-		void GetShortURLWithParams(NSDictionary @params, callbackWithUrl callback);
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andChannel:andFeature:andCallback:")]
-		void GetShortURLWithParams(NSDictionary @params, string channel, string feature, callbackWithUrl callback);
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:andCallback:")]
-		void GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage, callbackWithUrl callback);
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:andAlias:andCallback:")]
-		void GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage, string alias, callbackWithUrl callback);
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andType:(BranchLinkType)type andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:andType:andCallback:")]
-		void GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage, BranchLinkType type, callbackWithUrl callback);
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, BranchLinkType type, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andChannel:andFeature:andStage:andMatchDuration:andCallback:")]
-		void GetShortURLWithParams(NSDictionary @params, string channel, string feature, string stage, nuint duration, callbackWithUrl callback);
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, nuint duration, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andCallback:")]
-		//[Verify (StronglyTypedNSArray)]
-		void GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, callbackWithUrl callback);
+		//[Verify(StronglyTypedNSArray)]
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andAlias:andCallback:")]
-		//[Verify (StronglyTypedNSArray)]
-		void GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, string alias, callbackWithUrl callback);
+		//[Verify(StronglyTypedNSArray)]
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andType:(BranchLinkType)type andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andType:andCallback:")]
-		//[Verify (StronglyTypedNSArray)]
-		void GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, BranchLinkType type, callbackWithUrl callback);
+		//[Verify(StronglyTypedNSArray)]
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, BranchLinkType type, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl)callback;
+		// -(void)getShortURLWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortURLWithParams:andTags:andChannel:andFeature:andStage:andMatchDuration:andCallback:")]
-		//[Verify (StronglyTypedNSArray)]
-		void GetShortURLWithParams(NSDictionary @params, NSObject[] tags, string channel, string feature, string stage, nuint duration, callbackWithUrl callback);
+		//[Verify(StronglyTypedNSArray)]
+		void GetShortURLWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, nuint duration, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCallback:(callbackWithUrl)callback;
+		// -(void)getShortUrlWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andAlias:(NSString * _Nullable)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortUrlWithParams:andTags:andAlias:andMatchDuration:andChannel:andFeature:andStage:andCallback:")]
-		//[Verify (StronglyTypedNSArray)]
-		void GetShortUrlWithParams(NSDictionary @params, NSObject[] tags, string alias, nuint duration, string channel, string feature, string stage, callbackWithUrl callback);
+		//[Verify(StronglyTypedNSArray)]
+		void GetShortUrlWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string alias, nuint duration, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andCallback:(callbackWithUrl)callback;
+		// -(void)getShortUrlWithParams:(NSDictionary * _Nullable)params andTags:(NSArray * _Nullable)tags andAlias:(NSString * _Nullable)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString * _Nullable)channel andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andCampaign:(NSString * _Nullable)campaign andCallback:(callbackWithUrl _Nullable)callback;
 		[Export("getShortUrlWithParams:andTags:andAlias:andMatchDuration:andChannel:andFeature:andStage:andCampaign:andCallback:")]
-		//[Verify (StronglyTypedNSArray)]
-		void GetShortUrlWithParams(NSDictionary @params, NSObject[] tags, string alias, nuint duration, string channel, string feature, string stage, string campaign, callbackWithUrl callback);
+		//[Verify(StronglyTypedNSArray)]
+		void GetShortUrlWithParams([NullAllowed] NSDictionary @params, [NullAllowed] NSObject[] tags, [NullAllowed] string alias, nuint duration, [NullAllowed] string channel, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string campaign, [NullAllowed] callbackWithUrl callback);
 
-		// -(void)getSpotlightUrlWithParams:(NSDictionary *)params callback:(callbackWithParams)callback;
+		// -(void)getSpotlightUrlWithParams:(NSDictionary * _Nonnull)params callback:(callbackWithParams _Nonnull)callback;
 		[Export("getSpotlightUrlWithParams:callback:")]
 		void GetSpotlightUrlWithParams(NSDictionary @params, callbackWithParams callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description;
 		[Export("createDiscoverableContentWithTitle:description:")]
 		void CreateDiscoverableContentWithTitle(string title, string description);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description publiclyIndexable:(BOOL)publiclyIndexable callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description publiclyIndexable:(BOOL)publiclyIndexable callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:publiclyIndexable:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, bool publiclyIndexable, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:type:publiclyIndexable:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, string type, bool publiclyIndexable, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:type:publiclyIndexable:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, string type, bool publiclyIndexable, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:type:publiclyIndexable:keywords:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, string type, bool publiclyIndexable, NSSet keywords, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl linkParams:(NSDictionary * _Nonnull)linkParams publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:linkParams:publiclyIndexable:keywords:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, NSDictionary linkParams, bool publiclyIndexable, NSSet keywords);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl linkParams:(NSDictionary * _Nonnull)linkParams type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:linkParams:type:publiclyIndexable:keywords:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, NSDictionary linkParams, string type, bool publiclyIndexable, NSSet keywords);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:type:publiclyIndexable:keywords:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, string type, bool publiclyIndexable, NSSet keywords);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams publiclyIndexable:(BOOL)publiclyIndexable;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl linkParams:(NSDictionary * _Nonnull)linkParams publiclyIndexable:(BOOL)publiclyIndexable;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:linkParams:publiclyIndexable:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, NSDictionary linkParams, bool publiclyIndexable);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl linkParams:(NSDictionary * _Nonnull)linkParams type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:linkParams:type:publiclyIndexable:keywords:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, NSDictionary linkParams, string type, bool publiclyIndexable, NSSet keywords, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl linkParams:(NSDictionary * _Nonnull)linkParams type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords expirationDate:(NSDate * _Nonnull)expirationDate callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:linkParams:type:publiclyIndexable:keywords:expirationDate:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, NSDictionary linkParams, string type, bool publiclyIndexable, NSSet keywords, NSDate expirationDate, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl canonicalId:(NSString *)canonicalId linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate callback:(callbackWithUrl)callback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl canonicalId:(NSString * _Nonnull)canonicalId linkParams:(NSDictionary * _Nonnull)linkParams type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords expirationDate:(NSDate * _Nonnull)expirationDate callback:(callbackWithUrl _Nonnull)callback;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:canonicalId:linkParams:type:publiclyIndexable:keywords:expirationDate:callback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, string canonicalId, NSDictionary linkParams, string type, bool publiclyIndexable, NSSet keywords, NSDate expirationDate, callbackWithUrl callback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier)spotlightCallback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl linkParams:(NSDictionary * _Nonnull)linkParams type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords expirationDate:(NSDate * _Nonnull)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier _Nonnull)spotlightCallback;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:linkParams:type:publiclyIndexable:keywords:expirationDate:spotlightCallback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, NSDictionary linkParams, string type, bool publiclyIndexable, NSSet keywords, NSDate expirationDate, callbackWithUrlAndSpotlightIdentifier spotlightCallback);
 
-		// -(void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl canonicalId:(NSString *)canonicalId linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier)spotlightCallback;
+		// -(void)createDiscoverableContentWithTitle:(NSString * _Nonnull)title description:(NSString * _Nonnull)description thumbnailUrl:(NSURL * _Nonnull)thumbnailUrl canonicalId:(NSString * _Nonnull)canonicalId linkParams:(NSDictionary * _Nonnull)linkParams type:(NSString * _Nonnull)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet * _Nonnull)keywords expirationDate:(NSDate * _Nonnull)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier _Nonnull)spotlightCallback;
 		[Export("createDiscoverableContentWithTitle:description:thumbnailUrl:canonicalId:linkParams:type:publiclyIndexable:keywords:expirationDate:spotlightCallback:")]
 		void CreateDiscoverableContentWithTitle(string title, string description, NSUrl thumbnailUrl, string canonicalId, NSDictionary linkParams, string type, bool publiclyIndexable, NSSet keywords, NSDate expirationDate, callbackWithUrlAndSpotlightIdentifier spotlightCallback);
 
-		// -(void)indexOnSpotlightWithBranchUniversalObject:(BranchUniversalObject *)universalObject linkProperties:(BranchLinkProperties *)linkProperties completion:(void (^)(BranchUniversalObject *, NSString *, NSError *))completion;
+		// -(void)indexOnSpotlightWithBranchUniversalObject:(BranchUniversalObject * _Nonnull)universalObject linkProperties:(BranchLinkProperties * _Nullable)linkProperties completion:(void (^ _Nonnull)(BranchUniversalObject * _Nonnull, NSString * _Nonnull, NSError * _Nonnull))completion;
 		[Export("indexOnSpotlightWithBranchUniversalObject:linkProperties:completion:")]
-		void IndexOnSpotlightWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, Action<BranchUniversalObject, NSString, NSError> completion);
+		void IndexOnSpotlightWithBranchUniversalObject(BranchUniversalObject universalObject, [NullAllowed] BranchLinkProperties linkProperties, Action<BranchUniversalObject, NSString, NSError> completion);
 
-		// -(void)indexOnSpotlightUsingSearchableItems:(NSArray<BranchUniversalObject *> *)universalObjects completion:(void (^)(NSArray<BranchUniversalObject *> *, NSError *))completion;
-		[Export("indexOnSpotlightUsingSearchableItems:completion:")]
-		void IndexOnSpotlightUsingSearchableItems(BranchUniversalObject[] universalObjects, Action<NSArray<NSObject>, NSError> completion);
+		//// -(void)indexOnSpotlightUsingSearchableItems:(NSArray<BranchUniversalObject *> * _Nonnull)universalObjects completion:(void (^ _Nonnull)(NSArray<BranchUniversalObject *> * _Nonnull, NSError * _Nonnull))completion;
+		//[Export("indexOnSpotlightUsingSearchableItems:completion:")]
+		//void IndexOnSpotlightUsingSearchableItems(BranchUniversalObject[] universalObjects, Action<NSArray<BranchUniversalObject>, NSError> completion);
 
-		// -(void)removeSearchableItemWithBranchUniversalObject:(BranchUniversalObject *)universalObject callback:(void (^)(NSError *))completion;
+		// -(void)removeSearchableItemWithBranchUniversalObject:(BranchUniversalObject * _Nonnull)universalObject callback:(void (^ _Nullable)(NSError * _Nullable))completion;
 		[Export("removeSearchableItemWithBranchUniversalObject:callback:")]
-		void RemoveSearchableItemWithBranchUniversalObject(BranchUniversalObject universalObject, Action<NSError> completion);
+		void RemoveSearchableItemWithBranchUniversalObject(BranchUniversalObject universalObject, [NullAllowed] Action<NSError> completion);
 
-		// -(void)removeSearchableItemsWithBranchUniversalObjects:(NSArray<BranchUniversalObject *> *)universalObjects callback:(void (^)(NSError *))completion;
+		// -(void)removeSearchableItemsWithBranchUniversalObjects:(NSArray<BranchUniversalObject *> * _Nonnull)universalObjects callback:(void (^ _Nullable)(NSError * _Nullable))completion;
 		[Export("removeSearchableItemsWithBranchUniversalObjects:callback:")]
-		void RemoveSearchableItemsWithBranchUniversalObjects(BranchUniversalObject[] universalObjects, Action<NSError> completion);
+		void RemoveSearchableItemsWithBranchUniversalObjects(BranchUniversalObject[] universalObjects, [NullAllowed] Action<NSError> completion);
 
-		// -(void)removeAllPrivateContentFromSpotLightWithCallback:(void (^)(NSError *))completion;
+		// -(void)removeAllPrivateContentFromSpotLightWithCallback:(void (^ _Nullable)(NSError * _Nullable))completion;
 		[Export("removeAllPrivateContentFromSpotLightWithCallback:")]
-		void RemoveAllPrivateContentFromSpotLightWithCallback(Action<NSError> completion);
+		void RemoveAllPrivateContentFromSpotLightWithCallback([NullAllowed] Action<NSError> completion);
 
-		//// -(id)initWithInterface:(BNCServerInterface *)interface queue:(BNCServerRequestQueue *)queue cache:(BNCLinkCache *)cache preferenceHelper:(BNCPreferenceHelper *)preferenceHelper key:(NSString *)key;
-		//[Export ("initWithInterface:queue:cache:preferenceHelper:key:")]
-		//IntPtr Constructor (BNCServerInterface @interface, BNCServerRequestQueue queue, BNCLinkCache cache, BNCPreferenceHelper preferenceHelper, string key);
+		// -(id _Nonnull)initWithInterface:(BNCServerInterface * _Nonnull)interface queue:(BNCServerRequestQueue * _Nonnull)queue cache:(BNCLinkCache * _Nonnull)cache preferenceHelper:(BNCPreferenceHelper * _Nonnull)preferenceHelper key:(NSString * _Nonnull)key;
+		[Export("initWithInterface:queue:cache:preferenceHelper:key:")]
+		IntPtr Constructor(BNCServerInterface @interface, BNCServerRequestQueue queue, BNCLinkCache cache, BNCPreferenceHelper preferenceHelper, string key);
 
-		// -(void)registerViewWithParams:(NSDictionary *)params andCallback:(callbackWithParams)callback __attribute__((deprecated("This API is deprecated. Please use BranchEvent:BranchStandardEventViewItem instead.")));
+		// -(void)registerViewWithParams:(NSDictionary * _Nonnull)params andCallback:(callbackWithParams _Nonnull)callback __attribute__((deprecated("This API is deprecated. Please use BranchEvent:BranchStandardEventViewItem instead.")));
 		[Export("registerViewWithParams:andCallback:")]
 		void RegisterViewWithParams(NSDictionary @params, callbackWithParams callback);
 
-		//// -(void)sendServerRequest:(BNCServerRequest *)request;
-		//[Export ("sendServerRequest:")]
-		//void SendServerRequest (BNCServerRequest request);
+		// -(void)sendServerRequest:(BNCServerRequest * _Nonnull)request;
+		[Export("sendServerRequest:")]
+		void SendServerRequest(BNCServerRequest request);
 
-		//// -(void)sendServerRequestWithoutSession:(BNCServerRequest *)request;
-		//[Export ("sendServerRequestWithoutSession:")]
-		//void SendServerRequestWithoutSession (BNCServerRequest request);
+		// -(void)sendServerRequestWithoutSession:(BNCServerRequest * _Nonnull)request;
+		[Export("sendServerRequestWithoutSession:")]
+		void SendServerRequestWithoutSession(BNCServerRequest request);
 
-		//// @property (readonly, strong) BNCServerInterface * serverInterface;
-		//[Export ("serverInterface", ArgumentSemantic.Strong)]
-		//BNCServerInterface ServerInterface { get; }
+		// @property (copy, nonatomic) void (^ _Nonnull)(NSDictionary * _Nullable, NSError * _Nullable) sessionInitWithParamsCallback;
+		[Export("sessionInitWithParamsCallback", ArgumentSemantic.Copy)]
+		Action<NSDictionary, NSError> SessionInitWithParamsCallback { get; set; }
+
+		// @property (copy, nonatomic) void (^ _Nonnull)(BranchUniversalObject * _Nullable, BranchLinkProperties * _Nullable, NSError * _Nullable) sessionInitWithBranchUniversalObjectCallback;
+		[Export("sessionInitWithBranchUniversalObjectCallback", ArgumentSemantic.Copy)]
+		Action<BranchUniversalObject, BranchLinkProperties, NSError> SessionInitWithBranchUniversalObjectCallback { get; set; }
+
+		// @property (readonly, strong) BNCServerInterface * _Nonnull serverInterface;
+		[Export("serverInterface", ArgumentSemantic.Strong)]
+		BNCServerInterface ServerInterface { get; }
 
 		// -(void)clearNetworkQueue;
 		[Export("clearNetworkQueue")]
 		void ClearNetworkQueue();
 	}
+
 }
