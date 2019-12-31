@@ -8,4 +8,6 @@
   <attr path="/api/package[@name='io.branch.referral']/class[@name='ServerRequest']/method[@name='getRequestPath']" name="managedName">getRequestPath</attr>
   <attr path="/api/package[@name='io.branch.referral']/class[@name='Branch']" name="managedName">AndroidNativeBranch</attr>
   <remove-node path="/api/package[@name='io.branch.referral.validators']/class[@name='IntegrationValidator']/implements[@name='io.branch.referral.validators.ServerRequestGetAppConfig.IGetAppConfigEvents']" />
+  <remove-node path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask']"/>
+  <remove-node path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask.1']"/>
 </metadata>

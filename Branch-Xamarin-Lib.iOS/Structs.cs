@@ -3,7 +3,8 @@ using System.Runtime.InteropServices;
 using Foundation;
 using ObjCRuntime;
 
-namespace IOSNativeBranch {
+namespace IOSNativeBranch
+{
 
 	[Native]
 	public enum BNCErrorCode : long
@@ -81,4 +82,5 @@ namespace IOSNativeBranch {
 		MostRecentFirst,
 		LeastRecentFirst
 	}
+
 }
