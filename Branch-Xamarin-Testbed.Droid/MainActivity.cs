@@ -58,6 +58,8 @@ namespace Branch_Xamarin_Testbed.Droid
 
         protected override void OnNewIntent(Intent intent)
         {
+            base.OnNewIntent(intent);
+            intent.PutExtra("branch_force_new_session", true);
             this.Intent = intent;
         }
 
