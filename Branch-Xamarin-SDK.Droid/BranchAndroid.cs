@@ -46,8 +46,11 @@ namespace BranchXamarinSDK
 		public Activity CurrActivity { get; set; }
 
 		public static void GetAutoInstance(Context appContext) {
-            AndroidNativeBranch.GetAutoInstance(appContext);
-            //AndroidNativeBranch.DisableInstantDeepLinking(true);
+			BranchUtil.SetPluginType(BranchUtil.PluginType.Xamarin);
+			BranchUtil.PluginVersion = "7.0.0";
+
+			AndroidNativeBranch.GetAutoInstance(appContext);
+            AndroidNativeBranch.DisableInstantDeepLinking(true);
         }
 
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
@@ -74,6 +77,7 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.appContext = app.ApplicationContext;
 			instance.branchKey = branchKey;
+
 
 			if (Debug) {
 				instance.SetDebug ();
@@ -128,8 +132,8 @@ namespace BranchXamarinSDK
 			BranchSessionListener obj = new BranchSessionListener (callback);
 			callbacksList.Add (obj as Object);
 
-            //NativeBranch.InitSession (obj);
-            NativeBranch.ReInitSession(CurrActivity, obj);
+            NativeBranch.InitSession(obj);
+            //NativeBranch.ReInitSession(CurrActivity, obj);
         }
 
 		public override void InitSession (IBranchBUOSessionInterface callback) {
@@ -137,8 +141,8 @@ namespace BranchXamarinSDK
 			BranchBUOSessionListener obj = new BranchBUOSessionListener (callback);
 			callbacksList.Add (obj as Object);
 
-            //NativeBranch.InitSession (obj);
-            NativeBranch.ReInitSession(CurrActivity, obj);
+            NativeBranch.InitSession(obj);
+            //NativeBranch.ReInitSession(CurrActivity, obj);
         }
 
 		public override Dictionary<String, object> GetLastReferringParams () {
