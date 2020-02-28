@@ -47,7 +47,7 @@ namespace BranchXamarinSDK
 
 		public static void GetAutoInstance(Context appContext) {
 			BranchUtil.SetPluginType(BranchUtil.PluginType.Xamarin);
-			BranchUtil.PluginVersion = "7.0.0";
+			BranchUtil.PluginVersion = "7.0.1";
 
 			AndroidNativeBranch.GetAutoInstance(appContext);
             AndroidNativeBranch.DisableInstantDeepLinking(true);

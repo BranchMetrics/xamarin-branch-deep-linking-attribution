@@ -4,10 +4,10 @@
     <id>Branch-Xamarin-Linking-SDK</id>
     <title>Branch Xamarin SDK</title>
     <summary>Hosted deep links for your Xamarin-based Android or iOS app by Branch</summary>
-    <version>7.0.0</version>
+    <version>7.0.1</version>
     <authors>Branch Metrics, Inc.</authors>
     <owners>Branch Metrics, Inc.</owners>
-    <iconUrl> https://s3-us-west-1.amazonaws.com/branchhost/branch_icon.png</iconUrl>
+<!--     <iconUrl> https://s3-us-west-1.amazonaws.com/branchhost/branch_icon.png</iconUrl> -->
 <!--     <licenseUrl>https://raw.githubusercontent.com/BranchMetrics/Branch-Xamarin-SDK/master/LICENSE</licenseUrl> -->
     <projectUrl>https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -30,10 +30,12 @@
     </dependencies>
     
     <license type="file">LICENSE.txt</license>
+	<icon>branch_icon.png</icon>
     
   </metadata>
   <files>
     <file src="../LICENSE.txt" target="" />
+    <file src="../docs/images/branch_icon.png" target="" />
   
     <file src="../Branch-Xamarin-SDK/bin/Release/netstandard1.2/Branch-Xamarin-SDK.dll" target="lib/netstandard1.2" />
 
