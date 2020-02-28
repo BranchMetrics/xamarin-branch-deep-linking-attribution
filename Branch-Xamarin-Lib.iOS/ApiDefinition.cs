@@ -301,104 +301,104 @@ namespace IOSNativeBranch {
         void ClearAll();
     }
 
-    // @protocol BNCNetworkOperationProtocol <NSObject>
-    /*
-      Check whether adding [Model] to this declaration is appropriate.
-      [Model] is used to generate a C# class that implements this protocol,
-      and might be useful for protocols that consumers are supposed to implement,
-      since consumers can subclass the generated class instead of implementing
-      the generated interface. If consumers are not supposed to implement this
-      protocol, then [Model] is redundant and will generate code that will never
-      be used.
-    */
-    [Protocol]
-    [BaseType(typeof(NSObject))]
-    interface BNCNetworkOperationProtocol
-    {
-        // @required @property (readonly, copy) NSURLRequest * request;
-        [Abstract]
-        [Export("request", ArgumentSemantic.Copy)]
-        NSUrlRequest Request { get; }
+    //// @protocol BNCNetworkOperationProtocol <NSObject>
+    ///*
+    //  Check whether adding [Model] to this declaration is appropriate.
+    //  [Model] is used to generate a C# class that implements this protocol,
+    //  and might be useful for protocols that consumers are supposed to implement,
+    //  since consumers can subclass the generated class instead of implementing
+    //  the generated interface. If consumers are not supposed to implement this
+    //  protocol, then [Model] is redundant and will generate code that will never
+    //  be used.
+    //*/
+    //[Protocol]
+    //[BaseType(typeof(NSObject))]
+    //interface BNCNetworkOperationProtocol
+    //{
+    //    // @required @property (readonly, copy) NSURLRequest * request;
+    //    [Abstract]
+    //    [Export("request", ArgumentSemantic.Copy)]
+    //    NSUrlRequest Request { get; }
 
-        // @required @property (readonly, copy) NSHTTPURLResponse * response;
-        [Abstract]
-        [Export("response", ArgumentSemantic.Copy)]
-        NSHttpUrlResponse Response { get; }
+    //    // @required @property (readonly, copy) NSHTTPURLResponse * response;
+    //    [Abstract]
+    //    [Export("response", ArgumentSemantic.Copy)]
+    //    NSHttpUrlResponse Response { get; }
 
-        // @required @property (readonly, strong) NSData * responseData;
-        [Abstract]
-        [Export("responseData", ArgumentSemantic.Strong)]
-        NSData ResponseData { get; }
+    //    // @required @property (readonly, strong) NSData * responseData;
+    //    [Abstract]
+    //    [Export("responseData", ArgumentSemantic.Strong)]
+    //    NSData ResponseData { get; }
 
-        // @required @property (readonly, copy) NSError * error;
-        [Abstract]
-        [Export("error", ArgumentSemantic.Copy)]
-        NSError Error { get; }
+    //    // @required @property (readonly, copy) NSError * error;
+    //    [Abstract]
+    //    [Export("error", ArgumentSemantic.Copy)]
+    //    NSError Error { get; }
 
-        // @required @property (readonly, copy) NSDate * startDate;
-        [Abstract]
-        [Export("startDate", ArgumentSemantic.Copy)]
-        NSDate StartDate { get; }
+    //    // @required @property (readonly, copy) NSDate * startDate;
+    //    [Abstract]
+    //    [Export("startDate", ArgumentSemantic.Copy)]
+    //    NSDate StartDate { get; }
 
-        // @required @property (readonly, copy) NSDate * timeoutDate;
-        [Abstract]
-        [Export("timeoutDate", ArgumentSemantic.Copy)]
-        NSDate TimeoutDate { get; }
+    //    // @required @property (readonly, copy) NSDate * timeoutDate;
+    //    [Abstract]
+    //    [Export("timeoutDate", ArgumentSemantic.Copy)]
+    //    NSDate TimeoutDate { get; }
 
-        // @required @property (strong) NSDictionary * userInfo;
-        [Abstract]
-        [Export("userInfo", ArgumentSemantic.Strong)]
-        NSDictionary UserInfo { get; set; }
+    //    // @required @property (strong) NSDictionary * userInfo;
+    //    [Abstract]
+    //    [Export("userInfo", ArgumentSemantic.Strong)]
+    //    NSDictionary UserInfo { get; set; }
 
-        // @required -(void)start;
-        [Abstract]
-        [Export("start")]
-        void Start();
+    //    // @required -(void)start;
+    //    [Abstract]
+    //    [Export("start")]
+    //    void Start();
 
-        // @optional -(void)cancel;
-        [Export("cancel")]
-        void Cancel();
-    }
+    //    // @optional -(void)cancel;
+    //    [Export("cancel")]
+    //    void Cancel();
+    //}
 
-    // @protocol BNCNetworkServiceProtocol <NSObject>
-    /*
-      Check whether adding [Model] to this declaration is appropriate.
-      [Model] is used to generate a C# class that implements this protocol,
-      and might be useful for protocols that consumers are supposed to implement,
-      since consumers can subclass the generated class instead of implementing
-      the generated interface. If consumers are not supposed to implement this
-      protocol, then [Model] is redundant and will generate code that will never
-      be used.
-    */
-    [Protocol]
-    [BaseType(typeof(NSObject))]
-    interface BNCNetworkServiceProtocol
-    {
-        // @required +(id<BNCNetworkServiceProtocol>)new;
-        [Static, Abstract]
-        [Export("new")]
-        //[Verify(MethodToProperty)]
-        BNCNetworkServiceProtocol New { get; }
+    //// @protocol BNCNetworkServiceProtocol <NSObject>
+    ///*
+    //  Check whether adding [Model] to this declaration is appropriate.
+    //  [Model] is used to generate a C# class that implements this protocol,
+    //  and might be useful for protocols that consumers are supposed to implement,
+    //  since consumers can subclass the generated class instead of implementing
+    //  the generated interface. If consumers are not supposed to implement this
+    //  protocol, then [Model] is redundant and will generate code that will never
+    //  be used.
+    //*/
+    //[Protocol]
+    //[BaseType(typeof(NSObject))]
+    //interface BNCNetworkServiceProtocol
+    //{
+    //    // @required +(id<BNCNetworkServiceProtocol>)new;
+    //    [Static, Abstract]
+    //    [Export("new")]
+    //    //[Verify(MethodToProperty)]
+    //    BNCNetworkServiceProtocol New { get; }
 
-        // @optional -(void)cancelAllOperations;
-        [Export("cancelAllOperations")]
-        void CancelAllOperations();
+    //    // @optional -(void)cancelAllOperations;
+    //    [Export("cancelAllOperations")]
+    //    void CancelAllOperations();
 
-        // @required -(id<BNCNetworkOperationProtocol>)networkOperationWithURLRequest:(NSMutableURLRequest *)request completion:(void (^)(id<BNCNetworkOperationProtocol>))completion;
-        [Abstract]
-        [Export("networkOperationWithURLRequest:completion:")]
-        BNCNetworkOperationProtocol NetworkOperationWithURLRequest(NSMutableUrlRequest request, Action<BNCNetworkOperationProtocol> completion);
+    //    // @required -(id<BNCNetworkOperationProtocol>)networkOperationWithURLRequest:(NSMutableURLRequest *)request completion:(void (^)(id<BNCNetworkOperationProtocol>))completion;
+    //    [Abstract]
+    //    [Export("networkOperationWithURLRequest:completion:")]
+    //    BNCNetworkOperationProtocol NetworkOperationWithURLRequest(NSMutableUrlRequest request, Action<BNCNetworkOperationProtocol> completion);
 
-        // @required @property (strong) NSDictionary * userInfo;
-        [Abstract]
-        [Export("userInfo", ArgumentSemantic.Strong)]
-        NSDictionary UserInfo { get; set; }
+    //    // @required @property (strong) NSDictionary * userInfo;
+    //    [Abstract]
+    //    [Export("userInfo", ArgumentSemantic.Strong)]
+    //    NSDictionary UserInfo { get; set; }
 
-        // @optional -(NSError *)pinSessionToPublicSecKeyRefs:(NSArray *)publicKeys;
-        [Export("pinSessionToPublicSecKeyRefs:")]
-        //[Verify(StronglyTypedNSArray)]
-        NSError PinSessionToPublicSecKeyRefs(NSObject[] publicKeys);
-    }
+    //    // @optional -(NSError *)pinSessionToPublicSecKeyRefs:(NSArray *)publicKeys;
+    //    [Export("pinSessionToPublicSecKeyRefs:")]
+    //    //[Verify(StronglyTypedNSArray)]
+    //    NSError PinSessionToPublicSecKeyRefs(NSObject[] publicKeys);
+    //}
 
     // typedef void (^BNCServerCallback)(BNCServerResponse *, NSError *);
     delegate void BNCServerCallback(BNCServerResponse arg0, NSError arg1);

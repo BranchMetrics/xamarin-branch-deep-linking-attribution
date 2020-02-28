@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- 7.0.1
+  * Fixing plugin type value for Xamarin.IOS
+  * Changing deprecated "iconURL" to "icon" tag in nuspec
+
 - 7.0.0
   * Updating Branch to Android version 4.3.2 and iOS version 0.31.4
   * Adding support of Play Install Referrer API
