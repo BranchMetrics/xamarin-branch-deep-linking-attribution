@@ -324,6 +324,10 @@ namespace BranchXamarinSDK.iOS
             if (eventDict.ContainsKey("transaction_id")) {
                 branchEvent.TransactionID = eventDict ["transaction_id"].ToString();
             }
+            if (eventDict.ContainsKey("customer_event_alias"))
+            {
+                branchEvent.Alias = eventDict["customer_event_alias"].ToString();
+            }
             if (eventDict.ContainsKey("affiliation")) {
                 branchEvent.Affiliation = eventDict ["affiliation"].ToString();
             }
