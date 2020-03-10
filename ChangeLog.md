@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- 7.0.2
+  * Supporting 'customer_event_alias' field
+
 - 7.0.1
   * Fixing plugin type value for Xamarin.IOS
   * Changing deprecated "iconURL" to "icon" tag in nuspec

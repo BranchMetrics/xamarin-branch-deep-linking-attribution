@@ -189,7 +189,12 @@ namespace BranchXamarinSDK.Droid
                 branchEvent.SetTransactionID(parameters.GetString("transaction_id"));
             }
 
-            if (parameters.Has("affiliation")) {
+			if (parameters.Has("customer_event_alias"))
+			{
+				branchEvent.SetCustomerEventAlias(parameters.GetString("customer_event_alias"));
+			}
+
+			if (parameters.Has("affiliation")) {
                 branchEvent.SetAffiliation(parameters.GetString("affiliation"));
             }
 
