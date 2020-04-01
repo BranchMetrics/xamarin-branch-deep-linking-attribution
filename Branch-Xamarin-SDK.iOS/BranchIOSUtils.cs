@@ -354,18 +354,26 @@ namespace BranchXamarinSDK.iOS
             }
             if (eventDict.ContainsKey("custom_data")) {
                 Dictionary<string, string> dict = eventDict[@"custom_data"] as Dictionary<string, string>;
+                NSMutableDictionary<NSString, NSString> tempDict = new NSMutableDictionary<NSString, NSString>();
 
                 foreach(string key in dict.Keys) {
-                    branchEvent.CustomData.Add(new NSString(key), new NSString(dict[key]));
+                    tempDict.Add(new NSString(key), new NSString(dict[key]));
                 }
+
+                branchEvent.CustomData = new NSDictionary<NSString, NSString>(tempDict.Keys, tempDict.Values);
             }
 
             if (eventDict.ContainsKey("content_items")) {
                 List<string> array = eventDict["content_items"] as List<string>;
+                NSMutableDictionary<NSObject, NSObject> tempDict = new NSMutableDictionary<NSObject, NSObject>();
 
+                int i = 1;
                 foreach (string buoJson in array) {
-                    branchEvent.ContentItems.Add(ToNativeUniversalObject(new BranchUniversalObject(buoJson)));
+                    tempDict.Add(NSObject.FromObject(i), ToNativeUniversalObject(new BranchUniversalObject(buoJson)));
+                    ++i;
                 }
+
+                branchEvent.ContentItems = NSArray.FromNSObjects<NSObject>(tempDict.Values);
             }
                 
             branchEvent.LogEvent();
