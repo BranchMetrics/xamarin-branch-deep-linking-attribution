@@ -1,5 +1,9 @@
 Branch Xamarin SDK change log
 
+- 7.0.3
+  * Fixing InvalidCastException when adding custom data to branch event on IOS 
+  * Fixing empty content items in branch event on IOS
+
 - 7.0.2
   * Supporting 'customer_event_alias' field
 

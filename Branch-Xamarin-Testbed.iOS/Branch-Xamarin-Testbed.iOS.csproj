@@ -152,13 +152,13 @@
         <Project>{5F491888-E3EF-4A87-9296-75908B2DB31C}</Project>
         <Name>Branch-Xamarin-SDK</Name>
       </ProjectReference>
-      <ProjectReference Include="..\Branch-Xamarin-SDK.iOS\Branch-Xamarin-SDK.iOS.csproj">
-        <Project>{3F24A531-821D-4E9B-9776-31E19ABAF087}</Project>
-        <Name>Branch-Xamarin-SDK.iOS</Name>
-      </ProjectReference>
       <ProjectReference Include="..\Branch-Xamarin-Testbed\Branch-Xamarin-Testbed.csproj">
         <Project>{6CEB1D9B-7A7B-420E-8CA2-AAD59116F2A8}</Project>
         <Name>Branch-Xamarin-Testbed</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Branch-Xamarin-SDK.iOS\Branch-Xamarin-SDK.iOS.csproj">
+        <Project>{3F24A531-821D-4E9B-9776-31E19ABAF087}</Project>
+        <Name>Branch-Xamarin-SDK.iOS</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

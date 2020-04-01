@@ -2769,13 +2769,13 @@ namespace IOSNativeBranch {
         BranchEventAdType AdType { get; set; }
 
         // @property (copy, nonatomic) NSArray<BranchUniversalObject *> * _Nonnull contentItems;
-        [Export("contentItems", ArgumentSemantic.Copy)]
+        [Export("contentItems", ArgumentSemantic.Strong)]
         //BranchUniversalObject[] ContentItems { get; set; }
-        NSMutableArray<NSObject> ContentItems { get; set; }
+        NSArray ContentItems { get; set; }
 
         // @property (copy, nonatomic) NSDictionary<NSString *,NSString *> * _Nonnull customData;
-        [Export("customData", ArgumentSemantic.Copy)]
-        NSMutableDictionary<NSString, NSString> CustomData { get; set; }
+        [Export("customData", ArgumentSemantic.Strong)]
+        NSDictionary<NSString, NSString> CustomData { get; set; }
 
         // -(void)logEvent;
         [Export("logEvent")]
