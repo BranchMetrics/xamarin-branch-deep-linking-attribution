@@ -148,8 +148,7 @@ namespace BranchXamarinSDK
             {
                 if (data["metadata"] != null)
                 {
-                    //Dictionary<string, object> metaTemp = data["metadata"] as Dictionary<string, object>;
-                    Dictionary<string, object> metaTemp = JsonConvert.DeserializeObject<Dictionary<string, object>>(data["metadata"] as string);
+                    Dictionary<string, object> metaTemp = data["metadata"] as Dictionary<string, object>;
 
                     if (metaTemp != null)
                     {
