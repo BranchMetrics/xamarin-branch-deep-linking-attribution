@@ -219,7 +219,7 @@ namespace BranchXamarinSDK.Droid
             }
 
             if (parameters.Has("shipping")) {
-                branchEvent.SetRevenue(parameters.GetDouble("shipping"));
+                branchEvent.SetShipping(parameters.GetDouble("shipping"));
             }
 
             if (parameters.Has("search_query")) {
