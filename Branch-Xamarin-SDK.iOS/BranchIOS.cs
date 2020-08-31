@@ -52,7 +52,7 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-            instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.1");
+            instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.6");
             //IOSNativeBranch.RegisterPluginName();
 
             if (launchOptions != null) {
@@ -85,7 +85,7 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-			instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.1");
+			instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.6");
 
 			if (launchOptions != null) {
 				instance.launchOptions = new NSDictionary (launchOptions);
