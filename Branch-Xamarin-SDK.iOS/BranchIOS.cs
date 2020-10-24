@@ -27,17 +27,21 @@ namespace BranchXamarinSDK
 			get { return IOSNativeBranch.Branch.GetInstance(branchKey); }
 		}
 
-        #endregion
+		#endregion
 
-        #region Helpers declaration
+		#region Helpers declaration
 
-        private static bool delayInitToCheckForSearchAds = false;
+		private static bool delayInitToCheckForSearchAds = false;
 
-        #endregion
+		private static bool useLongerWaitForAppleSearchAds = false;
 
-        #region Initialization
+		private static bool ignoreAppleSearchAdsTestData = false;
 
-        private NSDictionary launchOptions = null;
+		#endregion
+
+		#region Initialization
+
+		private NSDictionary launchOptions = null;
 
 		public static void Init(String branchKey, NSDictionary launchOptions, IBranchSessionInterface callback) {
 			if (instance != null) {
@@ -52,7 +56,7 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-            instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.6");
+            instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.7");
             //IOSNativeBranch.RegisterPluginName();
 
             if (launchOptions != null) {
@@ -64,12 +68,23 @@ namespace BranchXamarinSDK
 			if (Debug || Runtime.Arch == Arch.SIMULATOR) {
 				instance.SetDebug ();
 			}
-				
-            if (delayInitToCheckForSearchAds) {
-                instance.NativeBranch.DelayInitToCheckForSearchAds();
-            }
 
-            instance.InitSession (callback);
+			if (delayInitToCheckForSearchAds)
+			{
+				instance.NativeBranch.DelayInitToCheckForSearchAds();
+			}
+
+			if (useLongerWaitForAppleSearchAds)
+			{
+				instance.NativeBranch.UseLongerWaitForAppleSearchAds();
+			}
+
+			if (ignoreAppleSearchAdsTestData)
+			{
+				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
+			}
+
+			instance.InitSession (callback);
 		}
 
 		public static void Init(String branchKey, NSDictionary launchOptions, IBranchBUOSessionInterface callback) {
@@ -85,7 +100,7 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-			instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.6");
+			instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.7");
 
 			if (launchOptions != null) {
 				instance.launchOptions = new NSDictionary (launchOptions);
@@ -97,11 +112,22 @@ namespace BranchXamarinSDK
 				instance.SetDebug ();
 			}
 
-            if (delayInitToCheckForSearchAds) {
-                instance.NativeBranch.DelayInitToCheckForSearchAds();
-            }
+			if (delayInitToCheckForSearchAds)
+			{
+				instance.NativeBranch.DelayInitToCheckForSearchAds();
+			}
 
-            instance.InitSession (callback);
+			if (useLongerWaitForAppleSearchAds)
+			{
+				instance.NativeBranch.UseLongerWaitForAppleSearchAds();
+			}
+
+			if (ignoreAppleSearchAdsTestData)
+			{
+				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
+			}
+
+			instance.InitSession (callback);
 		}
 
 		protected override void SetDebug() {
@@ -278,16 +304,27 @@ namespace BranchXamarinSDK
 			return (int)NativeBranch.GetCreditsForBucket(bucket);
 		}
 
-        #endregion
+		#endregion
 
 
-        #region Configuration methods
+		#region Configuration methods
 
-        public static void DelayInitToCheckForSearchAds() {
-            delayInitToCheckForSearchAds = true;
-        }
+		public static void DelayInitToCheckForSearchAds()
+		{
+			delayInitToCheckForSearchAds = true;
+		}
 
-        public override void SetRetryInterval (int retryInterval) {
+		public static void UseLongerWaitForAppleSearchAds()
+		{
+			useLongerWaitForAppleSearchAds = true;
+		}
+
+		public static void IgnoreAppleSearchAdsTestData()
+		{
+			ignoreAppleSearchAdsTestData = true;
+		}
+
+		public override void SetRetryInterval (int retryInterval) {
 			NativeBranch.SetRetryInterval (retryInterval);
 		}
 
