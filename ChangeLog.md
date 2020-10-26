@@ -1,5 +1,12 @@
 Branch Xamarin SDK change log
 
+- 7.0.7
+  * Adding method UseLongerWaitForAppleSearchAds (for ios only)
+  * Adding method IgnoreAppleSearchAdsTestData (for ios only)
+
+- 7.0.6
+  * Updating Branch to iOS version 0.35.0
+
 - 7.0.3
   * Fixing InvalidCastException when adding custom data to branch event on IOS 
   * Fixing empty content items in branch event on IOS
