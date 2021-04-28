@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>branch_key</key>
+	<dict>
+		<key>live</key>
+		<string>key_live_feebgAAhbH9Tv85H5wLQhpdaefiZv5Dv</string>
+		<key>test</key>
+		<string>key_test_hdcBLUy1xZ1JD0tKg7qrLcgirFmPPVJc</string>
+	</dict>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -43,19 +50,17 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleURLName</key>
-			<string>Branch Scheme</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>branchtesturi</string>
+				<string>branchtest</string>
 			</array>
-			<key>CFBundleURLTypes</key>
-			<string>Editor</string>
 		</dict>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.zoom2games.test</string>
+	<string>io.branch.sdk.Branch-TestBed</string>
 	<key>CFBundleName</key>
 	<string>Test</string>
+	<key>CFBundleDisplayName</key>
+	<string>Branch-TestBed</string>
 </dict>
 </plist>

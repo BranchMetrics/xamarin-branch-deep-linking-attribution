@@ -84,6 +84,8 @@ namespace BranchXamarinSDK
 				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
 			}
 
+			//instance.NativeBranch.EnableLogging();
+
 			instance.InitSession (callback);
 		}
 
@@ -126,6 +128,8 @@ namespace BranchXamarinSDK
 			{
 				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
 			}
+
+			//instance.NativeBranch.EnableLogging();
 
 			instance.InitSession (callback);
 		}

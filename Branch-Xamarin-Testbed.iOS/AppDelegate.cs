@@ -19,11 +19,11 @@ namespace Branch_Xamarin_Testbed.iOS
             global::Xamarin.Forms.Forms.Init();
             iAd.ADBannerView aDBannerView = new ADBannerView();
 
-            BranchIOS.DelayInitToCheckForSearchAds();
-            BranchIOS.UseLongerWaitForAppleSearchAds();
-            BranchIOS.IgnoreAppleSearchAdsTestData();
+            //BranchIOS.DelayInitToCheckForSearchAds();
+            //BranchIOS.UseLongerWaitForAppleSearchAds();
+            //BranchIOS.IgnoreAppleSearchAdsTestData();
             // set Debug mode
-            BranchIOS.Debug = true;
+            //BranchIOS.Debug = true;
 
             //App app = new App ();
             //BranchIOS.Init ("your Branch key", launchOptions, app);

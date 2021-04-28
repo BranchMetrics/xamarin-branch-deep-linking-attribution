@@ -46,10 +46,8 @@
     <ObjcBindingCoreSource Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="Branch.a">
-      <Kind>Static</Kind>
-      <ForceLoad>True</ForceLoad>
-      <Frameworks>SystemConfiguration</Frameworks>
+    <NativeReference Include="Branch.xcframework\ios-arm64_i386_x86_64-simulator\Branch.framework">
+      <Kind>Framework</Kind>
     </NativeReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />

@@ -3412,17 +3412,20 @@ namespace IOSNativeBranch {
         [Export("setDeepLinkDebugMode:")]
         void SetDeepLinkDebugMode([NullAllowed] NSDictionary debugParams);
 
+        // TODO: rename C# versions
         // -(void)addWhiteListedScheme:(NSString * _Nullable)scheme;
-        [Export("addWhiteListedScheme:")]
+        [Export("addAllowedScheme:")]
         void AddWhiteListedScheme([NullAllowed] string scheme);
 
+        // TODO: rename C# versions
         // -(void)setWhiteListedSchemes:(NSArray * _Nullable)schemes;
-        [Export("setWhiteListedSchemes:")]
+        [Export("setAllowedSchemes:")]
         //[Verify(StronglyTypedNSArray)]
         void SetWhiteListedSchemes([NullAllowed] NSObject[] schemes);
 
+        // TODO: rename C# versions
         // @property (copy) NSArray<NSString *> * _Nullable blackListURLRegex;
-        [NullAllowed, Export("blackListURLRegex", ArgumentSemantic.Copy)]
+        [NullAllowed, Export("urlPatternsToIgnore", ArgumentSemantic.Copy)]
         string[] BlackListURLRegex { get; set; }
 
         // -(void)registerFacebookDeepLinkingClass:(id _Nonnull)FBSDKAppLinkUtility;
@@ -3440,6 +3443,10 @@ namespace IOSNativeBranch {
         // -(void)ignoreAppleSearchAdsTestData;
         [Export("ignoreAppleSearchAdsTestData")]
         void IgnoreAppleSearchAdsTestData();
+
+        // - (void)enableLogging;
+        [Export("enableLogging")]
+        void EnableLogging();
 
         // -(void)setRetryInterval:(NSTimeInterval)retryInterval;
         [Export("setRetryInterval:")]
