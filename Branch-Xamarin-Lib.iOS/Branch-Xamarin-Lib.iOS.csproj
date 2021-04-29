@@ -46,7 +46,7 @@
     <ObjcBindingCoreSource Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="Branch.xcframework\ios-arm64_i386_x86_64-simulator\Branch.framework">
+    <NativeReference Include="Branch.xcframework\ios-arm64_armv7\Branch.framework">
       <Kind>Framework</Kind>
     </NativeReference>
   </ItemGroup>
