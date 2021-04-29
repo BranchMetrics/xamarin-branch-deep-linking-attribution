@@ -46,8 +46,9 @@
     <ObjcBindingCoreSource Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="Branch.xcframework\ios-arm64_armv7\Branch.framework">
-      <Kind>Framework</Kind>
+    <NativeReference Include="Branch.a">
+      <Kind>Static</Kind>
+      <SmartLink>False</SmartLink>
     </NativeReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
