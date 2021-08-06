@@ -37,6 +37,8 @@ namespace BranchXamarinSDK
 
 		private static bool ignoreAppleSearchAdsTestData = false;
 
+		private static bool checkPasteboardOnInstall = false;
+
 		#endregion
 
 		#region Initialization
@@ -56,17 +58,13 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-            instance.NativeBranch.RegisterPluginName("Xamarin", "7.0.7");
+            instance.NativeBranch.RegisterPluginName("Xamarin", "7.1.2");
             //IOSNativeBranch.RegisterPluginName();
 
             if (launchOptions != null) {
 				instance.launchOptions = new NSDictionary (launchOptions);
 			} else {
 				instance.launchOptions = new NSDictionary ();
-			}
-
-			if (Debug || Runtime.Arch == Arch.SIMULATOR) {
-				instance.SetDebug ();
 			}
 
 			if (delayInitToCheckForSearchAds)
@@ -84,7 +82,13 @@ namespace BranchXamarinSDK
 				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
 			}
 
-			//instance.NativeBranch.EnableLogging();
+			if (checkPasteboardOnInstall)
+            {
+				instance.NativeBranch.CheckPasteboardOnInstall();
+
+			}
+
+			instance.NativeBranch.EnableLogging();
 
 			instance.InitSession (callback);
 		}
@@ -102,7 +106,7 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-			instance.NativeBranch.RegisterPluginName("Xamarin", "7.1.1");
+			instance.NativeBranch.RegisterPluginName("Xamarin", "7.1.2");
 
 			if (launchOptions != null) {
 				instance.launchOptions = new NSDictionary (launchOptions);
@@ -129,7 +133,13 @@ namespace BranchXamarinSDK
 				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
 			}
 
-			//instance.NativeBranch.EnableLogging();
+			if (checkPasteboardOnInstall)
+			{
+				instance.NativeBranch.CheckPasteboardOnInstall();
+
+			}
+
+			instance.NativeBranch.EnableLogging();
 
 			instance.InitSession (callback);
 		}
@@ -314,7 +324,7 @@ namespace BranchXamarinSDK
 		#region Configuration methods
 
 		public static void DelayInitToCheckForSearchAds()
-		{
+        {
 			delayInitToCheckForSearchAds = true;
 		}
 
@@ -326,6 +336,11 @@ namespace BranchXamarinSDK
 		public static void IgnoreAppleSearchAdsTestData()
 		{
 			ignoreAppleSearchAdsTestData = true;
+		}
+
+		public static void CheckPasteboardOnInstall()
+        {
+			checkPasteboardOnInstall = true;
 		}
 
 		public override void SetRetryInterval (int retryInterval) {

@@ -3448,6 +3448,10 @@ namespace IOSNativeBranch {
         [Export("enableLogging")]
         void EnableLogging();
 
+        // - (void)checkPasteboardOnInstall;
+        [Export("checkPasteboardOnInstall")]
+        void CheckPasteboardOnInstall();
+
         // -(void)setRetryInterval:(NSTimeInterval)retryInterval;
         [Export("setRetryInterval:")]
         void SetRetryInterval(double retryInterval);
