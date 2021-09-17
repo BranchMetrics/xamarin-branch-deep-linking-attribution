@@ -176,55 +176,6 @@ namespace BranchXamarinSDK
 
         #endregion
 
-
-		#region Credits methods
-
-		/// <summary>
-		/// Loads credit totals from the server.
-		/// </summary>
-		/// <param name="callback">The callback that is called once the request has completed.</param>
-		abstract public void LoadRewards (IBranchRewardsInterface callback);
-
-		/// <summary>
-		/// Redeem credits from the specified bucket.
-		/// </summary>
-		/// <param name="callback">The callback that is called once the request has completed.</param>
-		/// <param name="amount">The number of credits to redeem.</param>
-		/// <param name="bucket">The bucket to redeem credits from.</param>
-		abstract public void RedeemRewards (IBranchRewardsInterface callback, int amount, string bucket = "default");
-
-		/// <summary>
-		/// Gets the credit history.
-		/// </summary>
-		/// <param name="callback">The callback that is called once the request has completed.</param>
-		/// <param name="bucket">The bucket to get transaction history for.</param>
-		/// <param name="afterId">The ID of the transaction to start from.</param>
-		/// <param name="length">The number of transactions to pull.</param>
-		/// <param name="mostRecentFirst">he direction to order transactions in the callback list.
-		/// Least recent first means oldest items will be in the front of the response array,
-		/// most recent means newest items will be front.</param>
-		abstract public void GetCreditHistory (IBranchRewardsInterface callback,
-		                                       string bucket = "",
-		                                       string afterId = "",
-		                                       int length = 100,
-		                                       bool mostRecentFirst = true);
-
-		/// <summary>
-		/// Get the local credit balance for the default bucket. You must `LoadRewards` before calling `GetCredits`. This method does not make a request for the balance.
-		/// </summary>
-		/// <returns>The credits.</returns>
-		abstract public int GetCredits ();
-
-		/// <summary>
-		/// Get the local credit balance for the specified bucket. You must `LoadRewards` before calling `GetCredits`. This method does not make a request for the balance.
-		/// </summary>
-		/// <returns>The credits for bucket.</returns>
-		/// <param name="bucket">The bucket to get credits balance from.</param>
-		abstract public int GetCreditsForBucket (string bucket);
-
-		#endregion
-
-
 		#region Configuration methods
 
 		/// <summary>

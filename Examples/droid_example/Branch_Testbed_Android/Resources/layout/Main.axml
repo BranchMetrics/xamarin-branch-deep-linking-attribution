@@ -34,33 +34,18 @@
             p1:layout_centerHorizontal="true"
             p1:minWidth="200dp"
             p1:textAllCaps="false" />
-        <TextView
-            p1:text="Reward Points ="
-            p1:layout_width="match_parent"
-            p1:layout_height="wrap_content"
-            p1:layout_below="@id/createLinkButton"
-            p1:id="@+id/rewardText"
-            p1:paddingStart="25dp" />
+        
         <LinearLayout
             p1:orientation="horizontal"
             p1:layout_width="wrap_content"
             p1:layout_height="wrap_content"
-            p1:layout_below="@id/rewardText"
             p1:id="@+id/linearLayout1"
             p1:layout_alignParentEnd="true"
             p1:layout_alignParentStart="true"
             p1:gravity="center_horizontal"
             p1:clipChildren="true"
             p1:clipToPadding="true">
-            <Button
-                p1:text="Redeem 5"
-                p1:layout_width="wrap_content"
-                p1:layout_height="wrap_content"
-                p1:id="@+id/redeemButton"
-                p1:layout_gravity="left"
-                p1:width="180dp"
-                p1:layout_weight="100"
-                p1:textAllCaps="false" />
+            
             <Button
                 p1:text="Set User ID"
                 p1:layout_width="wrap_content"
@@ -82,15 +67,7 @@
             p1:gravity="center_horizontal"
             p1:clipChildren="true"
             p1:clipToPadding="true">
-            <Button
-                p1:text="Refresh Rewards"
-                p1:layout_width="wrap_content"
-                p1:layout_height="wrap_content"
-                p1:id="@+id/refreshButton"
-                p1:layout_gravity="left"
-                p1:width="180dp"
-                p1:layout_weight="100"
-                p1:textAllCaps="false" />
+            
             <Button
                 p1:text="Simulate Logout"
                 p1:layout_width="wrap_content"
@@ -142,15 +119,7 @@
             p1:gravity="center_horizontal"
             p1:clipChildren="true"
             p1:clipToPadding="true">
-            <Button
-                p1:text="Show Reward History"
-                p1:layout_width="wrap_content"
-                p1:layout_height="wrap_content"
-                p1:id="@+id/historyButton"
-                p1:layout_gravity="left"
-                p1:width="180dp"
-                p1:layout_weight="100"
-                p1:textAllCaps="false" />
+            
             <Button
                 p1:text="ShareLink"
                 p1:layout_width="wrap_content"

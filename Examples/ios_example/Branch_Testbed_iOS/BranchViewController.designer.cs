@@ -22,21 +22,9 @@ namespace Branch_Testbed_iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField inputShortLink { get; set; }
 
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel lblRewardPoints { get; set; }
-
         [Action ("CreateBranchLink:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void CreateBranchLink (UIKit.UIButton sender);
-
-        [Action ("RedeemPoints:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void RedeemPoints (UIKit.UIButton sender);
-
-        [Action ("RefreshRewards:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void RefreshRewards (UIKit.UIButton sender);
 
         [Action ("RegisterForSpotlight:")]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -57,10 +45,6 @@ namespace Branch_Testbed_iOS
         [Action ("ShareLink:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void ShareLink (UIKit.UIButton sender);
-
-        [Action ("ShowRewardHistory:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void ShowRewardHistory (UIKit.UIButton sender);
 
         [Action ("SimulateContentAccess:")]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -90,10 +74,6 @@ namespace Branch_Testbed_iOS
                 inputShortLink = null;
             }
 
-            if (lblRewardPoints != null) {
-                lblRewardPoints.Dispose ();
-                lblRewardPoints = null;
-            }
         }
     }
 }
