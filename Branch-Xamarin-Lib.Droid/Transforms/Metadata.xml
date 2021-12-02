@@ -1,14 +1,13 @@
 ﻿<metadata>
 
     <attr path="/api/package[@name='io.branch.referral']/class[@name='BranchUrlBuilder']" name="visibility">public</attr>
-<!--    <attr path="/api/package[@name='io.branch.referral']/class[@name='RemoteInterface']" name="visibility">public</attr>-->
     <attr path="/api/package[@name='io.branch.referral']/class[@name='BranchLinkData']" name="visibility">public</attr>
     <attr path="/api/package[@name='io.branch.referral']/class[@name='SystemObserver']" name="visibility">public</attr>
     <attr path="/api/package[@name='io.branch.referral']/interface[@name='NetworkCallback']" name="visibility">public</attr>
     <attr path="/api/package[@name='io.branch.referral']/class[@name='ServerRequest']/method[@name='getRequestPath']" name="managedName">getRequestPath</attr>
     <attr path="/api/package[@name='io.branch.referral']/class[@name='Branch']" name="managedName">AndroidNativeBranch</attr>
-    <remove-node path="/api/package[@name='io.branch.referral.validators']/class[@name='IntegrationValidator']/implements[@name='io.branch.referral.validators.ServerRequestGetAppConfig.IGetAppConfigEvents']" />
-    <remove-node path="/api/package[@name='io.branch.referral']/class[@name='Branch']/implements[@name='io.branch.referral.GooglePlayStoreAttribution.IInstallReferrerEvents']" />
-    <remove-node path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask']"/>
-    <remove-node path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask.1']"/>
+    <attr path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask']/method[@name='doInBackground' and count(parameter)=1 and parameter[1][@type='java.lang.Void...']]/parameter[1]" name="managedType">Java.Lang.Object[]</attr>
+    <attr path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask']/method[@name='doInBackground' and count(parameter)=1 and parameter[1][@type='java.lang.Void...']]" name="managedReturn">Java.Lang.Object</attr>
+
+
 </metadata>
