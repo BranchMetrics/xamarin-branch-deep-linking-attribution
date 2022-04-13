@@ -164,29 +164,6 @@ namespace BranchXamarinSDK.iOS
 			return items;
 		}
 
-		public static List<CreditHistoryEntry> ToCreditHistoryArray(NSObject[] data) {
-			List<CreditHistoryEntry> list = new List<CreditHistoryEntry> ();
-
-			if (data != null) {
-
-				NSError error = null;
-				NSData jsonData = null;
-				NSString jsonString = null;
-
-				foreach (NSObject obj in data) {
-
-					if (obj != null) {
-						jsonData = NSJsonSerialization.Serialize (obj, NSJsonWritingOptions.PrettyPrinted, out error);
-						jsonString = new NSString (jsonData, NSStringEncoding.UTF8);
-
-						list.Add (JsonConvert.DeserializeObject<CreditHistoryEntry> ((string)jsonString));
-					}
-				}
-			}
-
-			return list;
-		}
-
 		public static IOSNativeBranch.BranchUniversalObject ToNativeUniversalObject(BranchUniversalObject obj) {
 			var res = new IOSNativeBranch.BranchUniversalObject ();
 

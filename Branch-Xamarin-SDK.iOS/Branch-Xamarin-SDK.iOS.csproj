@@ -44,7 +44,6 @@
     <Compile Include="Helpers\BranchSessionListener.cs" />
     <Compile Include="Helpers\BranchIdentityListener.cs" />
     <Compile Include="Helpers\BranchBUOSessionListener.cs" />
-    <Compile Include="Helpers\BranchRewardsListener.cs" />
     <Compile Include="Helpers\BranchUrlListener.cs" />
     <Compile Include="BranchIOS.cs" />
     <Compile Include="BranchIOSUtils.cs" />

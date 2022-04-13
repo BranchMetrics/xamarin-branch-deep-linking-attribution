@@ -30,7 +30,6 @@ namespace BranchXamarinSDK
         INITIATE_PURCHASE,
         ADD_PAYMENT_INFO,
         PURCHASE,
-        SPEND_CREDITS,
 
         // Content events
         SEARCH,

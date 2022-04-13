@@ -12,7 +12,6 @@ namespace BranchXamarinTestbed
 	IBranchUrlInterface,
 	IBranchBUOSessionInterface,
 	IBranchIdentityInterface,
-	IBranchRewardsInterface,
 	IBranchLinkShareInterface
 	{
 		readonly Label StatusLabel;
@@ -30,11 +29,7 @@ namespace BranchXamarinTestbed
 		readonly Entry ParamsEntry;
 		readonly Entry ActionEntry;
 		readonly Button CompleteActionButton;
-		readonly Label CreditsLabel;
-		readonly Entry RedeemEntry;
-		readonly Button RedeemButton;
-		readonly Entry CreditBucketEntry;
-		readonly StackLayout HistoryStack;
+	
 
 		string feature = "";
 		bool IsLoggedIn = false;
@@ -210,51 +205,6 @@ namespace BranchXamarinTestbed
 			};
 			CompleteActionButton.Clicked += CompleteActionClicked;
 
-			var loadRewardsButton = new Button {
-				Text = "Load Rewards",
-				TextColor = Color.White,
-				BackgroundColor = Color.Gray
-			};
-			loadRewardsButton.Clicked += LoadRewardsClicked;
-
-			CreditBucketEntry = new Entry {
-				TextColor = entryTextColor,
-				Placeholder = "Enter a bucket name to show credits for that bucket"
-			};
-			CreditBucketEntry.TextChanged += BucketChanged;
-
-			CreditsLabel = new Label {
-				TextColor = Color.Blue,
-				Text = "Press button to get credit count",
-				FontSize = 18
-			};
-
-			RedeemEntry = new Entry {
-				TextColor = entryTextColor,
-				Placeholder = "Enter a number of credits to redeem",
-				Keyboard = Keyboard.Numeric
-			};
-			RedeemEntry.TextChanged += RedeemChanged;
-
-			RedeemButton = new Button {
-				Text = "Redeem Rewards",
-				TextColor = Color.White,
-				BackgroundColor = Color.Gray,
-				IsEnabled = false
-			};
-			RedeemButton.Clicked += RedeemClicked;
-
-			var historyButton = new Button {
-				Text = "Get Credit History",
-				TextColor = Color.White,
-				BackgroundColor = Color.Gray
-			};
-			historyButton.Clicked += GetCreditHistoryClicked;
-
-			HistoryStack = new StackLayout {
-				Padding = 5
-			};
-
 			var stack1 = new StackLayout {
 				Children = {
 					SLabel,
@@ -332,23 +282,7 @@ namespace BranchXamarinTestbed
 				Content = stack6
 			};
 
-			var stack8 = new StackLayout {
-				Children = {
-					loadRewardsButton,
-					CreditBucketEntry,
-					CreditsLabel,
-					RedeemEntry,
-					RedeemButton,
-					historyButton,
-					HistoryStack
-				}
-			};
-			var frame8 = new Frame {
-                BorderColor = Color.Black,
-				Padding = new Thickness (5, 5, 5, 5),
-				Content = stack8
-			};
-
+		
 			var stackLayout = new StackLayout {
 				Children = {
 					frame1,
@@ -356,7 +290,6 @@ namespace BranchXamarinTestbed
 					frame3,
 					frame5,
 					frame6,
-					frame8
 				},
 				Spacing = 10,
 				Padding = 10
@@ -479,13 +412,9 @@ namespace BranchXamarinTestbed
 				bucket = e.NewTextValue;
 			}
 
-			CreditsLabel.Text = "Credits: " +
-				Branch.GetInstance ().GetCreditsForBucket (bucket);
-		}
 			
-		void RedeemChanged(object sender, TextChangedEventArgs e) {
-			RedeemButton.IsEnabled = !String.IsNullOrWhiteSpace (e.NewTextValue);
 		}
+		
 			
 		void LoginClicked(object sender, EventArgs e) {
 			Branch.GetInstance ().SetIdentity (UserEntry.Text, this);
@@ -507,29 +436,6 @@ namespace BranchXamarinTestbed
 			var data = new Dictionary<string, object> ();
 			data.Add ("action_complete_date", DateTime.Now.ToString ());
 			Branch.GetInstance ().UserCompletedAction (ActionEntry.Text, data);
-		}
-						
-		void LoadRewardsClicked(object sender, EventArgs e) {
-			Branch.GetInstance ().LoadRewards (this);
-		}
-
-		void RedeemClicked(object sender, EventArgs e) {
-			int amount = int.Parse (RedeemEntry.Text);
-			string bucket = "default";
-			if (!String.IsNullOrWhiteSpace (CreditBucketEntry.Text)) {
-				bucket = CreditBucketEntry.Text;
-			}
-
-			Branch.GetInstance ().RedeemRewards (this, amount, bucket);
-		}
-
-		void GetCreditHistoryClicked(object sender, EventArgs e) {
-			string bucket = "default";
-			if (!String.IsNullOrWhiteSpace (CreditBucketEntry.Text)) {
-				bucket = CreditBucketEntry.Text;
-			}
-
-			Branch.GetInstance ().GetCreditHistory (this, bucket);
 		}
 
 		void FeatureSelected(object sender, EventArgs args) {
@@ -679,45 +585,6 @@ namespace BranchXamarinTestbed
 
 		#endregion
 
-		#region IBranchRewardsInterface implementation
-
-		public void RewardsLoaded ()
-		{
-			StatusLabel.Text = "RewardsLoaded";
-			String bucket = "default";
-			if (!String.IsNullOrWhiteSpace(CreditBucketEntry.Text)) {
-				bucket = CreditBucketEntry.Text;
-			}
-			CreditsLabel.Text = "Credit: " + Branch.GetInstance ().GetCreditsForBucket (bucket);
-		}
-
-		public void RewardsRedeemed ()
-		{
-			StatusLabel.Text = "RewardsRedeemed";
-		}
-
-		public void CreditHistory (List<CreditHistoryEntry> history)
-		{
-			StatusLabel.Text = "CreditHistory";
-			while (HistoryStack.Children.Count > 0) {
-				HistoryStack.Children.RemoveAt(0);
-			}
-			foreach (var ch in history) {
-				Label che = new Label {
-					TextColor = Color.Black,
-					FontSize = 20
-				};
-				che.Text = ch.transaction.date + " Amount: " + ch.transaction.amount + " in " + ch.transaction.bucket;
-				HistoryStack.Children.Add(che);
-			}
-		}
-
-		public void RewardsRequestError (BranchError error)
-		{
-			StatusLabel.Text = error.ErrorMessage;
-		}
-
-		#endregion
 	}
 }
 

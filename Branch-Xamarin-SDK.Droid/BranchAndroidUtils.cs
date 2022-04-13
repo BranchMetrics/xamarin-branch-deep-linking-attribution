@@ -95,12 +95,6 @@ namespace BranchXamarinSDK.Droid
 			return new JSONObject ();
 		}
 
-		public static List<CreditHistoryEntry> ToCreditHistoryArray(JSONArray data) {
-			string res = data.ToString();
-			List<CreditHistoryEntry> list = JsonConvert.DeserializeObject<List<CreditHistoryEntry>> (res);
-			return list;
-		}
-
 		public static IO.Branch.Indexing.BranchUniversalObject ToNativeBUO(BranchUniversalObject buo) {
 			IO.Branch.Indexing.BranchUniversalObject resBuo = new IO.Branch.Indexing.BranchUniversalObject();
 

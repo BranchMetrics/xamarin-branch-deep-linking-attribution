@@ -267,54 +267,6 @@ namespace BranchXamarinSDK
 
         #endregion
 
-
-		#region Credits methods
-
-		public override void LoadRewards (IBranchRewardsInterface callback) {
-			BranchRewardsListener obj = new BranchRewardsListener (callback);
-			obj.onResponseRewards = obj.LoadRewardsCallback;
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.LoadRewards (obj);
-		}
-
-		public override void RedeemRewards (IBranchRewardsInterface callback, int amount, string bucket = "default") {
-			BranchRewardsListener obj = new BranchRewardsListener (callback);
-			obj.onResponseRewards = obj.RedeemRewardsCallback;
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.RedeemRewards (bucket, amount, obj);
-		}
-
-		public override void GetCreditHistory (IBranchRewardsInterface callback,
-			string bucket = "",
-			string afterId = "",
-			int length = 100,
-			bool mostRecentFirst = true)
-		{
-
-			BranchRewardsListener obj = new BranchRewardsListener (callback);
-			callbacksList.Add (obj as Object);
-
-			if (mostRecentFirst) {
-				NativeBranch.GetCreditHistory (bucket, afterId, length, AndroidNativeBranch.CreditHistoryOrder.KMostRecentFirst, obj);
-			}
-			else {
-				NativeBranch.GetCreditHistory (bucket, afterId, length, AndroidNativeBranch.CreditHistoryOrder.KLeastRecentFirst, obj);
-			}
-		}
-
-		public override int GetCredits () {
-			return NativeBranch.Credits;
-		}
-
-		public override int GetCreditsForBucket (string bucket) {
-			return NativeBranch.GetCreditsForBucket (bucket);
-		}
-
-		#endregion
-
-
 		#region Configuration methods
 
 		public override void SetRetryInterval (int retryInterval) {

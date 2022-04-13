@@ -11,7 +11,6 @@ namespace IOSNativeBranch
 	{
 		InitError = 1000,
 		DuplicateResourceError = 1001,
-		RedeemCreditsError = 1002,
 		BadRequestError = 1003,
 		ServerProblemError = 1004,
 		NilLogError = 1005,
@@ -21,7 +20,6 @@ namespace IOSNativeBranch
 		ContentIdentifierError = 1009,
 		SpotlightNotAvailableError = 1010,
 		SpotlightTitleError = 1011,
-		RedeemZeroCreditsError = 1012,
 		SpotlightIdentifierError = 1013,
 		SpotlightPublicIndexError = 1014,
 		TrackingDisabledError = 1015,
@@ -74,13 +72,6 @@ namespace IOSNativeBranch
 		Interstitial,
 		RewardedVideo,
 		Native
-	}
-
-	[Native]
-	public enum BranchCreditHistoryOrder : ulong
-	{
-		MostRecentFirst,
-		LeastRecentFirst
 	}
 
 }

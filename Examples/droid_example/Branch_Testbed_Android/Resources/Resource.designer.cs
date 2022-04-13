@@ -63,9 +63,6 @@ namespace Branch_Testbed_Android
 			// aapt resource value: 0x7F010005
 			public const int firstParamsButton = 2130771973;
 			
-			// aapt resource value: 0x7F010006
-			public const int historyButton = 2130771974;
-			
 			// aapt resource value: 0x7F010007
 			public const int lastParamsButton = 2130771975;
 			
@@ -93,17 +90,11 @@ namespace Branch_Testbed_Android
 			// aapt resource value: 0x7F01000E
 			public const int logText = 2130771982;
 			
-			// aapt resource value: 0x7F010010
-			public const int redeemButton = 2130771984;
-			
 			// aapt resource value: 0x7F010011
 			public const int refreshButton = 2130771985;
 			
 			// aapt resource value: 0x7F010012
 			public const int relativeLayout1 = 2130771986;
-			
-			// aapt resource value: 0x7F010013
-			public const int rewardText = 2130771987;
 			
 			// aapt resource value: 0x7F010014
 			public const int scrollView1 = 2130771988;

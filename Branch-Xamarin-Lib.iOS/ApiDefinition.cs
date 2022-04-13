@@ -204,44 +204,10 @@ namespace IOSNativeBranch {
         [Export("getEndpointFromURL:")]
         string GetEndpointFromURL(string url);
 
-        // -(void)clearUserCreditsAndCounts;
-        [Export("clearUserCreditsAndCounts")]
-        void ClearUserCreditsAndCounts();
-
-        // -(void)clearUserCredits;
-        [Export("clearUserCredits")]
-        void ClearUserCredits();
-
         // -(id)getBranchUniversalLinkDomains;
         [Export("getBranchUniversalLinkDomains")]
         //[Verify(MethodToProperty)]
         NSObject BranchUniversalLinkDomains { get; }
-
-        // -(void)setCreditCount:(NSInteger)count;
-        [Export("setCreditCount:")]
-        void SetCreditCount(nint count);
-
-        // -(void)setCreditCount:(NSInteger)count forBucket:(NSString *)bucket;
-        [Export("setCreditCount:forBucket:")]
-        void SetCreditCount(nint count, string bucket);
-
-        // -(void)removeCreditCountForBucket:(NSString *)bucket;
-        [Export("removeCreditCountForBucket:")]
-        void RemoveCreditCountForBucket(string bucket);
-
-        // -(NSDictionary *)getCreditDictionary;
-        [Export("getCreditDictionary")]
-        //[Verify(MethodToProperty)]
-        NSDictionary CreditDictionary { get; }
-
-        // -(NSInteger)getCreditCount;
-        [Export("getCreditCount")]
-        //[Verify(MethodToProperty)]
-        nint CreditCount { get; }
-
-        // -(NSInteger)getCreditCountForBucket:(NSString *)bucket;
-        [Export("getCreditCountForBucket:")]
-        nint GetCreditCountForBucket(string bucket);
 
         // -(void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value;
         [Export("setRequestMetadataKey:value:")]
@@ -1632,10 +1598,6 @@ namespace IOSNativeBranch {
         [Field("BRANCH_REQUEST_KEY_REFERRAL_USAGE_TYPE", "__Internal")]
         NSString BRANCH_REQUEST_KEY_REFERRAL_USAGE_TYPE { get; }
 
-        // extern NSString *const BRANCH_REQUEST_KEY_REFERRAL_REWARD_LOCATION;
-        [Field("BRANCH_REQUEST_KEY_REFERRAL_REWARD_LOCATION", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_REFERRAL_REWARD_LOCATION { get; }
-
         // extern NSString *const BRANCH_REQUEST_KEY_REFERRAL_TYPE;
         [Field("BRANCH_REQUEST_KEY_REFERRAL_TYPE", "__Internal")]
         NSString BRANCH_REQUEST_KEY_REFERRAL_TYPE { get; }
@@ -1819,18 +1781,6 @@ namespace IOSNativeBranch {
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_USER_COMPLETED_ACTION;
         [Field("BRANCH_REQUEST_ENDPOINT_USER_COMPLETED_ACTION", "__Internal")]
         NSString BRANCH_REQUEST_ENDPOINT_USER_COMPLETED_ACTION { get; }
-
-        // extern NSString *const BRANCH_REQUEST_ENDPOINT_LOAD_REWARDS;
-        [Field("BRANCH_REQUEST_ENDPOINT_LOAD_REWARDS", "__Internal")]
-        NSString BRANCH_REQUEST_ENDPOINT_LOAD_REWARDS { get; }
-
-        // extern NSString *const BRANCH_REQUEST_ENDPOINT_REDEEM_REWARDS;
-        [Field("BRANCH_REQUEST_ENDPOINT_REDEEM_REWARDS", "__Internal")]
-        NSString BRANCH_REQUEST_ENDPOINT_REDEEM_REWARDS { get; }
-
-        // extern NSString *const BRANCH_REQUEST_ENDPOINT_CREDIT_HISTORY;
-        [Field("BRANCH_REQUEST_ENDPOINT_CREDIT_HISTORY", "__Internal")]
-        NSString BRANCH_REQUEST_ENDPOINT_CREDIT_HISTORY { get; }
 
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_GET_SHORT_URL;
         [Field("BRANCH_REQUEST_ENDPOINT_GET_SHORT_URL", "__Internal")]
@@ -2624,10 +2574,6 @@ namespace IOSNativeBranch {
         // extern BranchStandardEvent _Nonnull BranchStandardEventPurchase;
         [Field("BranchStandardEventPurchase", "__Internal")]
         NSString BranchStandardEventPurchase { get; }
-
-        // extern BranchStandardEvent _Nonnull BranchStandardEventSpendCredits;
-        [Field("BranchStandardEventSpendCredits", "__Internal")]
-        NSString BranchStandardEventSpendCredits { get; }
 
         // extern BranchStandardEvent _Nonnull BranchStandardEventSubscribe;
         [Field("BranchStandardEventSubscribe", "__Internal")]
@@ -3578,52 +3524,6 @@ namespace IOSNativeBranch {
         // -(void)logoutWithCallback:(callbackWithStatus _Nullable)callback;
         [Export("logoutWithCallback:")]
         void LogoutWithCallback([NullAllowed] callbackWithStatus callback);
-
-        // -(void)loadRewardsWithCallback:(callbackWithStatus _Nullable)callback;
-        [Export("loadRewardsWithCallback:")]
-        void LoadRewardsWithCallback([NullAllowed] callbackWithStatus callback);
-
-        // -(void)redeemRewards:(NSInteger)count;
-        [Export("redeemRewards:")]
-        void RedeemRewards(nint count);
-
-        // -(void)redeemRewards:(NSInteger)count callback:(callbackWithStatus _Nullable)callback;
-        [Export("redeemRewards:callback:")]
-        void RedeemRewards(nint count, [NullAllowed] callbackWithStatus callback);
-
-        // -(void)redeemRewards:(NSInteger)count forBucket:(NSString * _Nullable)bucket;
-        [Export("redeemRewards:forBucket:")]
-        void RedeemRewards(nint count, [NullAllowed] string bucket);
-
-        // -(void)redeemRewards:(NSInteger)count forBucket:(NSString * _Nullable)bucket callback:(callbackWithStatus _Nullable)callback;
-        [Export("redeemRewards:forBucket:callback:")]
-        void RedeemRewards(nint count, [NullAllowed] string bucket, [NullAllowed] callbackWithStatus callback);
-
-        // -(NSInteger)getCredits;
-        [Export("getCredits")]
-        //[Verify(MethodToProperty)]
-        //nint Credits { get; }
-        nint Credits();
-
-        // -(NSInteger)getCreditsForBucket:(NSString * _Nonnull)bucket;
-        [Export("getCreditsForBucket:")]
-        nint GetCreditsForBucket(string bucket);
-
-        // -(void)getCreditHistoryWithCallback:(callbackWithList _Nullable)callback;
-        [Export("getCreditHistoryWithCallback:")]
-        void GetCreditHistoryWithCallback([NullAllowed] callbackWithList callback);
-
-        // -(void)getCreditHistoryForBucket:(NSString * _Nullable)bucket andCallback:(callbackWithList _Nullable)callback;
-        [Export("getCreditHistoryForBucket:andCallback:")]
-        void GetCreditHistoryForBucket([NullAllowed] string bucket, [NullAllowed] callbackWithList callback);
-
-        // -(void)getCreditHistoryAfter:(NSString * _Nullable)creditTransactionId number:(NSInteger)length order:(BranchCreditHistoryOrder)order andCallback:(callbackWithList _Nullable)callback;
-        [Export("getCreditHistoryAfter:number:order:andCallback:")]
-        void GetCreditHistoryAfter([NullAllowed] string creditTransactionId, nint length, BranchCreditHistoryOrder order, [NullAllowed] callbackWithList callback);
-
-        // -(void)getCreditHistoryForBucket:(NSString * _Nullable)bucket after:(NSString * _Nullable)creditTransactionId number:(NSInteger)length order:(BranchCreditHistoryOrder)order andCallback:(callbackWithList _Nullable)callback;
-        [Export("getCreditHistoryForBucket:after:number:order:andCallback:")]
-        void GetCreditHistoryForBucket([NullAllowed] string bucket, [NullAllowed] string creditTransactionId, nint length, BranchCreditHistoryOrder order, [NullAllowed] callbackWithList callback);
 
         // -(void)userCompletedAction:(NSString * _Nullable)action;
         [Export("userCompletedAction:")]

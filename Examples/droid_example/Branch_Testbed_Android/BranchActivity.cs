@@ -16,14 +16,13 @@ using Android.Widget;
 namespace Branch_Testbed_Android
 {
 	[Activity(Label = "BranchActivity")]
-	public class BranchActivity : Activity, IBranchUrlInterface, IBranchRewardsInterface, IBranchIdentityInterface, IBranchLinkShareInterface
+	public class BranchActivity : Activity, IBranchUrlInterface, IBranchIdentityInterface, IBranchLinkShareInterface
 	{
 		private BranchUniversalObject universalObject = null;
 		private BranchLinkProperties linkProperties = null;
 		private string logString = "";
 
 		private EditText shortLinkText;
-		private TextView rewardText;
 		private Button setUserButton;
 
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -42,13 +41,9 @@ namespace Branch_Testbed_Android
 			SetContentView(Resource.Layout.Main);
 
 			shortLinkText = FindViewById<EditText>(Resource.Id.linkText);
-			rewardText = FindViewById<TextView>(Resource.Id.rewardText);
 
 			Button createLinkButton = FindViewById<Button>(Resource.Id.createLinkButton);
 			createLinkButton.Click += CreateLinkButton_Click;
-
-			Button redeemButton = FindViewById<Button>(Resource.Id.redeemButton);
-			redeemButton.Click += RedeemButton_Click;
 
 			Button refreshButton = FindViewById<Button>(Resource.Id.refreshButton);
 			refreshButton.Click += RefreshButton_Click;
@@ -95,13 +90,6 @@ namespace Branch_Testbed_Android
 			logString += DateTime.Now.ToLongTimeString() + "> " + message + "\n";
 		}
 
-		private void RefreshRewards()
-		{
-			rewardText.Text = "Reward Points = " + "updating...";
-
-			BranchAndroid.GetInstance().LoadRewards(this);
-		}
-
 		#endregion
 
 		#region Event Handlers
@@ -132,27 +120,6 @@ namespace Branch_Testbed_Android
 			}
 		}
 
-		void RedeemButton_Click(object sender, EventArgs e)
-		{
-			BranchAndroid.GetInstance().RedeemRewards(this, 5);
-		}
-
-		void RefreshButton_Click(object sender, EventArgs e)
-		{
-			RefreshRewards();
-		}
-
-		void BuyButton_Click(object sender, EventArgs e)
-		{
-			BranchAndroid.GetInstance().UserCompletedAction("buy");
-			RefreshRewards();
-		}
-
-		void HistoryButton_Click(object sender, EventArgs e)
-		{
-			BranchAndroid.GetInstance().GetCreditHistory(this);
-		}
-
 		void SetUserButton_Click(object sender, EventArgs e)
 		{
 			BranchAndroid.GetInstance().SetIdentity("test_user_10", this);
@@ -172,7 +139,6 @@ namespace Branch_Testbed_Android
 			parameters.Add("double", 0.13415512301);
 
 			BranchAndroid.GetInstance().UserCompletedAction("buy", parameters);
-			RefreshRewards();
 		}
 
 		void ShareButton_Click(object sender, EventArgs e)
@@ -271,44 +237,12 @@ namespace Branch_Testbed_Android
 
 		#endregion
 
-		#region IBranchRewardsInterface
-
-		public void RewardsLoaded()
-		{
-			rewardText.Text = "Reward Points = " + BranchAndroid.GetInstance().GetCredits().ToString();
-			LogMessage("Branch.loadRewards changed: " + BranchAndroid.GetInstance().GetCredits().ToString());
-		}
-
-		public void RewardsRedeemed()
-		{
-			rewardText.Text = "Reward Points = " + BranchAndroid.GetInstance().GetCredits().ToString();
-			LogMessage("Branch.loadRewards changed: " + BranchAndroid.GetInstance().GetCredits().ToString());
-		}
-
-		public void CreditHistory(List<CreditHistoryEntry> history)
-		{
-			var intent = new Intent(this, typeof(HistoryActivity));
-			var json = JsonConvert.SerializeObject(history);
-			intent.PutExtra("HistoryArray", json);
-			StartActivity(intent);
-		}
-
-		public void RewardsRequestError(BranchError error)
-		{
-			LogMessage("Branch reward request error: " + error.ErrorCode);
-			LogMessage(error.ErrorMessage);
-			rewardText.Text = "Reward Points = " + "0";
-		}
-
-		#endregion
-
 		#region IBranchIdentityInterface
 
 		public void IdentitySet(Dictionary<string, object> data)
 		{
 			setUserButton.Text = "test_user_10";
 			LogMessage("Branch.setIdentity install params: " + data.ToString());
-			RefreshRewards();
 		}
 
 		public void LogoutComplete()

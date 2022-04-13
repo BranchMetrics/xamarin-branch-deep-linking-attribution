@@ -273,54 +273,6 @@ namespace BranchXamarinSDK
 
         #endregion
 
-
-		#region Credits methods
-
-		public override void LoadRewards (IBranchRewardsInterface callback) {
-			BranchRewardsListener obj = new BranchRewardsListener (callback);
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.LoadRewardsWithCallback (obj.LoadRewardsCallback);
-		}
-
-		public override void RedeemRewards (IBranchRewardsInterface callback, int amount, string bucket = "default") {
-			BranchRewardsListener obj = new BranchRewardsListener (callback);
-			callbacksList.Add (obj as Object);
-
-			NativeBranch.RedeemRewards (amount, bucket, obj.RedeemRewardsCallback);
-		}
-
-		public override void GetCreditHistory (IBranchRewardsInterface callback,
-			string bucket = "",
-			string afterId = "",
-			int length = 100,
-			bool mostRecentFirst = true)
-		{
-
-			BranchRewardsListener obj = new BranchRewardsListener (callback);
-			callbacksList.Add (obj as Object);
-
-			if (mostRecentFirst) {
-				NativeBranch.GetCreditHistoryForBucket(bucket, afterId, (nint)length,
-					IOSNativeBranch.BranchCreditHistoryOrder.MostRecentFirst, obj.GetCreditHistoryCallback);
-			}
-			else {
-				NativeBranch.GetCreditHistoryForBucket(bucket, afterId, (nint)length,
-					IOSNativeBranch.BranchCreditHistoryOrder.LeastRecentFirst, obj.GetCreditHistoryCallback);
-			}
-		}
-
-		public override int GetCredits () {
-            return (int)NativeBranch.Credits();
-		}
-
-		public override int GetCreditsForBucket (string bucket) {
-			return (int)NativeBranch.GetCreditsForBucket(bucket);
-		}
-
-		#endregion
-
-
 		#region Configuration methods
 
 		public static void DelayInitToCheckForSearchAds()

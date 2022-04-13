@@ -6,12 +6,11 @@ using UIKit;
 
 namespace Branch_Testbed_iOS
 {
-	public partial class BranchViewController : UIViewController, IBranchUrlInterface, IBranchRewardsInterface, IBranchIdentityInterface, IBranchLinkShareInterface
+	public partial class BranchViewController : UIViewController, IBranchUrlInterface, IBranchIdentityInterface, IBranchLinkShareInterface
 	{
 		private BranchUniversalObject universalObject = null;
 		private BranchLinkProperties linkProperties = null;
 		private string logString = "";
-		private List<CreditHistoryEntry> history;
 
 		public BranchViewController(IntPtr handle) : base(handle)
 		{
@@ -62,13 +61,6 @@ namespace Branch_Testbed_iOS
 			logString += DateTime.Now.ToLongTimeString() + "> " + message + "\n";
 		}
 
-		private void RefreshRewards()
-		{
-			lblRewardPoints.Text = "Reward Points = " + "updating...";
-
-			BranchIOS.GetInstance().LoadRewards(this);
-		}
-
 		#endregion
 
 		#region UIDesigner Event Handlers
@@ -99,25 +91,14 @@ namespace Branch_Testbed_iOS
 			}
 		}
 
-		partial void RedeemPoints(UIButton sender)
-		{
-			BranchIOS.GetInstance().RedeemRewards(this, 5);
-		}
-
 		partial void SetUserID(UIButton sender)
 		{
 			BranchIOS.GetInstance().SetIdentity("test_user_10", this);
 		}
 
-		partial void RefreshRewards(UIButton sender)
-		{
-			RefreshRewards();
-		}
-
 		partial void SendBuyEvent(UIButton sender)
 		{
 			BranchIOS.GetInstance().UserCompletedAction("buy");
-			RefreshRewards();
 		}
 
 		partial void SimulateLogout(UIButton sender)
@@ -134,7 +115,6 @@ namespace Branch_Testbed_iOS
 			parameters.Add("double", 0.13415512301);
 
 			BranchIOS.GetInstance().UserCompletedAction("buy", parameters);
-			RefreshRewards();
 		}
 
 		partial void ShareLink(UIButton sender)
@@ -168,11 +148,6 @@ namespace Branch_Testbed_iOS
 			{
 				LogMessage(e.ToString());
 			}
-		}
-
-		partial void ShowRewardHistory(UIButton sender)
-		{
-			BranchIOS.GetInstance().GetCreditHistory(this);
 		}
 
 		partial void ViewFirstReferringParams(UIButton sender)
@@ -226,42 +201,12 @@ namespace Branch_Testbed_iOS
 
 		#endregion
 
-		#region IBranchRewardInterface
-
-		public void RewardsLoaded()
-		{
-			lblRewardPoints.Text = "Reward Points = " + BranchIOS.GetInstance().GetCredits().ToString();
-			LogMessage("Branch.loadRewards changed: " + BranchIOS.GetInstance().GetCredits().ToString());
-		}
-
-		public void RewardsRedeemed()
-		{
-			lblRewardPoints.Text = "Reward Points = " + BranchIOS.GetInstance().GetCredits().ToString();
-			LogMessage("Branch.loadRewards changed: " + BranchIOS.GetInstance().GetCredits().ToString());
-		}
-
-		public void CreditHistory(List<CreditHistoryEntry> history)
-		{
-			this.history = history;
-			PerformSegue("HistoryPush", this);
-		}
-
-		public void RewardsRequestError(BranchError error)
-		{
-			LogMessage("Branch reward request error: " + error.ErrorCode);
-			LogMessage(error.ErrorMessage);
-			lblRewardPoints.Text = "Reward Points = " + "0";
-		}
-
-		#endregion
-
 		#region IBranchIdentityInterface
 
 		public void IdentitySet(Dictionary<string, object> data)
 		{
 			btnSetUserID.SetTitle("test_user_10", UIControlState.Normal);
 			LogMessage("Branch.setIdentity install params: " + data.ToString());
-			RefreshRewards();
 		}
 
 		public void LogoutComplete()
