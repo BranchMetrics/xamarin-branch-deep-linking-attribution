@@ -22,8 +22,7 @@ namespace Branch_Xamarin_Testbed.iOS
             //BranchIOS.DelayInitToCheckForSearchAds();
             //BranchIOS.UseLongerWaitForAppleSearchAds();
             //BranchIOS.IgnoreAppleSearchAdsTestData();
-            // set Debug mode
-            //BranchIOS.Debug = true;
+            BranchIOS.EnableLogging = true;
 
             //App app = new App ();
             //BranchIOS.Init ("your Branch key", launchOptions, app);
