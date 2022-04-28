@@ -47,7 +47,7 @@ namespace BranchXamarinSDK
 
 		public static void GetAutoInstance(Context appContext) {
 			// TODO: can we pull the plugin version automatically?
-			AndroidNativeBranch.RegisterPlugin("Xamarin", "7.2.0");
+			AndroidNativeBranch.RegisterPlugin("Xamarin", "8.0.0");
 			AndroidNativeBranch.GetAutoInstance(appContext);
 
             AndroidNativeBranch.DisableInstantDeepLinking(true);

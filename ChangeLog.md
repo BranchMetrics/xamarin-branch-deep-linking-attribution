@@ -1,5 +1,11 @@
 Branch Xamarin SDK change log
 
+- 8.0.0
+  * Update to Branch Android SDK 5.1.3 
+  * Bug fix for GAID. To enable GAID, add the "Xamarin.GooglePlayServices.Ads.Identifier" NuGet package. This is optional. As of April, 2022 the latest release does not work on macOS. Use version "116.0.0" instead.
+  * New dependency on "Xamarin.Android.Binding.InstallReferrer" NuGet package for install referrer. This is required.
+  * Deprecated the "Debug" option. Use "EnableLogging = true;" for device side logs. Use Test Devices (https://help.branch.io/using-branch/docs/add-test-devices) to simulate installs.
+
 - 7.0.7
   * Adding method UseLongerWaitForAppleSearchAds (for ios only)
   * Adding method IgnoreAppleSearchAdsTestData (for ios only)
