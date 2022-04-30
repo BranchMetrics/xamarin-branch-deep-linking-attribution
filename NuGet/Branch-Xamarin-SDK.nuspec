@@ -7,40 +7,33 @@
     <version>8.0.0</version>
     <authors>Branch Metrics, Inc.</authors>
     <owners>Branch Metrics, Inc.</owners>
-<!--     <iconUrl> https://s3-us-west-1.amazonaws.com/branchhost/branch_icon.png</iconUrl> -->
-<!--     <licenseUrl>https://raw.githubusercontent.com/BranchMetrics/Branch-Xamarin-SDK/master/LICENSE</licenseUrl> -->
     <projectUrl>https://github.com/BranchMetrics/Xamarin-Deferred-Deep-Linking-SDK</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This is the Branch Xamarin SDK for Android, iOS and Forms applications.</description>
     <copyright>Copyright 2020 Branch Metrics, Inc.</copyright>
     <tags>Xamarin Branch deep linking tracking measurement iOS Android sharing referral invite analytics</tags>
     <dependencies>
-      <group>
-        <dependency id="Newtonsoft.Json" version="12.0.3" />
-      </group>
       <group targetFramework=".NETStandard1.2" >
-        <dependency id="Newtonsoft.Json" version="12.0.3" />
+        <dependency id="Newtonsoft.Json" version="13.*" />
       </group>
-      <group targetFramework="MonoAndroid0.0" >
-        <dependency id="Newtonsoft.Json" version="12.0.3" />
-	<dependency id="Xamarin.Android.Binding.InstallReferrer" version="2.2.0" />
+      <group targetFramework="MonoAndroid" >
+        <dependency id="Newtonsoft.Json" version="13.*" />
+	<dependency id="Xamarin.Android.Binding.InstallReferrer" version="2.*" />
       </group>
-      <group targetFramework="Xamarin.iOS1.0" >
-        <dependency id="Newtonsoft.Json" version="12.0.3" />
+      <group targetFramework="Xamarin.iOS10" >
+        <dependency id="Newtonsoft.Json" version="13.*" />
       </group>
-    </dependencies>
-    
+    </dependencies>    
     <license type="file">LICENSE.txt</license>
-	<icon>branch_icon.png</icon>
-    
+    <icon>branch_icon.png</icon>
   </metadata>
   <files>
     <file src="../LICENSE.txt" target="" />
     <file src="../docs/images/branch_icon.png" target="" />
-  
+
     <file src="../Branch-Xamarin-SDK/bin/Release/netstandard1.2/Branch-Xamarin-SDK.dll" target="lib/netstandard1.2" />
 
-	<file src="../Branch-Xamarin-Lib.Droid/bin/Release/Branch-Xamarin-Lib.Droid.dll" target="lib/MonoAndroid" />
+    <file src="../Branch-Xamarin-Lib.Droid/bin/Release/Branch-Xamarin-Lib.Droid.dll" target="lib/MonoAndroid" />
     <file src="../Branch-Xamarin-SDK.Droid/bin/Release/Branch-Xamarin-SDK.Droid.dll" target="lib/MonoAndroid" />
     <file src="../Branch-Xamarin-SDK/bin/Release/netstandard1.2/Branch-Xamarin-SDK.dll" target="lib/MonoAndroid" />
     

@@ -16,6 +16,10 @@ namespace BranchXamarinSDK
 
 		private static BranchAndroid instance = null;
 
+		// TODO: can we pull the plugin version automatically?
+		private static String pluginName = "Xamarin";
+		private static String pluginVersion = "8.0.0";
+
 		private BranchAndroid () { }
 
 		public static BranchAndroid getInstance() {
@@ -46,21 +50,17 @@ namespace BranchXamarinSDK
 		public Activity CurrActivity { get; set; }
 
 		public static void GetAutoInstance(Context appContext) {
-			// TODO: can we pull the plugin version automatically?
-			AndroidNativeBranch.RegisterPlugin("Xamarin", "8.0.0");
+
+			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
 			AndroidNativeBranch.GetAutoInstance(appContext);
-
             AndroidNativeBranch.DisableInstantDeepLinking(true);
-
         }
 
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
-
 			Init (((Activity)context).Application, branchKey, callback);
 		}
 
 		public static void Init(Context context, String branchKey, IBranchBUOSessionInterface callback) {
-
 			Init (((Activity)context).Application, branchKey, callback);
 		}
 
@@ -79,7 +79,7 @@ namespace BranchXamarinSDK
 			instance.appContext = app.ApplicationContext;
 			instance.branchKey = branchKey;
 
-
+			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
 			if (EnableLogging)
 			{
 				AndroidNativeBranch.EnableLogging();
@@ -108,8 +108,8 @@ namespace BranchXamarinSDK
 			instance.appContext = app.ApplicationContext;
 			instance.branchKey = branchKey;
 
-			
-            if (EnableLogging)
+			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
+			if (EnableLogging)
             {
 				AndroidNativeBranch.EnableLogging();
 			}
