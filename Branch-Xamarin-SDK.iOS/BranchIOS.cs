@@ -57,9 +57,7 @@ namespace BranchXamarinSDK
 			instance = new BranchIOS ();
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
-
-            instance.NativeBranch.RegisterPluginName("Xamarin", "7.1.2");
-            //IOSNativeBranch.RegisterPluginName();
+            instance.NativeBranch.RegisterPluginName("Xamarin", "8.0.0");
 
             if (launchOptions != null) {
 				instance.launchOptions = new NSDictionary (launchOptions);
@@ -106,7 +104,7 @@ namespace BranchXamarinSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-			instance.NativeBranch.RegisterPluginName("Xamarin", "7.1.2");
+			instance.NativeBranch.RegisterPluginName("Xamarin", "8.0.0");
 
 			if (launchOptions != null) {
 				instance.launchOptions = new NSDictionary (launchOptions);
@@ -114,8 +112,8 @@ namespace BranchXamarinSDK
 				instance.launchOptions = new NSDictionary ();
 			}
 
-			if (Debug || Runtime.Arch == Arch.SIMULATOR) {
-				instance.SetDebug ();
+			if (EnableLogging || Runtime.Arch == Arch.SIMULATOR) {
+				instance.NativeBranch.EnableLogging();
 			}
 
 			if (delayInitToCheckForSearchAds)
@@ -142,10 +140,6 @@ namespace BranchXamarinSDK
 			instance.NativeBranch.EnableLogging();
 
 			instance.InitSession (callback);
-		}
-
-		protected override void SetDebug() {
-			NativeBranch.SetDebug ();
 		}
 
 		#endregion

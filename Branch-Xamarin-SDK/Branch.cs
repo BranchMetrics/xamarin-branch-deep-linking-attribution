@@ -25,10 +25,11 @@ namespace BranchXamarinSDK
 		#endregion
 
 		/// <summary>
-		/// Gets or sets the debug value.  If true, a random device id
-		/// will be used and each install will be considered a new install.
+		/// Enables Logging
 		/// </summary>
-		/// <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
+		public static bool EnableLogging = false;
+
+		[Obsolete("Debug is deprecated. Use EnableLogging to enable logging. Use Test Devices (https://help.branch.io/using-branch/docs/add-test-devices) to simulate installs.")]
 		public static bool Debug = false;
 
 		/// <summary>
@@ -89,11 +90,6 @@ namespace BranchXamarinSDK
 		/// </summary>
 		/// <returns>The first referring branch link properties.</returns>
 		abstract public BranchLinkProperties GetFirstReferringBranchLinkProperties ();
-
-		/// <summary>
-		/// Internal method: Sets debug mode. Use Debug instead.
-		/// </summary>
-		abstract protected void SetDebug ();
 
 		#endregion
 
@@ -166,7 +162,7 @@ namespace BranchXamarinSDK
         #endregion
 
 
-        #region Send Evene methods
+        #region Send Event methods
 
         /// <summary>
         /// Send event.

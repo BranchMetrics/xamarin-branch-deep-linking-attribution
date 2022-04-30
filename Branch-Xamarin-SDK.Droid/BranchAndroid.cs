@@ -16,6 +16,10 @@ namespace BranchXamarinSDK
 
 		private static BranchAndroid instance = null;
 
+		// TODO: can we pull the plugin version automatically?
+		private static String pluginName = "Xamarin";
+		private static String pluginVersion = "8.0.0";
+
 		private BranchAndroid () { }
 
 		public static BranchAndroid getInstance() {
@@ -46,20 +50,17 @@ namespace BranchXamarinSDK
 		public Activity CurrActivity { get; set; }
 
 		public static void GetAutoInstance(Context appContext) {
-			BranchUtil.SetPluginType(BranchUtil.PluginType.Xamarin);
-			BranchUtil.PluginVersion = "7.1.2";
 
+			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
 			AndroidNativeBranch.GetAutoInstance(appContext);
             AndroidNativeBranch.DisableInstantDeepLinking(true);
         }
 
 		public static void Init(Context context, String branchKey, IBranchSessionInterface callback) {
-
 			Init (((Activity)context).Application, branchKey, callback);
 		}
 
 		public static void Init(Context context, String branchKey, IBranchBUOSessionInterface callback) {
-
 			Init (((Activity)context).Application, branchKey, callback);
 		}
 
@@ -78,9 +79,10 @@ namespace BranchXamarinSDK
 			instance.appContext = app.ApplicationContext;
 			instance.branchKey = branchKey;
 
-
-			if (Debug) {
-				instance.SetDebug ();
+			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
+			if (EnableLogging)
+			{
+				AndroidNativeBranch.EnableLogging();
 			}
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
@@ -101,29 +103,25 @@ namespace BranchXamarinSDK
 			}
 
 			instance = new BranchAndroid ();
+
 			Branch.branchInstance = instance;
 			instance.appContext = app.ApplicationContext;
 			instance.branchKey = branchKey;
 
-			if (Debug) {
-				instance.SetDebug ();
+			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
+			if (EnableLogging)
+            {
+				AndroidNativeBranch.EnableLogging();
 			}
 
-			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
+            instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
 
             // we call IniSession in BranchAndroidLifeCycleHandler.OnActivityStarted
             //getInstance().InitSession(callback);
 		}
 
-
-		protected override void SetDebug() {
-            AndroidNativeBranch.EnableDebugMode();
-            //NativeBranch.SetDebug ();
-		}
-
 		#endregion
-
 
 		#region Session methods
 

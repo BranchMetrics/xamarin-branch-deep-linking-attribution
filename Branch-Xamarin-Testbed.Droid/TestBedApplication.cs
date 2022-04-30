@@ -20,6 +20,7 @@ namespace BranchXamarinTestbed.Droid
 		public override void OnCreate()
 		{
 			base.OnCreate();
+			BranchAndroid.EnableLogging = true;
 			BranchAndroid.GetAutoInstance(this.ApplicationContext);
 		}
 	}
