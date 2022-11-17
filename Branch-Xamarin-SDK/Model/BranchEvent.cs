@@ -100,6 +100,14 @@ namespace BranchXamarinSDK
             contentItems.Add(contentItem.ToJsonString());
         }
 
+        // Use this method to add multiple BranchUniversalObjects associated with this event
+        public void AddContentItems(List<BranchUniversalObject> contentItemsToAdd)
+        {
+            foreach (var item in contentItemsToAdd) {
+                contentItems.Add(item.ToJsonString());
+            }
+        }
+
         public Dictionary<string, object> ToDictionary()
         {
             var dataToSend = new Dictionary<string, object>(data);

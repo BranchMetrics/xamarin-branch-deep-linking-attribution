@@ -1,14 +1,14 @@
 ﻿using BranchXamarinSDK;
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using Xamarin.Forms;
 
 namespace BranchXamarinTestbed
 {
-	public class TestPage : ContentPage ,
+	public class TestPage : ContentPage,
 	IBranchUrlInterface,
 	IBranchSessionInterface,
 	IBranchIdentityInterface
@@ -370,6 +370,15 @@ namespace BranchXamarinTestbed
 
 			Branch.GetInstance().GetShortURL(this, universalObject, linkProperties);
 
+            BranchUniversalObject buo2 = new BranchUniversalObject();
+            buo2.canonicalIdentifier = "id2";
+            buo2.metadata.quantity = 2;
+            buo2.metadata.AddCustomMetadata("testCustom", "testData");
+            Debug.WriteLine("Branch Universal Object 2: " + buo2);
+
+            List<BranchUniversalObject> buos = new List<BranchUniversalObject>();
+            buos.Add(universalObject);
+			buos.Add(buo2);
 
             BranchEvent branchEvent = new BranchEvent("MY_CUSTOM_EVENT");
             branchEvent.SetAffiliation("my_affilation");
@@ -381,11 +390,12 @@ namespace BranchXamarinTestbed
             branchEvent.SetDescription("my_description");
             branchEvent.SetSearchQuery("my_search_query");
             branchEvent.AddCustomData("custom_data_key01", "custom_data_value01");
-            branchEvent.AddContentItem(universalObject);
+            branchEvent.AddContentItems(buos);
 
             Branch.GetInstance().SendEvent(branchEvent);
+            Debug.WriteLine("Branch Event: " + branchEvent);
 		}
-
+			
 		void SendEmailClicked(object sender, EventArgs e) {
 			if (UriString != null) {
 //				DependencyService.Get<IEmailUrl> ().EmailUrl (UriString);
