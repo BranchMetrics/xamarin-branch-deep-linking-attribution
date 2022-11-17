@@ -1,13 +1,14 @@
 ﻿using BranchXamarinSDK;
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace BranchXamarinTestbed
 {
-	public class TestPage : ContentPage ,
+	public class TestPage : ContentPage,
 	IBranchUrlInterface,
 	IBranchSessionInterface,
 	IBranchIdentityInterface
@@ -369,13 +370,15 @@ namespace BranchXamarinTestbed
 
 			Branch.GetInstance().GetShortURL(this, universalObject, linkProperties);
 
-            BranchUniversalObject buoTwo = new BranchUniversalObject();
-            buoTwo.canonicalIdentifier = "id2";
-            buoTwo.metadata.AddCustomMetadata("testCustom", "testData");
+            BranchUniversalObject buo2 = new BranchUniversalObject();
+            buo2.canonicalIdentifier = "id2";
+            buo2.metadata.quantity = 2;
+            buo2.metadata.AddCustomMetadata("testCustom", "testData");
+            Debug.WriteLine("Branch Universal Object 2: " + buo2);
 
             List<BranchUniversalObject> buos = new List<BranchUniversalObject>();
             buos.Add(universalObject);
-			buos.Add(buoTwo);
+			buos.Add(buo2);
 
             BranchEvent branchEvent = new BranchEvent("MY_CUSTOM_EVENT");
             branchEvent.SetAffiliation("my_affilation");
@@ -390,6 +393,7 @@ namespace BranchXamarinTestbed
             branchEvent.AddContentItems(buos);
 
             Branch.GetInstance().SendEvent(branchEvent);
+            Debug.WriteLine("Branch Event: " + branchEvent);
 		}
 			
 		void SendEmailClicked(object sender, EventArgs e) {
