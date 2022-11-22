@@ -2611,6 +2611,14 @@ namespace IOSNativeBranch {
         [Field("BranchStandardEventShare", "__Internal")]
         NSString BranchStandardEventShare { get; }
 
+        // extern BranchStandardEvent _Nonnull BranchStandardEventInitiateStream;
+        [Field("BranchStandardEventInitiateStream", "__Internal")]
+        NSString BranchStandardEventInitiateStream { get; }
+
+        // extern BranchStandardEvent _Nonnull BranchStandardEventCompleteStream;
+        [Field("BranchStandardEventCompleteStream", "__Internal")]
+        NSString BranchStandardEventCompleteStream { get; }
+
         // extern BranchStandardEvent _Nonnull BranchStandardEventCompleteRegistration;
         [Field("BranchStandardEventCompleteRegistration", "__Internal")]
         NSString BranchStandardEventCompleteRegistration { get; }
