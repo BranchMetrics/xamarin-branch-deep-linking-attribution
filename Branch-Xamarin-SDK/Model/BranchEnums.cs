@@ -37,12 +37,23 @@ namespace BranchXamarinSDK
         VIEW_ITEMS,
         RATE,
         SHARE,
+        INITIATE_STREAM,
+        COMPLETE_STREAM,
 
         // User lifecycle events
         COMPLETE_REGISTRATION,
         COMPLETE_TUTORIAL,
         ACHIEVE_LEVEL,
-        UNLOCK_ACHIEVEMENT
+        UNLOCK_ACHIEVEMENT,
+
+        // V2 Events
+        INVITE,
+        LOGIN,
+        RESERVE,
+        SUBSCRIBE,
+        START_TRIAL,
+        CLICK_AD,
+        VIEW_AD
     }
 
     public enum BranchContentSchema
