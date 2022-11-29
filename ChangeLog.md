@@ -1,5 +1,11 @@
 Branch Xamarin SDK change log
 
+- 8.1.0
+  * Update to Branch Android SDK 5.2.6
+  * Update to Branch iOS SDK 1.45.0
+  * Added new method for Branch Events, AddContentItems().
+  * Added support for missing Branch Event types.
+  
 - 8.0.0
   * Update to Branch Android SDK 5.1.3 
   * Update to Branch iOS SDK 1.41.0
