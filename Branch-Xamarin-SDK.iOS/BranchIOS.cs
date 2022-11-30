@@ -247,12 +247,31 @@ namespace BranchXamarinSDK
 			buo.ShowShareSheetWithLinkProperties (blp, message, window.RootViewController, delegate(string url, bool isShared) {});
 		}
 
-		#endregion
+        #endregion
+
+        #region QR Code methods
+
+        public override void GetQRCode(IBranchQRCodeInterface callback,
+			BranchQRCodeSettings qrCodeSettings,
+            BranchUniversalObject universalObject,
+            BranchLinkProperties linkProperties)
+        {
+
+            BranchQRCodeListener obj = new BranchQRCodeListener(callback);
+            callbacksList.Add(obj as Object);
+
+            IOSNativeBranch.BranchUniversalObject buo = BranchIOSUtils.ToNativeUniversalObject(universalObject);
+            IOSNativeBranch.BranchLinkProperties blp = BranchIOSUtils.ToNativeLinkProperties(linkProperties);
+
+            //buo.GetShortUrlWithLinkProperties(blp, obj.GetShortUrlCallback);
+        }
+
+        #endregion
 
 
-		#region Action methods
+        #region Action methods
 
-		public override void UserCompletedAction (String action, Dictionary<string, object> metadata = null) {
+        public override void UserCompletedAction (String action, Dictionary<string, object> metadata = null) {
 			NativeBranch.UserCompletedAction (action, BranchIOSUtils.ToNSDictionary (metadata));
 		}
 

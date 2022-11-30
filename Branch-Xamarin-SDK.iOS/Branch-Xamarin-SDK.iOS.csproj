@@ -47,6 +47,7 @@
     <Compile Include="Helpers\BranchUrlListener.cs" />
     <Compile Include="BranchIOS.cs" />
     <Compile Include="BranchIOSUtils.cs" />
+    <Compile Include="Helpers\BranchQRCodeListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">

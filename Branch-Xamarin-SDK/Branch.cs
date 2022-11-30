@@ -147,17 +147,33 @@ namespace BranchXamarinSDK
 		                                BranchLinkProperties linkProperties,
 		                                string message);
 
-		#endregion
+        #endregion
+
+        #region QR Code methods
+
+        /// <summary>
+        /// Get a QR code with specified universal object and link properties.
+        /// </summary>
+        /// <param name="callback">The callback that is called once the request has completed.</param>
+        /// <param name="universalObject">Universal object.</param>
+        /// <param name="linkProperties">Link properties.</param>
+        /// <param name="qrCodeSettings">QR code settings.</param>
+        abstract public void GetQRCode(IBranchUrlInterface callback,
+										  BranchQRCodeSettings qrCodeSettings,
+                                          BranchUniversalObject universalObject,
+                                          BranchLinkProperties linkProperties);
+
+        #endregion
 
 
-		#region Action methods
+        #region Action methods
 
-		/// <summary>
-		/// Send a user action to the server. Some examples actions could be things like `viewed_personal_welcome`, `purchased_an_item`, etc.
-		/// </summary>
-		/// <param name="action">The action string.</param>
-		/// <param name="metadata">The additional state items associated with the action.</param>
-		abstract public void UserCompletedAction (String action, Dictionary<string, object> metadata = null);
+        /// <summary>
+        /// Send a user action to the server. Some examples actions could be things like `viewed_personal_welcome`, `purchased_an_item`, etc.
+        /// </summary>
+        /// <param name="action">The action string.</param>
+        /// <param name="metadata">The additional state items associated with the action.</param>
+        abstract public void UserCompletedAction (String action, Dictionary<string, object> metadata = null);
 
         #endregion
 

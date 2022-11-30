@@ -57,6 +57,7 @@
     <Compile Include="BranchAndroid.cs" />
     <Compile Include="BranchAndroidLifeCycleHandler.cs" />
     <Compile Include="BranchAndroidUtils.cs" />
+    <Compile Include="Helpers\BranchQRCodeListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

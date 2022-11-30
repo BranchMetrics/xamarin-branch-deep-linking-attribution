@@ -2477,6 +2477,11 @@ namespace IOSNativeBranch {
         [return: NullAllowed]
         string GetLongUrlWithChannel([NullAllowed] string channel, [NullAllowed] NSObject[] tags, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias);
 
+        // -(NSString * _Nullable)getQRCodeAsData:(BranchUniversalObject * _Nullable)buo (BranchLinkProperties * _Nullable)lp completion:(void (^ _Nullable)(NSData * _Nullable, NSError * _Nullable))completion;
+        [Export("getQRCodeAsData:")]
+        [return: NullAllowed]
+        string GetQRCode([NullAllowed] BranchUniversalObject branchUniversalObject, [NullAllowed] BranchLinkProperties linkProperties);
+
         // -(UIActivityItemProvider * _Nullable)getBranchActivityItemWithLinkProperties:(BranchLinkProperties * _Nonnull)linkProperties;
         [Export("getBranchActivityItemWithLinkProperties:")]
         [return: NullAllowed]
