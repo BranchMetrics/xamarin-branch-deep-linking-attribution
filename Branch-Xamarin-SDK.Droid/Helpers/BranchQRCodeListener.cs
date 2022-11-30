@@ -7,7 +7,7 @@ using BranchXamarinSDK.Droid;
 
 namespace BranchXamarinSDK.Droid
 {
-    public class BranchQRCodeListener : Java.Lang.Object, IO.Branch.Referral.AndroidNativeBranch.IBranchLinkCreateListener
+    public class BranchQRCodeListener : Java.Lang.Object//, IO.Branch.Referral.AndroidNativeBranch.IBranchLinkCreateListener
     {
         private IBranchQRCodeInterface callback = null;
 

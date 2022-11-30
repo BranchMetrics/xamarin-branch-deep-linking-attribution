@@ -282,6 +282,31 @@ namespace BranchXamarinSDK.iOS
 			return res;
 		}
 
+        public static IOSNativeBranch.BranchQRCode ToNativeQRCode(BranchQRCodeSettings obj)
+        {
+            var res = new IOSNativeBranch.BranchQRCode();
+
+            if (obj != null)
+            {
+                res.codeColor = obj.codeColor != null ? obj.codeColor : "";
+                res.backgroundColor = obj.backgroundColor != null ? obj.backgroundColor : "";
+                res.width = (nuint)obj.width;
+                res.margin = (nuint)obj.margin;
+                res.imageFormat = obj.imageFormat != null ? obj.imageFormat : "";
+                res.centerLogoUrl = obj.centerLogoUrl != null ? obj.centerLogoUrl : "";
+                //QR Code v2 
+                //res.codePattern = (nuint)obj.codePattern;
+                //res.finderPattern = (nuint)obj.finderPattern;
+                //res.finderPatternColor = obj.finderPatternColor != null ? obj.finderPatternColor : "";
+                //res.backgroundImageUrl = obj.backgroundImageUrl != null ? obj.backgroundImageUrl : "";
+                //res.backgroundImageOpacity = (nuint)obj.backgroundImageOpacity;
+                //res.codePatternUrl = obj.codePatternUrl != null ? obj.codePatternUrl : "";
+                //res.finderEyeColor = obj.finderEyeColor != null ? obj.finderEyeColor : "";
+            }
+
+            return res;
+        }
+
         public static void SendEvent(BranchEvent e) {
             Dictionary<string, object> eventDict = e.ToDictionary();
 

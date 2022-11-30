@@ -7,6 +7,7 @@ using Org.Json;
 using Newtonsoft.Json;
 using IO.Branch.Referral;
 using BranchXamarinSDK.Droid;
+using static Java.Interop.JniEnvironment;
 
 namespace BranchXamarinSDK
 {
@@ -241,22 +242,25 @@ namespace BranchXamarinSDK
 		}
 
         #endregion
-
+		
         #region QR Code methods
 
-        public override void GetQRCode(IBranchUrlInterface callback,
+        public override void GetQRCode(IBranchQRCodeInterface callback,
 			BranchQRCodeSettings qrCodeSettings,
             BranchUniversalObject universalObject,
             BranchLinkProperties linkProperties)
         {
 
-            //BranchUrlListener obj = new BranchUrlListener(callback);
-            //callbacksList.Add(obj as Object);
+            BranchQRCodeListener obj = new BranchQRCodeListener(callback);
+            callbacksList.Add(obj as Object);
 
             IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
             IO.Branch.Referral.Util.LinkProperties resBlp = BranchAndroidUtils.ToNativeBLP(linkProperties);
+            IO.Branch.Referral.QRCode.BranchQRCode resQRCode = BranchAndroidUtils.ToNativeQRCode(qrCodeSettings);
 
-            //resBuo.GenerateShortUrl(appContext, resBlp, obj);
+			resQRCode.getQRCodeAsData(resBuo, resBlp);
+
+            //TODO: create a native QR code object with the qrCodeSettings, then call getQRCodeAsData with the settings, buo, and lp. 
         }
 
         #endregion

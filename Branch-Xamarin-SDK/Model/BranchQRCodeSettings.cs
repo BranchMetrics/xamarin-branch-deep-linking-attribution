@@ -7,48 +7,73 @@ namespace BranchXamarinSDK
     public class BranchQRCodeSettings
     {
 
-        public List<String> tags;
-        public string feature;
-        public string alias;
-        public string channel;
-        public string stage;
-        public int matchDuration;
-        public Dictionary<String, String> controlParams;
+        public string codeColor;
+        public string backgroundColor;
+        public int margin;
+        public int width;
+        public string imageFormat;
+        public string centerLogoUrl;
+        public int codePattern;
+        public int finderPattern;
+        public string finderPatternColor;
+        public string backgroundImageUrl;
+        public int backgroundImageOpacity;
+        public string codePatternUrl;
+        public string finderEyeColor;
 
 
         public BranchQRCodeSettings()
         {
-            tags = new List<String>();
-            feature = "";
-            alias = "";
-            channel = "";
-            stage = "";
-            matchDuration = 0;
-            controlParams = new Dictionary<String, String>();
+            codeColor = "";
+            backgroundColor = "";
+            margin = 0;
+            width = 0;
+            imageFormat = "";
+            centerLogoUrl = "";
+            codePattern = 0;
+            finderPattern = 0;
+            finderPatternColor = "";
+            backgroundImageUrl = "";
+            backgroundImageOpacity = 0;
+            codePatternUrl = "";
+            finderEyeColor = "";
+
         }
 
         public BranchQRCodeSettings(string json)
         {
-            tags = new List<String>();
-            feature = "";
-            alias = "";
-            channel = "";
-            stage = "";
-            matchDuration = 0;
-            controlParams = new Dictionary<String, String>();
+            codeColor = "";
+            backgroundColor = "";
+            margin = 0;
+            width = 0;
+            imageFormat = "";
+            centerLogoUrl = "";
+            codePattern = 0;
+            finderPattern = 0;
+            finderPatternColor = "";
+            backgroundImageUrl = "";
+            backgroundImageOpacity = 0;
+            codePatternUrl = "";
+            finderEyeColor = "";
 
             loadFromJson(json);
         }
 
         public BranchQRCodeSettings(Dictionary<string, object> data)
         {
-            tags = new List<String>();
-            feature = "";
-            alias = "";
-            channel = "";
-            stage = "";
-            matchDuration = 0;
-            controlParams = new Dictionary<String, String>();
+            codeColor = "";
+            backgroundColor = "";
+            margin = 0;
+            width = 0;
+            imageFormat = "";
+            centerLogoUrl = "";
+            codePattern = 0;
+            finderPattern = 0;
+            finderPatternColor = "";
+            backgroundImageUrl = "";
+            backgroundImageOpacity = 0;
+            codePatternUrl = "";
+            finderEyeColor = "";
 
             loadFromDictionary(data);
         }
@@ -67,69 +92,95 @@ namespace BranchXamarinSDK
             if (data == null)
                 return;
 
-            if (data.ContainsKey("~tags"))
+           
+            if (data.ContainsKey("codeColor"))
             {
-                IList<object> tagsTemp = data["~tags"] as IList<object>;
+                codeColor = data["codeColor"].ToString();
+            }
+            if (data.ContainsKey("backgroundColor"))
+            {
+                backgroundColor = data["backgroundColor"].ToString();
+            }
+            if (data.ContainsKey("margin"))
+            {
+                if (!string.IsNullOrEmpty(data["margin"].ToString()))
+                {
+                    margin = Convert.ToInt32(data["margin"].ToString());
+                }
+            }
+            if (data.ContainsKey("width"))
+            {
+                if (!string.IsNullOrEmpty(data["width"].ToString()))
+                {
+                    width = Convert.ToInt32(data["width"].ToString());
+                }
+            }
+            if (data.ContainsKey("imageFormat"))
+            {
+                imageFormat = data["imageFormat"].ToString();
+            }
+            if (data.ContainsKey("centerLogoUrl"))
+            {
+                centerLogoUrl = data["centerLogoUrl"].ToString();
+            }
+            if (data.ContainsKey("codePattern"))
+            {
+                if (!string.IsNullOrEmpty(data["codePattern"].ToString()))
+                {
+                    codePattern = Convert.ToInt32(data["codePattern"].ToString());
+                }
+            }
+            if (data.ContainsKey("finderPattern"))
+            {
+                if (!string.IsNullOrEmpty(data["finderPattern"].ToString()))
+                {
+                    finderPattern = Convert.ToInt32(data["finderPattern"].ToString());
+                }
+            }
+            if (data.ContainsKey("finderPatternColor"))
+            {
+                finderPatternColor = data["finderPatternColor"].ToString();
+            }
+            if (data.ContainsKey("backgroundImageUrl"))
+            {
+                backgroundImageUrl = data["backgroundImageUrl"].ToString();
+            }
+            if (data.ContainsKey("backgroundImageOpacity"))
+            {
+                if (!string.IsNullOrEmpty(data["backgroundImageOpacity"].ToString()))
+                {
+                    backgroundImageOpacity = Convert.ToInt32(data["backgroundImageOpacity"].ToString());
+                }
+            }
+            if (data.ContainsKey("codePatternUrl"))
+            {
+                codePatternUrl = data["codePatternUrl"].ToString();
+            }
+            if (data.ContainsKey("finderEyeColor"))
+            {
+                finderEyeColor = data["finderEyeColor"].ToString();
+            }
 
-                if (tagsTemp != null)
-                {
-                    foreach (object obj in tagsTemp)
-                    {
-                        tags.Add(obj.ToString());
-                    }
-                }
-            }
-            if (data.ContainsKey("~feature"))
-            {
-                feature = data["~feature"].ToString();
-            }
-            if (data.ContainsKey("~alias"))
-            {
-                alias = data["~alias"].ToString();
-            }
-            if (data.ContainsKey("~channel"))
-            {
-                channel = data["~channel"].ToString();
-            }
-            if (data.ContainsKey("~stage"))
-            {
-                stage = data["~stage"].ToString();
-            }
-            if (data.ContainsKey("~duration"))
-            {
-                if (!string.IsNullOrEmpty(data["~duration"].ToString()))
-                {
-                    matchDuration = Convert.ToInt32(data["~duration"].ToString());
-                }
-            }
-            if (data.ContainsKey("control_params"))
-            {
-                if (data["control_params"] != null)
-                {
-                    IDictionary<string, object> paramsTemp = data["control_params"] as IDictionary<string, object>;
 
-                    if (paramsTemp != null)
-                    {
-                        foreach (string key in paramsTemp.Keys)
-                        {
-                            controlParams.Add(key, paramsTemp[key].ToString());
-                        }
-                    }
-                }
-            }
         }
 
         public Dictionary<string, object> ToDictionary()
         {
             var data = new Dictionary<string, object>();
 
-            data.Add("~tags", tags);
-            data.Add("~feature", feature);
-            data.Add("~alias", alias);
-            data.Add("~channel", channel);
-            data.Add("~stage", stage);
-            data.Add("~duration", matchDuration.ToString());
-            data.Add("control_params", controlParams);
+            data.Add("codeColor", codeColor);
+            data.Add("backgroundColor", backgroundColor);
+            data.Add("margin", margin.ToString());
+            data.Add("width", width.ToString());
+            data.Add("imageFormat", imageFormat);
+            data.Add("centerLogoUrl", centerLogoUrl);
+            data.Add("codePattern", codePattern.ToString());
+            data.Add("finderPattern", finderPattern.ToString());
+            data.Add("finderPatternColor", finderPatternColor);
+            data.Add("backgroundImageUrl", backgroundImageUrl);
+            data.Add("backgroundImageOpacity", backgroundImageOpacity.ToString());
+            data.Add("codePatternUrl", codePatternUrl);
+            data.Add("finderEyeColor", finderEyeColor);
 
             return data;
         }

@@ -155,10 +155,10 @@ namespace BranchXamarinSDK
         /// Get a QR code with specified universal object and link properties.
         /// </summary>
         /// <param name="callback">The callback that is called once the request has completed.</param>
+        /// <param name="qrCodeSettings">QR code settings.</param>
         /// <param name="universalObject">Universal object.</param>
         /// <param name="linkProperties">Link properties.</param>
-        /// <param name="qrCodeSettings">QR code settings.</param>
-        abstract public void GetQRCode(IBranchUrlInterface callback,
+        abstract public void GetQRCode(IBranchQRCodeInterface callback,
 										  BranchQRCodeSettings qrCodeSettings,
                                           BranchUniversalObject universalObject,
                                           BranchLinkProperties linkProperties);

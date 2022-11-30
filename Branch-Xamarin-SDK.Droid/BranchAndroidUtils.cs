@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Org.Json;
 using Newtonsoft.Json;
 using Android.Content;
+using static Java.Interop.JniEnvironment;
 
 namespace BranchXamarinSDK.Droid
 {
@@ -155,10 +156,33 @@ namespace BranchXamarinSDK.Droid
 			return resBlp;
 		}
 
+        public static IO.Branch.Referral.QRCode.BranchQRCode ToNativeQRCode(BranchQRCodeSettings qrCodeSettings)
+        {
+            IO.Branch.Referral.QRCode.BranchQRCode resQRCode = new IO.Branch.Referral.QRCode.BranchQRCode();
+
+            resQRCode.setCodeColor(qrCodeSettings.codeColor);
+            resQRCode.setBackgroundColor(qrCodeSettings.backgroundColor);
+            resQRCode.setWidth(qrCodeSettings.width);
+            resQRCode.setMargin(qrCodeSettings.margin);
+            resQRCode.setCenterLogoUrl(qrCodeSettings.centerLogoUrl);
+            //Need to convert string to enum
+            //resQRCode.setImageFormat(qrCodeSettings.imageFormat);
+
+            //QR Code v2 
+            //resQRCode.setCodePattern(qrCodeSettings.codePattern);
+            //resQRCode.setFinderPattern(qrCodeSettings.finderPattern);
+            //resQRCode.setFinderPatternColor(qrCodeSettings.finderPatternColor);
+            //resQRCode.setBackgroundImageUrl(qrCodeSettings.backgroundImageUrl);
+            //resQRCode.setBackgroundImageOpacity(qrCodeSettings.backgroundImageOpacity);
+            //resQRCode.setCodePatternUrl(qrCodeSettings.codePatternUrl);
+            //resQRCode.setFinderEyeColor(qrCodeSettings.finderEyeColor);
+
+            return resQRCode;
+        }
+
         public static void SendEvent(BranchEvent e, Context c) {
             IO.Branch.Referral.Util.BranchEvent branchEvent = null;
             JSONObject parameters = new JSONObject(e.ToJsonString());
-
 
             if (parameters.Has("event_name")) {
 
