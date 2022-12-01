@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using IO.Branch.Referral;
 using BranchXamarinSDK.Droid;
 using static Java.Interop.JniEnvironment;
+using Object = System.Object;
 
 namespace BranchXamarinSDK
 {
@@ -258,7 +259,8 @@ namespace BranchXamarinSDK
             IO.Branch.Referral.Util.LinkProperties resBlp = BranchAndroidUtils.ToNativeBLP(linkProperties);
             IO.Branch.Referral.QRCode.BranchQRCode resQRCode = BranchAndroidUtils.ToNativeQRCode(qrCodeSettings);
 
-			resQRCode.getQRCodeAsData(resBuo, resBlp);
+			resQRCode.GetQRCodeAsData(appContext, resBuo, resBlp, obj);
+
 
             //TODO: create a native QR code object with the qrCodeSettings, then call getQRCodeAsData with the settings, buo, and lp. 
         }
@@ -280,7 +282,7 @@ namespace BranchXamarinSDK
 		#endregion
 
 
-        #region Send Evene methods
+        #region Send Event methods
 
         public override void SendEvent(BranchEvent branchEvent) {
             BranchAndroidUtils.SendEvent(branchEvent, appContext);

@@ -7,7 +7,7 @@ using BranchXamarinSDK.Droid;
 
 namespace BranchXamarinSDK.Droid
 {
-    public class BranchQRCodeListener : Java.Lang.Object//, IO.Branch.Referral.AndroidNativeBranch.IBranchLinkCreateListener
+    public class BranchQRCodeListener : Java.Lang.Object, IO.Branch.Referral.QRCode.BranchQRCode.IBranchQRCodeDataHandler
     {
         private IBranchQRCodeInterface callback = null;
 
@@ -16,7 +16,19 @@ namespace BranchXamarinSDK.Droid
             this.callback = callback;
         }
 
-        public void OnQRCodeCreate(string qrCode, IO.Branch.Referral.BranchError error)
+        public void OnFailure(Java.Lang.Exception error)
+        {
+            BranchError err = new BranchError("Error getting QR Code", 1);
+            callback.QRCodeRequestError(err);
+        }
+
+        public void OnSuccess(byte[] qrCodeData)
+        {
+            string qrCode = System.Text.Encoding.UTF8.GetString(qrCodeData, 0, qrCodeData.Length);
+            callback.ReceivedQRCode(qrCode);
+        }
+
+        /*public void OnQRCodeCreate(string qrCode, IO.Branch.Referral.BranchError error)
         {
             if (callback == null)
             {
@@ -34,7 +46,8 @@ namespace BranchXamarinSDK.Droid
                 BranchError err = new BranchError(error.Message, error.ErrorCode);
                 callback.QRCodeRequestError(err);
             }
-        }
+        }*/
+
     }
 }
 

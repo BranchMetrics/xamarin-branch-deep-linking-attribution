@@ -160,22 +160,22 @@ namespace BranchXamarinSDK.Droid
         {
             IO.Branch.Referral.QRCode.BranchQRCode resQRCode = new IO.Branch.Referral.QRCode.BranchQRCode();
 
-            resQRCode.setCodeColor(qrCodeSettings.codeColor);
-            resQRCode.setBackgroundColor(qrCodeSettings.backgroundColor);
-            resQRCode.setWidth(qrCodeSettings.width);
-            resQRCode.setMargin(qrCodeSettings.margin);
-            resQRCode.setCenterLogoUrl(qrCodeSettings.centerLogoUrl);
+            resQRCode.SetCodeColor(qrCodeSettings.codeColor);
+            resQRCode.SetBackgroundColor(qrCodeSettings.backgroundColor);
+            resQRCode.SetWidth((Java.Lang.Integer)qrCodeSettings.width);
+            resQRCode.SetMargin((Java.Lang.Integer)qrCodeSettings.margin);
+            resQRCode.SetCenterLogo(qrCodeSettings.centerLogoUrl);
             //Need to convert string to enum
             //resQRCode.setImageFormat(qrCodeSettings.imageFormat);
 
             //QR Code v2 
-            //resQRCode.setCodePattern(qrCodeSettings.codePattern);
-            //resQRCode.setFinderPattern(qrCodeSettings.finderPattern);
-            //resQRCode.setFinderPatternColor(qrCodeSettings.finderPatternColor);
-            //resQRCode.setBackgroundImageUrl(qrCodeSettings.backgroundImageUrl);
-            //resQRCode.setBackgroundImageOpacity(qrCodeSettings.backgroundImageOpacity);
-            //resQRCode.setCodePatternUrl(qrCodeSettings.codePatternUrl);
-            //resQRCode.setFinderEyeColor(qrCodeSettings.finderEyeColor);
+            //resQRCode.SetCodePattern(qrCodeSettings.codePattern);
+            //resQRCode.SetFinderPattern(qrCodeSettings.finderPattern);
+            //resQRCode.SetFinderPatternColor(qrCodeSettings.finderPatternColor);
+            //resQRCode.SetBackgroundImageUrl(qrCodeSettings.backgroundImageUrl);
+            //resQRCode.SetBackgroundImageOpacity(qrCodeSettings.backgroundImageOpacity);
+            //resQRCode.SetCodePatternUrl(qrCodeSettings.codePatternUrl);
+            //resQRCode.SetFinderEyeColor(qrCodeSettings.finderEyeColor);
 
             return resQRCode;
         }
