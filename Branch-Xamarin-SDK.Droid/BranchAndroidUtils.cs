@@ -158,6 +158,10 @@ namespace BranchXamarinSDK.Droid
 
         public static IO.Branch.Referral.QRCode.BranchQRCode ToNativeQRCode(BranchQRCodeSettings qrCodeSettings)
         {
+            Array codePatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.CodePattern));
+            Array finderPatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.FinderPattern));
+            Array imageFormatValues = Enum.GetValues(typeof(BranchQRCodeSettings.ImageFormat));
+
             IO.Branch.Referral.QRCode.BranchQRCode resQRCode = new IO.Branch.Referral.QRCode.BranchQRCode();
 
             resQRCode.SetCodeColor(qrCodeSettings.codeColor);
@@ -165,17 +169,15 @@ namespace BranchXamarinSDK.Droid
             resQRCode.SetWidth((Java.Lang.Integer)qrCodeSettings.width);
             resQRCode.SetMargin((Java.Lang.Integer)qrCodeSettings.margin);
             resQRCode.SetCenterLogo(qrCodeSettings.centerLogoUrl);
-            //Need to convert string to enum
-            //resQRCode.setImageFormat(qrCodeSettings.imageFormat);
+            resQRCode.SetImageFormat((IO.Branch.Referral.QRCode.BranchQRCode.BranchImageFormat)(Array.IndexOf(imageFormatValues, qrCodeSettings.imageFormat)));
 
-            //QR Code v2 
-            //resQRCode.SetCodePattern(qrCodeSettings.codePattern);
-            //resQRCode.SetFinderPattern(qrCodeSettings.finderPattern);
-            //resQRCode.SetFinderPatternColor(qrCodeSettings.finderPatternColor);
-            //resQRCode.SetBackgroundImageUrl(qrCodeSettings.backgroundImageUrl);
-            //resQRCode.SetBackgroundImageOpacity(qrCodeSettings.backgroundImageOpacity);
-            //resQRCode.SetCodePatternUrl(qrCodeSettings.codePatternUrl);
-            //resQRCode.SetFinderEyeColor(qrCodeSettings.finderEyeColor);
+            resQRCode.SetPattern((IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodePattern)(Array.IndexOf(codePatternValues, qrCodeSettings.codePattern)));
+            resQRCode.SetFinderPattern((IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodeFinderPattern)(Array.IndexOf(finderPatternValues, qrCodeSettings.finderPattern)));
+            resQRCode.SetFinderPatternColor(qrCodeSettings.finderPatternColor);
+            resQRCode.SetBackgroundImage(qrCodeSettings.backgroundImageUrl);
+            resQRCode.SetBackgroundImageOpacity((Java.Lang.Integer)qrCodeSettings.backgroundImageOpacity);
+            resQRCode.SetPatternImage(qrCodeSettings.codePatternUrl);
+            resQRCode.SetFinderEyeColor(qrCodeSettings.finderEyeColor);
 
             return resQRCode;
         }

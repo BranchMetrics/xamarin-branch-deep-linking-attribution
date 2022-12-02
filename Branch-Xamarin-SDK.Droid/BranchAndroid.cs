@@ -260,9 +260,6 @@ namespace BranchXamarinSDK
             IO.Branch.Referral.QRCode.BranchQRCode resQRCode = BranchAndroidUtils.ToNativeQRCode(qrCodeSettings);
 
 			resQRCode.GetQRCodeAsData(appContext, resBuo, resBlp, obj);
-
-
-            //TODO: create a native QR code object with the qrCodeSettings, then call getQRCodeAsData with the settings, buo, and lp. 
         }
 
         #endregion

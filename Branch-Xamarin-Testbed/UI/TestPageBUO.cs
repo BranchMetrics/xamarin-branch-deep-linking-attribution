@@ -3,8 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.Diagnostics;
+using System.IO;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 
 namespace BranchXamarinTestbed
 {
@@ -12,7 +14,8 @@ namespace BranchXamarinTestbed
 	IBranchUrlInterface,
 	IBranchBUOSessionInterface,
 	IBranchIdentityInterface,
-	IBranchLinkShareInterface
+	IBranchLinkShareInterface,
+	IBranchQRCodeInterface
 	{
 		readonly Label StatusLabel;
 		readonly Label FirstLabel;
@@ -29,9 +32,10 @@ namespace BranchXamarinTestbed
 		readonly Entry ParamsEntry;
 		readonly Entry ActionEntry;
 		readonly Button CompleteActionButton;
-	
+        readonly Button QRCodeButton;
+		readonly Image qrImage;
 
-		string feature = "";
+        string feature = "";
 		bool IsLoggedIn = false;
 
 		Color entryTextColor = Color.Gray;
@@ -205,7 +209,28 @@ namespace BranchXamarinTestbed
 			};
 			CompleteActionButton.Clicked += CompleteActionClicked;
 
-			var stack1 = new StackLayout {
+
+            var qrLabel = new Label
+            {
+                TextColor = Color.Blue,
+                Text = "QR Code",
+                FontSize = 18
+            };
+
+			qrImage = new Image
+			{
+				Source = "https://t4.ftcdn.net/jpg/03/24/10/93/360_F_324109330_f2P2ohY4fYETjXCrjHLzZaLTho9cYBV4.jpg"
+            };
+
+            QRCodeButton = new Button
+            {
+                Text = "Create QR Code",
+                TextColor = Color.White,
+                BackgroundColor = Color.Gray,
+            };
+            QRCodeButton.Clicked += QRCodeClicked;
+
+            var stack1 = new StackLayout {
 				Children = {
 					SLabel,
 					StatusLabel
@@ -282,14 +307,30 @@ namespace BranchXamarinTestbed
 				Content = stack6
 			};
 
-		
-			var stackLayout = new StackLayout {
+            var stack7 = new StackLayout
+            {
+                Children = {
+                    qrLabel,
+                    qrImage,
+                    QRCodeButton
+                }
+            };
+            var frame7 = new Frame
+            {
+                BorderColor = Color.Black,
+                Padding = new Thickness(5, 5, 5, 5),
+                Content = stack7
+            };
+
+
+            var stackLayout = new StackLayout {
 				Children = {
 					frame1,
 					frame2,
 					frame3,
 					frame5,
 					frame6,
+					frame7
 				},
 				Spacing = 10,
 				Padding = 10
@@ -438,7 +479,28 @@ namespace BranchXamarinTestbed
 			Branch.GetInstance ().UserCompletedAction (ActionEntry.Text, data);
 		}
 
-		void FeatureSelected(object sender, EventArgs args) {
+        void QRCodeClicked(object sender, EventArgs e)
+        {
+            universalObject = new BranchUniversalObject();
+            universalObject.canonicalIdentifier = "qrTest1";
+
+            linkProperties = new BranchLinkProperties();
+            linkProperties.feature = feature;
+
+            BranchQRCodeSettings qrCodeSettings = new BranchQRCodeSettings();
+            qrCodeSettings.margin = 2;
+            qrCodeSettings.width = 500;
+            qrCodeSettings.codeColor = "#38d6a7";
+            qrCodeSettings.backgroundColor = "#281fc6";
+			qrCodeSettings.backgroundImageUrl = "https://cdn.logo.com/hotlink-ok/logo-social.png";
+			qrCodeSettings.backgroundImageOpacity = 20;
+			qrCodeSettings.codePattern = BranchQRCodeSettings.CodePattern.Circles;
+			qrCodeSettings.finderEyeColor = "#38d6a7";
+
+            Branch.GetInstance().GetQRCode(this, qrCodeSettings, universalObject, linkProperties);
+        }
+
+        void FeatureSelected(object sender, EventArgs args) {
 			switch (FeaturePicker.SelectedIndex) {
 			case 1:
 				feature = Constants.URL_FEATURE_SHARE;
@@ -583,8 +645,28 @@ namespace BranchXamarinTestbed
 			StatusLabel.Text = error.ErrorMessage;
 		}
 
-		#endregion
+        #endregion
 
-	}
+        #region IBranchQRCodeInterface implementation
+
+        void IBranchQRCodeInterface.ReceivedQRCode(byte[] qrCode)
+        {
+			Debug.WriteLine("Got QR Code!");
+
+			qrImage.Source = ImageSource.FromStream(() =>
+            {
+                return new MemoryStream(qrCode);
+            });
+        }
+
+        void IBranchQRCodeInterface.QRCodeRequestError(BranchError error)
+        {
+			Debug.WriteLine("Error getting QR Code");
+
+        }
+
+        #endregion
+
+    }
 }
 

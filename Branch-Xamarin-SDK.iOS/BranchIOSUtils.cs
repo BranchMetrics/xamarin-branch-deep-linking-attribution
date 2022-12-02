@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Foundation;
 using Newtonsoft.Json;
+using UIKit;
 
 namespace BranchXamarinSDK.iOS
 {
@@ -288,23 +289,66 @@ namespace BranchXamarinSDK.iOS
 
             if (obj != null)
             {
-                res.codeColor = obj.codeColor != null ? obj.codeColor : "";
-                res.backgroundColor = obj.backgroundColor != null ? obj.backgroundColor : "";
-                res.width = (nuint)obj.width;
-                res.margin = (nuint)obj.margin;
-                res.imageFormat = obj.imageFormat != null ? obj.imageFormat : "";
-                res.centerLogoUrl = obj.centerLogoUrl != null ? obj.centerLogoUrl : "";
-                //QR Code v2 
-                //res.codePattern = (nuint)obj.codePattern;
-                //res.finderPattern = (nuint)obj.finderPattern;
-                //res.finderPatternColor = obj.finderPatternColor != null ? obj.finderPatternColor : "";
-                //res.backgroundImageUrl = obj.backgroundImageUrl != null ? obj.backgroundImageUrl : "";
-                //res.backgroundImageOpacity = (nuint)obj.backgroundImageOpacity;
-                //res.codePatternUrl = obj.codePatternUrl != null ? obj.codePatternUrl : "";
-                //res.finderEyeColor = obj.finderEyeColor != null ? obj.finderEyeColor : "";
+                Array codePatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.CodePattern));
+                Array finderPatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.FinderPattern));
+                Array imageFormatValues = Enum.GetValues(typeof(BranchQRCodeSettings.ImageFormat));
+
+                if (!string.IsNullOrEmpty(obj.codeColor)) 
+                    res.CodeColor = FromHexString(obj.codeColor);
+                if (!string.IsNullOrEmpty(obj.backgroundColor))
+                    res.BackgroundColor = FromHexString(obj.backgroundColor);
+                if (!string.IsNullOrEmpty(obj.finderPatternColor))
+                    res.FinderPatternColor = FromHexString(obj.finderPatternColor);
+                if (!string.IsNullOrEmpty(obj.finderEyeColor))
+                    res.FinderEyeColor = FromHexString(obj.finderEyeColor);
+                res.Width = obj.width;
+                res.Margin = obj.margin;
+                res.BackgroundImageOpacity = obj.backgroundImageOpacity;
+                res.CenterLogo = obj.centerLogoUrl != null ? obj.centerLogoUrl : "";
+                res.BackgroundImage = obj.backgroundImageUrl != null ? obj.backgroundImageUrl : "";
+                res.PatternImage = obj.codePatternUrl != null ? obj.codePatternUrl : "";
+                res.ImageFormat = (IOSNativeBranch.BranchQRCodeImageFormat)Array.IndexOf(imageFormatValues, obj.imageFormat);
+                res.Pattern = (IOSNativeBranch.BranchQRCodePattern)Array.IndexOf(codePatternValues, obj.codePattern);
+                res.FinderPattern = (IOSNativeBranch.BranchQRCodeFinderPattern)Array.IndexOf(finderPatternValues, obj.finderPattern);
+      
             }
 
             return res;
+        }
+
+        public static UIColor FromHexString(string hexString)
+        {
+            if (string.IsNullOrEmpty(hexString))
+            {
+                throw new ArgumentException("Hexadecimal string cannot be null or empty.", nameof(hexString));
+            }
+
+            // Remove the leading "#" character if it exists
+            if (hexString[0] == '#')
+            {
+                hexString = hexString.Substring(1);
+            }
+
+            // Make sure the string is a valid hexadecimal string
+            if (hexString.Length != 6 && hexString.Length != 8)
+            {
+                throw new ArgumentException("Hexadecimal string must be 6 or 8 characters in length.", nameof(hexString));
+            }
+
+            // Parse the red, green, and blue components of the color
+            int red = int.Parse(hexString.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+            int green = int.Parse(hexString.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+            int blue = int.Parse(hexString.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+
+            // If the hexadecimal string includes an alpha component, parse it as well
+            float alpha = 1.0f;
+            if (hexString.Length == 8)
+            {
+                alpha = (float)int.Parse(hexString.Substring(6, 2), System.Globalization.NumberStyles.HexNumber) / 255.0f;
+            }
+
+            // Create and return the UIColor object
+            return UIColor.FromRGBA(red, green, blue, alpha);
         }
 
         public static void SendEvent(BranchEvent e) {

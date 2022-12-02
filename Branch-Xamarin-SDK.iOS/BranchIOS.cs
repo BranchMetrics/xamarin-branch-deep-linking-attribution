@@ -263,10 +263,7 @@ namespace BranchXamarinSDK
             IOSNativeBranch.BranchUniversalObject buo = BranchIOSUtils.ToNativeUniversalObject(universalObject);
             IOSNativeBranch.BranchLinkProperties blp = BranchIOSUtils.ToNativeLinkProperties(linkProperties);
 
-			IOSNativeBranch.BranchQRCode qrCode = BrnahcIOSUtils.ToNativeQRCode(qrCodeSettings);
-
-            //TODO: create a native QR code object with the qrCodeSettings, then call getQRCodeAsData with the settings, buo, and lp. 
-
+			IOSNativeBranch.BranchQRCode qrCode = BranchIOSUtils.ToNativeQRCode(qrCodeSettings);
         }
 
         #endregion

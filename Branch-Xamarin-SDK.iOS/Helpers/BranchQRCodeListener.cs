@@ -9,12 +9,12 @@ namespace BranchXamarinSDK.iOS
     {
         private IBranchQRCodeInterface callback = null;
 
-        public BranchQRCodeListener(BranchQRCodeListener callback)
+        public BranchQRCodeListener(IBranchQRCodeInterface callback)
         {
             this.callback = callback;
         }
 
-        public void GetQRCodeCallback(string qrCode, NSError error)
+        public void GetQRCodeCallback(byte[] qrCode, NSError error)
         {
 
             if (callback == null)

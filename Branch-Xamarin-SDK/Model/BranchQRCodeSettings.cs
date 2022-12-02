@@ -6,15 +6,38 @@ namespace BranchXamarinSDK
 {
     public class BranchQRCodeSettings
     {
+        public enum CodePattern
+        {
+            Standard,
+            Squares,
+            Circles,
+            Triangles,
+            Diamonds,
+            Hexagons,
+            Octagons
+        }
+
+        public enum FinderPattern
+        {
+            Square,
+            RoundedRectangle,
+            Circle
+        }
+
+        public enum ImageFormat
+        {
+            JPEG,
+            PNG,
+        }
 
         public string codeColor;
         public string backgroundColor;
         public int margin;
         public int width;
-        public string imageFormat;
+        public ImageFormat imageFormat;
         public string centerLogoUrl;
-        public int codePattern;
-        public int finderPattern;
+        public CodePattern codePattern;
+        public FinderPattern finderPattern;
         public string finderPatternColor;
         public string backgroundImageUrl;
         public int backgroundImageOpacity;
@@ -28,10 +51,10 @@ namespace BranchXamarinSDK
             backgroundColor = "";
             margin = 0;
             width = 0;
-            imageFormat = "";
+            imageFormat = ImageFormat.PNG;
             centerLogoUrl = "";
-            codePattern = 0;
-            finderPattern = 0;
+            codePattern = CodePattern.Standard;
+            finderPattern = FinderPattern.Square;
             finderPatternColor = "";
             backgroundImageUrl = "";
             backgroundImageOpacity = 0;
@@ -46,10 +69,10 @@ namespace BranchXamarinSDK
             backgroundColor = "";
             margin = 0;
             width = 0;
-            imageFormat = "";
+            imageFormat = ImageFormat.PNG;
             centerLogoUrl = "";
-            codePattern = 0;
-            finderPattern = 0;
+            codePattern = CodePattern.Standard;
+            finderPattern = FinderPattern.Square;
             finderPatternColor = "";
             backgroundImageUrl = "";
             backgroundImageOpacity = 0;
@@ -65,10 +88,10 @@ namespace BranchXamarinSDK
             backgroundColor = "";
             margin = 0;
             width = 0;
-            imageFormat = "";
+            imageFormat = ImageFormat.PNG;
             centerLogoUrl = "";
-            codePattern = 0;
-            finderPattern = 0;
+            codePattern = CodePattern.Standard;
+            finderPattern = FinderPattern.Square;
             finderPatternColor = "";
             backgroundImageUrl = "";
             backgroundImageOpacity = 0;
@@ -117,7 +140,7 @@ namespace BranchXamarinSDK
             }
             if (data.ContainsKey("imageFormat"))
             {
-                imageFormat = data["imageFormat"].ToString();
+                imageFormat = (ImageFormat)data["imageFormat"];
             }
             if (data.ContainsKey("centerLogoUrl"))
             {
@@ -125,17 +148,11 @@ namespace BranchXamarinSDK
             }
             if (data.ContainsKey("codePattern"))
             {
-                if (!string.IsNullOrEmpty(data["codePattern"].ToString()))
-                {
-                    codePattern = Convert.ToInt32(data["codePattern"].ToString());
-                }
+                codePattern = (CodePattern)data["codePattern"];
             }
             if (data.ContainsKey("finderPattern"))
             {
-                if (!string.IsNullOrEmpty(data["finderPattern"].ToString()))
-                {
-                    finderPattern = Convert.ToInt32(data["finderPattern"].ToString());
-                }
+                finderPattern = (FinderPattern)data["finderPattern"];
             }
             if (data.ContainsKey("finderPatternColor"))
             {
@@ -160,8 +177,6 @@ namespace BranchXamarinSDK
             {
                 finderEyeColor = data["finderEyeColor"].ToString();
             }
-
-
         }
 
         public Dictionary<string, object> ToDictionary()
@@ -172,7 +187,7 @@ namespace BranchXamarinSDK
             data.Add("backgroundColor", backgroundColor);
             data.Add("margin", margin.ToString());
             data.Add("width", width.ToString());
-            data.Add("imageFormat", imageFormat);
+            data.Add("imageFormat", imageFormat.ToString());
             data.Add("centerLogoUrl", centerLogoUrl);
             data.Add("codePattern", codePattern.ToString());
             data.Add("finderPattern", finderPattern.ToString());
@@ -181,7 +196,7 @@ namespace BranchXamarinSDK
             data.Add("backgroundImageOpacity", backgroundImageOpacity.ToString());
             data.Add("codePatternUrl", codePatternUrl);
             data.Add("finderEyeColor", finderEyeColor);
-
+            
             return data;
         }
 
@@ -191,4 +206,5 @@ namespace BranchXamarinSDK
             return JsonConvert.SerializeObject(data);
         }
     }
+  
 }

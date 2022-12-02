@@ -4,7 +4,7 @@ namespace BranchXamarinSDK
 {
     public interface IBranchQRCodeInterface
     {
-        void ReceivedQRCode(string qrCode);
+        void ReceivedQRCode(byte[] qrCode);
         void QRCodeRequestError(BranchError error);
     }
 }

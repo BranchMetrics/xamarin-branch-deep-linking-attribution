@@ -74,4 +74,31 @@ namespace IOSNativeBranch
 		Native
 	}
 
+    [Native]
+    public enum BranchQRCodeImageFormat : long
+    {
+        PNG,
+        JPEG
+    }
+
+    [Native]
+    public enum BranchQRCodePattern : long
+    {
+        Standard = 1,
+        Squares = 2,
+        Circles = 3,
+        Triangles = 4,
+        Diamonds = 5,
+        Hexagons = 6,
+        Octagons = 7,
+    }
+
+    [Native]
+    public enum BranchQRCodeFinderPattern : long
+    {
+        Square = 1,
+        RoundedRectangle = 2,
+        Circle = 3,
+    }
+
 }

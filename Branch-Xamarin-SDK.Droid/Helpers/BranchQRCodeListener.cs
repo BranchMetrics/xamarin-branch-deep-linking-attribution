@@ -18,36 +18,14 @@ namespace BranchXamarinSDK.Droid
 
         public void OnFailure(Java.Lang.Exception error)
         {
-            BranchError err = new BranchError("Error getting QR Code", 1);
+            BranchError err = new BranchError("Error getting QR Code: " + error.Message);
             callback.QRCodeRequestError(err);
         }
 
-        public void OnSuccess(byte[] qrCodeData)
+        public void OnSuccess(byte[] qrCode)
         {
-            string qrCode = System.Text.Encoding.UTF8.GetString(qrCodeData, 0, qrCodeData.Length);
             callback.ReceivedQRCode(qrCode);
         }
-
-        /*public void OnQRCodeCreate(string qrCode, IO.Branch.Referral.BranchError error)
-        {
-            if (callback == null)
-            {
-                return;
-            }
-
-            if (error == null)
-            {
-
-                callback.ReceivedQRCode(qrCode);
-            }
-            else
-            {
-
-                BranchError err = new BranchError(error.Message, error.ErrorCode);
-                callback.QRCodeRequestError(err);
-            }
-        }*/
-
     }
 }
 
