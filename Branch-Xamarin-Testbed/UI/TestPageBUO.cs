@@ -494,6 +494,7 @@ namespace BranchXamarinTestbed
             qrCodeSettings.backgroundColor = "#281fc6";
 			qrCodeSettings.backgroundImageUrl = "https://cdn.logo.com/hotlink-ok/logo-social.png";
 			qrCodeSettings.backgroundImageOpacity = 20;
+			qrCodeSettings.imageFormat = BranchQRCodeSettings.ImageFormat.JPEG;
 			qrCodeSettings.codePattern = BranchQRCodeSettings.CodePattern.Circles;
 			qrCodeSettings.finderEyeColor = "#38d6a7";
 

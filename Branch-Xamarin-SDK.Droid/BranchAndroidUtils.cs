@@ -4,6 +4,9 @@ using Org.Json;
 using Newtonsoft.Json;
 using Android.Content;
 using static Java.Interop.JniEnvironment;
+using System.Diagnostics;
+using IO.Branch.Referral.Util;
+using static Android.Hardware.Camera;
 
 namespace BranchXamarinSDK.Droid
 {
@@ -158,26 +161,58 @@ namespace BranchXamarinSDK.Droid
 
         public static IO.Branch.Referral.QRCode.BranchQRCode ToNativeQRCode(BranchQRCodeSettings qrCodeSettings)
         {
-            Array codePatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.CodePattern));
-            Array finderPatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.FinderPattern));
-            Array imageFormatValues = Enum.GetValues(typeof(BranchQRCodeSettings.ImageFormat));
-
             IO.Branch.Referral.QRCode.BranchQRCode resQRCode = new IO.Branch.Referral.QRCode.BranchQRCode();
 
-            resQRCode.SetCodeColor(qrCodeSettings.codeColor);
-            resQRCode.SetBackgroundColor(qrCodeSettings.backgroundColor);
-            resQRCode.SetWidth((Java.Lang.Integer)qrCodeSettings.width);
-            resQRCode.SetMargin((Java.Lang.Integer)qrCodeSettings.margin);
-            resQRCode.SetCenterLogo(qrCodeSettings.centerLogoUrl);
-            resQRCode.SetImageFormat((IO.Branch.Referral.QRCode.BranchQRCode.BranchImageFormat)(Array.IndexOf(imageFormatValues, qrCodeSettings.imageFormat)));
+            if (!string.IsNullOrEmpty(qrCodeSettings.codeColor)) {
+                resQRCode.SetCodeColor(qrCodeSettings.codeColor);
+            }
+            if (!string.IsNullOrEmpty(qrCodeSettings.backgroundColor)) {
+                resQRCode.SetBackgroundColor(qrCodeSettings.backgroundColor);
+            }
+            if (qrCodeSettings.width > 0) {
+                resQRCode.SetWidth((Java.Lang.Integer)qrCodeSettings.width);
+            }
+            if (qrCodeSettings.margin > 0) {
+                resQRCode.SetMargin((Java.Lang.Integer)qrCodeSettings.margin);
+            }
+            if (!string.IsNullOrEmpty(qrCodeSettings.centerLogoUrl)) {
+                resQRCode.SetCenterLogo(qrCodeSettings.centerLogoUrl);
+            }
+            if (!string.IsNullOrEmpty(qrCodeSettings.finderPatternColor)) {
+                resQRCode.SetFinderPatternColor(qrCodeSettings.finderPatternColor);
+            }
+            if (!string.IsNullOrEmpty(qrCodeSettings.backgroundImageUrl)) {
+                resQRCode.SetBackgroundImage(qrCodeSettings.backgroundImageUrl);
+            }
+            if (qrCodeSettings.backgroundImageOpacity > 0) {
+                resQRCode.SetBackgroundImageOpacity((Java.Lang.Integer)qrCodeSettings.backgroundImageOpacity);
+            }
+            if (!string.IsNullOrEmpty(qrCodeSettings.codePatternUrl)) {
+                resQRCode.SetPatternImage(qrCodeSettings.codePatternUrl);
+            }
+            if (!string.IsNullOrEmpty(qrCodeSettings.finderEyeColor)) {
+                resQRCode.SetFinderEyeColor(qrCodeSettings.finderEyeColor);
+            }
 
-            resQRCode.SetPattern((IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodePattern)(Array.IndexOf(codePatternValues, qrCodeSettings.codePattern)));
-            resQRCode.SetFinderPattern((IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodeFinderPattern)(Array.IndexOf(finderPatternValues, qrCodeSettings.finderPattern)));
-            resQRCode.SetFinderPatternColor(qrCodeSettings.finderPatternColor);
-            resQRCode.SetBackgroundImage(qrCodeSettings.backgroundImageUrl);
-            resQRCode.SetBackgroundImageOpacity((Java.Lang.Integer)qrCodeSettings.backgroundImageOpacity);
-            resQRCode.SetPatternImage(qrCodeSettings.codePatternUrl);
-            resQRCode.SetFinderEyeColor(qrCodeSettings.finderEyeColor);
+            if (qrCodeSettings.imageFormat == BranchQRCodeSettings.ImageFormat.JPEG) {
+                resQRCode.SetImageFormat(IO.Branch.Referral.QRCode.BranchQRCode.BranchImageFormat.Jpeg);
+            } else {
+                resQRCode.SetImageFormat(IO.Branch.Referral.QRCode.BranchQRCode.BranchImageFormat.Png);
+            }
+
+            foreach (IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodePattern type in IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodePattern.Values()) {
+                if (type.Name().Equals(qrCodeSettings.codePattern.ToString())) {
+                    resQRCode.SetPattern(type);
+                    break;
+                }
+            }
+
+            foreach (IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodeFinderPattern type in IO.Branch.Referral.QRCode.BranchQRCode.BranchQRCodeFinderPattern.Values()) {
+                if (type.Name().Equals(qrCodeSettings.finderPattern.ToString())) {
+                    resQRCode.SetFinderPattern(type);
+                    break;
+                }
+            }
 
             return resQRCode;
         }
@@ -188,7 +223,7 @@ namespace BranchXamarinSDK.Droid
 
             if (parameters.Has("event_name")) {
 
-                // try to create standart event
+                // try to create standard event
                 foreach (IO.Branch.Referral.Util.BRANCH_STANDARD_EVENT type in IO.Branch.Referral.Util.BRANCH_STANDARD_EVENT.Values()) {
                     if (type.Name.Equals(parameters.GetString("event_name"))) {
                         branchEvent = new IO.Branch.Referral.Util.BranchEvent(type);
@@ -196,7 +231,7 @@ namespace BranchXamarinSDK.Droid
                     }
                 }
 
-                // if standart event can't be created, let's create custom event
+                // if standard event can't be created, let's create custom event
                 if (branchEvent == null) {
                     branchEvent = new IO.Branch.Referral.Util.BranchEvent(parameters.GetString("event_name"));
                 }
