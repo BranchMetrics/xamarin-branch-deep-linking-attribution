@@ -17,3 +17,8 @@ Branch-Xamarin-Testbed.Droid/obj
 Branch-Xamarin-Testbed.iOS/bin
 Branch-Xamarin-Testbed.iOS/obj
 packages
+Branch-Xamarin-SDK.iOS/Info.plist
+Branch-Xamarin-SDK.Droid/Resources/Resource.designer.cs
+Branch-Xamarin-SDK.iOS/Branch-Xamarin-SDK.iOS.csproj
+Branch-Xamarin-Testbed.Droid/Resources/Resource.designer.cs
+.DS_Store

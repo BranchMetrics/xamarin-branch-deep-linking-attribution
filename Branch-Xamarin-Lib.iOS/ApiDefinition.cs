@@ -2477,11 +2477,6 @@ namespace IOSNativeBranch {
         [return: NullAllowed]
         string GetLongUrlWithChannel([NullAllowed] string channel, [NullAllowed] NSObject[] tags, [NullAllowed] string feature, [NullAllowed] string stage, [NullAllowed] string alias);
 
-        // -(NSString * _Nullable)getQRCodeAsData:(BranchUniversalObject * _Nullable)buo (BranchLinkProperties * _Nullable)lp completion:(void (^ _Nullable)(NSData * _Nullable, NSError * _Nullable))completion;
-        [Export("getQRCodeAsData:")]
-        [return: NullAllowed]
-        string GetQRCode([NullAllowed] BranchUniversalObject branchUniversalObject, [NullAllowed] BranchLinkProperties linkProperties);
-
         // -(UIActivityItemProvider * _Nullable)getBranchActivityItemWithLinkProperties:(BranchLinkProperties * _Nonnull)linkProperties;
         [Export("getBranchActivityItemWithLinkProperties:")]
         [return: NullAllowed]
@@ -2880,6 +2875,10 @@ namespace IOSNativeBranch {
         // @property (nonatomic, strong, readwrite) UIColor *finderEyeColor;
         [Export("finderEyeColor", ArgumentSemantic.Strong)]
         UIColor FinderEyeColor { get; set; }
+
+        // -(void)getQRCodeAsData:(BranchUniversalObject * _Nullable)buo linkProperties:(BranchLinkProperties * _Nullable)lp completion:(void(^)(NSData * _Nullable qrCode, NSError * _Nullable error))completion;
+        [Export("getQRCodeAsData:linkProperties:completion:")]
+        void GetQRCodeAsData([NullAllowed] BranchUniversalObject buo, [NullAllowed] BranchLinkProperties lp, Action<NSData, NSError> completion);
     }
 
     // @protocol BranchDelegate <NSObject>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Foundation;
 using Newtonsoft.Json;
 using UIKit;
@@ -287,31 +288,35 @@ namespace BranchXamarinSDK.iOS
         {
             var res = new IOSNativeBranch.BranchQRCode();
 
+            Console.WriteLine("Created BranchQRCode Object: " + obj.ToJsonString());
+
             if (obj != null)
             {
-                Array codePatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.CodePattern));
-                Array finderPatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.FinderPattern));
-                Array imageFormatValues = Enum.GetValues(typeof(BranchQRCodeSettings.ImageFormat));
+                //Array codePatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.CodePattern));
+                //Array finderPatternValues = Enum.GetValues(typeof(BranchQRCodeSettings.FinderPattern));
+                //Array imageFormatValues = Enum.GetValues(typeof(BranchQRCodeSettings.ImageFormat));
 
-                if (!string.IsNullOrEmpty(obj.codeColor)) 
-                    res.CodeColor = FromHexString(obj.codeColor);
-                if (!string.IsNullOrEmpty(obj.backgroundColor))
-                    res.BackgroundColor = FromHexString(obj.backgroundColor);
-                if (!string.IsNullOrEmpty(obj.finderPatternColor))
-                    res.FinderPatternColor = FromHexString(obj.finderPatternColor);
-                if (!string.IsNullOrEmpty(obj.finderEyeColor))
-                    res.FinderEyeColor = FromHexString(obj.finderEyeColor);
-                res.Width = obj.width;
-                res.Margin = obj.margin;
-                res.BackgroundImageOpacity = obj.backgroundImageOpacity;
-                res.CenterLogo = obj.centerLogoUrl != null ? obj.centerLogoUrl : "";
-                res.BackgroundImage = obj.backgroundImageUrl != null ? obj.backgroundImageUrl : "";
-                res.PatternImage = obj.codePatternUrl != null ? obj.codePatternUrl : "";
-                res.ImageFormat = (IOSNativeBranch.BranchQRCodeImageFormat)Array.IndexOf(imageFormatValues, obj.imageFormat);
-                res.Pattern = (IOSNativeBranch.BranchQRCodePattern)Array.IndexOf(codePatternValues, obj.codePattern);
-                res.FinderPattern = (IOSNativeBranch.BranchQRCodeFinderPattern)Array.IndexOf(finderPatternValues, obj.finderPattern);
+                //if (!string.IsNullOrEmpty(obj.codeColor)) 
+                //    res.CodeColor = FromHexString(obj.codeColor);
+                //if (!string.IsNullOrEmpty(obj.backgroundColor))
+                //    res.BackgroundColor = FromHexString(obj.backgroundColor);
+                //if (!string.IsNullOrEmpty(obj.finderPatternColor))
+                //    res.FinderPatternColor = FromHexString(obj.finderPatternColor);
+                //if (!string.IsNullOrEmpty(obj.finderEyeColor))
+                //    res.FinderEyeColor = FromHexString(obj.finderEyeColor);
+                //res.Width = obj.width;
+                //res.Margin = obj.margin;
+                //res.BackgroundImageOpacity = obj.backgroundImageOpacity;
+                //res.CenterLogo = obj.centerLogoUrl != null ? obj.centerLogoUrl : "";
+                //res.BackgroundImage = obj.backgroundImageUrl != null ? obj.backgroundImageUrl : "";
+                //res.PatternImage = obj.codePatternUrl != null ? obj.codePatternUrl : "";
+                //res.ImageFormat = (IOSNativeBranch.BranchQRCodeImageFormat)Array.IndexOf(imageFormatValues, obj.imageFormat);
+                //res.Pattern = (IOSNativeBranch.BranchQRCodePattern)Array.IndexOf(codePatternValues, obj.codePattern);
+                //res.FinderPattern = (IOSNativeBranch.BranchQRCodeFinderPattern)Array.IndexOf(finderPatternValues, obj.finderPattern);
       
             }
+
+            Console.WriteLine("Added parameters to BranchQRCode: " + res.ToString());
 
             return res;
         }
@@ -320,7 +325,8 @@ namespace BranchXamarinSDK.iOS
         {
             if (string.IsNullOrEmpty(hexString))
             {
-                throw new ArgumentException("Hexadecimal string cannot be null or empty.", nameof(hexString));
+                //throw new ArgumentException("Hexadecimal string cannot be null or empty.", nameof(hexString));
+                Console.WriteLine("Hexadecimal string cannot be null or empty.", nameof(hexString));
             }
 
             // Remove the leading "#" character if it exists
@@ -332,7 +338,9 @@ namespace BranchXamarinSDK.iOS
             // Make sure the string is a valid hexadecimal string
             if (hexString.Length != 6 && hexString.Length != 8)
             {
-                throw new ArgumentException("Hexadecimal string must be 6 or 8 characters in length.", nameof(hexString));
+                //throw new ArgumentException("Hexadecimal string must be 6 or 8 characters in length.", nameof(hexString));
+                Console.WriteLine("Hexadecimal string must be 6 or 8 characters in length.", nameof(hexString));
+
             }
 
             // Parse the red, green, and blue components of the color

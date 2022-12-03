@@ -234,7 +234,7 @@ namespace BranchXamarinSDK
 		abstract public void SetTrackingDisabled(bool value);
 
 
-		#endregion
-	}
+        #endregion
+    }
 }
 
