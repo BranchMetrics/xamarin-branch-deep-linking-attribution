@@ -14,22 +14,18 @@ namespace BranchXamarinSDK.iOS
             this.callback = callback;
         }
 
-        public void GetQRCodeCallback(byte[] qrCode, NSError error)
+        public void GetQRCodeCallback(NSData qrCode, NSError error)
         {
 
-            if (callback == null)
-            {
+            if (callback == null)   {
                 return;
             }
 
-            if (error == null)
-            {
-
-                callback.ReceivedQRCode(qrCode);
-            }
-            else
-            {
-
+            if (error == null) {
+                byte[] dataBytes = new byte[qrCode.Length];
+                System.Runtime.InteropServices.Marshal.Copy(qrCode.Bytes, dataBytes, 0, Convert.ToInt32(qrCode.Length));
+                callback.ReceivedQRCode(dataBytes);
+            } else {
                 BranchError err = new BranchError(error.Description, (int)error.Code);
                 callback.QRCodeRequestError(err);
             }

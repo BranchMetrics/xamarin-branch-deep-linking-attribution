@@ -257,17 +257,15 @@ namespace BranchXamarinSDK
             BranchLinkProperties linkProperties)
         {
 
-            Console.WriteLine("GetQRCode Called!");
-
             BranchQRCodeListener obj = new BranchQRCodeListener(callback);
             callbacksList.Add(obj as Object);
 
             IOSNativeBranch.BranchUniversalObject buo = BranchIOSUtils.ToNativeUniversalObject(universalObject);
             IOSNativeBranch.BranchLinkProperties blp = BranchIOSUtils.ToNativeLinkProperties(linkProperties);
-			IOSNativeBranch.BranchQRCode bQrCode = BranchIOSUtils.ToNativeQRCode(qrCodeSettings);
+			IOSNativeBranch.BranchQRCode qrCode = BranchIOSUtils.ToNativeQRCode(qrCodeSettings);
 
-            bQrCode.GetQRCodeAsData(buo, blp, delegate (NSData qrCode, NSError error) {});
-			Console.WriteLine("Done with GetQRCode: " + bQrCode);
+            qrCode.GetQRCodeAsData(buo, blp, obj.GetQRCodeCallback);
+
         }
 
         #endregion
