@@ -18,7 +18,7 @@ namespace BranchXamarinSDK
 
 		// TODO: can we pull the plugin version automatically?
 		private static String pluginName = "Xamarin";
-		private static String pluginVersion = "8.1.0";
+		private static String pluginVersion = "8.1.1";
 
 		private BranchAndroid () { }
 

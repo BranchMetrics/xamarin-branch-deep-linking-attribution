@@ -1,5 +1,8 @@
 Branch Xamarin SDK change log
 
+- 8.1.1
+  * Update to Branch iOS SDK 1.45.1
+
 - 8.1.0
   * Update to Branch Android SDK 5.2.6
   * Update to Branch iOS SDK 1.45.0
