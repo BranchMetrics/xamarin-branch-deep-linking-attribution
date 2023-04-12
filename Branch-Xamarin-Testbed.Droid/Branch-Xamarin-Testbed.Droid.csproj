@@ -37,7 +37,6 @@
     <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
     <LangVersion>latestmajor</LangVersion>
     <ExternalConsole>false</ExternalConsole>
-    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
