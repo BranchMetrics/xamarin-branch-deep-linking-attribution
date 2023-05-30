@@ -51,7 +51,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <CodesignKey>Apple Development: ernest cho (M6T4SBYUJX)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignProvision>VS: io.branch.sdk.Branch-TestBed Development</CodesignProvision>
+    <CodesignProvision>Automatic</CodesignProvision>
     <AssemblyName>Branch-Xamarin-Testbed.iOS</AssemblyName>
     <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
@@ -164,6 +164,12 @@
       <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <NativeReference Include="..\Branch-Xamarin-Lib.iOS\Branch.xcframework">
+      <Kind>Framework</Kind>
+      <SmartLink>False</SmartLink>
+    </NativeReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
