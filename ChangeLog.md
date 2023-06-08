@@ -1,5 +1,12 @@
 Branch Xamarin SDK change log
 
+- 8.2.0
+  * Initial support for MAUI and .Net6
+  * Update to Branch Android SDK 5.4.0
+  * Update to Branch iOS SDK 2.1.2
+
+  Known issue: The NuGet package does not properly include the xcframework. Workaround is to also add the xcframework as a native reference.
+
 - 8.1.2
   * Update to Branch iOS SDK 1.45.2
 
