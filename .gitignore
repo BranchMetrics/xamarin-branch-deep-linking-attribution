@@ -17,3 +17,6 @@ Branch-Xamarin-Testbed.Droid/obj
 Branch-Xamarin-Testbed.iOS/bin
 Branch-Xamarin-Testbed.iOS/obj
 packages
+
+# ignore Branch SDK binary
+BranchSDK.xcframework/

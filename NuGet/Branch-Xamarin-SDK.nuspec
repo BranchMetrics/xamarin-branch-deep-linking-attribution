@@ -30,12 +30,20 @@
   <files>
     <file src="../LICENSE.txt" target="" />
     <file src="../docs/images/branch_icon.png" target="" />
+
+    <!-- C# API, empty version for unsupported platforms -->
     <file src="../Branch-Xamarin-SDK/bin/Release/netstandard1.2/Branch-Xamarin-SDK.dll" target="lib/netstandard1.2" />
-    <file src="../Branch-Xamarin-Lib.Droid/bin/Release/Branch-Xamarin-Lib.Droid.dll" target="lib/MonoAndroid" />
-    <file src="../Branch-Xamarin-SDK.Droid/bin/Release/Branch-Xamarin-SDK.Droid.dll" target="lib/MonoAndroid" />
+
+    <!-- C# API, Android implementation and Android binding -->
     <file src="../Branch-Xamarin-SDK/bin/Release/netstandard1.2/Branch-Xamarin-SDK.dll" target="lib/MonoAndroid" />
+    <file src="../Branch-Xamarin-SDK.Droid/bin/Release/Branch-Xamarin-SDK.Droid.dll" target="lib/MonoAndroid" />
+    <file src="../Branch-Xamarin-Lib.Droid/bin/Release/Branch-Xamarin-Lib.Droid.dll" target="lib/MonoAndroid" />
+
+    <!-- C# API, iOS implementation and iOS binding -->
+    <file src="../Branch-Xamarin-SDK/bin/Release/netstandard1.2/Branch-Xamarin-SDK.dll" target="lib/Xamarin.iOS10" />
     <file src="../Branch-Xamarin-Lib.iOS/bin/Release/Branch-Xamarin-Lib.iOS.dll" target="lib/Xamarin.iOS10" />
     <file src="../Branch-Xamarin-SDK.iOS/bin/Release/Branch-Xamarin-SDK.iOS.dll" target="lib/Xamarin.iOS10" />
-    <file src="../Branch-Xamarin-SDK/bin/Release/netstandard1.2/Branch-Xamarin-SDK.dll" target="lib/Xamarin.iOS10" />
+  
+    <!-- TODO: figure out why `dotnet pack` isn't including the iOS xcframework sidecar properly -->
   </files>
 </package>
