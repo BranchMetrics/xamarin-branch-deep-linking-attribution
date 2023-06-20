@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchSDK.AndroidBinding", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchSDK.iOSBinding", "BranchSDK.iOSBinding\BranchSDK.iOSBinding.csproj", "{7E849709-CBEF-4C4F-9B7F-AE436E73D83F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchTestBed", "BranchTestBed\BranchTestBed.csproj", "{BFB0C76F-ED08-45E8-B199-0410455FFE5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{7E849709-CBEF-4C4F-9B7F-AE436E73D83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E849709-CBEF-4C4F-9B7F-AE436E73D83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E849709-CBEF-4C4F-9B7F-AE436E73D83F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFB0C76F-ED08-45E8-B199-0410455FFE5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFB0C76F-ED08-45E8-B199-0410455FFE5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFB0C76F-ED08-45E8-B199-0410455FFE5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFB0C76F-ED08-45E8-B199-0410455FFE5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
