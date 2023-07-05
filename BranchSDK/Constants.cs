@@ -4,8 +4,6 @@ namespace BranchSDK
 {
 	static public class Constants
 	{
-		public const String SDK_VERSION = "3.0.0";
-
 		// Link Types for GetShortURL
 		public const int URL_TYPE_UNLIMITED = 0;
 		public const int URL_TYPE_SINGLE_USE = 1;

@@ -50,7 +50,6 @@ namespace BranchSDK
 		public Activity CurrActivity { get; set; }
 
 		public static void GetAutoInstance(Context appContext) {
-
 			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
 			AndroidNativeBranch.GetAutoInstance(appContext);
             AndroidNativeBranch.DisableInstantDeepLinking(true);
