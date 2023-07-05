@@ -2,7 +2,6 @@
 using Android.Content.PM;
 using Android.OS;
 using BranchSDK;
-using Newtonsoft.Json;
 using Android.Content;
 
 namespace Timber;
@@ -23,6 +22,8 @@ DataHost = "timber.app.link")]
  * Add a "Name" so this Activity can be located by name.
  * Set the LaunchMode, singleTop or singleTask is recommended.
  * 
+ * Implement IBranchSessionInterface to get Branch Payloads
+ * 
  */
 [Activity(Name = "io.branch.timber.MainActivity", Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTop, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity, IBranchSessionInterface
@@ -30,7 +31,6 @@ public class MainActivity : MauiAppCompatActivity, IBranchSessionInterface
     protected override void OnCreate(Bundle savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
-
         BranchAndroid.Init(this, "key_live_nf8w3l1WBpzWdlC00KsLNdmbuEccK6Yr", this);
     }
 

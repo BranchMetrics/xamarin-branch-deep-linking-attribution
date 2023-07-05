@@ -4,6 +4,9 @@ using UIKit;
 
 namespace Timber;
 
+/*
+ * Implement IBranchSessionInterface to get Branch payloads.
+ */
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate, IBranchSessionInterface
 {
@@ -17,15 +20,15 @@ public class AppDelegate : MauiUIApplicationDelegate, IBranchSessionInterface
         return base.FinishedLaunching(application, launchOptions);
     }
 
+    // Handle URI opens
     public override bool OpenUrl(UIApplication application, NSUrl url, NSDictionary options)
     {
-        //return base.OpenUrl(application, url, options);
         return BranchIOS.getInstance().OpenUrl(url);
     }
 
+    // Handle Universal Links
     public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
     {
-        //return base.ContinueUserActivity(application, userActivity, completionHandler);
         return BranchIOS.getInstance().ContinueUserActivity(userActivity);
     }
 
