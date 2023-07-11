@@ -1,0 +1,21 @@
+﻿<metadata>
+  <!--
+  This sample removes the class: android.support.v4.content.AsyncTaskLoader.LoadTask:
+  <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='AsyncTaskLoader.LoadTask']" />
+  
+  This sample removes the method: android.support.v4.content.CursorLoader.loadInBackground:
+  <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
+  -->
+
+  <!-- Clarify some methods that don't automatically map from Java to C# -->
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='BranchUrlBuilder']" name="visibility">public</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='BranchLinkData']" name="visibility">public</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='SystemObserver']" name="visibility">public</attr>
+  <attr path="/api/package[@name='io.branch.referral']/interface[@name='NetworkCallback']" name="visibility">public</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='ServerRequest']/method[@name='getRequestPath']" name="managedName">getRequestPath</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='Branch']" name="managedName">AndroidNativeBranch</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask']/method[@name='doInBackground' and count(parameter)=1 and parameter[1][@type='java.lang.Void...']]/parameter[1]" name="managedType">Java.Lang.Object[]</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='GAdsPrefetchTask']/method[@name='doInBackground' and count(parameter)=1 and parameter[1][@type='java.lang.Void...']]" name="managedReturn">Java.Lang.Object</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='HuaweiOAIDFetchTask']/method[@name='doInBackground' and count(parameter)=1 and parameter[1][@type='java.lang.Void...']]/parameter[1]" name="managedType">Java.Lang.Object[]</attr>
+  <attr path="/api/package[@name='io.branch.referral']/class[@name='HuaweiOAIDFetchTask']/method[@name='doInBackground' and count(parameter)=1 and parameter[1][@type='java.lang.Void...']]" name="managedReturn">Java.Lang.Object</attr>
+</metadata>
