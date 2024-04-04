@@ -19,7 +19,12 @@ namespace BranchSDK.Droid
 			callback.ChannelSelected (channel);
 		}
 
-		public void OnLinkShareResponse (string sharedLink, string sharedChannel, IO.Branch.Referral.BranchError error) {
+        public void OnChannelSelectedBranchLinkShareListener(string p0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnLinkShareResponse (string sharedLink, string sharedChannel, IO.Branch.Referral.BranchError error) {
 			if (callback == null) {
 				return;
 			}
@@ -33,7 +38,12 @@ namespace BranchSDK.Droid
 			}
 		}
 
-		public void OnShareLinkDialogDismissed () {}
+        public void OnLinkShareResponseBranchLinkShareListener(string p0, string p1, IO.Branch.Referral.BranchError p2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnShareLinkDialogDismissed () {}
 
 		public void OnShareLinkDialogLaunched () {}
 	}

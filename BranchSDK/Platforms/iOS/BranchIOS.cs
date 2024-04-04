@@ -249,17 +249,7 @@ namespace BranchSDK
 
 		#endregion
 
-
-		#region Action methods
-
-		public override void UserCompletedAction (String action, Dictionary<string, object> metadata = null) {
-			NativeBranch.UserCompletedAction (action, BranchIOSUtils.ToNSDictionary (metadata));
-		}
-
-		#endregion
-
-
-        #region Send Evene methods
+        #region Send Event methods
 
         public override void SendEvent(BranchEvent branchEvent) {
             BranchIOSUtils.SendEvent(branchEvent);
