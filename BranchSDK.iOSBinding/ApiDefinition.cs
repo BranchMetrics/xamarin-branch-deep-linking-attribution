@@ -3601,26 +3601,6 @@ namespace IOSNativeBranch {
         [Export("logoutWithCallback:")]
         void LogoutWithCallback([NullAllowed] callbackWithStatus callback);
 
-        // -(void)userCompletedAction:(NSString * _Nullable)action;
-        [Export("userCompletedAction:")]
-        void UserCompletedAction([NullAllowed] string action);
-
-        // -(void)userCompletedAction:(NSString * _Nullable)action withState:(NSDictionary * _Nullable)state;
-        [Export("userCompletedAction:withState:")]
-        void UserCompletedAction([NullAllowed] string action, [NullAllowed] NSDictionary state);
-
-        // -(void)userCompletedAction:(NSString * _Nullable)action withState:(NSDictionary * _Nullable)state withDelegate:(id _Nullable)branchViewCallback __attribute__((deprecated("This API is deprecated. Please use userCompletedAction:action:state instead.")));
-        [Export("userCompletedAction:withState:withDelegate:")]
-        void UserCompletedAction([NullAllowed] string action, [NullAllowed] NSDictionary state, [NullAllowed] NSObject branchViewCallback);
-
-        // -(void)sendCommerceEvent:(BNCCommerceEvent * _Nonnull)commerceEvent metadata:(NSDictionary<NSString *,id> * _Nonnull)metadata withCompletion:(void (^ _Nonnull)(NSDictionary * _Nullable, NSError * _Nullable))completion __attribute__((deprecated("Please use BranchEvent to track commerce events.")));
-        [Export("sendCommerceEvent:metadata:withCompletion:")]
-        void SendCommerceEvent(BNCCommerceEvent commerceEvent, NSDictionary<NSString, NSObject> metadata, Action<NSDictionary, NSError> completion);
-
-        // -(void)crossPlatformIdDataWithCompletion:(void (^ _Nonnull)(BranchCrossPlatformID * _Nullable))completion;
-        [Export("crossPlatformIdDataWithCompletion:")]
-        void CrossPlatformIdDataWithCompletion(Action<BranchCrossPlatformID> completion);
-
         // -(void)lastAttributedTouchDataWithAttributionWindow:(NSInteger)window completion:(void (^ _Nonnull)(BranchLastAttributedTouchData * _Nullable))completion;
         [Export("lastAttributedTouchDataWithAttributionWindow:completion:")]
         void LastAttributedTouchDataWithAttributionWindow(nint window, Action<BranchLastAttributedTouchData> completion);
