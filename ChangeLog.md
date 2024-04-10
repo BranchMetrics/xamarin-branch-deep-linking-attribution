@@ -1,5 +1,10 @@
 Branch Xamarin SDK change log
 
+- 9.1.0
+  * Update Branch iOS SDK to 3.4.1
+  * Update Branch Android SDK to 5.11.0
+
+
 - 9.0.1
   * Fix iOS linker issue causing crashes on pre-iOS 14 devices
   * Update Branch iOS SDK 2.1.3 (unreleased version)
