@@ -96,82 +96,102 @@ namespace IOSNativeBranch {
     [BaseType(typeof(NSObject))]
     interface BNCServerResponse
     {
-        // @property (nonatomic, strong) NSNumber * statusCode;
+        // @property (nonatomic, strong) NSNumber * _Nonnull statusCode;
         [Export("statusCode", ArgumentSemantic.Strong)]
         NSNumber StatusCode { get; set; }
 
-        // @property (nonatomic, strong) id data;
-        [Export("data", ArgumentSemantic.Strong)]
+        // @property (nonatomic, strong) id _Nullable data;
+        [NullAllowed, Export("data", ArgumentSemantic.Strong)]
         NSObject Data { get; set; }
+
+        // @property (copy, nonatomic) NSString * _Nullable requestId;
+        [NullAllowed, Export("requestId")]
+        string RequestId { get; set; }
     }
 
     // @interface BNCPreferenceHelper : NSObject
     [BaseType(typeof(NSObject))]
     interface BNCPreferenceHelper
     {
-        // @property (nonatomic, strong) NSString * lastRunBranchKey;
-        [Export("lastRunBranchKey", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * lastRunBranchKey;
+        [Export("lastRunBranchKey")]
         string LastRunBranchKey { get; set; }
 
         // @property (nonatomic, strong) NSDate * lastStrongMatchDate;
         [Export("lastStrongMatchDate", ArgumentSemantic.Strong)]
         NSDate LastStrongMatchDate { get; set; }
 
-        // @property (nonatomic, strong) NSString * appVersion;
-        [Export("appVersion", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * appVersion;
+        [Export("appVersion")]
         string AppVersion { get; set; }
 
-        // @property (nonatomic, strong) NSString * deviceFingerprintID;
-        [Export("deviceFingerprintID", ArgumentSemantic.Strong)]
-        string DeviceFingerprintID { get; set; }
+        // @property (copy, nonatomic) NSString * randomizedDeviceToken;
+        [Export("randomizedDeviceToken")]
+        string RandomizedDeviceToken { get; set; }
 
-        // @property (nonatomic, strong) NSString * sessionID;
-        [Export("sessionID", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * randomizedBundleToken;
+        [Export("randomizedBundleToken")]
+        string RandomizedBundleToken { get; set; }
+
+        // @property (copy, nonatomic) NSString * anonID;
+        [Export("anonID")]
+        string AnonID { get; set; }
+
+        // @property (copy, nonatomic) NSString * sessionID;
+        [Export("sessionID")]
         string SessionID { get; set; }
 
-        // @property (nonatomic, strong) NSString * identityID;
-        [Export("identityID", ArgumentSemantic.Strong)]
-        string IdentityID { get; set; }
-
-        // @property (nonatomic, strong) NSString * linkClickIdentifier;
-        [Export("linkClickIdentifier", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * linkClickIdentifier;
+        [Export("linkClickIdentifier")]
         string LinkClickIdentifier { get; set; }
 
-        // @property (nonatomic, strong) NSString * spotlightIdentifier;
-        [Export("spotlightIdentifier", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * spotlightIdentifier;
+        [Export("spotlightIdentifier")]
         string SpotlightIdentifier { get; set; }
 
-        // @property (atomic, strong) NSString * universalLinkUrl;
-        [Export("universalLinkUrl", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * universalLinkUrl;
+        [Export("universalLinkUrl")]
         string UniversalLinkUrl { get; set; }
 
-        // @property (nonatomic, strong) NSString * userUrl;
-        [Export("userUrl", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * initialReferrer;
+        [Export("initialReferrer")]
+        string InitialReferrer { get; set; }
+
+        // @property (copy, nonatomic) NSString * userUrl;
+        [Export("userUrl")]
         string UserUrl { get; set; }
 
-        // @property (nonatomic, strong) NSString * userIdentity;
-        [Export("userIdentity", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * localUrl;
+        [Export("localUrl")]
+        string LocalUrl { get; set; }
+
+        // @property (copy, nonatomic) NSString * userIdentity;
+        [Export("userIdentity")]
         string UserIdentity { get; set; }
 
-        // @property (nonatomic, strong) NSString * sessionParams;
-        [Export("sessionParams", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * sessionParams;
+        [Export("sessionParams")]
         string SessionParams { get; set; }
 
-        // @property (nonatomic, strong) NSString * installParams;
-        [Export("installParams", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * installParams;
+        [Export("installParams")]
         string InstallParams { get; set; }
 
         // @property (assign, nonatomic) BOOL isDebug;
         [Export("isDebug")]
         bool IsDebug { get; set; }
 
-        // @property (assign, nonatomic) BOOL checkedFacebookAppLinks;
-        [Export("checkedFacebookAppLinks")]
-        bool CheckedFacebookAppLinks { get; set; }
+        // @property (assign, readwrite, nonatomic) BOOL appleAttributionTokenChecked;
+        [Export("appleAttributionTokenChecked")]
+        bool AppleAttributionTokenChecked { get; set; }
 
-        // @property (assign, nonatomic) BOOL checkedAppleSearchAdAttribution;
-        [Export("checkedAppleSearchAdAttribution")]
-        bool CheckedAppleSearchAdAttribution { get; set; }
+        // @property (assign, readwrite, nonatomic) BOOL hasOptedInBefore;
+        [Export("hasOptedInBefore")]
+        bool HasOptedInBefore { get; set; }
+
+        // @property (assign, readwrite, nonatomic) BOOL hasCalledHandleATTAuthorizationStatus;
+        [Export("hasCalledHandleATTAuthorizationStatus")]
+        bool HasCalledHandleATTAuthorizationStatus { get; set; }
 
         // @property (assign, nonatomic) NSInteger retryCount;
         [Export("retryCount")]
@@ -185,97 +205,111 @@ namespace IOSNativeBranch {
         [Export("timeout")]
         double Timeout { get; set; }
 
-        // @property (atomic, strong) NSString * externalIntentURI;
-        [Export("externalIntentURI", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * externalIntentURI;
+        [Export("externalIntentURI")]
         string ExternalIntentURI { get; set; }
 
         // @property (nonatomic, strong) NSMutableDictionary * savedAnalyticsData;
         [Export("savedAnalyticsData", ArgumentSemantic.Strong)]
         NSMutableDictionary SavedAnalyticsData { get; set; }
 
-        // @property (nonatomic, strong) NSDictionary * appleSearchAdDetails;
-        [Export("appleSearchAdDetails", ArgumentSemantic.Strong)]
-        NSDictionary AppleSearchAdDetails { get; set; }
-
-        // @property (assign, nonatomic) BOOL appleSearchAdNeedsSend;
-        [Export("appleSearchAdNeedsSend")]
-        bool AppleSearchAdNeedsSend { get; set; }
-
-        // @property (nonatomic, strong) NSString * lastSystemBuildVersion;
-        [Export("lastSystemBuildVersion", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * lastSystemBuildVersion;
+        [Export("lastSystemBuildVersion")]
         string LastSystemBuildVersion { get; set; }
 
-        // @property (nonatomic, strong) NSString * browserUserAgentString;
-        [Export("browserUserAgentString", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * browserUserAgentString;
+        [Export("browserUserAgentString")]
         string BrowserUserAgentString { get; set; }
 
-        // @property (atomic, strong) NSString * referringURL;
-        [Export("referringURL", ArgumentSemantic.Strong)]
+        // @property (copy, nonatomic) NSString * referringURL;
+        [Export("referringURL")]
         string ReferringURL { get; set; }
 
-        // @property (atomic, strong) NSString * branchAPIURL;
-        [Export("branchAPIURL", ArgumentSemantic.Strong)]
-        string BranchAPIURL { get; set; }
-
-        // @property (readwrite, nonatomic, strong) NSString * branchBlacklistURL;
-        [Export("branchBlacklistURL", ArgumentSemantic.Strong)]
-        string BranchBlacklistURL { get; set; }
-
-        // @property (assign, atomic) BOOL limitFacebookTracking;
+        // @property (assign, nonatomic) BOOL limitFacebookTracking;
         [Export("limitFacebookTracking")]
         bool LimitFacebookTracking { get; set; }
 
-        // @property (atomic, strong) NSDate * previousAppBuildDate;
+        // @property (nonatomic, strong) NSDate * previousAppBuildDate;
         [Export("previousAppBuildDate", ArgumentSemantic.Strong)]
         NSDate PreviousAppBuildDate { get; set; }
 
-        // @property (readwrite, nonatomic, strong) NSURL * faceBookAppLink;
-        [Export("faceBookAppLink", ArgumentSemantic.Strong)]
-        NSUrl FaceBookAppLink { get; set; }
+        // @property (assign, readwrite, nonatomic) BOOL disableAdNetworkCallouts;
+        [Export("disableAdNetworkCallouts")]
+        bool DisableAdNetworkCallouts { get; set; }
 
-        // @property (atomic, strong) NSArray<NSString *> * URLBlackList;
-        [Export("URLBlackList", ArgumentSemantic.Strong)]
-        string[] URLBlackList { get; set; }
+        // @property (readwrite, copy, nonatomic) NSString * patternListURL;
+        [Export("patternListURL")]
+        string PatternListURL { get; set; }
 
-        // @property (assign, atomic) NSInteger URLBlackListVersion;
-        [Export("URLBlackListVersion")]
-        nint URLBlackListVersion { get; set; }
+        // @property (nonatomic, strong) NSArray<NSString *> * savedURLPatternList;
+        [Export("savedURLPatternList", ArgumentSemantic.Strong)]
+        string[] SavedURLPatternList { get; set; }
 
-        // @property (assign, atomic) BOOL blacklistURLOpen;
-        [Export("blacklistURLOpen")]
-        bool BlacklistURLOpen { get; set; }
+        // @property (assign, nonatomic) NSInteger savedURLPatternListVersion;
+        [Export("savedURLPatternListVersion")]
+        nint SavedURLPatternListVersion { get; set; }
 
-        // @property (assign, atomic) BOOL trackingDisabled;
+        // @property (assign, nonatomic) BOOL dropURLOpen;
+        [Export("dropURLOpen")]
+        bool DropURLOpen { get; set; }
+
+        // @property (assign, nonatomic) BOOL trackingDisabled;
         [Export("trackingDisabled")]
         bool TrackingDisabled { get; set; }
+
+        // @property (copy, nonatomic) NSString * referrerGBRAID;
+        [Export("referrerGBRAID")]
+        string ReferrerGBRAID { get; set; }
+
+        // @property (assign, nonatomic) NSTimeInterval referrerGBRAIDValidityWindow;
+        [Export("referrerGBRAIDValidityWindow")]
+        double ReferrerGBRAIDValidityWindow { get; set; }
+
+        // @property (nonatomic, strong) NSDate * referrerGBRAIDInitDate;
+        [Export("referrerGBRAIDInitDate", ArgumentSemantic.Strong)]
+        NSDate ReferrerGBRAIDInitDate { get; set; }
+
+        // @property (nonatomic, strong) NSMutableDictionary * referringURLQueryParameters;
+        [Export("referringURLQueryParameters", ArgumentSemantic.Strong)]
+        NSMutableDictionary ReferringURLQueryParameters { get; set; }
+
+        // @property (assign, nonatomic) NSInteger skanCurrentWindow;
+        [Export("skanCurrentWindow")]
+        nint SkanCurrentWindow { get; set; }
+
+        // @property (assign, nonatomic) NSInteger highestConversionValueSent;
+        [Export("highestConversionValueSent")]
+        nint HighestConversionValueSent { get; set; }
+
+        // @property (nonatomic, strong) NSDate * firstAppLaunchTime;
+        [Export("firstAppLaunchTime", ArgumentSemantic.Strong)]
+        NSDate FirstAppLaunchTime { get; set; }
+
+        // @property (assign, nonatomic) BOOL invokeRegisterApp;
+        [Export("invokeRegisterApp")]
+        bool InvokeRegisterApp { get; set; }
+
+        // @property (assign, nonatomic) BOOL eeaRegion;
+        [Export("eeaRegion")]
+        bool EeaRegion { get; set; }
+
+        // @property (assign, nonatomic) BOOL adPersonalizationConsent;
+        [Export("adPersonalizationConsent")]
+        bool AdPersonalizationConsent { get; set; }
+
+        // @property (assign, nonatomic) BOOL adUserDataUsageConsent;
+        [Export("adUserDataUsageConsent")]
+        bool AdUserDataUsageConsent { get; set; }
 
         // -(void)clearTrackingInformation;
         [Export("clearTrackingInformation")]
         void ClearTrackingInformation();
 
-        // +(BNCPreferenceHelper *)preferenceHelper;
+        // +(BNCPreferenceHelper *)sharedInstance;
         [Static]
-        [Export("preferenceHelper")]
+        [Export("sharedInstance")]
         //[Verify(MethodToProperty)]
-        BNCPreferenceHelper PreferenceHelper { get; }
-
-        // -(NSString *)getAPIBaseURL;
-        [Export("getAPIBaseURL")]
-        //[Verify(MethodToProperty)]
-        string APIBaseURL { get; }
-
-        // -(NSString *)getAPIURL:(NSString *)endpoint;
-        [Export("getAPIURL:")]
-        string GetAPIURL(string endpoint);
-
-        // -(NSString *)getEndpointFromURL:(NSString *)url;
-        [Export("getEndpointFromURL:")]
-        string GetEndpointFromURL(string url);
-
-        // -(id)getBranchUniversalLinkDomains;
-        [Export("getBranchUniversalLinkDomains")]
-        //[Verify(MethodToProperty)]
-        NSObject BranchUniversalLinkDomains { get; }
+        BNCPreferenceHelper SharedInstance { get; }
 
         // -(void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value;
         [Export("setRequestMetadataKey:value:")]
@@ -294,6 +328,11 @@ namespace IOSNativeBranch {
         [Export("instrumentationDictionary")]
         //[Verify(MethodToProperty)]
         NSMutableDictionary InstrumentationDictionary { get; }
+
+        // -(NSDictionary *)instrumentationParameters;
+        [Export("instrumentationParameters")]
+        //[Verify(MethodToProperty)]
+        NSDictionary InstrumentationParameters { get; }
 
         // -(void)clearInstrumentationDictionary;
         [Export("clearInstrumentationDictionary")]
@@ -333,6 +372,11 @@ namespace IOSNativeBranch {
         [Static]
         [Export("clearAll")]
         void ClearAll();
+
+        // -(BOOL)eeaRegionInitialized;
+        [Export("eeaRegionInitialized")]
+        //[Verify(MethodToProperty)]
+        bool EeaRegionInitialized { get; }
     }
 
     //// @protocol BNCNetworkOperationProtocol <NSObject>
@@ -453,7 +497,7 @@ namespace IOSNativeBranch {
         [Export("postRequest:url:key:callback:")]
         void PostRequest(NSDictionary post, string url, string key, BNCServerCallback callback);
 
-        //// -(void)genericHTTPRequest:(NSURLRequest *)request retryNumber:(NSInteger)retryNumber callback:(BNCServerCallback)callback retryHandler:(NSURLRequest *(^)(NSInteger))retryHandler;
+        // -(void)genericHTTPRequest:(NSURLRequest *)request retryNumber:(NSInteger)retryNumber callback:(BNCServerCallback)callback retryHandler:(NSURLRequest *(^)(NSInteger))retryHandler;
         //[Export("genericHTTPRequest:retryNumber:callback:retryHandler:")]
         //void GenericHTTPRequest(NSUrlRequest request, nint retryNumber, BNCServerCallback callback, Func<nint, NSURLRequest> retryHandler);
 
@@ -1280,85 +1324,6 @@ namespace IOSNativeBranch {
         NSString BNCCurrencyZMW { get; }
     }
 
-    // @interface BNCProduct : NSObject
-    [BaseType(typeof(NSObject))]
-    interface BNCProduct
-    {
-        // @property (nonatomic, strong) NSString * _Nullable sku;
-        [NullAllowed, Export("sku", ArgumentSemantic.Strong)]
-        string Sku { get; set; }
-
-        // @property (nonatomic, strong) NSString * _Nullable name;
-        [NullAllowed, Export("name", ArgumentSemantic.Strong)]
-        string Name { get; set; }
-
-        // @property (nonatomic, strong) NSDecimalNumber * _Nullable price;
-        [NullAllowed, Export("price", ArgumentSemantic.Strong)]
-        NSDecimalNumber Price { get; set; }
-
-        // @property (nonatomic, strong) NSNumber * _Nullable quantity;
-        [NullAllowed, Export("quantity", ArgumentSemantic.Strong)]
-        NSNumber Quantity { get; set; }
-
-        // @property (nonatomic, strong) NSString * _Nullable brand;
-        [NullAllowed, Export("brand", ArgumentSemantic.Strong)]
-        string Brand { get; set; }
-
-        // @property (nonatomic, strong) BNCProductCategory _Nullable category;
-        [NullAllowed, Export("category", ArgumentSemantic.Strong)]
-        string Category { get; set; }
-
-        // @property (nonatomic, strong) NSString * _Nullable variant;
-        [NullAllowed, Export("variant", ArgumentSemantic.Strong)]
-        string Variant { get; set; }
-    }
-
-    // @interface BNCCommerceEvent : NSObject
-    [BaseType(typeof(NSObject))]
-    interface BNCCommerceEvent
-    {
-        // @property (nonatomic, strong) NSDecimalNumber * _Nullable revenue;
-        [NullAllowed, Export("revenue", ArgumentSemantic.Strong)]
-        NSDecimalNumber Revenue { get; set; }
-
-        // @property (nonatomic, strong) BNCCurrency _Nullable currency;
-        [NullAllowed, Export("currency", ArgumentSemantic.Strong)]
-        string Currency { get; set; }
-
-        // @property (nonatomic, strong) NSString * _Nullable transactionID;
-        [NullAllowed, Export("transactionID", ArgumentSemantic.Strong)]
-        string TransactionID { get; set; }
-
-        // @property (nonatomic, strong) NSDecimalNumber * _Nullable shipping;
-        [NullAllowed, Export("shipping", ArgumentSemantic.Strong)]
-        NSDecimalNumber Shipping { get; set; }
-
-        // @property (nonatomic, strong) NSDecimalNumber * _Nullable tax;
-        [NullAllowed, Export("tax", ArgumentSemantic.Strong)]
-        NSDecimalNumber Tax { get; set; }
-
-        // @property (nonatomic, strong) NSString * _Nullable coupon;
-        [NullAllowed, Export("coupon", ArgumentSemantic.Strong)]
-        string Coupon { get; set; }
-
-        // @property (nonatomic, strong) NSString * _Nullable affiliation;
-        [NullAllowed, Export("affiliation", ArgumentSemantic.Strong)]
-        string Affiliation { get; set; }
-
-        // @property (nonatomic, strong) NSArray<BNCProduct *> * _Nullable products;
-        [NullAllowed, Export("products", ArgumentSemantic.Strong)]
-        BNCProduct[] Products { get; set; }
-    }
-
-    // @interface BranchCommerceEventRequest : BNCServerRequest <NSSecureCoding>
-    [BaseType(typeof(BNCServerRequest))]
-    interface BranchCommerceEventRequest : INSSecureCoding
-    {
-        // -(instancetype _Nonnull)initWithCommerceEvent:(BNCCommerceEvent * _Nonnull)commerceEvent metadata:(NSDictionary * _Nullable)dictionary completion:(void (^ _Nullable)(NSDictionary * _Nullable, NSError * _Nullable))callBack;
-        [Export("initWithCommerceEvent:metadata:completion:")]
-        IntPtr Constructor(BNCCommerceEvent commerceEvent, [NullAllowed] NSDictionary dictionary, [NullAllowed] Action<NSDictionary, NSError> callBack);
-    }
-
     //[Static]
     //[Verify(ConstantsInterfaceAssociation)]
     partial interface Constants
@@ -1513,17 +1478,14 @@ namespace IOSNativeBranch {
         [Export("remove:")]
         void Remove(BNCServerRequest request);
 
-        // -(void)persistEventually;
-        [Export("persistEventually")]
-        void PersistEventually();
-
-        // -(void)persistImmediately;
-        [Export("persistImmediately")]
-        void PersistImmediately();
-
         // -(void)clearQueue;
         [Export("clearQueue")]
         void ClearQueue();
+
+        // -(NSInteger)queueDepth;
+        [Export("queueDepth")]
+        //[Verify(MethodToProperty)]
+        nint QueueDepth { get; }
 
         // -(BOOL)containsInstallOrOpen;
         [Export("containsInstallOrOpen")]
@@ -1535,28 +1497,23 @@ namespace IOSNativeBranch {
         //[Verify(MethodToProperty)]
         bool RemoveInstallOrOpen { get; }
 
-        // -(BOOL)containsClose;
-        [Export("containsClose")]
-        //[Verify(MethodToProperty)]
-        bool ContainsClose { get; }
-
-        //// -(BranchOpenRequest *)moveInstallOrOpenToFront:(NSInteger)networkCount;
+        // -(BranchOpenRequest *)moveInstallOrOpenToFront:(NSInteger)networkCount;
         //[Export("moveInstallOrOpenToFront:")]
         //BranchOpenRequest MoveInstallOrOpenToFront(nint networkCount);
+
+        // -(void)persistEventually;
+        [Export("persistEventually")]
+        void PersistEventually();
+
+        // -(void)persistImmediately;
+        [Export("persistImmediately")]
+        void PersistImmediately();
 
         // +(id)getInstance;
         [Static]
         [Export("getInstance")]
         //[Verify(MethodToProperty)]
         NSObject Instance { get; }
-
-        // @property (readonly, assign, atomic) NSInteger queueDepth;
-        [Export("queueDepth")]
-        nint QueueDepth { get; }
-
-        // @property (readonly, assign, atomic) BOOL isDirty;
-        [Export("isDirty")]
-        bool IsDirty { get; }
     }
 
     // @protocol BranchActivityItemProviderDelegate <NSObject>
