@@ -18,7 +18,7 @@ namespace BranchSDK
 
 		// TODO: can we pull the plugin version automatically?
 		private static String pluginName = "Xamarin";
-		private static String pluginVersion = "9.0.1";
+		private static String pluginVersion = "10.0.0";
 
 		private BranchAndroid () { }
 
@@ -31,7 +31,7 @@ namespace BranchSDK
 		}
 
 		private AndroidNativeBranch NativeBranch {
-			get { return AndroidNativeBranch.GetInstance (appContext, branchKey); }
+			get { return AndroidNativeBranch.GetAutoInstance (appContext, branchKey); }
 		}
 
 		#endregion
@@ -122,26 +122,6 @@ namespace BranchSDK
 
 		#endregion
 
-		#region Session methods
-
-		public override void InitSession(IBranchSessionInterface callback) {
-			base.InitSession (callback);
-			BranchSessionListener obj = new BranchSessionListener (callback);
-			callbacksList.Add (obj as Object);
-
-            NativeBranch.InitSession(obj);
-            //NativeBranch.ReInitSession(CurrActivity, obj);
-        }
-
-		public override void InitSession (IBranchBUOSessionInterface callback) {
-			base.InitSession (callback);
-			BranchBUOSessionListener obj = new BranchBUOSessionListener (callback);
-			callbacksList.Add (obj as Object);
-
-            NativeBranch.InitSession(obj);
-            //NativeBranch.ReInitSession(CurrActivity, obj);
-        }
-
 		public override Dictionary<String, object> GetLastReferringParams () {
 			return BranchAndroidUtils.ToDictionary(NativeBranch.LatestReferringParams);
 		}
@@ -165,9 +145,6 @@ namespace BranchSDK
 		public override BranchLinkProperties GetFirstReferringBranchLinkProperties () {
 			return new BranchLinkProperties (BranchAndroidUtils.ToDictionary(NativeBranch.FirstReferringParams));
 		}
-
-		#endregion
-
 
 		#region Identity methods
 
@@ -241,22 +218,7 @@ namespace BranchSDK
 
 		#endregion
 
-
-		#region Action methods
-
-		public override void UserCompletedAction (String action, Dictionary<string, object> metadata = null) {
-			if (metadata != null) {
-				NativeBranch.UserCompletedAction(action, BranchAndroidUtils.ToJSONObject(metadata));
-			}
-			else {
-				NativeBranch.UserCompletedAction(action);
-			}
-		}
-
-		#endregion
-
-
-        #region Send Evene methods
+        #region Send Event methods
 
         public override void SendEvent(BranchEvent branchEvent) {
             BranchAndroidUtils.SendEvent(branchEvent, appContext);
@@ -284,9 +246,9 @@ namespace BranchSDK
 		}
 
 		public override void ListOnSpotlight(BranchUniversalObject universalObject) {
-			IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
-			resBuo.ListOnGoogleSearch(appContext);
-		}
+            IO.Branch.Indexing.BranchUniversalObject resBuo = BranchAndroidUtils.ToNativeBUO(universalObject);
+			resBuo.SetContentIndexingMode(IO.Branch.Indexing.BranchUniversalObject.CONTENT_INDEX_MODE.Public);
+        }
 
 		public override void SetRequestMetadata(string key, string value) {
 			if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value)) {

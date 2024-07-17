@@ -403,3 +403,4 @@ Timber/.DS_Store
 Timber/Platforms/.DS_Store
 .DS_Store
 .vscode/launch.json
+Timber/nuget.config

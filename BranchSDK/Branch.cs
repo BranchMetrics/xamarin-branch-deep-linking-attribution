@@ -149,19 +149,6 @@ namespace BranchSDK
 
 		#endregion
 
-
-		#region Action methods
-
-		/// <summary>
-		/// Send a user action to the server. Some examples actions could be things like `viewed_personal_welcome`, `purchased_an_item`, etc.
-		/// </summary>
-		/// <param name="action">The action string.</param>
-		/// <param name="metadata">The additional state items associated with the action.</param>
-		abstract public void UserCompletedAction (String action, Dictionary<string, object> metadata = null);
-
-        #endregion
-
-
         #region Send Event methods
 
         /// <summary>
