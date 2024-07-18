@@ -34,12 +34,6 @@ namespace BranchSDK
 
 		#region Helpers declaration
 
-		private static bool delayInitToCheckForSearchAds = false;
-
-		private static bool useLongerWaitForAppleSearchAds = false;
-
-		private static bool ignoreAppleSearchAdsTestData = false;
-
 		private static bool checkPasteboardOnInstall = false;
 
 		#endregion
@@ -74,28 +68,10 @@ namespace BranchSDK
 				instance.launchOptions = new NSDictionary();
 			}
 
-			if (delayInitToCheckForSearchAds)
-			{
-				instance.NativeBranch.DelayInitToCheckForSearchAds();
-			}
-
-			if (useLongerWaitForAppleSearchAds)
-			{
-				instance.NativeBranch.UseLongerWaitForAppleSearchAds();
-			}
-
-			if (ignoreAppleSearchAdsTestData)
-			{
-				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
-			}
-
 			if (checkPasteboardOnInstall)
 			{
 				instance.NativeBranch.CheckPasteboardOnInstall();
-
 			}
-
-			instance.NativeBranch.EnableLogging();
 
 			instance.InitSession(callback);
 		}
@@ -129,31 +105,13 @@ namespace BranchSDK
 
 			if (EnableLogging || Runtime.Arch == Arch.SIMULATOR)
 			{
-				instance.NativeBranch.EnableLogging();
-			}
-
-			if (delayInitToCheckForSearchAds)
-			{
-				instance.NativeBranch.DelayInitToCheckForSearchAds();
-			}
-
-			if (useLongerWaitForAppleSearchAds)
-			{
-				instance.NativeBranch.UseLongerWaitForAppleSearchAds();
-			}
-
-			if (ignoreAppleSearchAdsTestData)
-			{
-				instance.NativeBranch.IgnoreAppleSearchAdsTestData();
+				IOSNativeBranch.Branch.EnableLogging(IOSNativeBranch.BranchLogLevel.Debug);
 			}
 
 			if (checkPasteboardOnInstall)
 			{
 				instance.NativeBranch.CheckPasteboardOnInstall();
-
 			}
-
-			instance.NativeBranch.EnableLogging();
 
 			instance.InitSession(callback);
 		}
@@ -183,32 +141,32 @@ namespace BranchSDK
 
 		public override Dictionary<String, object> GetLastReferringParams()
 		{
-			return BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringParams());
+			return BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringParams);
 		}
 
 		public override BranchUniversalObject GetLastReferringBranchUniversalObject()
 		{
-			return new BranchUniversalObject(BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringBranchUniversalObject()));
+			return new BranchUniversalObject(BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringBranchUniversalObject));
 		}
 
 		public override BranchLinkProperties GetLastReferringBranchLinkProperties()
 		{
-			return new BranchLinkProperties(BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringBranchLinkProperties()));
+			return new BranchLinkProperties(BranchIOSUtils.ToDictionary(NativeBranch.LatestReferringBranchLinkProperties));
 		}
 
 		public override Dictionary<String, object> GetFirstReferringParams()
 		{
-			return BranchIOSUtils.ToDictionary(NativeBranch.FirstReferringParams());
+			return BranchIOSUtils.ToDictionary(NativeBranch.FirstReferringParams);
 		}
 
 		public override BranchUniversalObject GetFirstReferringBranchUniversalObject()
 		{
-			return new BranchUniversalObject(BranchIOSUtils.ToDictionary(NativeBranch.FirstReferringBranchUniversalObject()));
+			return new BranchUniversalObject(BranchIOSUtils.ToDictionary(NativeBranch.FirstReferringBranchUniversalObject));
 		}
 
 		public override BranchLinkProperties GetFirstReferringBranchLinkProperties()
 		{
-			return new BranchLinkProperties(BranchIOSUtils.ToDictionary(NativeBranch.FirstReferringBranchLinkProperties()));
+			return new BranchLinkProperties(BranchIOSUtils.ToDictionary(NativeBranch.FirstReferringBranchLinkProperties));
 		}
 
 		#endregion
@@ -271,7 +229,7 @@ namespace BranchSDK
 			IOSNativeBranch.BranchLinkProperties blp = BranchIOSUtils.ToNativeLinkProperties(linkProperties);
 			UIKit.UIWindow window = UIKit.UIApplication.SharedApplication.KeyWindow;
 
-			buo.ShowShareSheetWithLinkProperties(blp, message, window.RootViewController, delegate (string url, bool isShared) { });
+			buo.ShowShareSheetWithLinkProperties(blp, message, window.RootViewController, delegate (string url, bool isShared, NSError error) { });
 		}
 
 		#endregion
@@ -286,21 +244,6 @@ namespace BranchSDK
 		#endregion
 
 		#region Configuration methods
-
-		public static void DelayInitToCheckForSearchAds()
-		{
-			delayInitToCheckForSearchAds = true;
-		}
-
-		public static void UseLongerWaitForAppleSearchAds()
-		{
-			useLongerWaitForAppleSearchAds = true;
-		}
-
-		public static void IgnoreAppleSearchAdsTestData()
-		{
-			ignoreAppleSearchAdsTestData = true;
-		}
 
 		public static void CheckPasteboardOnInstall()
 		{
@@ -338,7 +281,7 @@ namespace BranchSDK
 		{
 			if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
 			{
-				NativeBranch.SetRequestMetadataKey(key, value);
+				NativeBranch.SetRequestMetadataKey(key, new NSString(value));
 			}
 		}
 
@@ -365,6 +308,11 @@ namespace BranchSDK
 		public void HandlePushNotification(NSDictionary userInfo)
 		{
 			NativeBranch.HandlePushNotification(userInfo);
+		}
+
+		public static void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent)
+		{
+			IOSNativeBranch.Branch.SetDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
 		}
 
 		#endregion
