@@ -213,7 +213,7 @@ namespace BranchSDK
 		/// <param name="eeaRegion">Whether the region is EEA.</param>
 		/// <param name="adPersonalizationConsent">Ad personalization consent.</param>
 		/// <param name="adUserDataUsageConsent">Ad user data usage consent.</param>
-		public abstract void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent);
+		abstract public void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent);
 
 		#endregion
 	}

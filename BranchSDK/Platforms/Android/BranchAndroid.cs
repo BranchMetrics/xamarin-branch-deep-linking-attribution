@@ -290,7 +290,7 @@ namespace BranchSDK
 			NativeBranch.DisableTracking(value);
 		}
 
-		public static void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent)
+		public override void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent)
 		{
 			NativeBranch.SetDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
 		}

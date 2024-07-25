@@ -73,6 +73,8 @@ namespace BranchSDK
 				instance.NativeBranch.CheckPasteboardOnInstall();
 			}
 
+			IOSNativeBranch.Branch.EnableLogging();
+
 			instance.InitSession(callback);
 		}
 
@@ -92,7 +94,7 @@ namespace BranchSDK
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
 
-			instance.NativeBranch.RegisterPluginName("Xamarin", "8.2.0");
+			instance.NativeBranch.RegisterPluginName("Xamarin", "10.0.0");
 
 			if (launchOptions != null)
 			{
@@ -105,13 +107,15 @@ namespace BranchSDK
 
 			if (EnableLogging || Runtime.Arch == Arch.SIMULATOR)
 			{
-				IOSNativeBranch.Branch.EnableLogging(IOSNativeBranch.BranchLogLevel.Debug);
+				IOSNativeBranch.Branch.EnableLoggingAtLevel(IOSNativeBranch.BranchLogLevel.Verbose, null);
 			}
 
 			if (checkPasteboardOnInstall)
 			{
 				instance.NativeBranch.CheckPasteboardOnInstall();
 			}
+
+			IOSNativeBranch.Branch.EnableLogging();
 
 			instance.InitSession(callback);
 		}
@@ -310,7 +314,7 @@ namespace BranchSDK
 			NativeBranch.HandlePushNotification(userInfo);
 		}
 
-		public static void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent)
+		public override void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent)
 		{
 			IOSNativeBranch.Branch.SetDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
 		}
