@@ -1693,10 +1693,6 @@ namespace IOSNativeBranch
         [Field("BRANCH_REQUEST_ENDPOINT_LATD", "__Internal")]
         NSString BRANCH_REQUEST_ENDPOINT_LATD { get; }
 
-        // extern NSString *const BRANCH_RESPONSE_KEY_BRANCH_IDENTITY;
-        [Field("BRANCH_RESPONSE_KEY_BRANCH_IDENTITY", "__Internal")]
-        NSString BRANCH_RESPONSE_KEY_BRANCH_IDENTITY { get; }
-
         // extern NSString *const BRANCH_RESPONSE_KEY_SESSION_ID;
         [Field("BRANCH_RESPONSE_KEY_SESSION_ID", "__Internal")]
         NSString BRANCH_RESPONSE_KEY_SESSION_ID { get; }
@@ -1728,10 +1724,6 @@ namespace IOSNativeBranch
         // extern NSString *const BRANCH_RESPONSE_KEY_DEVELOPER_IDENTITY;
         [Field("BRANCH_RESPONSE_KEY_DEVELOPER_IDENTITY", "__Internal")]
         NSString BRANCH_RESPONSE_KEY_DEVELOPER_IDENTITY { get; }
-
-        // extern NSString *const BRANCH_RESPONSE_KEY_DEVICE_FINGERPRINT_ID;
-        [Field("BRANCH_RESPONSE_KEY_DEVICE_FINGERPRINT_ID", "__Internal")]
-        NSString BRANCH_RESPONSE_KEY_DEVICE_FINGERPRINT_ID { get; }
 
         // extern NSString *const BRANCH_RESPONSE_KEY_SESSION_DATA;
         [Field("BRANCH_RESPONSE_KEY_SESSION_DATA", "__Internal")]
@@ -1908,10 +1900,6 @@ namespace IOSNativeBranch
         // extern NSString *const BRANCH_ENTITIES_KEY;
         [Field("BRANCH_ENTITIES_KEY", "__Internal")]
         NSString BRANCH_ENTITIES_KEY { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_SEARCH_AD;
-        [Field("BRANCH_REQUEST_KEY_SEARCH_AD", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_SEARCH_AD { get; }
 
         // extern NSString *const BRANCH_CRASHLYTICS_SDK_VERSION_KEY;
         [Field("BRANCH_CRASHLYTICS_SDK_VERSION_KEY", "__Internal")]
