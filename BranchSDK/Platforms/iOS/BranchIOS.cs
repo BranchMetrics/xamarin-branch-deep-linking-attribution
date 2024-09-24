@@ -120,6 +120,11 @@ namespace BranchSDK
 			instance.InitSession(callback);
 		}
 
+		public override void NotifyNativeInit()
+		{
+			NativeBranch.NotifyNativeToInit();
+		}
+
 		#endregion
 
 

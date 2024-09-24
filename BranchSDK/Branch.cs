@@ -93,6 +93,11 @@ namespace BranchSDK
 		/// <returns>The first referring branch link properties.</returns>
 		abstract public BranchLinkProperties GetFirstReferringBranchLinkProperties();
 
+		/// <summary>
+		/// Notifies the native Branch layer to begin initializing.
+		/// </summary>
+		abstract public void NotifyNativeInit();
+
 		#endregion
 
 		#region Identity methods

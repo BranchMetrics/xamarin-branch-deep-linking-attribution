@@ -1489,17 +1489,9 @@ namespace IOSNativeBranch
     //[Static]
     partial interface Constants
     {
-        // extern NSString *const BRANCH_REQUEST_KEY_BRANCH_IDENTITY;
-        [Field("BRANCH_REQUEST_KEY_BRANCH_IDENTITY", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_BRANCH_IDENTITY { get; }
-
         // extern NSString *const BRANCH_REQUEST_KEY_DEVELOPER_IDENTITY;
         [Field("BRANCH_REQUEST_KEY_DEVELOPER_IDENTITY", "__Internal")]
         NSString BRANCH_REQUEST_KEY_DEVELOPER_IDENTITY { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID;
-        [Field("BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_DEVICE_FINGERPRINT_ID { get; }
 
         // extern NSString *const BRANCH_REQUEST_KEY_SESSION_ID;
         [Field("BRANCH_REQUEST_KEY_SESSION_ID", "__Internal")]
@@ -1532,26 +1524,6 @@ namespace IOSNativeBranch
         // extern NSString *const BRANCH_REQUEST_KEY_STARTING_TRANSACTION_ID;
         [Field("BRANCH_REQUEST_KEY_STARTING_TRANSACTION_ID", "__Internal")]
         NSString BRANCH_REQUEST_KEY_STARTING_TRANSACTION_ID { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_REFERRAL_USAGE_TYPE;
-        [Field("BRANCH_REQUEST_KEY_REFERRAL_USAGE_TYPE", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_REFERRAL_USAGE_TYPE { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_REFERRAL_TYPE;
-        [Field("BRANCH_REQUEST_KEY_REFERRAL_TYPE", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_REFERRAL_TYPE { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_REFERRAL_CREATION_SOURCE;
-        [Field("BRANCH_REQUEST_KEY_REFERRAL_CREATION_SOURCE", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_REFERRAL_CREATION_SOURCE { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_REFERRAL_PREFIX;
-        [Field("BRANCH_REQUEST_KEY_REFERRAL_PREFIX", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_REFERRAL_PREFIX { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_REFERRAL_EXPIRATION;
-        [Field("BRANCH_REQUEST_KEY_REFERRAL_EXPIRATION", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_REFERRAL_EXPIRATION { get; }
 
         // extern NSString *const BRANCH_REQUEST_KEY_URL_SOURCE;
         [Field("BRANCH_REQUEST_KEY_URL_SOURCE", "__Internal")]
@@ -1613,10 +1585,6 @@ namespace IOSNativeBranch
         [Field("BRANCH_REQUEST_KEY_IOS_VENDOR_ID", "__Internal")]
         NSString BRANCH_REQUEST_KEY_IOS_VENDOR_ID { get; }
 
-        // extern NSString *const BRANCH_REQUEST_KEY_AD_TRACKING_ENABLED;
-        [Field("BRANCH_REQUEST_KEY_AD_TRACKING_ENABLED", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_AD_TRACKING_ENABLED { get; }
-
         // extern NSString *const BRANCH_REQUEST_KEY_DEBUG;
         [Field("BRANCH_REQUEST_KEY_DEBUG", "__Internal")]
         NSString BRANCH_REQUEST_KEY_DEBUG { get; }
@@ -1644,14 +1612,6 @@ namespace IOSNativeBranch
         // extern NSString *const BRANCH_REQUEST_KEY_URI_SCHEME;
         [Field("BRANCH_REQUEST_KEY_URI_SCHEME", "__Internal")]
         NSString BRANCH_REQUEST_KEY_URI_SCHEME { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_CHECKED_FACEBOOK_APPLINKS;
-        [Field("BRANCH_REQUEST_KEY_CHECKED_FACEBOOK_APPLINKS", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_CHECKED_FACEBOOK_APPLINKS { get; }
-
-        // extern NSString *const BRANCH_REQUEST_KEY_CHECKED_APPLE_AD_ATTRIBUTION;
-        [Field("BRANCH_REQUEST_KEY_CHECKED_APPLE_AD_ATTRIBUTION", "__Internal")]
-        NSString BRANCH_REQUEST_KEY_CHECKED_APPLE_AD_ATTRIBUTION { get; }
 
         // extern NSString *const BRANCH_REQUEST_KEY_LINK_IDENTIFIER;
         [Field("BRANCH_REQUEST_KEY_LINK_IDENTIFIER", "__Internal")]
@@ -1705,17 +1665,9 @@ namespace IOSNativeBranch
         [Field("BRANCH_REQUEST_KEY_APPLE_TESTFLIGHT", "__Internal")]
         NSString BRANCH_REQUEST_KEY_APPLE_TESTFLIGHT { get; }
 
-        // extern NSString *const BRANCH_REQUEST_ENDPOINT_SET_IDENTITY;
-        [Field("BRANCH_REQUEST_ENDPOINT_SET_IDENTITY", "__Internal")]
-        NSString BRANCH_REQUEST_ENDPOINT_SET_IDENTITY { get; }
-
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_APP_LINK_SETTINGS;
         [Field("BRANCH_REQUEST_ENDPOINT_APP_LINK_SETTINGS", "__Internal")]
         NSString BRANCH_REQUEST_ENDPOINT_APP_LINK_SETTINGS { get; }
-
-        // extern NSString *const BRANCH_REQUEST_ENDPOINT_LOGOUT;
-        [Field("BRANCH_REQUEST_ENDPOINT_LOGOUT", "__Internal")]
-        NSString BRANCH_REQUEST_ENDPOINT_LOGOUT { get; }
 
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_USER_COMPLETED_ACTION;
         [Field("BRANCH_REQUEST_ENDPOINT_USER_COMPLETED_ACTION", "__Internal")]
@@ -1724,10 +1676,6 @@ namespace IOSNativeBranch
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_GET_SHORT_URL;
         [Field("BRANCH_REQUEST_ENDPOINT_GET_SHORT_URL", "__Internal")]
         NSString BRANCH_REQUEST_ENDPOINT_GET_SHORT_URL { get; }
-
-        // extern NSString *const BRANCH_REQUEST_ENDPOINT_CLOSE;
-        [Field("BRANCH_REQUEST_ENDPOINT_CLOSE", "__Internal")]
-        NSString BRANCH_REQUEST_ENDPOINT_CLOSE { get; }
 
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_OPEN;
         [Field("BRANCH_REQUEST_ENDPOINT_OPEN", "__Internal")]
@@ -1740,10 +1688,6 @@ namespace IOSNativeBranch
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_REGISTER_VIEW;
         [Field("BRANCH_REQUEST_ENDPOINT_REGISTER_VIEW", "__Internal")]
         NSString BRANCH_REQUEST_ENDPOINT_REGISTER_VIEW { get; }
-
-        // extern NSString *const BRANCH_REQUEST_ENDPOINT_CPID;
-        [Field("BRANCH_REQUEST_ENDPOINT_CPID", "__Internal")]
-        NSString BRANCH_REQUEST_ENDPOINT_CPID { get; }
 
         // extern NSString *const BRANCH_REQUEST_ENDPOINT_LATD;
         [Field("BRANCH_REQUEST_ENDPOINT_LATD", "__Internal")]
@@ -1973,13 +1917,77 @@ namespace IOSNativeBranch
         [Field("BRANCH_CRASHLYTICS_SDK_VERSION_KEY", "__Internal")]
         NSString BRANCH_CRASHLYTICS_SDK_VERSION_KEY { get; }
 
-        // extern NSString *const BRANCH_CRASHLYTICS_FINGERPRINT_ID_KEY;
-        [Field("BRANCH_CRASHLYTICS_FINGERPRINT_ID_KEY", "__Internal")]
-        NSString BRANCH_CRASHLYTICS_FINGERPRINT_ID_KEY { get; }
-
         // extern NSString *const BRANCH_CRASHLYTICS_LOW_MEMORY_KEY;
         [Field("BRANCH_CRASHLYTICS_LOW_MEMORY_KEY", "__Internal")]
         NSString BRANCH_CRASHLYTICS_LOW_MEMORY_KEY { get; }
+        [Field("BRANCH_REQUEST_KEY_RANDOMIZED_BUNDLE_TOKEN", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_RANDOMIZED_BUNDLE_TOKEN { get; }
+
+        [Field("BRANCH_REQUEST_KEY_RANDOMIZED_DEVICE_TOKEN", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_RANDOMIZED_DEVICE_TOKEN { get; }
+
+        [Field("BRANCH_REQUEST_KEY_OPTED_IN_STATUS", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_OPTED_IN_STATUS { get; }
+
+        [Field("BRANCH_REQUEST_KEY_FIRST_OPT_IN", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_FIRST_OPT_IN { get; }
+
+        [Field("BRANCH_REQUEST_KEY_LOCAL_URL", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_LOCAL_URL { get; }
+
+        [Field("BRANCH_REQUEST_KEY_INITIAL_REFERRER", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_INITIAL_REFERRER { get; }
+
+        [Field("BRANCH_REQUEST_KEY_APP_CLIP_BUNDLE_ID", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_APP_CLIP_BUNDLE_ID { get; }
+
+        [Field("BRANCH_REQUEST_KEY_LATEST_APP_CLIP_INSTALL_TIME", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_LATEST_APP_CLIP_INSTALL_TIME { get; }
+
+        [Field("BRANCH_REQUEST_KEY_APP_CLIP_RANDOMIZED_DEVICE_TOKEN", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_APP_CLIP_RANDOMIZED_DEVICE_TOKEN { get; }
+
+        [Field("BRANCH_REQUEST_KEY_APP_CLIP_RANDOMIZED_BUNDLE_TOKEN", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_APP_CLIP_RANDOMIZED_BUNDLE_TOKEN { get; }
+
+        [Field("BRANCH_REQUEST_KEY_PARTNER_PARAMETERS", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_PARTNER_PARAMETERS { get; }
+
+        [Field("BRANCH_REQUEST_METADATA_KEY_SCANTIME_WINDOW", "__Internal")]
+        NSString BRANCH_REQUEST_METADATA_KEY_SCANTIME_WINDOW { get; }
+
+        [Field("BRANCH_REQUEST_KEY_REFERRER_GBRAID", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_REFERRER_GBRAID { get; }
+
+        [Field("BRANCH_REQUEST_KEY_REFERRER_GBRAID_TIMESTAMP", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_REFERRER_GBRAID_TIMESTAMP { get; }
+
+        [Field("BRANCH_REQUEST_KEY_IS_DEEPLINK_GBRAID", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_IS_DEEPLINK_GBRAID { get; }
+
+        [Field("BRANCH_REQUEST_KEY_GCLID", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_GCLID { get; }
+
+        [Field("BRANCH_REQUEST_KEY_META_CAMPAIGN_IDS", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_META_CAMPAIGN_IDS { get; }
+
+        [Field("BRANCH_REQUEST_KEY_SCCID", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_SCCID { get; }
+
+        [Field("BRANCH_REQUEST_KEY_APPLE_ATTRIBUTION_TOKEN", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_APPLE_ATTRIBUTION_TOKEN { get; }
+
+        [Field("BRANCH_REQUEST_KEY_SKAN_POSTBACK_INDEX", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_SKAN_POSTBACK_INDEX { get; }
+
+        [Field("BRANCH_REQUEST_KEY_DMA_EEA", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_DMA_EEA { get; }
+
+        [Field("BRANCH_REQUEST_KEY_DMA_AD_PEROSALIZATION", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_DMA_AD_PEROSALIZATION { get; }
+
+        [Field("BRANCH_REQUEST_KEY_DMA_AD_USER_DATA", "__Internal")]
+        NSString BRANCH_REQUEST_KEY_DMA_AD_USER_DATA { get; }
     }
 
     // @interface BranchCSSearchableItemAttributeSet : CSSearchableItemAttributeSet

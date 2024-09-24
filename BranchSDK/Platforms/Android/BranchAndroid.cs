@@ -90,7 +90,7 @@ namespace BranchSDK
 			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
 			if (EnableLogging)
 			{
-				AndroidNativeBranch.EnableLogging();
+				AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 			}
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
@@ -122,7 +122,7 @@ namespace BranchSDK
 			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
 			if (EnableLogging)
 			{
-				AndroidNativeBranch.EnableLogging();
+				AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 			}
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
@@ -130,6 +130,36 @@ namespace BranchSDK
 
 			// we call IniSession in BranchAndroidLifeCycleHandler.OnActivityStarted
 			//getInstance().InitSession(callback);
+		}
+
+		public override void InitSession(IBranchSessionInterface callback)
+		{
+			base.InitSession(callback);
+			BranchSessionListener obj = new BranchSessionListener(callback);
+			callbacksList.Add(obj as Object);
+
+			AndroidNativeBranch.SessionBuilder(CurrActivity)
+				.WithCallback(obj)
+				.WithData(CurrActivity.Intent.Data)
+				.Init();
+		}
+
+		public override void InitSession(IBranchBUOSessionInterface callback)
+		{
+			base.InitSession(callback);
+			BranchBUOSessionListener obj = new BranchBUOSessionListener(callback);
+			callbacksList.Add(obj as Object);
+
+			AndroidNativeBranch.SessionBuilder(CurrActivity)
+					.WithCallback(obj)
+					.WithData(CurrActivity.Intent.Data)
+					.Init();
+		}
+
+
+		public override void NotifyNativeInit()
+		{
+			AndroidNativeBranch.NotifyNativeToInit();
 		}
 
 		#endregion
