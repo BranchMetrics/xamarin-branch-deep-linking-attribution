@@ -93,6 +93,8 @@ namespace BranchSDK
 				AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 			}
 
+			AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
+
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
 
@@ -124,6 +126,8 @@ namespace BranchSDK
 			{
 				AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 			}
+
+			AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
