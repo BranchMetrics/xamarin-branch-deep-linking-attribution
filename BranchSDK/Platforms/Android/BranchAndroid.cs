@@ -88,12 +88,11 @@ namespace BranchSDK
 			instance.branchKey = branchKey;
 
 			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
+
 			if (EnableLogging)
 			{
 				AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 			}
-
-			AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
@@ -122,12 +121,11 @@ namespace BranchSDK
 			instance.branchKey = branchKey;
 
 			AndroidNativeBranch.RegisterPlugin(pluginName, pluginVersion);
+
 			if (EnableLogging)
 			{
 				AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 			}
-
-			AndroidNativeBranch.EnableLogging(BranchLogger.BranchLogLevel.Verbose);
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
@@ -160,6 +158,33 @@ namespace BranchSDK
 					.Init();
 		}
 
+		public void ReInitSession(Intent intent, IBranchSessionInterface callback, Activity activity)
+		{
+			callbacksList.Clear();
+			BranchSessionListener obj = new BranchSessionListener(callback);
+			callbacksList.Add(obj as Object);
+
+			activity.Intent = intent;
+
+			AndroidNativeBranch.SessionBuilder(activity)
+				.WithCallback(obj)
+				.WithData(intent.Data)
+				.ReInit();
+		}
+
+		public void ReInitSession(Intent intent, IBranchBUOSessionInterface callback, Activity activity)
+		{
+			callbacksList.Clear();
+			BranchBUOSessionListener obj = new BranchBUOSessionListener(callback);
+			callbacksList.Add(obj as Object);
+
+			activity.Intent = intent;
+
+			AndroidNativeBranch.SessionBuilder(activity)
+				.WithCallback(obj)
+				.WithData(intent.Data)
+				.ReInit();
+		}
 
 		public override void NotifyNativeInit()
 		{

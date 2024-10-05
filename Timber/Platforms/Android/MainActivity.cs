@@ -25,18 +25,26 @@ DataHost = "timber.app.link")]
  * Implement IBranchSessionInterface to get Branch Payloads
  * 
  */
-[Activity(Name = "io.branch.timber.MainActivity", Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTop, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
+[Activity(Name = "io.branch.timber.MainActivity", Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTask, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity, IBranchSessionInterface
 {
     protected override void OnCreate(Bundle savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+        LogMessage("BRANCHSDK .NET MAUI: MainActivity.OnCreate still");
         BranchAndroid.Init(this, "key_live_nf8w3l1WBpzWdlC00KsLNdmbuEccK6Yr", this);
+    }
+
+    protected override void OnNewIntent(Intent intent)
+    {
+        base.OnNewIntent(intent);
+        LogMessage("BRANCHSDK .NET MAUI: MainActivity.OnNewIntent");
+        BranchAndroid.getInstance().ReInitSession(intent, this, this);
     }
 
     public void InitSessionComplete(Dictionary<string, object> data)
     {
-        LogMessage("InitSessionComplete: ");
+        LogMessage("BRANCHSDK .NET MAUI: InitSessionComplete: ");
         foreach (var key in data.Keys)
         {
             LogMessage(key + " : " + data[key].ToString());
@@ -45,9 +53,9 @@ public class MainActivity : MauiAppCompatActivity, IBranchSessionInterface
 
     public void SessionRequestError(BranchError error)
     {
-        LogMessage("SessionRequestError: ");
-        LogMessage("Error Message: " + error.ErrorMessage);
-        LogMessage("Error Code: " + error.ErrorCode);
+        LogMessage("BRANCHSDK .NET MAUI: SessionRequestError: ");
+        LogMessage("BRANCHSDK .NET MAUI: Error Message: " + error.ErrorMessage);
+        LogMessage("BRANCHSDK .NET MAUI: Error Code: " + error.ErrorCode);
     }
 
     void LogMessage(string message)
