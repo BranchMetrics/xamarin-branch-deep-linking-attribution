@@ -129,9 +129,6 @@ namespace BranchSDK
 
 			instance.lifeCycleHandler = new BranchAndroidLifeCycleHandler(callback);
 			app.RegisterActivityLifecycleCallbacks(instance.lifeCycleHandler);
-
-			// we call IniSession in BranchAndroidLifeCycleHandler.OnActivityStarted
-			//getInstance().InitSession(callback);
 		}
 
 		public override void InitSession(IBranchSessionInterface callback)
@@ -160,30 +157,48 @@ namespace BranchSDK
 
 		public void ReInitSession(Intent intent, IBranchSessionInterface callback, Activity activity)
 		{
-			callbacksList.Clear();
-			BranchSessionListener obj = new BranchSessionListener(callback);
-			callbacksList.Add(obj as Object);
+			if (intent?.Data != null)
+			{
+				callbacksList.Clear();
+				BranchSessionListener obj = new BranchSessionListener(callback);
+				callbacksList.Add(obj as Object);
 
-			activity.Intent = intent;
+				Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession Activity: " + activity);
 
-			AndroidNativeBranch.SessionBuilder(activity)
-				.WithCallback(obj)
-				.WithData(intent.Data)
-				.ReInit();
+				intent.PutExtra("branch_force_new_session", true);
+				activity.Intent = intent;
+
+				AndroidNativeBranch.SessionBuilder(activity)
+					.WithCallback(obj)
+					.WithData(intent.Data)
+					.ReInit();
+			}
+			else
+			{
+				Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession: No URL in intent: " + intent);
+			}
 		}
 
 		public void ReInitSession(Intent intent, IBranchBUOSessionInterface callback, Activity activity)
 		{
-			callbacksList.Clear();
-			BranchBUOSessionListener obj = new BranchBUOSessionListener(callback);
-			callbacksList.Add(obj as Object);
+			if (intent?.Data != null)
+			{
+				callbacksList.Clear();
+				BranchBUOSessionListener obj = new BranchBUOSessionListener(callback);
+				callbacksList.Add(obj as Object);
 
-			activity.Intent = intent;
+				intent.PutExtra("branch_force_new_session", true);
+				activity.Intent = intent;
 
-			AndroidNativeBranch.SessionBuilder(activity)
-				.WithCallback(obj)
-				.WithData(intent.Data)
-				.ReInit();
+				AndroidNativeBranch.SessionBuilder(activity)
+					.WithCallback(obj)
+					.WithData(intent.Data)
+					.ReInit();
+			}
+			else
+			{
+				Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession: No URL in intent: " + intent);
+			}
 		}
 
 		public override void NotifyNativeInit()
