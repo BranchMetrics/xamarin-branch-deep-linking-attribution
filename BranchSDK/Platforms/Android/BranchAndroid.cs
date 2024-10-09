@@ -155,7 +155,6 @@ namespace BranchSDK
 					.Init();
 		}
 
-		public void ReInitSession(Intent intent, IBranchSessionInterface callback, Activity activity)
 		// public void ReInitSession(Intent intent, IBranchSessionInterface callback, Activity activity)
 		// {
 		// 	if (intent?.Data != null)
