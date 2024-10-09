@@ -33,33 +33,29 @@ public class MainActivity : MauiAppCompatActivity, IBranchSessionInterface
         base.OnCreate(savedInstanceState);
         LogMessage("BRANCHSDK .NET MAUI: MainActivity.OnCreate");
         BranchAndroid.Init(this, "key_live_nf8w3l1WBpzWdlC00KsLNdmbuEccK6Yr", this);
-
-    }
-
-    protected override void OnStart()
-    {
-        base.OnStart();
-        LogMessage("BRANCHSDK .NET MAUI: MainActivity.OnStart");
-        //BranchAndroid.Init(this, "key_live_nf8w3l1WBpzWdlC00KsLNdmbuEccK6Yr", this);
-        Branch.GetInstance().NotifyNativeToInit();
-
     }
 
     protected override void OnNewIntent(Intent intent)
     {
-        base.OnNewIntent(intent);
         LogMessage("BRANCHSDK .NET MAUI: MainActivity.OnNewIntent");
-        BranchAndroid.getInstance().ReInitSession(intent, this, this);
+        base.OnNewIntent(intent);
+        intent.PutExtra("branch_force_new_session", true);
+        Intent = intent;
     }
 
     public void InitSessionComplete(Dictionary<string, object> data)
     {
-        LogMessage("BRANCHSDK .NET MAUI: InitSessionComplete: ");
-        foreach (var key in data.Keys)
+        if (data == null)
         {
-            LogMessage(key + " : " + data[key].ToString());
+            LogMessage("BRANCHSDK .NET MAUI: InitSessionComplete with data: null");
+        }
+        else
+        {
+            var dataString = string.Join(", ", data.Select(kvp => $"{kvp.Key}: {kvp.Value?.ToString() ?? "null"}"));
+            LogMessage($"BRANCHSDK .NET MAUI: InitSessionComplete with data: {dataString}");
         }
     }
+
 
     public void SessionRequestError(BranchError error)
     {

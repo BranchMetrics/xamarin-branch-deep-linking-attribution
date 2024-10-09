@@ -156,50 +156,55 @@ namespace BranchSDK
 		}
 
 		public void ReInitSession(Intent intent, IBranchSessionInterface callback, Activity activity)
-		{
-			if (intent?.Data != null)
-			{
-				callbacksList.Clear();
-				BranchSessionListener obj = new BranchSessionListener(callback);
-				callbacksList.Add(obj as Object);
+		// public void ReInitSession(Intent intent, IBranchSessionInterface callback, Activity activity)
+		// {
+		// 	if (intent?.Data != null)
+		// 	{
+		// 		callbacksList.Clear();
+		// 		BranchSessionListener obj = new BranchSessionListener(callback);
+		// 		callbacksList.Add(obj as Object);
 
-				Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession Activity: " + activity);
+		// 		Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession Activity: " + activity);
 
-				intent.PutExtra("branch_force_new_session", true);
-				activity.Intent = intent;
+		// 		intent.PutExtra("branch_force_new_session", true);
+		// 		activity.Intent = intent;
 
-				AndroidNativeBranch.SessionBuilder(activity)
-					.WithCallback(obj)
-					.WithData(intent.Data)
-					.ReInit();
-			}
-			else
-			{
-				Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession: No URL in intent: " + intent);
-			}
-		}
+		// 		CurrActivity = activity;
 
-		public void ReInitSession(Intent intent, IBranchBUOSessionInterface callback, Activity activity)
-		{
-			if (intent?.Data != null)
-			{
-				callbacksList.Clear();
-				BranchBUOSessionListener obj = new BranchBUOSessionListener(callback);
-				callbacksList.Add(obj as Object);
+		// 		AndroidNativeBranch.SessionBuilder(activity)
+		// 			.WithCallback(obj)
+		// 			.WithData(intent.Data)
+		// 			.ReInit();
+		// 	}
+		// 	else
+		// 	{
+		// 		Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession: No URL in intent: " + intent);
+		// 	}
+		// }
 
-				intent.PutExtra("branch_force_new_session", true);
-				activity.Intent = intent;
+		// public void ReInitSession(Intent intent, IBranchBUOSessionInterface callback, Activity activity)
+		// {
+		// 	if (intent?.Data != null)
+		// 	{
+		// 		callbacksList.Clear();
+		// 		BranchBUOSessionListener obj = new BranchBUOSessionListener(callback);
+		// 		callbacksList.Add(obj as Object);
 
-				AndroidNativeBranch.SessionBuilder(activity)
-					.WithCallback(obj)
-					.WithData(intent.Data)
-					.ReInit();
-			}
-			else
-			{
-				Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession: No URL in intent: " + intent);
-			}
-		}
+		// 		intent.PutExtra("branch_force_new_session", true);
+		// 		activity.Intent = intent;
+
+		// 		CurrActivity = activity;
+
+		// 		AndroidNativeBranch.SessionBuilder(activity)
+		// 			.WithCallback(obj)
+		// 			.WithData(intent.Data)
+		// 			.ReInit();
+		// 	}
+		// 	else
+		// 	{
+		// 		Console.WriteLine("BRANCHSDK .NET MAUI: ReInitSession: No URL in intent: " + intent);
+		// 	}
+		// }
 
 		public override void NotifyNativeInit()
 		{
