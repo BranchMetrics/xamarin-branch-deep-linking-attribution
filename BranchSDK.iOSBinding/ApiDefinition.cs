@@ -3407,9 +3407,9 @@ namespace IOSNativeBranch
         [Export("isBranchLink:")]
         bool IsBranchLink(string urlString);
 
-        // -(void)setRequestMetadataKey:(NSString * _Nonnull)key value:(id _Nullable)value;
+        // -(void)setRequestMetadataKey:(NSString * _Nonnull)key value:(NSString _Nullable)value;
         [Export("setRequestMetadataKey:value:")]
-        void SetRequestMetadataKey(string key, [NullAllowed] NSObject value);
+        void SetRequestMetadataKey(string key, [NullAllowed] string value);
 
         // +(BOOL)trackingDisabled;
         // +(void)setTrackingDisabled:(BOOL)disabled;
