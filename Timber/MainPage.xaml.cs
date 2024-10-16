@@ -153,6 +153,14 @@ public partial class MainPage : ContentPage
             contentDescription = "ITEM 2"
         };
 
+        BranchContentMetadata metadata = new BranchContentMetadata();
+        metadata.price = (float)99;
+        metadata.AddCustomMetadata("key1", "value1");
+        metadata.quantity = 999;
+
+        buo1.metadata = metadata;
+        buo2.metadata.productCategory = BranchProductCategory.BABY_AND_TODDLER;
+
         List<BranchUniversalObject> list = new List<BranchUniversalObject> { buo1, buo2 };
         branchEvent.AddContentItems(list);
 
