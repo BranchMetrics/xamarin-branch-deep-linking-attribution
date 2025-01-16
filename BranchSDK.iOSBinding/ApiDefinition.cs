@@ -239,6 +239,10 @@ namespace IOSNativeBranch
         [Export("adUserDataUsageConsent")]
         bool AdUserDataUsageConsent { get; set; }
 
+        // @property (assign, nonatomic) NSString * attributionLevel;
+        [Export("attributionLevel")]
+        string AttributionLevel { get; set; }
+
         // -(void)clearTrackingInformation;
         [Export("clearTrackingInformation")]
         void ClearTrackingInformation();
@@ -308,6 +312,11 @@ namespace IOSNativeBranch
         // -(BOOL)eeaRegionInitialized;
         [Export("eeaRegionInitialized")]
         bool EeaRegionInitialized { get; }
+
+        // -(BOOL)attributionLevelInitialized;
+        [Export("attributionLevelInitialized")]
+        [Verify(MethodToProperty)]
+        bool AttributionLevelInitialized { get; }
     }
 
     // @protocol BNCNetworkOperationProtocol <NSObject>
@@ -1420,14 +1429,6 @@ namespace IOSNativeBranch
         // [Export("findExistingInstallOrOpen")]
         // BranchOpenRequest FindExistingInstallOrOpen { get; }
 
-        // -(void)persistEventually;
-        [Export("persistEventually")]
-        void PersistEventually();
-
-        // -(void)persistImmediately;
-        [Export("persistImmediately")]
-        void PersistImmediately();
-
         // +(id)getInstance;
         [Static]
         [Export("getInstance")]
@@ -2481,6 +2482,22 @@ namespace IOSNativeBranch
 
     partial interface Constants
     {
+        // extern const BranchAttributionLevel _Nonnull BranchAttributionLevelFull;
+        [Field("BranchAttributionLevelFull", "__Internal")]
+        NSString BranchAttributionLevelFull { get; }
+
+        // extern const BranchAttributionLevel _Nonnull BranchAttributionLevelReduced;
+        [Field("BranchAttributionLevelReduced", "__Internal")]
+        NSString BranchAttributionLevelReduced { get; }
+
+        // extern const BranchAttributionLevel _Nonnull BranchAttributionLevelMinimal;
+        [Field("BranchAttributionLevelMinimal", "__Internal")]
+        NSString BranchAttributionLevelMinimal { get; }
+
+        // extern const BranchAttributionLevel _Nonnull BranchAttributionLevelNone;
+        [Field("BranchAttributionLevelNone", "__Internal")]
+        NSString BranchAttributionLevelNone { get; }
+
         // extern BranchStandardEvent _Nonnull BranchStandardEventAddToCart;
         [Field("BranchStandardEventAddToCart", "__Internal")]
         NSString BranchStandardEventAddToCart { get; }
@@ -3412,7 +3429,7 @@ namespace IOSNativeBranch
         void SetRequestMetadataKey(string key, [NullAllowed] string value);
 
         // +(BOOL)trackingDisabled;
-        // +(void)setTrackingDisabled:(BOOL)disabled;
+        // +(void)setTrackingDisabled:(BOOL)disabled __attribute__((deprecated("This method has been deprecated. Use `setConsumerProtectionAttributionLevel:` with `BranchAttributionLevelNone` instead.")));
         [Static]
         [Export("trackingDisabled")]
         bool TrackingDisabled { get; set; }
@@ -3426,6 +3443,10 @@ namespace IOSNativeBranch
         [Static]
         [Export("setDMAParamsForEEA:AdPersonalizationConsent:AdUserDataUsageConsent:")]
         void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent);
+
+        // -(void)setConsumerProtectionAttributionLevel:(BranchAttributionLevel _Nonnull)level;
+        [Export("setConsumerProtectionAttributionLevel:")]
+        void SetConsumerProtectionAttributionLevel(string level);
 
         // -(BranchUniversalObject * _Nullable)getFirstReferringBranchUniversalObject;
         [NullAllowed, Export("getFirstReferringBranchUniversalObject")]

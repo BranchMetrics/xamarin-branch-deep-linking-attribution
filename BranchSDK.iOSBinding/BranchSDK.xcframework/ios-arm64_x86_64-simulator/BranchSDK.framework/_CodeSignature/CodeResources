@@ -30,7 +30,7 @@
 		</data>
 		<key>Headers/BNCPreferenceHelper.h</key>
 		<data>
-		wejKeHx3nf+D3w9FenyVvnJDjnA=
+		PZymd2rSpEd8bkGpFDpEGFUVn0s=
 		</data>
 		<key>Headers/BNCProductCategory.h</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Headers/BNCServerRequestQueue.h</key>
 		<data>
-		bUBx5APIixvz/Y04YM8jl6KKcLU=
+		FTaiXokWfwT7bBiMUgQ/P97LGBk=
 		</data>
 		<key>Headers/BNCServerResponse.h</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Headers/Branch.h</key>
 		<data>
-		BeDG2YtJQow4/6ngB8qAMunmlpM=
+		lGj2dDTKNlNFORrLx6RG0HGlJZs=
 		</data>
 		<key>Headers/BranchActivityItemProvider.h</key>
 		<data>
@@ -86,7 +86,7 @@
 		</data>
 		<key>Headers/BranchLogger.h</key>
 		<data>
-		9fbwRt1BFhZCRr2qqZSwr1GV/OA=
+		UNufxjMcTuaVMOzLOD+bKANLtzE=
 		</data>
 		<key>Headers/BranchPasteControl.h</key>
 		<data>
@@ -118,7 +118,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		kShkvdMqkEKab1C74+lBaeM3Bsk=
+		UVDcfGrLT3/F6k9ExkZEDObhFqI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -177,7 +177,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			CJYGr/cDKDnr6tNrTFasjyUOXBUFEUsfbVB27CQ8bjI=
+			pI/mYHdGsRIYfjH1UOjGd0T0GDNdyP18OaHVdAdLyjQ=
 			</data>
 		</dict>
 		<key>Headers/BNCProductCategory.h</key>
@@ -205,7 +205,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zhSw9k3ayW3pglwwvvN1eb1/ie0Gm4nM07skeIQG7D8=
+			CcsMvZQxWWORDaP2MikMbJVlrlzmjxrc7Q4rdivud4g=
 			</data>
 		</dict>
 		<key>Headers/BNCServerResponse.h</key>
@@ -219,7 +219,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/aXn0iERBer0iGGBTQsfr8438HyynfnySoPMokwDrAw=
+			/xGajrq8F9rhBA9hapvunLsxrPKdTClt9HsetzRbwsA=
 			</data>
 		</dict>
 		<key>Headers/BranchActivityItemProvider.h</key>
@@ -275,7 +275,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			rCPgtnWl+oeSV2nt6w4hlMJrXtAQtdvqHH7LFrg7Dck=
+			2L9k0g1Vl7vDnuujARddIFaCrlHBFSuaqEeqHcvHK4c=
 			</data>
 		</dict>
 		<key>Headers/BranchPasteControl.h</key>

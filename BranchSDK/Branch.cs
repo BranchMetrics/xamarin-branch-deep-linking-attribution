@@ -220,6 +220,18 @@ namespace BranchSDK
 		/// <param name="adUserDataUsageConsent">Ad user data usage consent.</param>
 		abstract public void SetDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent);
 
+
+
+		#endregion
+
+		#region Consumer Protection methods
+
+		/// <summary>
+		/// Set the consumer protection attribution level.
+		/// </summary>
+		/// <param name="level">The attribution level to set.</param>
+		abstract public void setConsumerProtectionAttributionLevel(BranchAttributionLevel level);
+
 		#endregion
 	}
 }

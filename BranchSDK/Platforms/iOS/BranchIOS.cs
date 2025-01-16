@@ -325,5 +325,14 @@ namespace BranchSDK
 		}
 
 		#endregion
+
+		#region Consumer Protection methods
+
+		public override void setConsumerProtectionAttributionLevel(BranchAttributionLevel level)
+		{
+			NativeBranch.SetConsumerProtectionAttributionLevel(level);
+		}
+
+		#endregion
 	}
 }
