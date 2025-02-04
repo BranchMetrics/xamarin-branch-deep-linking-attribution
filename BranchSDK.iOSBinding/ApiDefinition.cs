@@ -315,7 +315,7 @@ namespace IOSNativeBranch
 
         // -(BOOL)attributionLevelInitialized;
         [Export("attributionLevelInitialized")]
-        [Verify(MethodToProperty)]
+        // [Verify(MethodToProperty)]
         bool AttributionLevelInitialized { get; }
     }
 
