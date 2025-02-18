@@ -330,7 +330,10 @@ namespace BranchSDK
 
 		public override void setConsumerProtectionAttributionLevel(BranchAttributionLevel level)
 		{
-			NativeBranch.SetConsumerProtectionAttributionLevel(level);
+			if(level != null)
+			{
+				NativeBranch.SetConsumerProtectionAttributionLevel(level.ToString());
+			}
 		}
 
 		#endregion
