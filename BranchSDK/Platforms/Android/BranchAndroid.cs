@@ -379,7 +379,24 @@ namespace BranchSDK
 
 		public override void setConsumerProtectionAttributionLevel(BranchAttributionLevel level)
 		{
-			NativeBranch.SetConsumerProtectionAttributionLevel(level);
+			IO.Branch.Referral.Defines.BranchAttributionLevel bal = null;
+
+			if(level == BranchAttributionLevel.FULL){
+				bal = IO.Branch.Referral.Defines.BranchAttributionLevel.FULL;
+			}
+			else if(level == BranchAttributionLevel.REDUCED){
+				bal = IO.Branch.Referral.Defines.BranchAttributionLevel.REDUCED;
+			}
+			else if(level == BranchAttributionLevel.MINIMAL){
+				bal = IO.Branch.Referral.Defines.BranchAttributionLevel.MINIMAL;
+			}
+			else if(level == BranchAttributionLevel.NONE){
+				bal = IO.Branch.Referral.Defines.BranchAttributionLevel.NONE;
+			}
+			
+			if(bal != null){
+				NativeBranch.setConsumerProtectionAttributionLevel(bal);
+			}
 		}
 
 		#endregion
