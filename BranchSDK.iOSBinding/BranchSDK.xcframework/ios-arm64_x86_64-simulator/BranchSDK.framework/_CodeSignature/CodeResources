@@ -54,7 +54,7 @@
 		</data>
 		<key>Headers/Branch.h</key>
 		<data>
-		LnfpqHngSMGEPDVWDdlqBqIS0Ow=
+		lGj2dDTKNlNFORrLx6RG0HGlJZs=
 		</data>
 		<key>Headers/BranchActivityItemProvider.h</key>
 		<data>
@@ -75,10 +75,6 @@
 		<key>Headers/BranchEvent.h</key>
 		<data>
 		9AKheC/dhBmcW6/nsjs/jYVVPuE=
-		</data>
-		<key>Headers/BranchFileLogger.h</key>
-		<data>
-		VVdbEPE1dEfYcq5JyYaq5Y1mcBc=
 		</data>
 		<key>Headers/BranchLastAttributedTouchData.h</key>
 		<data>
@@ -122,7 +118,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		nH3J2RG392e4egUhmLKJlF8KTis=
+		UVDcfGrLT3/F6k9ExkZEDObhFqI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -223,7 +219,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			JWvEoGoEUrNCXT/L4oWMXBOyZae1q4EjtJynode0p2U=
+			/xGajrq8F9rhBA9hapvunLsxrPKdTClt9HsetzRbwsA=
 			</data>
 		</dict>
 		<key>Headers/BranchActivityItemProvider.h</key>
@@ -259,13 +255,6 @@
 			<key>hash2</key>
 			<data>
 			kBlAqil4AtcnJWA4UtaVsqHeq0MtAqwzNtCvaVxI4Y0=
-			</data>
-		</dict>
-		<key>Headers/BranchFileLogger.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			YVe6W2kC78lRDG1wn91DB6K2pRqf1AvPMcYQE10h4EQ=
 			</data>
 		</dict>
 		<key>Headers/BranchLastAttributedTouchData.h</key>
