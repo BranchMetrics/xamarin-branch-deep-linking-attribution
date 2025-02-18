@@ -395,7 +395,7 @@ namespace BranchSDK
 			}
 			
 			if(bal != null){
-				NativeBranch.setConsumerProtectionAttributionLevel(bal);
+				NativeBranch.SetConsumerProtectionAttributionLevel(bal);
 			}
 		}
 
