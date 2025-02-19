@@ -2962,61 +2962,72 @@ namespace IOSNativeBranch
     }
 
     // typedef void (^BranchLogCallback)(NSString * _Nonnull, BranchLogLevel, NSError * _Nullable);
-    delegate void BranchLogCallback(string arg0, BranchLogLevel arg1, [NullAllowed] NSError arg2);
+    delegate void BranchLogCallback (string arg0, BranchLogLevel arg1, [NullAllowed] NSError arg2);
+
+    // typedef void (^BranchAdvancedLogCallback)(NSString * _Nonnull, BranchLogLevel, NSError * _Nullable, NSMutableURLRequest * _Nullable, BNCServerResponse * _Nullable);
+    delegate void BranchAdvancedLogCallback (string arg0, BranchLogLevel arg1, [NullAllowed] NSError arg2, [NullAllowed] NSMutableUrlRequest arg3, [NullAllowed] BNCServerResponse arg4);
 
     // @interface BranchLogger : NSObject
-    [BaseType(typeof(NSObject))]
+    [BaseType (typeof(NSObject))]
     interface BranchLogger
     {
         // @property (assign, nonatomic) BOOL loggingEnabled;
-        [Export("loggingEnabled")]
+        [Export ("loggingEnabled")]
         bool LoggingEnabled { get; set; }
 
         // @property (assign, nonatomic) BOOL includeCallerDetails;
-        [Export("includeCallerDetails")]
+        [Export ("includeCallerDetails")]
         bool IncludeCallerDetails { get; set; }
 
         // @property (copy, nonatomic) BranchLogCallback _Nullable logCallback;
-        [NullAllowed, Export("logCallback", ArgumentSemantic.Copy)]
+        [NullAllowed, Export ("logCallback", ArgumentSemantic.Copy)]
         BranchLogCallback LogCallback { get; set; }
 
+        // @property (copy, nonatomic) BranchAdvancedLogCallback _Nullable advancedLogCallback;
+        [NullAllowed, Export ("advancedLogCallback", ArgumentSemantic.Copy)]
+        BranchAdvancedLogCallback AdvancedLogCallback { get; set; }
+
         // @property (assign, nonatomic) BranchLogLevel logLevelThreshold;
-        [Export("logLevelThreshold", ArgumentSemantic.Assign)]
+        [Export ("logLevelThreshold", ArgumentSemantic.Assign)]
         BranchLogLevel LogLevelThreshold { get; set; }
 
         // +(instancetype _Nonnull)shared;
         [Static]
-        [Export("shared")]
-        BranchLogger Shared();
+        [Export ("shared")]
+        BranchLogger Shared ();
 
         // -(BOOL)shouldLog:(BranchLogLevel)level;
-        [Export("shouldLog:")]
-        bool ShouldLog(BranchLogLevel level);
+        [Export ("shouldLog:")]
+        bool ShouldLog (BranchLogLevel level);
 
         // -(void)disableCallerDetails;
-        [Export("disableCallerDetails")]
-        void DisableCallerDetails();
+        [Export ("disableCallerDetails")]
+        void DisableCallerDetails ();
 
         // -(void)logError:(NSString * _Nonnull)message error:(NSError * _Nullable)error;
-        [Export("logError:error:")]
-        void LogError(string message, [NullAllowed] NSError error);
+        [Export ("logError:error:")]
+        void LogError (string message, [NullAllowed] NSError error);
 
         // -(void)logWarning:(NSString * _Nonnull)message error:(NSError * _Nullable)error;
-        [Export("logWarning:error:")]
-        void LogWarning(string message, [NullAllowed] NSError error);
+        [Export ("logWarning:error:")]
+        void LogWarning (string message, [NullAllowed] NSError error);
 
         // -(void)logDebug:(NSString * _Nonnull)message error:(NSError * _Nullable)error;
-        [Export("logDebug:error:")]
-        void LogDebug(string message, [NullAllowed] NSError error);
+        [Export ("logDebug:error:")]
+        void LogDebug (string message, [NullAllowed] NSError error);
+
+        // -(void)logDebug:(NSString * _Nonnull)message error:(NSError * _Nullable)error request:(NSMutableURLRequest * _Nullable)request response:(BNCServerResponse * _Nullable)response;
+        [Export ("logDebug:error:request:response:")]
+        void LogDebug (string message, [NullAllowed] NSError error, [NullAllowed] NSMutableUrlRequest request, [NullAllowed] BNCServerResponse response);
 
         // -(void)logVerbose:(NSString * _Nonnull)message error:(NSError * _Nullable)error;
-        [Export("logVerbose:error:")]
-        void LogVerbose(string message, [NullAllowed] NSError error);
+        [Export ("logVerbose:error:")]
+        void LogVerbose (string message, [NullAllowed] NSError error);
 
         // +(NSString * _Nonnull)formatMessage:(NSString * _Nonnull)message logLevel:(BranchLogLevel)logLevel error:(NSError * _Nonnull)error;
         [Static]
-        [Export("formatMessage:logLevel:error:")]
-        string FormatMessage(string message, BranchLogLevel logLevel, NSError error);
+        [Export ("formatMessage:logLevel:error:")]
+        string FormatMessage (string message, BranchLogLevel logLevel, NSError error);
     }
 
     //[Static]
@@ -3330,13 +3341,18 @@ namespace IOSNativeBranch
 
         // +(void)enableLogging;
         [Static]
-        [Export("enableLogging")]
-        void EnableLogging();
+        [Export ("enableLogging")]
+        void EnableLogging ();
 
         // +(void)enableLoggingAtLevel:(BranchLogLevel)logLevel withCallback:(BranchLogCallback _Nullable)callback;
         [Static]
-        [Export("enableLoggingAtLevel:withCallback:")]
-        void EnableLoggingAtLevel(BranchLogLevel logLevel, [NullAllowed] BranchLogCallback callback);
+        [Export ("enableLoggingAtLevel:withCallback:")]
+        void EnableLoggingAtLevel (BranchLogLevel logLevel, [NullAllowed] BranchLogCallback callback);
+
+        // +(void)enableLoggingAtLevel:(BranchLogLevel)logLevel withAdvancedCallback:(BranchAdvancedLogCallback _Nonnull)callback;
+        [Static]
+        [Export ("enableLoggingAtLevel:withAdvancedCallback:")]
+        void EnableLoggingAtLevel (BranchLogLevel logLevel, BranchAdvancedLogCallback callback);
 
         // -(void)useEUEndpoints;
         [Export("useEUEndpoints")]
