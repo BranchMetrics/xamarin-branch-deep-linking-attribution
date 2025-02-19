@@ -16,7 +16,7 @@
       <group targetFramework="net9.0" >
         <dependency id="Newtonsoft.Json" version="13.0.3" />
       </group>
-      <group targetFramework="net9.0-android34" >
+      <group targetFramework="net9.0-android35" >
         <dependency id="Newtonsoft.Json" version="13.0.3" />
 	      <dependency id="Xamarin.Android.Binding.InstallReferrer" version="2.2.0" />
       </group>
@@ -32,17 +32,17 @@
     <file src="branch_icon.png" target="" />
 
     <!-- Android Binding -->
-    <file src="BranchSDK.AndroidBinding/bin/Release/net9.0-android/BranchSDK.AndroidBinding.dll" target="lib/net9.0-android34" />
-    <file src="BranchSDK.AndroidBinding/bin/Release/net9.0-android/BranchSDK.AndroidBinding.xml" target="lib/net9.0-android34" />
-    <file src="BranchSDK.AndroidBinding/bin/Release/net9.0-android/BranchSDK.AndroidBinding.aar" target="lib/net9.0-android34" />
+    <file src="BranchSDK.AndroidBinding/bin/Release/net9.0-android/BranchSDK.AndroidBinding.dll" target="lib/net9.0-android35" />
+    <file src="BranchSDK.AndroidBinding/bin/Release/net9.0-android/BranchSDK.AndroidBinding.xml" target="lib/net9.0-android35" />
+    <file src="BranchSDK.AndroidBinding/bin/Release/net9.0-android/BranchSDK.AndroidBinding.aar" target="lib/net9.0-android35" />
 
     <!-- iOS Binding -->
     <file src="BranchSDK.iOSBinding/bin/Release/net9.0-ios/BranchSDK.iOSBinding.dll" target="lib/net9.0-iOS11.0" />
     <file src="BranchSDK.iOSBinding/bin/Release/net9.0-ios/BranchSDK.iOSBinding.resources.zip" target="lib/net9.0-iOS11.0" />
 
     <!-- Branch SDK  -->
-    <file src="BranchSDK/bin/Release/net9.0-android/BranchSDK.dll" target="lib/net9.0-android34" />
-    <file src="BranchSDK/bin/Release/net9.0-android/BranchSDK.xml" target="lib/net9.0-android34" />
+    <file src="BranchSDK/bin/Release/net9.0-android/BranchSDK.dll" target="lib/net9.0-android35" />
+    <file src="BranchSDK/bin/Release/net9.0-android/BranchSDK.xml" target="lib/net9.0-android35" />
     <file src="BranchSDK/bin/Release/net9.0-ios/BranchSDK.dll" target="lib/net9.0-ios11.0" />
     <file src="BranchSDK/bin/Release/net9.0/BranchSDK.dll" target="lib/net9.0" />
 

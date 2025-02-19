@@ -107,15 +107,13 @@ namespace BranchSDK
 
 			if (EnableLogging || Runtime.Arch == Arch.SIMULATOR)
 			{
-				IOSNativeBranch.Branch.EnableLoggingAtLevel(IOSNativeBranch.BranchLogLevel.Verbose, null);
+				IOSNativeBranch.Branch.EnableLogging();
 			}
 
 			if (checkPasteboardOnInstall)
 			{
 				instance.NativeBranch.CheckPasteboardOnInstall();
 			}
-
-			IOSNativeBranch.Branch.EnableLogging();
 
 			instance.InitSession(callback);
 		}
