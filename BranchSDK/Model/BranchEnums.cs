@@ -2,6 +2,13 @@
 
 namespace BranchSDK
 {
+    public enum BranchAttributionLevel{
+        FULL,
+        REDUCED,
+        MINIMAL,
+        NONE
+    }
+
     public enum BranchCurrencyType
     {
         AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN, BAM, BBD,
