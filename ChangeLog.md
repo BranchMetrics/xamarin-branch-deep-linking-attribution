@@ -1,9 +1,9 @@
 Branch Xamarin SDK change log
 
 - 10.0.0
-  * Update to Branch Android SDK 5.15.0
-  * Update to Branch iOS SDK 3.8.0
-  * Update to use .NET-7
+  * Update to Branch Android SDK 5.15.1
+  * Update to Branch iOS SDK 3.9.0
+  * Update to use .NET-9
   * Exposed new method `setConsumerProtectionAttributionLevel` to set CPP level
 
 - 9.0.1
