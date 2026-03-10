@@ -390,6 +390,25 @@ namespace BranchSDK
 		}
 
 		#endregion
+
+		#region Google On Device Measurement methods
+
+		public override void SetSDKWaitTimeForThirdPartyAPIs(string waitTime)
+		{
+			NativeBranch.SetSDKWaitTimeForThirdPartyAPIs(waitTime);
+		}
+
+		public override void SetODMInfo(string odmInfo, double firstOpenTimestamp)
+		{
+			NativeBranch.SetODMInfo(odmInfo, firstOpenTimestamp);
+		}
+
+		public override void SetAnonID(string anonID)
+		{
+			NativeBranch.SetAnonID(anonID);
+		}
+
+		#endregion
 	}
 }
 

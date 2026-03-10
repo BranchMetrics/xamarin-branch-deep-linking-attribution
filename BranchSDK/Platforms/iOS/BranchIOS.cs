@@ -335,5 +335,37 @@ namespace BranchSDK
 		}
 
 		#endregion
+
+		#region Google On Device Measurement methods
+
+		public override void SetSDKWaitTimeForThirdPartyAPIs(string waitTime)
+		{
+			if(waitTime != null)
+			{
+				NativeBranch.SetSDKWaitTimeForThirdPartyAPIs(waitTime.toDouble());
+			}
+		}
+
+		public override void SetODMInfo(string odmInfo, double firstOpenTimestamp)
+		{
+    		if (firstOpenTimestamp != null && odmInfo != null)
+    		{
+        		double timeInSeconds = firstOpenTimestamp / 1000.0;
+    			Foundation.NSDate firstOpenDate = Foundation.NSDate.FromTimeIntervalSince1970(timeInSeconds);
+    			NativeBranch.SetODMInfo(odmInfo, firstOpenDate);
+    		}
+    
+    		NativeBranch.SetODMInfo(odmInfo, firstOpenDate);
+		}
+
+		public override void SetAnonID(string anonID)
+		{
+			if(anonID != null)
+			{
+				NativeBranch.SetAnonID(anonID.ToString());
+			}
+		}
+
+		#endregion
 	}
 }

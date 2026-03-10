@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace BranchSDK
 {
@@ -231,6 +232,29 @@ namespace BranchSDK
 		/// </summary>
 		/// <param name="level">The attribution level to set.</param>
 		abstract public void setConsumerProtectionAttributionLevel(BranchAttributionLevel level);
+
+		#endregion
+
+		#region Google On Device Measurement methods
+
+		/// <summary>
+		/// Set the time the Branch SDK waits for third party APIs to initialize before initializing itself.
+		/// </summary>
+		/// <param name="waitTime">The amount of seconds the Branch SDK waits.</param>
+		abstract public void setSDKWaitTimeForThirdPartyAPIs(double waitTime);
+
+		/// <summary>
+		/// Set the odmInfo and firstOpenTimestamp manually.
+		/// </summary>
+		/// <param name="odmInfo">The odmInfo.</param>
+		/// <param name="firstOpenTimestamp">The firstOpenTimestamp.</param>
+		abstract public void setODMInfo(string odmInfo, double firstOpenTimestamp);
+
+		/// <summary>
+		/// Set the anonymous ID.
+		/// </summary>
+		/// <param name="anonID">The anonymous ID.</param>
+		abstract public void setAnonID(string anonID);
 
 		#endregion
 	}

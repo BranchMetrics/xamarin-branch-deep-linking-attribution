@@ -3464,6 +3464,18 @@ namespace IOSNativeBranch
         [Export("setConsumerProtectionAttributionLevel:")]
         void SetConsumerProtectionAttributionLevel(string level);
 
+        // -(void)setSDKWaitTimeForThirdAPIs:(NSNumber * _Nonnull)waitTime;
+        [Export("setSDKWaitTimeForThirdPartyAPIs:")]
+        void SetSDKWaitTimeForThirdPartyAPIs(double waitTime);
+
+        // -(void)setODMInfo:(NSString * _Nonnull, NSNumber * _Nonnull)odmInfo, firstOpenTimestamp;
+        [Export("setODMInfo:")]
+        void SetODMInfo(string odmInfo, double firstOpenTimestamp);
+
+        // -(void)setAnonID:(NSString * _Nonnull)anonID;
+        [Export("setAnonID:")]
+        void SetAnonID(double anonID);
+
         // -(BranchUniversalObject * _Nullable)getFirstReferringBranchUniversalObject;
         [NullAllowed, Export("getFirstReferringBranchUniversalObject")]
         BranchUniversalObject FirstReferringBranchUniversalObject { get; }
