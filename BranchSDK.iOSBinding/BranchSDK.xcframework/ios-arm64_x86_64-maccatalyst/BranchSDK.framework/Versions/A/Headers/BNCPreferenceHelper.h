@@ -46,6 +46,7 @@ NSURL* /* _Nonnull */ BNCURLForBranchDirectory(void);
 @property (assign, nonatomic) NSInteger retryCount;
 @property (assign, nonatomic) NSTimeInterval retryInterval;
 @property (assign, nonatomic) NSTimeInterval timeout;
+@property (assign, nonatomic) NSTimeInterval thirdPartyAPIsWaitTime;
 @property (copy, nonatomic) NSString *externalIntentURI;
 @property (strong, nonatomic) NSMutableDictionary *savedAnalyticsData;
 @property (copy, nonatomic) NSString *lastSystemBuildVersion;
@@ -67,6 +68,10 @@ NSURL* /* _Nonnull */ BNCURLForBranchDirectory(void);
 @property (strong, nonatomic) NSDate *referrerGBRAIDInitDate;
 @property (strong, nonatomic) NSMutableDictionary *referringURLQueryParameters;
 
+@property (copy, nonatomic) NSString *odmInfo;
+@property (assign, nonatomic) NSTimeInterval odmInfoValidityWindow;
+@property (strong, nonatomic) NSDate *odmInfoInitDate;
+
 @property (assign, nonatomic) NSInteger skanCurrentWindow;
 @property (assign, nonatomic) NSInteger highestConversionValueSent;
 @property (strong, nonatomic) NSDate   *firstAppLaunchTime;
@@ -78,6 +83,8 @@ NSURL* /* _Nonnull */ BNCURLForBranchDirectory(void);
 
 @property (nonatomic, assign) NSString *attributionLevel;
 
+@property (copy, nonatomic) NSString *uxType;
+@property (strong, nonatomic) NSDate *urlLoadMs;
 
 - (void) clearTrackingInformation;
 

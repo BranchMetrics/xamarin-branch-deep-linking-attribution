@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/BNCCallbacks.h</key>
 		<data>
-		qH9Le3B3R8/gq0fncUjfYJZahpQ=
+		yd4Ol2RhqQgt2I7mDAHvr0fX9+k=
 		</data>
 		<key>Headers/BNCCurrency.h</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>Headers/BNCPreferenceHelper.h</key>
 		<data>
-		PZymd2rSpEd8bkGpFDpEGFUVn0s=
+		HnWXFOX+6MyqzfIPFmdJ8AVPfjI=
 		</data>
 		<key>Headers/BNCProductCategory.h</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Headers/Branch.h</key>
 		<data>
-		LnfpqHngSMGEPDVWDdlqBqIS0Ow=
+		mn35IMnJ8r0YMGqx3+iLXN+2NIc=
 		</data>
 		<key>Headers/BranchActivityItemProvider.h</key>
 		<data>
@@ -74,7 +74,7 @@
 		</data>
 		<key>Headers/BranchEvent.h</key>
 		<data>
-		9AKheC/dhBmcW6/nsjs/jYVVPuE=
+		ewFq7oEDgeMYPS7cDFZetH7xzY4=
 		</data>
 		<key>Headers/BranchFileLogger.h</key>
 		<data>
@@ -106,7 +106,7 @@
 		</data>
 		<key>Headers/BranchSDK.h</key>
 		<data>
-		Yw6kXS8KqhWa45VHkXqaBl9odtw=
+		+FaTBiU8n73GE22/G1uOdpKpSJE=
 		</data>
 		<key>Headers/BranchScene.h</key>
 		<data>
@@ -122,7 +122,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		HJZVPKpH+YVHJzYGS/aTZHSEwZk=
+		eRINB6871ZPrpSSBvu5cTwfGPfE=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -139,7 +139,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZQHBeODx5vwfSDqFeFZ3mPuYHoNkf9ovP93FSIGK/hk=
+			jTLc69nMSPXhxwD4BLNG9Yxhh2cjE6M/661+GyVUgo0=
 			</data>
 		</dict>
 		<key>Headers/BNCCurrency.h</key>
@@ -181,7 +181,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pI/mYHdGsRIYfjH1UOjGd0T0GDNdyP18OaHVdAdLyjQ=
+			bA1yhBKWKAsPeEuBken1WQHfb7ZWtjqSHN+Uo/eoL8U=
 			</data>
 		</dict>
 		<key>Headers/BNCProductCategory.h</key>
@@ -223,7 +223,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			JWvEoGoEUrNCXT/L4oWMXBOyZae1q4EjtJynode0p2U=
+			x3LIOCq8AHvNNV4umYo4lfH7KkLivmC6rmTHc4bVDUw=
 			</data>
 		</dict>
 		<key>Headers/BranchActivityItemProvider.h</key>
@@ -258,7 +258,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			kBlAqil4AtcnJWA4UtaVsqHeq0MtAqwzNtCvaVxI4Y0=
+			gusRh2jMdX9EhqPiIwc/8lbGWyflwE8BOyL6616sMWI=
 			</data>
 		</dict>
 		<key>Headers/BranchFileLogger.h</key>
@@ -314,7 +314,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			95Bl17Hq+8tWRgcCP/NB/+509dUour8tL6Q18pR7yDk=
+			TXKqyc/89SWfkERwi9lDUXTZzlEbyfnWnnBxsNBJN+g=
 			</data>
 		</dict>
 		<key>Headers/BranchScene.h</key>
