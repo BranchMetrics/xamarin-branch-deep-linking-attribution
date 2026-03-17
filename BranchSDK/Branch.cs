@@ -7,7 +7,7 @@ namespace BranchSDK
 {
 	abstract public class Branch
 	{
-		public const string version = "10.0.0";
+		public const string version = "10.1.0";
 
 		#region Singleton
 
