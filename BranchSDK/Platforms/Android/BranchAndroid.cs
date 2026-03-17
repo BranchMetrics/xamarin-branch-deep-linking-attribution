@@ -393,7 +393,7 @@ namespace BranchSDK
 
 		#region Google On Device Measurement methods
 
-		public override void SetSDKWaitTimeForThirdPartyAPIs(string waitTime)
+		public override void SetSDKWaitTimeForThirdPartyAPIs(double waitTime)
 		{
 			string warningMessage = "[Branch SDK] Warning: SetSDKWaitTimeForThirdPartyAPIs is an iOS-only feature. This call was ignored on Android.";
     		System.Diagnostics.Debug.WriteLine(warningMessage);

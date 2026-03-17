@@ -1235,7 +1235,7 @@ namespace IOSNativeBranch
 
 		// -(void)getShortUrlWithLinkProperties:(BranchLinkProperties * _Nonnull)linkProperties andCallback:(void (^ _Nullable)(NSString * _Nullable, NSError * _Nullable))callback;
 		[Export ("getShortUrlWithLinkProperties:andCallback:")]
-		void GetShortUrlWithLinkProperties (BranchLinkProperties linkProperties, [NullAllowed] Action<NSString, NSError> callback);
+		void GetShortUrlWithLinkProperties (BranchLinkProperties linkProperties, [NullAllowed] Action<string, NSError> callback);
 
 		// -(NSString * _Nullable)getLongUrlWithChannel:(NSString * _Nullable)channel andTags:(NSArray * _Nullable)tags andFeature:(NSString * _Nullable)feature andStage:(NSString * _Nullable)stage andAlias:(NSString * _Nullable)alias;
 		[Export ("getLongUrlWithChannel:andTags:andFeature:andStage:andAlias:")]
@@ -1244,15 +1244,15 @@ namespace IOSNativeBranch
 
 		// -(void)showShareSheetWithShareText:(NSString * _Nullable)shareText completion:(void (^ _Nullable)(NSString * _Nullable, BOOL, NSError * _Nullable))completion;
 		[Export ("showShareSheetWithShareText:completion:")]
-		void ShowShareSheetWithShareText ([NullAllowed] string shareText, [NullAllowed] Action<NSString, bool, NSError> completion);
+		void ShowShareSheetWithShareText ([NullAllowed] string shareText, [NullAllowed] Action<string, bool, NSError> completion);
 
 		// -(void)showShareSheetWithLinkProperties:(BranchLinkProperties * _Nullable)linkProperties andShareText:(NSString * _Nullable)shareText fromViewController:(UIViewController * _Nullable)viewController completionWithError:(void (^ _Nullable)(NSString * _Nullable, BOOL, NSError * _Nullable))completion;
 		[Export ("showShareSheetWithLinkProperties:andShareText:fromViewController:completionWithError:")]
-		void ShowShareSheetWithLinkProperties ([NullAllowed] BranchLinkProperties linkProperties, [NullAllowed] string shareText, [NullAllowed] UIViewController viewController, [NullAllowed] Action<NSString, bool, NSError> completion);
+		void ShowShareSheetWithLinkProperties ([NullAllowed] BranchLinkProperties linkProperties, [NullAllowed] string shareText, [NullAllowed] UIViewController viewController, [NullAllowed] Action<string, bool, NSError> completion);
 
 		// -(void)showShareSheetWithLinkProperties:(BranchLinkProperties * _Nullable)linkProperties andShareText:(NSString * _Nullable)shareText fromViewController:(UIViewController * _Nullable)viewController anchor:(UIBarButtonItem * _Nullable)anchor completionWithError:(void (^ _Nullable)(NSString * _Nullable, BOOL, NSError * _Nullable))completion;
 		[Export ("showShareSheetWithLinkProperties:andShareText:fromViewController:anchor:completionWithError:")]
-		void ShowShareSheetWithLinkProperties ([NullAllowed] BranchLinkProperties linkProperties, [NullAllowed] string shareText, [NullAllowed] UIViewController viewController, [NullAllowed] UIBarButtonItem anchor, [NullAllowed] Action<NSString, bool, NSError> completion);
+		void ShowShareSheetWithLinkProperties ([NullAllowed] BranchLinkProperties linkProperties, [NullAllowed] string shareText, [NullAllowed] UIViewController viewController, [NullAllowed] UIBarButtonItem anchor, [NullAllowed] Action<string, bool, NSError> completion);
 
 		// -(void)listOnSpotlight;
 		[Export ("listOnSpotlight")]
@@ -3272,7 +3272,7 @@ namespace IOSNativeBranch
 
 		// @property (nonatomic, strong) NSArray<BranchUniversalObject *> * _Nonnull contentItems;
 		[Export ("contentItems", ArgumentSemantic.Strong)]
-		BranchUniversalObject[] ContentItems { get; set; }
+		NSArray ContentItems { get; set; }
 
 		// @property (nonatomic, strong) NSDictionary<NSString *,NSString *> * _Nonnull customData;
 		[Export ("customData", ArgumentSemantic.Strong)]

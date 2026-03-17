@@ -241,20 +241,20 @@ namespace BranchSDK
 		/// Set the time the Branch SDK waits for third party APIs to initialize before initializing itself.
 		/// </summary>
 		/// <param name="waitTime">The amount of seconds the Branch SDK waits.</param>
-		abstract public void setSDKWaitTimeForThirdPartyAPIs(double waitTime);
+		abstract public void SetSDKWaitTimeForThirdPartyAPIs(double waitTime);
 
 		/// <summary>
 		/// Set the odmInfo and firstOpenTimestamp manually.
 		/// </summary>
 		/// <param name="odmInfo">The odmInfo.</param>
 		/// <param name="firstOpenTimestamp">The firstOpenTimestamp.</param>
-		abstract public void setODMInfo(string odmInfo, double firstOpenTimestamp);
+		abstract public void SetODMInfo(string odmInfo, double firstOpenTimestamp);
 
 		/// <summary>
 		/// Set the anonymous ID.
 		/// </summary>
 		/// <param name="anonID">The anonymous ID.</param>
-		abstract public void setAnonID(string anonID);
+		abstract public void SetAnonID(string anonID);
 
 		#endregion
 	}
