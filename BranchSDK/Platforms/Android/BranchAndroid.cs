@@ -390,28 +390,7 @@ namespace BranchSDK
 		}
 
 		#endregion
-
-		#region Google On Device Measurement methods
-
-		public override void SetSDKWaitTimeForThirdPartyAPIs(double waitTime)
-		{
-			string warningMessage = "[Branch SDK] Warning: SetSDKWaitTimeForThirdPartyAPIs is an iOS-only feature. This call was ignored on Android.";
-    		System.Diagnostics.Debug.WriteLine(warningMessage);
-		}
-
-		public override void SetODMInfo(string odmInfo, double firstOpenTimestamp)
-		{
-			string warningMessage = "[Branch SDK] Warning: SetODMInfo is an iOS-only feature. This call was ignored on Android.";
-    		System.Diagnostics.Debug.WriteLine(warningMessage);
-		}
-
-		public override void SetAnonID(string anonID)
-		{
-			string warningMessage = "[Branch SDK] Warning: SetAnonID is an iOS-only feature. This call was ignored on Android.";
-    		System.Diagnostics.Debug.WriteLine(warningMessage);
-		}
-
-		#endregion
+		
 	}
 }
 

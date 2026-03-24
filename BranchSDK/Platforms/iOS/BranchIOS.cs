@@ -36,6 +36,13 @@ namespace BranchSDK
 
 		private static bool checkPasteboardOnInstall = false;
 
+		// Google On Device Measurement Fields
+
+		private static double? preInitSDKWaitTime = null;
+		private static string preInitOdmInfo = null;
+		private static double? preInitFirstOpenTimestamp = null;
+		private static string preInitAnonId = null;
+
 		#endregion
 
 		#region Initialization
@@ -54,9 +61,12 @@ namespace BranchSDK
 				Console.WriteLine("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
 
+			ApplyPreInitGoogleOnDeviceMeasurementValues();
+
 			instance = new BranchIOS();
 			Branch.branchInstance = instance;
 			instance.branchKey = branchKey;
+
 			instance.NativeBranch.RegisterPluginName("Xamarin", "10.1.0");
 
 			if (launchOptions != null)
@@ -89,6 +99,8 @@ namespace BranchSDK
 			{
 				Console.WriteLine("Usage of App Key is deprecated, please move toward using a Branch key");
 			}
+
+			ApplyPreInitGoogleOnDeviceMeasurementValues();
 
 			instance = new BranchIOS();
 			Branch.branchInstance = instance;
@@ -336,31 +348,38 @@ namespace BranchSDK
 
 		#endregion
 
-		#region Google On Device Measurement methods
+		#region Google On Device Measurement
 
-		public override void SetSDKWaitTimeForThirdPartyAPIs(double waitTime)
+		public static void SetODMInfo(string odmInfo, double firstOpenTimestamp) 
 		{
-			if (waitTime != null)
-			{
-				IOSNativeBranch.Branch.SetSDKWaitTimeForThirdPartyAPIs(waitTime);
+			preInitOdmInfo = odmInfo;
+			preInitFirstOpenTimestamp = firstOpenTimestamp;
+		}
+
+		public static void SetAnonID(string anonID)
+		{
+			preInitAnonId = anonID;
+		}
+
+		public static void SetSDKWaitTimeForThirdPartyAPIs(double waitTime) 
+		{
+			preInitSDKWaitTime = waitTime;
+		}
+
+		private static void ApplyPreInitGoogleOnDeviceMeasurementValues()
+		{
+			if (!string.IsNullOrEmpty(preInitOdmInfo) && preInitFirstOpenTimestamp.HasValue) {
+				double timeInSeconds = preInitFirstOpenTimestamp.Value / 1000.0;
+                Foundation.NSDate firstOpenDate = Foundation.NSDate.FromTimeIntervalSince1970(timeInSeconds);
+                IOSNativeBranch.Branch.SetODMInfo(preInitOdmInfo, firstOpenDate);
 			}
-		}
 
-		public override void SetODMInfo(string odmInfo, double firstOpenTimestamp)
-		{
-    		if (firstOpenTimestamp != null && odmInfo != null)
-    		{
-        		double timeInSeconds = firstOpenTimestamp / 1000.0;
-    			Foundation.NSDate firstOpenDate = Foundation.NSDate.FromTimeIntervalSince1970(timeInSeconds);
-    			IOSNativeBranch.Branch.SetODMInfo(odmInfo, firstOpenDate);
-    		}
-		}
+			if (!string.IsNullOrEmpty(preInitAnonId)) {
+				IOSNativeBranch.Branch.SetAnonID(preInitAnonId);
+			}
 
-		public override void SetAnonID(string anonID)
-		{
-			if (anonID != null)
-			{
-				IOSNativeBranch.Branch.SetAnonID(anonID);
+			if (preInitSDKWaitTime.HasValue) {
+				IOSNativeBranch.Branch.SetSDKWaitTimeForThirdPartyAPIs(preInitSDKWaitTime.Value);
 			}
 		}
 
