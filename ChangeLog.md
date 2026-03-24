@@ -3,9 +3,9 @@ Branch Xamarin SDK change log
 - 10.1.0
   * Update to Branch Android SDK 5.20.3
   * Update to Branch iOS SDK 3.14.0
-  * Exposed new method `setSDKWaitTimeForThirdPartyAPIs` to set SDK wait time.
-  * Exposed new method `setODMInfo` to set On Device Measurement info.
-  * Exposed new method `setAnonID` to set meta Anon ID.
+  * Exposed new method `SetSDKWaitTimeForThirdPartyAPIs` to set SDK wait time.
+  * Exposed new method `SetODMInfo` to set On Device Measurement info.
+  * Exposed new method `SetAnonID` to set meta Anon ID.
 
 - 10.0.0
   * Update to Branch Android SDK 5.15.1
