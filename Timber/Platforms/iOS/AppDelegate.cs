@@ -1,6 +1,8 @@
 ﻿using Foundation;
 using BranchSDK;
 using UIKit;
+using Firebase.Core;
+using Firebase.Analytics;
 
 namespace Timber;
 
@@ -14,8 +16,25 @@ public class AppDelegate : MauiUIApplicationDelegate, IBranchSessionInterface
 
     public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
     {
+        
         Branch.EnableLogging = true;
+
+        // BranchIOS.SetSDKWaitTimeForThirdPartyAPIs(0.000000000000000001);
+        BranchIOS.SetAnonID("EighthAnonIDTest");
+        BranchIOS.SetODMInfo("EighthODMInfoTest", (double)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+
         BranchIOS.Init("key_live_nf8w3l1WBpzWdlC00KsLNdmbuEccK6Yr", launchOptions, this);
+
+        //Branch.SetTrackingDisabled(true);
+        
+        Firebase.Core.App.Configure();
+        string firebaseAppInstanceId = Analytics.AppInstanceId;
+        if (string.IsNullOrEmpty(firebaseAppInstanceId)) {
+            firebaseAppInstanceId = "pending_firebase_id"; 
+        }
+        
+        var keepFirebase = typeof(Firebase.Analytics.Analytics);
+        var keepBranch = typeof(BranchSDK.BranchIOS);
 
         return base.FinishedLaunching(application, launchOptions);
     }
