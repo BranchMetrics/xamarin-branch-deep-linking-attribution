@@ -32,6 +32,7 @@ public class MainActivity : MauiAppCompatActivity, IBranchSessionInterface
     {
         base.OnCreate(savedInstanceState);
         LogMessage("BRANCHSDK .NET MAUI: MainActivity.OnCreate");
+        BranchAndroid.EnableLogging = true;
         BranchAndroid.Init(this, "key_live_nf8w3l1WBpzWdlC00KsLNdmbuEccK6Yr", this);
     }
 
