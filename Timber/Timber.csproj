@@ -65,9 +65,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AdamE.Firebase.iOS.Analytics" Version="11.14.0" />
+		<PackageReference Include="Branch-Xamarin-Linking-SDK" Version="10.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.14" />
-		<PackageReference Include="Branch-Xamarin-Linking-SDK" Version="10.0.0" />
 	</ItemGroup>
+
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+  		<BundleResource Include="Platforms/iOS/GoogleService-Info.plist" Link="GoogleService-Info.plist" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+    	<NativeReference Include="Platforms\iOS\Frameworks\GoogleAdsOnDeviceConversion.xcframework">
+       	 	<Kind>Framework</Kind>
+        	<SmartLink>True</SmartLink>
+    	</NativeReference>
+	</ItemGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+    	<MtouchExtraArgs>-cxx -gcc_flags "-lc++ -ObjC"</MtouchExtraArgs>
+	</PropertyGroup>
 
 </Project>

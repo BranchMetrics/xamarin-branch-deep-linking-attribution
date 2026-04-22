@@ -18,7 +18,7 @@ namespace BranchSDK
 
 		// TODO: can we pull the plugin version automatically?
 		private static String pluginName = "Xamarin";
-		private static String pluginVersion = "10.0.0";
+		private static String pluginVersion = "10.1.0";
 
 		private BranchAndroid() { }
 
@@ -390,6 +390,7 @@ namespace BranchSDK
 		}
 
 		#endregion
+		
 	}
 }
 
